@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Names Analytics</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .search-box {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        .search-box input {
+            padding: 0.75rem;
+            width: 70%;
+            max-width: 400px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        .trending {
+            margin-top: 3rem;
+        }
+        .trending h2 {
+            color: #3498db;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 0.5rem;
+        }
+        .trending-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+        }
+        .trending-list li {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .trending-list h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .trending-list p {
+            color: #7f8c8d;
+            margin: 0.5rem 0 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Baby Names Analytics</h1>
+        <p>Explore the popularity and trends of baby names over time.</p>
+        
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Enter a name to explore...">
+            <p id="searchHint">Try popular names like Olivia, Liam, Emma, Noah</p>
+        </div>
+        
+        <div class="trending">
+            <h2>Top Names of All Time (by total usage)</h2>
+            <ul class="trending-list">
+                <li>
+                    <h3>James</h3>
+                    <p>5,250,638 total babies</p>
+                </li>
+                <li>
+                    <h3>John</h3>
+                    <p>5,182,633 total babies</p>
+                </li>
+                <li>
+                    <h3>Robert</h3>
+                    <p>4,849,730 total babies</p>
+                </li>
+                <li>
+                    <h3>Michael</h3>
+                    <p>4,426,753 total babies</p>
+                </li>
+                <li>
+                    <h3>William</h3>
+                    <p>4,199,696 total babies</p>
+                </li>
+                <li>
+                    <h3>David</h3>
+                    <p>3,676,654 total babies</p>
+                </li>
+                <li>
+                    <h3>Joseph</h3>
+                    <p>2,669,490 total babies</p>
+                </li>
+                <li>
+                    <h3>Richard</h3>
+                    <p>2,577,552 total babies</p>
+                </li>
+                <li>
+                    <h3>Charles</h3>
+                    <p>2,434,659 total babies</p>
+                </li>
+                <li>
+                    <h3>Thomas</h3>
+                    <p>2,358,576 total babies</p>
+                </li>
+                <li>
+                    <h3>Christopher</h3>
+                    <p>2,069,596 total babies</p>
+                </li>
+                <li>
+                    <h3>Daniel</h3>
+                    <p>1,982,812 total babies</p>
+                </li>
+                <li>
+                    <h3>Matthew</h3>
+                    <p>1,654,075 total babies</p>
+                </li>
+                <li>
+                    <h3>Anthony</h3>
+                    <p>1,488,042 total babies</p>
+                </li>
+                <li>
+                    <h3>George</h3>
+                    <p>1,487,297 total babies</p>
+                </li>
+                <li>
+                    <h3>Donald</h3>
+                    <p>1,414,824 total babies</p>
+                </li>
+                <li>
+                    <h3>Paul</h3>
+                    <p>1,398,293 total babies</p>
+                </li>
+                <li>
+                    <h3>Mark</h3>
+                    <p>1,362,176 total babies</p>
+                </li>
+                <li>
+                    <h3>Andrew</h3>
+                    <p>1,329,454 total babies</p>
+                </li>
+                <li>
+                    <h3>Edward</h3>
+                    <p>1,303,594 total babies</p>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>Data source: U.S. Social Security Administration</p>
+            <p>&copy; 2026 Baby Names Analytics</p>
+        </div>
+    </div>
+    <script>
+        // Simple redirect to name page if entered
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const name = this.value.trim();
+                if (name) {
+                    // Format name for URL: lowercase, replace spaces with hyphens
+                    const urlName = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                    window.location.href = `/name/${urlName}/`;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
