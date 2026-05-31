@@ -77,7 +77,7 @@
         
         <div class="search-box">
             <input type="text" id="searchInput" placeholder="Enter a name to explore...">
-            <p id="searchHint">Try popular names like Olivia, Liam, Emma, Noah</p>
+            <p id="searchHint">Try names like James, Mary, Liam, Noah (top 1000 all-time)</p>
         </div>
         
         <div class="trending">
@@ -177,9 +177,9 @@
             if (e.key === 'Enter') {
                 const name = this.value.trim();
                 if (name) {
-                    // Format name for URL: lowercase, replace spaces with hyphens
-                    const urlName = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-                    window.location.href = `/name/${urlName}/`;
+                    // Pages are generated as /name/<name>.html (single word, lowercase)
+                    const urlName = name.toLowerCase().replace(/[^a-z0-9]+/g, '');
+                    window.location.href = `/name/${urlName}.html`;
                 }
             }
         });

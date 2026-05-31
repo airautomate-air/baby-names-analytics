@@ -164,8 +164,8 @@ def generate_homepage():
                 const name = this.value.trim();
                 if (name) {
                     // Format name for URL: lowercase, replace spaces with hyphens
-                    const urlName = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-                    window.location.href = `/name/${urlName}/`;
+                    const urlName = name.toLowerCase().replace(/[^a-z0-9]+/g, '');
+                    window.location.href = `/name/${urlName}.html`;
                 }
             }
         });
@@ -466,7 +466,7 @@ def generate_year_page(year):
     for rank, (name, count, sex) in enumerate(top_for_year, start=1):
         html += f'''                <tr>
                     <td class="rank-column">{rank}</td>
-                    <td class="name-column"><a href="/name/{''.join(c if c.isalnum() else '-' for c in name.lower()).strip('-')}/">{name}</a></td>
+                    <td class="name-column"><a href="/name/{''.join(c if c.isalnum() else '_' for c in name.lower()).strip('_')}.html">{name}</a></td>
                     <td class="sex-column">{sex}</td>
                     <td class="count-column">{count:,}</td>
                 </tr>\n'''
