@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Baby Names of 1984 - Baby Name Analytics</title>
+    <title>Top Baby Names of 1984 - Rankings & Counts</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -12,693 +12,159 @@
             background-color: #f5f5f5;
             color: #333;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        .nav {
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { color: #2c3e50; }
+        .nav { margin-bottom: 2rem; }
+        .nav a { color: #3498db; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
             margin-bottom: 2rem;
         }
-        .nav a {
-            color: #3498db;
-            text-decoration: none;
+        .stat {
+            background: #fff; padding: 1.5rem; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
-        .nav a:hover {
-            text-decoration: underline;
-        }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
+        .stat-label { color: #7f8c8d; margin-top: 0.5rem; }
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 2rem;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
+            width: 100%; border-collapse: collapse; margin-bottom: 2rem;
+            background: #fff; border-radius: 8px; overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #ecf0f1;
-            font-weight: 600;
-        }
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-        .rank-column {
-            width: 10%;
-            text-align: center;
-            font-weight: bold;
-            color: #e74c3c;
-        }
-        .name-column {
-            width: 30%;
-        }
-        .count-column {
-            width: 20%;
-            text-align: right;
-        }
-        .sex-column {
-            width: 10%;
-            text-align: center;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 3rem;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
-    </style>
+        th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #ecf0f1; font-weight: 600; }
+        tr:hover { background-color: #f8f9fa; }
+        .year-column { width: 12%; font-family: monospace; }
+        .count-column { width: 18%; text-align: right; }
+        .rank-column { width: 15%; text-align: right; }
+        .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
+        a { color: #3498db; }
+</style>
 </head>
 <body>
     <div class="container">
-        <nav class="nav">
-            <a href="/">← Back to all names</a>
-            <a href="/year/1983/">← 1983</a> |
-            <a href="/year/1985/">1985 →</a>
-        </nav>
+        <nav class="nav"><a href="/">← All names</a> &nbsp; <a href="/year/1983.html">← 1983</a> &nbsp; <a href="/year/1985.html">1985 →</a></nav>
         <h1>Top Baby Names of 1984</h1>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th class="rank-column">Rank</th>
-                    <th class="name-column">Name</th>
-                    <th class="sex-column">Sex</th>
-                    <th class="count-column">Number of Babies</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="rank-column">1</td>
-                    <td class="name-column"><a href="/name/michael.html">Michael</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">67,735</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">2</td>
-                    <td class="name-column"><a href="/name/christopher.html">Christopher</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">60,021</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">3</td>
-                    <td class="name-column"><a href="/name/jennifer.html">Jennifer</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">50,564</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">4</td>
-                    <td class="name-column"><a href="/name/matthew.html">Matthew</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">49,767</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">5</td>
-                    <td class="name-column"><a href="/name/jessica.html">Jessica</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">45,857</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">6</td>
-                    <td class="name-column"><a href="/name/joshua.html">Joshua</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">40,266</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">7</td>
-                    <td class="name-column"><a href="/name/ashley.html">Ashley</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">38,773</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">8</td>
-                    <td class="name-column"><a href="/name/david.html">David</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">38,492</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">9</td>
-                    <td class="name-column"><a href="/name/daniel.html">Daniel</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">36,531</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">10</td>
-                    <td class="name-column"><a href="/name/james.html">James</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">35,859</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">11</td>
-                    <td class="name-column"><a href="/name/amanda.html">Amanda</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">33,915</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">12</td>
-                    <td class="name-column"><a href="/name/john.html">John</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">32,610</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">13</td>
-                    <td class="name-column"><a href="/name/robert.html">Robert</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">31,768</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">14</td>
-                    <td class="name-column"><a href="/name/joseph.html">Joseph</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">30,513</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">15</td>
-                    <td class="name-column"><a href="/name/jason.html">Jason</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">29,953</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">16</td>
-                    <td class="name-column"><a href="/name/ryan.html">Ryan</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">28,724</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">17</td>
-                    <td class="name-column"><a href="/name/justin.html">Justin</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">26,769</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">18</td>
-                    <td class="name-column"><a href="/name/andrew.html">Andrew</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">25,916</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">19</td>
-                    <td class="name-column"><a href="/name/sarah.html">Sarah</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">25,887</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">20</td>
-                    <td class="name-column"><a href="/name/brandon.html">Brandon</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">25,673</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">21</td>
-                    <td class="name-column"><a href="/name/william.html">William</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">24,900</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">22</td>
-                    <td class="name-column"><a href="/name/brian.html">Brian</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">24,720</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">23</td>
-                    <td class="name-column"><a href="/name/adam.html">Adam</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">23,939</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">24</td>
-                    <td class="name-column"><a href="/name/jonathan.html">Jonathan</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">23,345</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">25</td>
-                    <td class="name-column"><a href="/name/stephanie.html">Stephanie</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">23,025</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">26</td>
-                    <td class="name-column"><a href="/name/nicole.html">Nicole</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">22,270</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">27</td>
-                    <td class="name-column"><a href="/name/melissa.html">Melissa</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">21,896</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">28</td>
-                    <td class="name-column"><a href="/name/heather.html">Heather</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">21,489</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">29</td>
-                    <td class="name-column"><a href="/name/nicholas.html">Nicholas</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">21,017</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">30</td>
-                    <td class="name-column"><a href="/name/anthony.html">Anthony</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">20,956</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">31</td>
-                    <td class="name-column"><a href="/name/eric.html">Eric</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">20,955</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">32</td>
-                    <td class="name-column"><a href="/name/elizabeth.html">Elizabeth</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">20,360</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">33</td>
-                    <td class="name-column"><a href="/name/steven.html">Steven</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">18,217</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">34</td>
-                    <td class="name-column"><a href="/name/kevin.html">Kevin</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">17,858</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">35</td>
-                    <td class="name-column"><a href="/name/thomas.html">Thomas</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">17,596</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">36</td>
-                    <td class="name-column"><a href="/name/timothy.html">Timothy</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">16,987</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">37</td>
-                    <td class="name-column"><a href="/name/megan.html">Megan</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">16,984</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">38</td>
-                    <td class="name-column"><a href="/name/crystal.html">Crystal</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">16,560</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">39</td>
-                    <td class="name-column"><a href="/name/amy.html">Amy</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">15,988</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">40</td>
-                    <td class="name-column"><a href="/name/tiffany.html">Tiffany</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">15,861</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">41</td>
-                    <td class="name-column"><a href="/name/rachel.html">Rachel</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">15,839</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">42</td>
-                    <td class="name-column"><a href="/name/danielle.html">Danielle</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">15,670</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">43</td>
-                    <td class="name-column"><a href="/name/richard.html">Richard</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">15,607</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">44</td>
-                    <td class="name-column"><a href="/name/michelle.html">Michelle</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">15,499</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">45</td>
-                    <td class="name-column"><a href="/name/amber.html">Amber</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">15,369</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">46</td>
-                    <td class="name-column"><a href="/name/laura.html">Laura</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">14,818</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">47</td>
-                    <td class="name-column"><a href="/name/jeffrey.html">Jeffrey</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">14,758</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">48</td>
-                    <td class="name-column"><a href="/name/christina.html">Christina</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">14,705</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">49</td>
-                    <td class="name-column"><a href="/name/lauren.html">Lauren</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">14,475</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">50</td>
-                    <td class="name-column"><a href="/name/kimberly.html">Kimberly</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">14,445</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">51</td>
-                    <td class="name-column"><a href="/name/aaron.html">Aaron</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">13,401</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">52</td>
-                    <td class="name-column"><a href="/name/rebecca.html">Rebecca</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">13,348</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">53</td>
-                    <td class="name-column"><a href="/name/benjamin.html">Benjamin</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">13,266</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">54</td>
-                    <td class="name-column"><a href="/name/jeremy.html">Jeremy</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">13,250</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">55</td>
-                    <td class="name-column"><a href="/name/mark.html">Mark</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">13,214</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">56</td>
-                    <td class="name-column"><a href="/name/charles.html">Charles</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">12,942</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">57</td>
-                    <td class="name-column"><a href="/name/emily.html">Emily</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">12,786</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">58</td>
-                    <td class="name-column"><a href="/name/erin.html">Erin</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">12,622</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">59</td>
-                    <td class="name-column"><a href="/name/kyle.html">Kyle</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">12,546</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">60</td>
-                    <td class="name-column"><a href="/name/stephen.html">Stephen</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">12,096</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">61</td>
-                    <td class="name-column"><a href="/name/patrick.html">Patrick</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">11,524</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">62</td>
-                    <td class="name-column"><a href="/name/jacob.html">Jacob</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">11,358</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">63</td>
-                    <td class="name-column"><a href="/name/angela.html">Angela</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">11,291</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">64</td>
-                    <td class="name-column"><a href="/name/kelly.html">Kelly</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">11,216</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">65</td>
-                    <td class="name-column"><a href="/name/nathan.html">Nathan</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">10,614</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">66</td>
-                    <td class="name-column"><a href="/name/scott.html">Scott</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">10,574</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">67</td>
-                    <td class="name-column"><a href="/name/paul.html">Paul</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">10,460</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">68</td>
-                    <td class="name-column"><a href="/name/dustin.html">Dustin</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">10,403</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">69</td>
-                    <td class="name-column"><a href="/name/andrea.html">Andrea</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">10,350</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">70</td>
-                    <td class="name-column"><a href="/name/travis.html">Travis</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">10,241</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">71</td>
-                    <td class="name-column"><a href="/name/lisa.html">Lisa</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">10,238</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">72</td>
-                    <td class="name-column"><a href="/name/katherine.html">Katherine</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">10,157</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">73</td>
-                    <td class="name-column"><a href="/name/sean.html">Sean</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">10,024</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">74</td>
-                    <td class="name-column"><a href="/name/jamie.html">Jamie</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">9,761</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">75</td>
-                    <td class="name-column"><a href="/name/gregory.html">Gregory</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">9,688</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">76</td>
-                    <td class="name-column"><a href="/name/sara.html">Sara</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">9,314</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">77</td>
-                    <td class="name-column"><a href="/name/mary.html">Mary</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">9,293</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">78</td>
-                    <td class="name-column"><a href="/name/erica.html">Erica</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">9,278</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">79</td>
-                    <td class="name-column"><a href="/name/zachary.html">Zachary</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">9,065</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">80</td>
-                    <td class="name-column"><a href="/name/lindsey.html">Lindsey</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">9,005</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">81</td>
-                    <td class="name-column"><a href="/name/kenneth.html">Kenneth</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">8,790</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">82</td>
-                    <td class="name-column"><a href="/name/tyler.html">Tyler</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">8,705</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">83</td>
-                    <td class="name-column"><a href="/name/lindsay.html">Lindsay</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">8,510</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">84</td>
-                    <td class="name-column"><a href="/name/shannon.html">Shannon</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">8,476</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">85</td>
-                    <td class="name-column"><a href="/name/kristen.html">Kristen</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">8,385</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">86</td>
-                    <td class="name-column"><a href="/name/bryan.html">Bryan</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">8,270</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">87</td>
-                    <td class="name-column"><a href="/name/samantha.html">Samantha</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">8,038</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">88</td>
-                    <td class="name-column"><a href="/name/jose.html">Jose</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">8,013</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">89</td>
-                    <td class="name-column"><a href="/name/alicia.html">Alicia</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">7,820</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">90</td>
-                    <td class="name-column"><a href="/name/brittany.html">Brittany</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">7,665</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">91</td>
-                    <td class="name-column"><a href="/name/jesse.html">Jesse</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">7,606</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">92</td>
-                    <td class="name-column"><a href="/name/april.html">April</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">7,566</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">93</td>
-                    <td class="name-column"><a href="/name/christine.html">Christine</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">7,299</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">94</td>
-                    <td class="name-column"><a href="/name/katie.html">Katie</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">7,175</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">95</td>
-                    <td class="name-column"><a href="/name/vanessa.html">Vanessa</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">7,156</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">96</td>
-                    <td class="name-column"><a href="/name/courtney.html">Courtney</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">7,150</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">97</td>
-                    <td class="name-column"><a href="/name/chad.html">Chad</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">7,062</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">98</td>
-                    <td class="name-column"><a href="/name/kristin.html">Kristin</a></td>
-                    <td class="sex-column">F</td>
-                    <td class="count-column">7,007</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">99</td>
-                    <td class="name-column"><a href="/name/derek.html">Derek</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">6,972</td>
-                </tr>
-                <tr>
-                    <td class="rank-column">100</td>
-                    <td class="name-column"><a href="/name/bradley.html">Bradley</a></td>
-                    <td class="sex-column">M</td>
-                    <td class="count-column">6,567</td>
-                </tr>
-            </tbody>
-        </table>
-        
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
+            <div>
+                <h2 style="color:#e84393;">Girls</h2>
+                <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
+                <tbody>
+                <tr><td class="rank-column">1</td><td><a href="/name/jennifer.html">Jennifer</a></td><td class="count-column">50,563</td></tr>
+                <tr><td class="rank-column">2</td><td><a href="/name/jessica.html">Jessica</a></td><td class="count-column">45,858</td></tr>
+                <tr><td class="rank-column">3</td><td><a href="/name/ashley.html">Ashley</a></td><td class="count-column">38,774</td></tr>
+                <tr><td class="rank-column">4</td><td><a href="/name/amanda.html">Amanda</a></td><td class="count-column">33,913</td></tr>
+                <tr><td class="rank-column">5</td><td><a href="/name/sarah.html">Sarah</a></td><td class="count-column">25,889</td></tr>
+                <tr><td class="rank-column">6</td><td><a href="/name/stephanie.html">Stephanie</a></td><td class="count-column">23,025</td></tr>
+                <tr><td class="rank-column">7</td><td><a href="/name/nicole.html">Nicole</a></td><td class="count-column">22,271</td></tr>
+                <tr><td class="rank-column">8</td><td><a href="/name/melissa.html">Melissa</a></td><td class="count-column">21,897</td></tr>
+                <tr><td class="rank-column">9</td><td><a href="/name/heather.html">Heather</a></td><td class="count-column">21,489</td></tr>
+                <tr><td class="rank-column">10</td><td><a href="/name/elizabeth.html">Elizabeth</a></td><td class="count-column">20,361</td></tr>
+                <tr><td class="rank-column">11</td><td><a href="/name/megan.html">Megan</a></td><td class="count-column">16,984</td></tr>
+                <tr><td class="rank-column">12</td><td><a href="/name/crystal.html">Crystal</a></td><td class="count-column">16,561</td></tr>
+                <tr><td class="rank-column">13</td><td><a href="/name/amy.html">Amy</a></td><td class="count-column">15,990</td></tr>
+                <tr><td class="rank-column">14</td><td><a href="/name/tiffany.html">Tiffany</a></td><td class="count-column">15,861</td></tr>
+                <tr><td class="rank-column">15</td><td><a href="/name/rachel.html">Rachel</a></td><td class="count-column">15,838</td></tr>
+                <tr><td class="rank-column">16</td><td><a href="/name/danielle.html">Danielle</a></td><td class="count-column">15,670</td></tr>
+                <tr><td class="rank-column">17</td><td><a href="/name/michelle.html">Michelle</a></td><td class="count-column">15,499</td></tr>
+                <tr><td class="rank-column">18</td><td><a href="/name/amber.html">Amber</a></td><td class="count-column">15,369</td></tr>
+                <tr><td class="rank-column">19</td><td><a href="/name/laura.html">Laura</a></td><td class="count-column">14,818</td></tr>
+                <tr><td class="rank-column">20</td><td><a href="/name/christina.html">Christina</a></td><td class="count-column">14,705</td></tr>
+                <tr><td class="rank-column">21</td><td><a href="/name/lauren.html">Lauren</a></td><td class="count-column">14,475</td></tr>
+                <tr><td class="rank-column">22</td><td><a href="/name/kimberly.html">Kimberly</a></td><td class="count-column">14,446</td></tr>
+                <tr><td class="rank-column">23</td><td><a href="/name/rebecca.html">Rebecca</a></td><td class="count-column">13,349</td></tr>
+                <tr><td class="rank-column">24</td><td><a href="/name/emily.html">Emily</a></td><td class="count-column">12,786</td></tr>
+                <tr><td class="rank-column">25</td><td><a href="/name/erin.html">Erin</a></td><td class="count-column">12,622</td></tr>
+                <tr><td class="rank-column">26</td><td><a href="/name/angela.html">Angela</a></td><td class="count-column">11,292</td></tr>
+                <tr><td class="rank-column">27</td><td><a href="/name/kelly.html">Kelly</a></td><td class="count-column">11,217</td></tr>
+                <tr><td class="rank-column">28</td><td><a href="/name/andrea.html">Andrea</a></td><td class="count-column">10,350</td></tr>
+                <tr><td class="rank-column">29</td><td><a href="/name/lisa.html">Lisa</a></td><td class="count-column">10,237</td></tr>
+                <tr><td class="rank-column">30</td><td><a href="/name/katherine.html">Katherine</a></td><td class="count-column">10,156</td></tr>
+                <tr><td class="rank-column">31</td><td><a href="/name/jamie.html">Jamie</a></td><td class="count-column">9,762</td></tr>
+                <tr><td class="rank-column">32</td><td><a href="/name/sara.html">Sara</a></td><td class="count-column">9,315</td></tr>
+                <tr><td class="rank-column">33</td><td><a href="/name/mary.html">Mary</a></td><td class="count-column">9,294</td></tr>
+                <tr><td class="rank-column">34</td><td><a href="/name/erica.html">Erica</a></td><td class="count-column">9,279</td></tr>
+                <tr><td class="rank-column">35</td><td><a href="/name/lindsey.html">Lindsey</a></td><td class="count-column">9,006</td></tr>
+                <tr><td class="rank-column">36</td><td><a href="/name/lindsay.html">Lindsay</a></td><td class="count-column">8,511</td></tr>
+                <tr><td class="rank-column">37</td><td><a href="/name/shannon.html">Shannon</a></td><td class="count-column">8,476</td></tr>
+                <tr><td class="rank-column">38</td><td><a href="/name/kristen.html">Kristen</a></td><td class="count-column">8,385</td></tr>
+                <tr><td class="rank-column">39</td><td><a href="/name/samantha.html">Samantha</a></td><td class="count-column">8,038</td></tr>
+                <tr><td class="rank-column">40</td><td><a href="/name/alicia.html">Alicia</a></td><td class="count-column">7,819</td></tr>
+                <tr><td class="rank-column">41</td><td><a href="/name/brittany.html">Brittany</a></td><td class="count-column">7,666</td></tr>
+                <tr><td class="rank-column">42</td><td><a href="/name/april.html">April</a></td><td class="count-column">7,565</td></tr>
+                <tr><td class="rank-column">43</td><td><a href="/name/christine.html">Christine</a></td><td class="count-column">7,298</td></tr>
+                <tr><td class="rank-column">44</td><td><a href="/name/katie.html">Katie</a></td><td class="count-column">7,174</td></tr>
+                <tr><td class="rank-column">45</td><td><a href="/name/vanessa.html">Vanessa</a></td><td class="count-column">7,155</td></tr>
+                <tr><td class="rank-column">46</td><td><a href="/name/courtney.html">Courtney</a></td><td class="count-column">7,150</td></tr>
+                <tr><td class="rank-column">47</td><td><a href="/name/kristin.html">Kristin</a></td><td class="count-column">7,007</td></tr>
+                <tr><td class="rank-column">48</td><td><a href="/name/kathryn.html">Kathryn</a></td><td class="count-column">6,538</td></tr>
+                <tr><td class="rank-column">49</td><td><a href="/name/tara.html">Tara</a></td><td class="count-column">6,284</td></tr>
+                <tr><td class="rank-column">50</td><td><a href="/name/maria.html">Maria</a></td><td class="count-column">6,135</td></tr>
+                </tbody></table>
+            </div>
+            <div>
+                <h2 style="color:#0984e3;">Boys</h2>
+                <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
+                <tbody>
+                <tr><td class="rank-column">1</td><td><a href="/name/michael.html">Michael</a></td><td class="count-column">67,741</td></tr>
+                <tr><td class="rank-column">2</td><td><a href="/name/christopher.html">Christopher</a></td><td class="count-column">60,019</td></tr>
+                <tr><td class="rank-column">3</td><td><a href="/name/matthew.html">Matthew</a></td><td class="count-column">49,769</td></tr>
+                <tr><td class="rank-column">4</td><td><a href="/name/joshua.html">Joshua</a></td><td class="count-column">40,266</td></tr>
+                <tr><td class="rank-column">5</td><td><a href="/name/david.html">David</a></td><td class="count-column">38,492</td></tr>
+                <tr><td class="rank-column">6</td><td><a href="/name/daniel.html">Daniel</a></td><td class="count-column">36,533</td></tr>
+                <tr><td class="rank-column">7</td><td><a href="/name/james.html">James</a></td><td class="count-column">35,856</td></tr>
+                <tr><td class="rank-column">8</td><td><a href="/name/john.html">John</a></td><td class="count-column">32,611</td></tr>
+                <tr><td class="rank-column">9</td><td><a href="/name/robert.html">Robert</a></td><td class="count-column">31,772</td></tr>
+                <tr><td class="rank-column">10</td><td><a href="/name/joseph.html">Joseph</a></td><td class="count-column">30,511</td></tr>
+                <tr><td class="rank-column">11</td><td><a href="/name/jason.html">Jason</a></td><td class="count-column">29,952</td></tr>
+                <tr><td class="rank-column">12</td><td><a href="/name/ryan.html">Ryan</a></td><td class="count-column">28,726</td></tr>
+                <tr><td class="rank-column">13</td><td><a href="/name/justin.html">Justin</a></td><td class="count-column">26,772</td></tr>
+                <tr><td class="rank-column">14</td><td><a href="/name/andrew.html">Andrew</a></td><td class="count-column">25,919</td></tr>
+                <tr><td class="rank-column">15</td><td><a href="/name/brandon.html">Brandon</a></td><td class="count-column">25,671</td></tr>
+                <tr><td class="rank-column">16</td><td><a href="/name/william.html">William</a></td><td class="count-column">24,902</td></tr>
+                <tr><td class="rank-column">17</td><td><a href="/name/brian.html">Brian</a></td><td class="count-column">24,723</td></tr>
+                <tr><td class="rank-column">18</td><td><a href="/name/adam.html">Adam</a></td><td class="count-column">23,940</td></tr>
+                <tr><td class="rank-column">19</td><td><a href="/name/jonathan.html">Jonathan</a></td><td class="count-column">23,344</td></tr>
+                <tr><td class="rank-column">20</td><td><a href="/name/nicholas.html">Nicholas</a></td><td class="count-column">21,018</td></tr>
+                <tr><td class="rank-column">21</td><td><a href="/name/anthony.html">Anthony</a></td><td class="count-column">20,958</td></tr>
+                <tr><td class="rank-column">22</td><td><a href="/name/eric.html">Eric</a></td><td class="count-column">20,956</td></tr>
+                <tr><td class="rank-column">23</td><td><a href="/name/steven.html">Steven</a></td><td class="count-column">18,219</td></tr>
+                <tr><td class="rank-column">24</td><td><a href="/name/kevin.html">Kevin</a></td><td class="count-column">17,862</td></tr>
+                <tr><td class="rank-column">25</td><td><a href="/name/thomas.html">Thomas</a></td><td class="count-column">17,597</td></tr>
+                <tr><td class="rank-column">26</td><td><a href="/name/timothy.html">Timothy</a></td><td class="count-column">16,988</td></tr>
+                <tr><td class="rank-column">27</td><td><a href="/name/richard.html">Richard</a></td><td class="count-column">15,607</td></tr>
+                <tr><td class="rank-column">28</td><td><a href="/name/jeffrey.html">Jeffrey</a></td><td class="count-column">14,759</td></tr>
+                <tr><td class="rank-column">29</td><td><a href="/name/aaron.html">Aaron</a></td><td class="count-column">13,404</td></tr>
+                <tr><td class="rank-column">30</td><td><a href="/name/benjamin.html">Benjamin</a></td><td class="count-column">13,269</td></tr>
+                <tr><td class="rank-column">31</td><td><a href="/name/jeremy.html">Jeremy</a></td><td class="count-column">13,252</td></tr>
+                <tr><td class="rank-column">32</td><td><a href="/name/mark.html">Mark</a></td><td class="count-column">13,214</td></tr>
+                <tr><td class="rank-column">33</td><td><a href="/name/charles.html">Charles</a></td><td class="count-column">12,942</td></tr>
+                <tr><td class="rank-column">34</td><td><a href="/name/kyle.html">Kyle</a></td><td class="count-column">12,547</td></tr>
+                <tr><td class="rank-column">35</td><td><a href="/name/stephen.html">Stephen</a></td><td class="count-column">12,096</td></tr>
+                <tr><td class="rank-column">36</td><td><a href="/name/patrick.html">Patrick</a></td><td class="count-column">11,526</td></tr>
+                <tr><td class="rank-column">37</td><td><a href="/name/jacob.html">Jacob</a></td><td class="count-column">11,357</td></tr>
+                <tr><td class="rank-column">38</td><td><a href="/name/nathan.html">Nathan</a></td><td class="count-column">10,613</td></tr>
+                <tr><td class="rank-column">39</td><td><a href="/name/scott.html">Scott</a></td><td class="count-column">10,575</td></tr>
+                <tr><td class="rank-column">40</td><td><a href="/name/paul.html">Paul</a></td><td class="count-column">10,461</td></tr>
+                <tr><td class="rank-column">41</td><td><a href="/name/dustin.html">Dustin</a></td><td class="count-column">10,403</td></tr>
+                <tr><td class="rank-column">42</td><td><a href="/name/travis.html">Travis</a></td><td class="count-column">10,240</td></tr>
+                <tr><td class="rank-column">43</td><td><a href="/name/sean.html">Sean</a></td><td class="count-column">10,024</td></tr>
+                <tr><td class="rank-column">44</td><td><a href="/name/gregory.html">Gregory</a></td><td class="count-column">9,687</td></tr>
+                <tr><td class="rank-column">45</td><td><a href="/name/zachary.html">Zachary</a></td><td class="count-column">9,065</td></tr>
+                <tr><td class="rank-column">46</td><td><a href="/name/kenneth.html">Kenneth</a></td><td class="count-column">8,791</td></tr>
+                <tr><td class="rank-column">47</td><td><a href="/name/tyler.html">Tyler</a></td><td class="count-column">8,706</td></tr>
+                <tr><td class="rank-column">48</td><td><a href="/name/bryan.html">Bryan</a></td><td class="count-column">8,270</td></tr>
+                <tr><td class="rank-column">49</td><td><a href="/name/jose.html">Jose</a></td><td class="count-column">8,013</td></tr>
+                <tr><td class="rank-column">50</td><td><a href="/name/jesse.html">Jesse</a></td><td class="count-column">7,609</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+
         <div class="footer">
-            <p>Data source: U.S. Social Security Administration</p>
+            <p>Data source: U.S. Social Security Administration national data (1880–2024).</p>
             <p>&copy; 2026 Baby Names Analytics</p>
         </div>
     </div>

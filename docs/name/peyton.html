@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peyton - Baby Name Analytics</title>
+    <title>Peyton - Baby Name Popularity & Trends</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -12,748 +12,129 @@
             background-color: #f5f5f5;
             color: #333;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        h1 {
-            color: #2c3e50;
-        }
-        .nav {
-            margin-bottom: 2rem;
-        }
-        .nav a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        .nav a:hover {
-            text-decoration: underline;
-        }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { color: #2c3e50; }
+        .nav { margin-bottom: 2rem; }
+        .nav a { color: #3498db; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
         .stat {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: center;
+            background: #fff; padding: 1.5rem; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .stat-label {
-            color: #7f8c8d;
-            margin-top: 0.5rem;
-        }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
+        .stat-label { color: #7f8c8d; margin-top: 0.5rem; }
         table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 2rem;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
+            width: 100%; border-collapse: collapse; margin-bottom: 2rem;
+            background: #fff; border-radius: 8px; overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        th, td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #ecf0f1;
-            font-weight: 600;
-        }
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-        .year-column {
-            width: 10%;
-            font-family: monospace;
-        }
-        .count-column {
-            width: 15%;
-            text-align: right;
-        }
-        .rank-column {
-            width: 15%;
-            text-align: right;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 3rem;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
-    </style>
+        th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #ecf0f1; font-weight: 600; }
+        tr:hover { background-color: #f8f9fa; }
+        .year-column { width: 12%; font-family: monospace; }
+        .count-column { width: 18%; text-align: right; }
+        .rank-column { width: 15%; text-align: right; }
+        .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
+        a { color: #3498db; }
+</style>
 </head>
 <body>
     <div class="container">
-        <nav class="nav">
-            <a href="/">← Back to all names</a>
-        </nav>
+        <nav class="nav"><a href="/">← Back to all names</a></nav>
         <h1>Peyton</h1>
-        
+        <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a girl's name &middot; Unisex — 62% girls / 38% boys</p>
+
         <div class="stats">
-            <div class="stat">
-                <div class="stat-value">52,383</div>
-                <div class="stat-label">Total babies</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">125</div>
-                <div class="stat-label">Years appearing</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">3,375</div>
-                <div class="stat-label">Peak popularity</div>
-            </div>
+            <div class="stat"><div class="stat-value">138,617</div><div class="stat-label">Total babies (all years)</div></div>
+            <div class="stat"><div class="stat-value">65</div><div class="stat-label">Years in the data</div></div>
+            <div class="stat"><div class="stat-value">5,317</div><div class="stat-label">Peak in a single year</div></div>
         </div>
-        
-        <h2>Popularity Over Time</h2>
+
+        <h2>Popularity Over Time — Girls</h2>
+        <p style="color:#7f8c8d; font-size:0.9rem;">Rank is among all girls' names registered that year.</p>
         <table>
-            <thead>
-                <tr>
-                    <th class="year-column">Year</th>
-                    <th class="count-column">Babies</th>
-                    <th class="rank-column">Rank</th>
-                </tr>
-            </thead>
+            <thead><tr>
+                <th class="year-column">Year</th>
+                <th class="count-column">Babies</th>
+                <th class="rank-column">Rank</th>
+            </tr></thead>
             <tbody>
-                <tr>
-                    <td class="year-column">1884</td>
-                    <td class="count-column">5</td>
-                    <td class="rank-column">2221</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1887</td>
-                    <td class="count-column">7</td>
-                    <td class="rank-column">1826</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1890</td>
-                    <td class="count-column">6</td>
-                    <td class="rank-column">2284</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1891</td>
-                    <td class="count-column">6</td>
-                    <td class="rank-column">2240</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1892</td>
-                    <td class="count-column">8</td>
-                    <td class="rank-column">1999</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1893</td>
-                    <td class="count-column">7</td>
-                    <td class="rank-column">2159</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1895</td>
-                    <td class="count-column">6</td>
-                    <td class="rank-column">2612</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1898</td>
-                    <td class="count-column">7</td>
-                    <td class="rank-column">2451</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1903</td>
-                    <td class="count-column">5</td>
-                    <td class="rank-column">3280</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1907</td>
-                    <td class="count-column">6</td>
-                    <td class="rank-column">3314</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1911</td>
-                    <td class="count-column">9</td>
-                    <td class="rank-column">3026</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1912</td>
-                    <td class="count-column">8</td>
-                    <td class="rank-column">4324</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1913</td>
-                    <td class="count-column">14</td>
-                    <td class="rank-column">3149</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1914</td>
-                    <td class="count-column">24</td>
-                    <td class="rank-column">2512</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1915</td>
-                    <td class="count-column">23</td>
-                    <td class="rank-column">3007</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1916</td>
-                    <td class="count-column">15</td>
-                    <td class="rank-column">4243</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1917</td>
-                    <td class="count-column">19</td>
-                    <td class="rank-column">3644</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1918</td>
-                    <td class="count-column">31</td>
-                    <td class="rank-column">2687</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1919</td>
-                    <td class="count-column">27</td>
-                    <td class="rank-column">2956</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1920</td>
-                    <td class="count-column">24</td>
-                    <td class="rank-column">3326</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1921</td>
-                    <td class="count-column">32</td>
-                    <td class="rank-column">2787</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1922</td>
-                    <td class="count-column">19</td>
-                    <td class="rank-column">3956</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1923</td>
-                    <td class="count-column">25</td>
-                    <td class="rank-column">3260</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1924</td>
-                    <td class="count-column">19</td>
-                    <td class="rank-column">4000</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1925</td>
-                    <td class="count-column">26</td>
-                    <td class="rank-column">3176</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1926</td>
-                    <td class="count-column">20</td>
-                    <td class="rank-column">3753</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1927</td>
-                    <td class="count-column">25</td>
-                    <td class="rank-column">3263</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1928</td>
-                    <td class="count-column">11</td>
-                    <td class="rank-column">5526</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1929</td>
-                    <td class="count-column">17</td>
-                    <td class="rank-column">3992</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1930</td>
-                    <td class="count-column">18</td>
-                    <td class="rank-column">3808</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1931</td>
-                    <td class="count-column">17</td>
-                    <td class="rank-column">3836</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1932</td>
-                    <td class="count-column">15</td>
-                    <td class="rank-column">4195</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1933</td>
-                    <td class="count-column">17</td>
-                    <td class="rank-column">3717</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1934</td>
-                    <td class="count-column">11</td>
-                    <td class="rank-column">5061</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1935</td>
-                    <td class="count-column">21</td>
-                    <td class="rank-column">3239</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1936</td>
-                    <td class="count-column">17</td>
-                    <td class="rank-column">3643</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1937</td>
-                    <td class="count-column">18</td>
-                    <td class="rank-column">3575</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1938</td>
-                    <td class="count-column">26</td>
-                    <td class="rank-column">2831</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1939</td>
-                    <td class="count-column">20</td>
-                    <td class="rank-column">3302</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1940</td>
-                    <td class="count-column">20</td>
-                    <td class="rank-column">3388</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1941</td>
-                    <td class="count-column">26</td>
-                    <td class="rank-column">2892</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1942</td>
-                    <td class="count-column">16</td>
-                    <td class="rank-column">4136</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1943</td>
-                    <td class="count-column">21</td>
-                    <td class="rank-column">3501</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1944</td>
-                    <td class="count-column">23</td>
-                    <td class="rank-column">3215</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1945</td>
-                    <td class="count-column">16</td>
-                    <td class="rank-column">3968</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1946</td>
-                    <td class="count-column">22</td>
-                    <td class="rank-column">3558</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1947</td>
-                    <td class="count-column">23</td>
-                    <td class="rank-column">3665</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1948</td>
-                    <td class="count-column">23</td>
-                    <td class="rank-column">3609</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1949</td>
-                    <td class="count-column">25</td>
-                    <td class="rank-column">3449</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1950</td>
-                    <td class="count-column">18</td>
-                    <td class="rank-column">4207</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1951</td>
-                    <td class="count-column">27</td>
-                    <td class="rank-column">3360</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1952</td>
-                    <td class="count-column">20</td>
-                    <td class="rank-column">4120</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1953</td>
-                    <td class="count-column">19</td>
-                    <td class="rank-column">4306</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1954</td>
-                    <td class="count-column">19</td>
-                    <td class="rank-column">4381</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1955</td>
-                    <td class="count-column">22</td>
-                    <td class="rank-column">4059</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1956</td>
-                    <td class="count-column">23</td>
-                    <td class="rank-column">4040</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1957</td>
-                    <td class="count-column">21</td>
-                    <td class="rank-column">4324</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1958</td>
-                    <td class="count-column">20</td>
-                    <td class="rank-column">4467</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1959</td>
-                    <td class="count-column">20</td>
-                    <td class="rank-column">4504</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1960</td>
-                    <td class="count-column">23</td>
-                    <td class="rank-column">4278</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1961</td>
-                    <td class="count-column">17</td>
-                    <td class="rank-column">5210</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1962</td>
-                    <td class="count-column">28</td>
-                    <td class="rank-column">3807</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1963</td>
-                    <td class="count-column">22</td>
-                    <td class="rank-column">4410</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1964</td>
-                    <td class="count-column">27</td>
-                    <td class="rank-column">3930</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1965</td>
-                    <td class="count-column">28</td>
-                    <td class="rank-column">3758</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1966</td>
-                    <td class="count-column">17</td>
-                    <td class="rank-column">3768</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1967</td>
-                    <td class="count-column">22</td>
-                    <td class="rank-column">4255</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1968</td>
-                    <td class="count-column">24</td>
-                    <td class="rank-column">4240</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1969</td>
-                    <td class="count-column">27</td>
-                    <td class="rank-column">4156</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1970</td>
-                    <td class="count-column">23</td>
-                    <td class="rank-column">4748</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1971</td>
-                    <td class="count-column">29</td>
-                    <td class="rank-column">4237</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1972</td>
-                    <td class="count-column">23</td>
-                    <td class="rank-column">4871</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1973</td>
-                    <td class="count-column">34</td>
-                    <td class="rank-column">3777</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1974</td>
-                    <td class="count-column">50</td>
-                    <td class="rank-column">2973</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1975</td>
-                    <td class="count-column">46</td>
-                    <td class="rank-column">3226</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1976</td>
-                    <td class="count-column">30</td>
-                    <td class="rank-column">4380</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1977</td>
-                    <td class="count-column">27</td>
-                    <td class="rank-column">4866</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1978</td>
-                    <td class="count-column">39</td>
-                    <td class="rank-column">3836</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1979</td>
-                    <td class="count-column">34</td>
-                    <td class="rank-column">4354</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1980</td>
-                    <td class="count-column">24</td>
-                    <td class="rank-column">5672</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1981</td>
-                    <td class="count-column">32</td>
-                    <td class="rank-column">4630</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1982</td>
-                    <td class="count-column">36</td>
-                    <td class="rank-column">4297</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1983</td>
-                    <td class="count-column">43</td>
-                    <td class="rank-column">3727</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1984</td>
-                    <td class="count-column">50</td>
-                    <td class="rank-column">3386</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1985</td>
-                    <td class="count-column">57</td>
-                    <td class="rank-column">3216</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1986</td>
-                    <td class="count-column">75</td>
-                    <td class="rank-column">2683</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1987</td>
-                    <td class="count-column">80</td>
-                    <td class="rank-column">2651</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1988</td>
-                    <td class="count-column">80</td>
-                    <td class="rank-column">2753</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1989</td>
-                    <td class="count-column">107</td>
-                    <td class="rank-column">2394</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1990</td>
-                    <td class="count-column">121</td>
-                    <td class="rank-column">2276</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1991</td>
-                    <td class="count-column">125</td>
-                    <td class="rank-column">2283</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1992</td>
-                    <td class="count-column">187</td>
-                    <td class="rank-column">1091</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1993</td>
-                    <td class="count-column">242</td>
-                    <td class="rank-column">783</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1994</td>
-                    <td class="count-column">357</td>
-                    <td class="rank-column">828</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1995</td>
-                    <td class="count-column">453</td>
-                    <td class="rank-column">832</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1996</td>
-                    <td class="count-column">772</td>
-                    <td class="rank-column">512</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1997</td>
-                    <td class="count-column">1,121</td>
-                    <td class="rank-column">466</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1998</td>
-                    <td class="count-column">1,451</td>
-                    <td class="rank-column">432</td>
-                </tr>
-                <tr>
-                    <td class="year-column">1999</td>
-                    <td class="count-column">1,382</td>
-                    <td class="rank-column">466</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2000</td>
-                    <td class="count-column">2,000</td>
-                    <td class="rank-column">349</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2001</td>
-                    <td class="count-column">2,114</td>
-                    <td class="rank-column">330</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2002</td>
-                    <td class="count-column">1,764</td>
-                    <td class="rank-column">386</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2003</td>
-                    <td class="count-column">1,768</td>
-                    <td class="rank-column">389</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2004</td>
-                    <td class="count-column">2,484</td>
-                    <td class="rank-column">293</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2005</td>
-                    <td class="count-column">2,843</td>
-                    <td class="rank-column">254</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2006</td>
-                    <td class="count-column">2,686</td>
-                    <td class="rank-column">286</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2007</td>
-                    <td class="count-column">3,375</td>
-                    <td class="rank-column">224</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2008</td>
-                    <td class="count-column">3,225</td>
-                    <td class="rank-column">156</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2009</td>
-                    <td class="count-column">2,710</td>
-                    <td class="rank-column">123</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2010</td>
-                    <td class="count-column">2,647</td>
-                    <td class="rank-column">134</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2011</td>
-                    <td class="count-column">2,299</td>
-                    <td class="rank-column">142</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2012</td>
-                    <td class="count-column">2,075</td>
-                    <td class="rank-column">140</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2013</td>
-                    <td class="count-column">1,847</td>
-                    <td class="rank-column">139</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2014</td>
-                    <td class="count-column">1,842</td>
-                    <td class="rank-column">147</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2015</td>
-                    <td class="count-column">1,383</td>
-                    <td class="rank-column">173</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2016</td>
-                    <td class="count-column">1,248</td>
-                    <td class="rank-column">195</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2017</td>
-                    <td class="count-column">999</td>
-                    <td class="rank-column">211</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2018</td>
-                    <td class="count-column">797</td>
-                    <td class="rank-column">234</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2019</td>
-                    <td class="count-column">698</td>
-                    <td class="rank-column">230</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2020</td>
-                    <td class="count-column">687</td>
-                    <td class="rank-column">232</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2021</td>
-                    <td class="count-column">634</td>
-                    <td class="rank-column">242</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2022</td>
-                    <td class="count-column">556</td>
-                    <td class="rank-column">284</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2023</td>
-                    <td class="count-column">467</td>
-                    <td class="rank-column">327</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2024</td>
-                    <td class="count-column">417</td>
-                    <td class="rank-column">365</td>
-                </tr>
-                <tr>
-                    <td class="year-column">2025</td>
-                    <td class="count-column">398</td>
-                    <td class="rank-column">426</td>
-                </tr>
+                <tr><td class="year-column">1957</td><td class="count-column">5</td><td class="rank-column">#6,797</td></tr>
+                <tr><td class="year-column">1961</td><td class="count-column">7</td><td class="rank-column">#5,701</td></tr>
+                <tr><td class="year-column">1962</td><td class="count-column">7</td><td class="rank-column">#5,708</td></tr>
+                <tr><td class="year-column">1963</td><td class="count-column">6</td><td class="rank-column">#6,411</td></tr>
+                <tr><td class="year-column">1964</td><td class="count-column">10</td><td class="rank-column">#4,557</td></tr>
+                <tr><td class="year-column">1965</td><td class="count-column">8</td><td class="rank-column">#5,169</td></tr>
+                <tr><td class="year-column">1966</td><td class="count-column">28</td><td class="rank-column">#2,291</td></tr>
+                <tr><td class="year-column">1967</td><td class="count-column">23</td><td class="rank-column">#2,615</td></tr>
+                <tr><td class="year-column">1968</td><td class="count-column">15</td><td class="rank-column">#3,566</td></tr>
+                <tr><td class="year-column">1969</td><td class="count-column">14</td><td class="rank-column">#3,921</td></tr>
+                <tr><td class="year-column">1970</td><td class="count-column">24</td><td class="rank-column">#2,911</td></tr>
+                <tr><td class="year-column">1971</td><td class="count-column">8</td><td class="rank-column">#6,433</td></tr>
+                <tr><td class="year-column">1972</td><td class="count-column">16</td><td class="rank-column">#3,842</td></tr>
+                <tr><td class="year-column">1973</td><td class="count-column">13</td><td class="rank-column">#4,524</td></tr>
+                <tr><td class="year-column">1974</td><td class="count-column">19</td><td class="rank-column">#3,525</td></tr>
+                <tr><td class="year-column">1975</td><td class="count-column">19</td><td class="rank-column">#3,604</td></tr>
+                <tr><td class="year-column">1976</td><td class="count-column">17</td><td class="rank-column">#3,916</td></tr>
+                <tr><td class="year-column">1977</td><td class="count-column">12</td><td class="rank-column">#5,441</td></tr>
+                <tr><td class="year-column">1978</td><td class="count-column">14</td><td class="rank-column">#4,863</td></tr>
+                <tr><td class="year-column">1979</td><td class="count-column">19</td><td class="rank-column">#4,003</td></tr>
+                <tr><td class="year-column">1980</td><td class="count-column">17</td><td class="rank-column">#4,464</td></tr>
+                <tr><td class="year-column">1981</td><td class="count-column">18</td><td class="rank-column">#4,285</td></tr>
+                <tr><td class="year-column">1982</td><td class="count-column">19</td><td class="rank-column">#4,129</td></tr>
+                <tr><td class="year-column">1983</td><td class="count-column">18</td><td class="rank-column">#4,236</td></tr>
+                <tr><td class="year-column">1984</td><td class="count-column">25</td><td class="rank-column">#3,396</td></tr>
+                <tr><td class="year-column">1985</td><td class="count-column">22</td><td class="rank-column">#3,810</td></tr>
+                <tr><td class="year-column">1986</td><td class="count-column">32</td><td class="rank-column">#2,956</td></tr>
+                <tr><td class="year-column">1987</td><td class="count-column">29</td><td class="rank-column">#3,237</td></tr>
+                <tr><td class="year-column">1988</td><td class="count-column">42</td><td class="rank-column">#2,577</td></tr>
+                <tr><td class="year-column">1989</td><td class="count-column">35</td><td class="rank-column">#3,086</td></tr>
+                <tr><td class="year-column">1990</td><td class="count-column">61</td><td class="rank-column">#2,145</td></tr>
+                <tr><td class="year-column">1991</td><td class="count-column">67</td><td class="rank-column">#2,048</td></tr>
+                <tr><td class="year-column">1992</td><td class="count-column">398</td><td class="rank-column">#584</td></tr>
+                <tr><td class="year-column">1993</td><td class="count-column">617</td><td class="rank-column">#405</td></tr>
+                <tr><td class="year-column">1994</td><td class="count-column">585</td><td class="rank-column">#431</td></tr>
+                <tr><td class="year-column">1995</td><td class="count-column">588</td><td class="rank-column">#437</td></tr>
+                <tr><td class="year-column">1996</td><td class="count-column">1,104</td><td class="rank-column">#255</td></tr>
+                <tr><td class="year-column">1997</td><td class="count-column">1,303</td><td class="rank-column">#230</td></tr>
+                <tr><td class="year-column">1998</td><td class="count-column">1,417</td><td class="rank-column">#218</td></tr>
+                <tr><td class="year-column">1999</td><td class="count-column">1,356</td><td class="rank-column">#235</td></tr>
+                <tr><td class="year-column">2000</td><td class="count-column">1,967</td><td class="rank-column">#168</td></tr>
+                <tr><td class="year-column">2001</td><td class="count-column">1,885</td><td class="rank-column">#173</td></tr>
+                <tr><td class="year-column">2002</td><td class="count-column">1,702</td><td class="rank-column">#188</td></tr>
+                <tr><td class="year-column">2003</td><td class="count-column">1,700</td><td class="rank-column">#192</td></tr>
+                <tr><td class="year-column">2004</td><td class="count-column">2,394</td><td class="rank-column">#134</td></tr>
+                <tr><td class="year-column">2005</td><td class="count-column">2,462</td><td class="rank-column">#131</td></tr>
+                <tr><td class="year-column">2006</td><td class="count-column">2,537</td><td class="rank-column">#138</td></tr>
+                <tr><td class="year-column">2007</td><td class="count-column">2,774</td><td class="rank-column">#123</td></tr>
+                <tr><td class="year-column">2008</td><td class="count-column">4,737</td><td class="rank-column">#60</td></tr>
+                <tr><td class="year-column">2009</td><td class="count-column">5,317</td><td class="rank-column">#42</td></tr>
+                <tr><td class="year-column">2010</td><td class="count-column">4,971</td><td class="rank-column">#51</td></tr>
+                <tr><td class="year-column">2011</td><td class="count-column">4,678</td><td class="rank-column">#53</td></tr>
+                <tr><td class="year-column">2012</td><td class="count-column">4,477</td><td class="rank-column">#53</td></tr>
+                <tr><td class="year-column">2013</td><td class="count-column">4,579</td><td class="rank-column">#51</td></tr>
+                <tr><td class="year-column">2014</td><td class="count-column">4,453</td><td class="rank-column">#56</td></tr>
+                <tr><td class="year-column">2015</td><td class="count-column">3,906</td><td class="rank-column">#72</td></tr>
+                <tr><td class="year-column">2016</td><td class="count-column">3,510</td><td class="rank-column">#81</td></tr>
+                <tr><td class="year-column">2017</td><td class="count-column">3,258</td><td class="rank-column">#89</td></tr>
+                <tr><td class="year-column">2018</td><td class="count-column">2,910</td><td class="rank-column">#102</td></tr>
+                <tr><td class="year-column">2019</td><td class="count-column">2,867</td><td class="rank-column">#97</td></tr>
+                <tr><td class="year-column">2020</td><td class="count-column">2,730</td><td class="rank-column">#98</td></tr>
+                <tr><td class="year-column">2021</td><td class="count-column">2,695</td><td class="rank-column">#100</td></tr>
+                <tr><td class="year-column">2022</td><td class="count-column">2,319</td><td class="rank-column">#125</td></tr>
+                <tr><td class="year-column">2023</td><td class="count-column">1,958</td><td class="rank-column">#142</td></tr>
+                <tr><td class="year-column">2024</td><td class="count-column">1,812</td><td class="rank-column">#168</td></tr>
             </tbody>
         </table>
-        
+
         <div class="footer">
-            <p>Data source: U.S. Social Security Administration</p>
+            <p>Data source: U.S. Social Security Administration national data (1880–2024).</p>
             <p>&copy; 2026 Baby Names Analytics</p>
         </div>
     </div>

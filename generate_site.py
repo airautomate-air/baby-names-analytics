@@ -1,69 +1,98 @@
 #!/usr/bin/env python3
 """
 Generate static site for baby names analytics.
+
+Data: U.S. Social Security Administration national data (yob<year>.txt),
+one row per (name, sex, count) per year. NOTE: each name can appear twice in a
+year file -- once for F and once for M -- so counts MUST be tracked per sex and
+summed, never overwritten.
 """
-import os
-import csv
+import re
 from collections import defaultdict
 from pathlib import Path
 
+# ---------------------------------------------------------------------------
 # Configuration
-DATA_DIR = Path('.')  # where the yob*.txt files are
-OUTPUT_DIR = Path('docs')  # GitHub Pages will serve from /docs (or we can change to root)
-YEARS = range(1880, 2026)  # we have data up to 2025
+# ---------------------------------------------------------------------------
+DATA_DIR = Path('.')          # where the yob<year>.txt files live
+OUTPUT_DIR = Path('docs')     # site output (served by Vercel)
+YEARS = [y for y in range(1880, 2025) if (DATA_DIR / f'yob{y}.txt').exists()]
+TOP_N_NAMES = 1000            # how many names get their own page
+DATA_RANGE = f"{YEARS[0]}–{YEARS[-1]}" if YEARS else ""
 
-# We'll create the output directory
 OUTPUT_DIR.mkdir(exist_ok=True)
 (OUTPUT_DIR / 'name').mkdir(exist_ok=True)
 (OUTPUT_DIR / 'year').mkdir(exist_ok=True)
 (OUTPUT_DIR / 'compare').mkdir(exist_ok=True)
 
-# Data structures
-# name_data[name][year] = count
-name_data = defaultdict(lambda: defaultdict(int))
-# year_data[year] = list of (name, count, sex) sorted by count descending
-year_data = defaultdict(list)
+
+def slugify(name: str) -> str:
+    """Consistent URL slug used for every internal link and file name."""
+    s = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')
+    return s or 'name'
+
+
+# ---------------------------------------------------------------------------
+# Load data  ->  counts[name][sex][year] = count   (summed correctly)
+# ---------------------------------------------------------------------------
+counts = defaultdict(lambda: {'F': {}, 'M': {}})
+rank_by_year_sex = {}   # (year, sex) -> {name: rank}
 
 print("Reading data...")
 for year in YEARS:
-    filename = DATA_DIR / f'yob{year}.txt'
-    if not filename.exists():
-        print(f"Warning: {filename} not found")
-        continue
-    with open(filename, 'r') as f:
+    rows = {'F': [], 'M': []}
+    with open(DATA_DIR / f'yob{year}.txt', 'r', encoding='utf-8') as f:
         for line in f:
             line = line.strip()
             if not line:
                 continue
             name, sex, count = line.split(',')
             count = int(count)
-            name_data[name][year] = count
-            year_data[year].append((name, count, sex))
-    # Sort the year data by count descending (and then by name for tie-breaking)
-    year_data[year].sort(key=lambda x: (-x[1], x[0]))
-    print(f"  Processed {year}: {len(year_data[year])} entries")
+            if sex not in ('F', 'M'):
+                continue
+            # += guards against any accidental duplicate rows; the key fix is
+            # that F and M are stored separately and never overwrite each other.
+            counts[name][sex][year] = counts[name][sex].get(year, 0) + count
+            rows[sex].append((name, count))
+    for sex in ('F', 'M'):
+        rows[sex].sort(key=lambda x: (-x[1], x[0]))
+        rank_by_year_sex[(year, sex)] = {n: i + 1 for i, (n, _) in enumerate(rows[sex])}
+    print(f"  {year}: F={len(rows['F'])}, M={len(rows['M'])}")
 
-# Compute total counts per name to get top names
-total_counts = defaultdict(int)
-for name, years in name_data.items():
-    total_counts[name] = sum(years.values())
+# Per-name totals (per sex and combined)
+name_sex_total = {}
+name_total = {}
+for name, d in counts.items():
+    ft = sum(d['F'].values())
+    mt = sum(d['M'].values())
+    name_sex_total[(name, 'F')] = ft
+    name_sex_total[(name, 'M')] = mt
+    name_total[name] = ft + mt
 
-# Get top 1000 names by total count
-top_names = sorted(total_counts.items(), key=lambda x: x[1], reverse=True)[:1000]
-top_names_set = set(name for name, _ in top_names)
 
-print(f"Total unique names: len(name_data)")
-print(f"Top {len(top_names)} names selected for page generation.")
+def dominant_sex(name: str) -> str:
+    return 'F' if name_sex_total[(name, 'F')] >= name_sex_total[(name, 'M')] else 'M'
 
-# Generate homepage
-def generate_homepage():
-    html = '''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baby Names Analytics</title>
-    <style>
+
+top_names = sorted(name_total.items(), key=lambda x: (-x[1], x[0]))[:TOP_N_NAMES]
+
+# Every name that gets its own page: the all-time top N, PLUS any name that ever
+# cracked a yearly top-50 (so year-page links never 404 and trending modern
+# names like Isla / Nova get pages even if their all-time total is modest).
+pages_to_generate = {name for name, _ in top_names}
+for (year, sex), ranks in rank_by_year_sex.items():
+    for name, rank in ranks.items():
+        if rank <= 50:
+            pages_to_generate.add(name)
+pages_to_generate = sorted(pages_to_generate, key=lambda n: (-name_total[n], n))
+
+print(f"Total unique names: {len(name_total):,}")
+print(f"Top {len(top_names)} all-time + yearly top-50 = {len(pages_to_generate)} name pages.")
+
+# ---------------------------------------------------------------------------
+# Shared markup
+# ---------------------------------------------------------------------------
+BASE_CSS = """
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
@@ -71,593 +100,257 @@ def generate_homepage():
             background-color: #f5f5f5;
             color: #333;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-        }
-        .search-box {
-            margin: 2rem 0;
-            text-align: center;
-        }
-        .search-box input {
-            padding: 0.75rem;
-            width: 70%;
-            max-width: 400px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        .trending {
-            margin-top: 3rem;
-        }
-        .trending h2 {
-            color: #3498db;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 0.5rem;
-        }
-        .trending-list {
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { color: #2c3e50; }
+        .nav { margin-bottom: 2rem; }
+        .nav a { color: #3498db; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
+        .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-            list-style: none;
-            padding: 0;
-        }
-        .trending-list li {
-            background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .trending-list h3 {
-            margin-top: 0;
-            color: #2c3e50;
-        }
-        .trending-list p {
-            color: #7f8c8d;
-            margin: 0.5rem 0 0;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 3rem;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Baby Names Analytics</h1>
-        <p>Explore the popularity and trends of baby names over time.</p>
-        
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Enter a name to explore...">
-            <p id="searchHint">Try popular names like Olivia, Liam, Emma, Noah</p>
-        </div>
-        
-        <div class="trending">
-            <h2>Top Names of All Time (by total usage)</h2>
-            <ul class="trending-list">
-'''
-    # Add top 20 names as trending
-    for rank, (name, total) in enumerate(top_names[:20], start=1):
-        html += f'''                <li>
-                    <h3>{name}</h3>
-                    <p>{total:,} total babies</p>
-                </li>\n'''
-    html += '''            </ul>
-        </div>
-        
-        <div class="footer">
-            <p>Data source: U.S. Social Security Administration</p>
-            <p>&copy; 2026 Baby Names Analytics</p>
-        </div>
-    </div>
-    <script>
-        // Simple redirect to name page if entered
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const name = this.value.trim();
-                if (name) {
-                    // Format name for URL: lowercase, replace spaces with hyphens
-                    const urlName = name.toLowerCase().replace(/[^a-z0-9]+/g, '');
-                    window.location.href = `/name/${urlName}.html`;
-                }
-            }
-        });
-    </script>
-</body>
-</html>'''
-    with open(OUTPUT_DIR / 'index.html', 'w') as f:
-        f.write(html)
-
-# Generate name pages
-def generate_name_page(name):
-    # Get the data for this name across years
-    years_data = name_data[name]
-    # Prepare data for chart: years and counts
-    years = sorted(years_data.keys())
-    counts = [years_data[y] for y in years]
-    
-    # Determine gender: if the name appears mostly as one gender, we can show that
-    # We'll compute the total by sex across all years
-    sex_totals = {'F': 0, 'M': 0}
-    for year in years_data:
-        # We need to know the sex for each year; we didn't store it separately.
-        # Let's adjust: we'll store sex data as well.
-        # For simplicity, we'll assume the sex is consistent (most names are predominantly one sex).
-        # We'll compute this by re-reading or storing separately.
-        # We'll change the data structure to also track sex.
-        pass
-    # Since we didn't store sex, we'll skip gender info for now and add later.
-    
-    # For now, we'll generate a simple page showing the trend as a table.
-    html = f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{name} - Baby Name Analytics</title>
-    <style>
-        body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin: 0;
-            padding: 2rem;
-            background-color: #f5f5f5;
-            color: #333;
-        }}
-        .container {{
-            max-width: 800px;
-            margin: 0 auto;
-        }}
-        h1 {{
-            color: #2c3e50;
-        }}
-        .nav {{
-            margin-bottom: 2rem;
-        }}
-        .nav a {{
-            color: #3498db;
-            text-decoration: none;
-        }}
-        .nav a:hover {{
-            text-decoration: underline;
-        }}
-        .stats {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
-        }}
-        .stat {{
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
+        }
+        .stat {
+            background: #fff; padding: 1.5rem; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
+        }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
+        .stat-label { color: #7f8c8d; margin-top: 0.5rem; }
+        table {
+            width: 100%; border-collapse: collapse; margin-bottom: 2rem;
+            background: #fff; border-radius: 8px; overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            text-align: center;
-        }}
-        .stat-value {{
-            font-size: 2rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }}
-        .stat-label {{
-            color: #7f8c8d;
-            margin-top: 0.5rem;
-        }}
-        table {{
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 2rem;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }}
-        th, td {{
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }}
-        th {{
-            background-color: #ecf0f1;
-            font-weight: 600;
-        }}
-        tr:hover {{
-            background-color: #f8f9fa;
-        }}
-        .year-column {{
-            width: 10%;
-            font-family: monospace;
-        }}
-        .count-column {{
-            width: 15%;
-            text-align: right;
-        }}
-        .rank-column {{
-            width: 15%;
-            text-align: right;
-        }}
-        .footer {{
-            text-align: center;
-            margin-top: 3rem;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }}
-    </style>
+        }
+        th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #ecf0f1; font-weight: 600; }
+        tr:hover { background-color: #f8f9fa; }
+        .year-column { width: 12%; font-family: monospace; }
+        .count-column { width: 18%; text-align: right; }
+        .rank-column { width: 15%; text-align: right; }
+        .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
+        a { color: #3498db; }
+"""
+
+FOOTER = f"""
+        <div class="footer">
+            <p>Data source: U.S. Social Security Administration national data ({DATA_RANGE}).</p>
+            <p>&copy; 2026 Baby Names Analytics</p>
+        </div>"""
+
+
+def page(title, body):
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title}</title>
+    <style>{BASE_CSS}</style>
 </head>
 <body>
     <div class="container">
-        <nav class="nav">
-            <a href="/">← Back to all names</a>
-        </nav>
-        <h1>{name}</h1>
-        
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-value">{sum(years_data.values()):,}</div>
-                <div class="stat-label">Total babies</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">{len(years_data)}</div>
-                <div class="stat-label">Years appearing</div>
-            </div>
-            <div class="stat">
-                <div class="stat-value">{max(years_data.values()) if years_data else 0:,}</div>
-                <div class="stat-label">Peak popularity</div>
-            </div>
+{body}
+{FOOTER}
+    </div>
+</body>
+</html>"""
+
+
+def sex_label(sex: str) -> str:
+    return 'girls' if sex == 'F' else 'boys'
+
+
+# ---------------------------------------------------------------------------
+# Homepage
+# ---------------------------------------------------------------------------
+def generate_homepage():
+    items = ""
+    for name, total in top_names[:20]:
+        dom = dominant_sex(name)
+        items += (
+            f'                <li><a href="/name/{slugify(name)}.html"><h3>{name}</h3></a>'
+            f'<p>{total:,} total babies</p><p style="font-size:0.8rem">mostly {sex_label(dom)}</p></li>\n'
+        )
+    body = f"""        <h1>Baby Names Analytics</h1>
+        <p>Explore the popularity and trends of U.S. baby names from {DATA_RANGE}.</p>
+
+        <div class="search-box" style="margin:2rem 0; text-align:center;">
+            <input type="text" id="searchInput" placeholder="Enter a name to explore..."
+                   style="padding:0.75rem; width:70%; max-width:400px; border:1px solid #ddd; border-radius:4px; font-size:1rem;">
+            <p>Try names like Olivia, Liam, Emma, Noah, James (top {len(top_names)} all-time)</p>
         </div>
-        
-        <h2>Popularity Over Time</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th class="year-column">Year</th>
-                    <th class="count-column">Babies</th>
-                    <th class="rank-column">Rank</th>
-                </tr>
-            </thead>
-            <tbody>
-'''
-    # Add rows for each year where the name appeared
+
+        <div class="trending">
+            <h2 style="color:#3498db; border-bottom:2px solid #ecf0f1; padding-bottom:0.5rem;">Top Names of All Time (by total usage)</h2>
+            <ul class="trending-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; list-style:none; padding:0;">
+{items}            </ul>
+        </div>
+
+        <script>
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {{
+            if (e.key === 'Enter') {{
+                var slug = this.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+                if (slug) window.location.href = '/name/' + slug + '.html';
+            }}
+        }});
+        </script>"""
+    (OUTPUT_DIR / 'index.html').write_text(page("Baby Names Analytics", body), encoding='utf-8')
+
+
+# ---------------------------------------------------------------------------
+# Name page
+# ---------------------------------------------------------------------------
+def generate_name_page(name):
+    dom = dominant_sex(name)
+    series = counts[name][dom]                 # {year: count} for the dominant sex
+    years = sorted(series.keys())
+    ft = name_sex_total[(name, 'F')]
+    mt = name_sex_total[(name, 'M')]
+    total = ft + mt
+    peak = max(series.values()) if series else 0
+    f_pct = round(100 * ft / total) if total else 0
+
+    if ft and mt and min(ft, mt) / total >= 0.10:
+        gender_text = f"Unisex — {f_pct}% girls / {100 - f_pct}% boys"
+    else:
+        gender_text = f"{f_pct}% girls" if dom == 'F' else f"{100 - f_pct}% boys"
+
+    rows = ""
     for year in years:
-        count = years_data[year]
-        # Find rank for this year
-        # We have year_data[year] which is a list of (name, count, sex) sorted by count
-        # We'll search for the name in that list to get rank.
-        # This is O(n) per year, but we can precompute a rank dict for each year.
-        # For simplicity, we'll do a linear search since we're only doing top 1000 names.
-        rank = None
-        for i, (n, c, s) in enumerate(year_data[year]):
-            if n == name:
-                rank = i + 1
-                break
-        if rank is None:
-            rank = '>1000'  # not in top 1000 for that year
-        html += f'''                <tr>
-                    <td class="year-column">{year}</td>
-                    <td class="count-column">{count:,}</td>
-                    <td class="rank-column">{rank}</td>
-                </tr>\n'''
-    html += '''            </tbody>
-        </table>
-        
-        <div class="footer">
-            <p>Data source: U.S. Social Security Administration</p>
-            <p>&copy; 2026 Baby Names Analytics</p>
-        </div>
-    </div>
-</body>
-</html>'''
-    # Write to file
-    # Create a safe filename: lowercase, replace non-alphanumeric with hyphens
-    safe_name = ''.join(c if c.isalnum() else '-' for c in name.lower()).strip('-')
-    # Avoid empty name
-    if not safe_name:
-        safe_name = 'name'
-    with open(OUTPUT_DIR / 'name' / f'{safe_name}.html', 'w') as f:
-        f.write(html)
+        count = series[year]
+        rank = rank_by_year_sex.get((year, dom), {}).get(name)
+        rank_disp = f"#{rank:,}" if rank else "–"
+        rows += (
+            f'                <tr><td class="year-column">{year}</td>'
+            f'<td class="count-column">{count:,}</td>'
+            f'<td class="rank-column">{rank_disp}</td></tr>\n'
+        )
 
-# Generate year pages (top names for each year)
-def generate_year_page(year):
-    # Get top 100 names for this year (or all if less)
-    top_for_year = year_data[year][:100]  # already sorted by count descending
-    html = f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Baby Names of {year} - Baby Name Analytics</title>
-    <style>
-        body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin: 0;
-            padding: 2rem;
-            background-color: #f5f5f5;
-            color: #333;
-        }}
-        .container {{
-            max-width: 800px;
-            margin: 0 auto;
-        }}
-        h1 {{
-            color: #2c3e50;
-        }}
-        .nav {{
-            margin-bottom: 2rem;
-        }}
-        .nav a {{
-            color: #3498db;
-            text-decoration: none;
-        }}
-        .nav a:hover {{
-            text-decoration: underline;
-        }}
-        table {{
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 2rem;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }}
-        th, td {{
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }}
-        th {{
-            background-color: #ecf0f1;
-            font-weight: 600;
-        }}
-        tr:hover {{
-            background-color: #f8f9fa;
-        }}
-        .rank-column {{
-            width: 10%;
-            text-align: center;
-            font-weight: bold;
-            color: #e74c3c;
-        }}
-        .name-column {{
-            width: 30%;
-        }}
-        .count-column {{
-            width: 20%;
-            text-align: right;
-        }}
-        .sex-column {{
-            width: 10%;
-            text-align: center;
-        }}
-        .footer {{
-            text-align: center;
-            margin-top: 3rem;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <nav class="nav">
-            <a href="/">← Back to all names</a>
-            <a href="/year/{year-1}/">← {year-1}</a> |
-            <a href="/year/{year+1}/">{year+1} →</a>
-        </nav>
-        <h1>Top Baby Names of {year}</h1>
-        
+    body = f"""        <nav class="nav"><a href="/">← Back to all names</a></nav>
+        <h1>{name}</h1>
+        <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a {sex_label(dom)[:-1]}'s name &middot; {gender_text}</p>
+
+        <div class="stats">
+            <div class="stat"><div class="stat-value">{total:,}</div><div class="stat-label">Total babies (all years)</div></div>
+            <div class="stat"><div class="stat-value">{len(years)}</div><div class="stat-label">Years in the data</div></div>
+            <div class="stat"><div class="stat-value">{peak:,}</div><div class="stat-label">Peak in a single year</div></div>
+        </div>
+
+        <h2>Popularity Over Time — {sex_label(dom).capitalize()}</h2>
+        <p style="color:#7f8c8d; font-size:0.9rem;">Rank is among all {sex_label(dom)}' names registered that year.</p>
         <table>
-            <thead>
-                <tr>
-                    <th class="rank-column">Rank</th>
-                    <th class="name-column">Name</th>
-                    <th class="sex-column">Sex</th>
-                    <th class="count-column">Number of Babies</th>
-                </tr>
-            </thead>
+            <thead><tr>
+                <th class="year-column">Year</th>
+                <th class="count-column">Babies</th>
+                <th class="rank-column">Rank</th>
+            </tr></thead>
             <tbody>
-'''
-    for rank, (name, count, sex) in enumerate(top_for_year, start=1):
-        html += f'''                <tr>
-                    <td class="rank-column">{rank}</td>
-                    <td class="name-column"><a href="/name/{''.join(c if c.isalnum() else '_' for c in name.lower()).strip('_')}.html">{name}</a></td>
-                    <td class="sex-column">{sex}</td>
-                    <td class="count-column">{count:,}</td>
-                </tr>\n'''
-    html += '''            </tbody>
-        </table>
-        
-        <div class="footer">
-            <p>Data source: U.S. Social Security Administration</p>
-            <p>&copy; 2026 Baby Names Analytics</p>
-        </div>
-    </div>
-</body>
-</html>'''
-    with open(OUTPUT_DIR / 'year' / f'{year}.html', 'w') as f:
-        f.write(html)
+{rows}            </tbody>
+        </table>"""
+    (OUTPUT_DIR / 'name' / f'{slugify(name)}.html').write_text(
+        page(f"{name} - Baby Name Popularity & Trends", body), encoding='utf-8')
 
-# Generate comparison page (optional, for now we'll skip or do a simple version)
-# We'll generate a few sample comparisons for popular names.
 
+# ---------------------------------------------------------------------------
+# Year page  (separate top-50 girls and boys lists = conventional + correct)
+# ---------------------------------------------------------------------------
+def generate_year_page(year):
+    def table_for(sex):
+        ranked = sorted(rank_by_year_sex[(year, sex)].items(), key=lambda x: x[1])[:50]
+        rows = ""
+        for name, rank in ranked:
+            c = counts[name][sex][year]
+            rows += (
+                f'                <tr><td class="rank-column">{rank}</td>'
+                f'<td><a href="/name/{slugify(name)}.html">{name}</a></td>'
+                f'<td class="count-column">{c:,}</td></tr>\n'
+            )
+        return rows
+
+    prev_link = f'<a href="/year/{year-1}.html">← {year-1}</a>' if (year - 1) in YEARS else ''
+    next_link = f'<a href="/year/{year+1}.html">{year+1} →</a>' if (year + 1) in YEARS else ''
+    body = f"""        <nav class="nav"><a href="/">← All names</a> &nbsp; {prev_link} &nbsp; {next_link}</nav>
+        <h1>Top Baby Names of {year}</h1>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
+            <div>
+                <h2 style="color:#e84393;">Girls</h2>
+                <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
+                <tbody>
+{table_for('F')}                </tbody></table>
+            </div>
+            <div>
+                <h2 style="color:#0984e3;">Boys</h2>
+                <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
+                <tbody>
+{table_for('M')}                </tbody></table>
+            </div>
+        </div>"""
+    (OUTPUT_DIR / 'year' / f'{year}.html').write_text(
+        page(f"Top Baby Names of {year} - Rankings & Counts", body), encoding='utf-8')
+
+
+# ---------------------------------------------------------------------------
+# Comparison page
+# ---------------------------------------------------------------------------
 def generate_comparison_page(name1, name2):
-    # We'll show a side-by-side trend chart (as a table)
-    html = f'''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{name1} vs {name2} - Baby Name Analytics</title>
-    <style>
-        body {{
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin: 0;
-            padding: 2rem;
-            background-color: #f5f5f5;
-            color: #333;
-        }}
-        .container {{
-            max-width: 1000px;
-            margin: 0 auto;
-        }}
-        h1 {{
-            color: #2c3e50;
-            text-align: center;
-        }}
-        .nav {{
-            margin-bottom: 2rem;
-        }}
-        .nav a {{
-            color: #3498db;
-            text-decoration: none;
-        }}
-        .nav a:hover {{
-            text-decoration: underline;
-        }}
-        .comparison {{
-            display: flex;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }}
-        .comparison-column {{
-            flex: 1;
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }}
-        .comparison-column h2 {{
-            margin-top: 0;
-            color: #3498db;
-            border-bottom: 1px solid #ecf0f1;
-            padding-bottom: 0.5rem;
-        }}
-        table {{
-            width: 100%;
-            border-collapse: collapse;
-        }}
-        th, td {{
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }}
-        th {{
-            background-color: #ecf0f1;
-            font-weight: 600;
-        }}
-        tr:hover {{
-            background-color: #f8f9fa;
-        }}
-        .year-column {{
-            width: 20%;
-            font-family: monospace;
-        }}
-        .count-column {{
-            width: 30%;
-            text-align: right;
-        }}
-        .footer {{
-            text-align: center;
-            margin-top: 3rem;
-            color: #7f8c8d;
-            font-size: 0.9rem;
-        }}
-    </style>
-</head>
-<body>
-    <div class="container">
-        <nav class="nav">
-            <a href="/">← Back to all names</a>
-        </nav>
-        <h1>{name1} vs {name2}</h1>
-        
-        <div class="comparison">
-            <div class="comparison-column">
-                <h2>{name1}</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="year-column">Year</th>
-                            <th class="count-column">Babies</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-'''
-    # Add data for name1
-    years1 = sorted(name_data[name1].keys())
-    for year in years1:
-        count = name_data[name1][year]
-        html += f'''                        <tr>
-                            <td class="year-column">{year}</td>
-                            <td class="count-column">{count:,}</td>
-                        </tr>\n'''
-    html += '''                    </tbody>
-                </table>
-            </div>
-            <div class="comparison-column">
-                <h2>{name2}</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="year-column">Year</th>
-                            <th class="count-column">Babies</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-'''
-    # Add data for name2
-    years2 = sorted(name_data[name2].keys())
-    for year in years2:
-        count = name_data[name2][year]
-        html += f'''                        <tr>
-                            <td class="year-column">{year}</td>
-                            <td class="count-column">{count:,}</td>
-                        </tr>\n'''
-    html += '''                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>Data source: U.S. Social Security Administration</p>
-            <p>&copy; 2026 Baby Names Analytics</p>
-        </div>
-    </div>
-</body>
-</html>'''
-    safe_name1 = ''.join(c if c.isalnum() else '-' for c in name1.lower()).strip('-')
-    safe_name2 = ''.join(c if c.isalnum() else '-' for c in name2.lower()).strip('-')
-    with open(OUTPUT_DIR / 'compare' / f'{safe_name1}-vs-{safe_name2}.html', 'w') as f:
-        f.write(html)
+    def column(name):
+        dom = dominant_sex(name)
+        series = counts[name][dom]
+        rows = ""
+        for year in sorted(series.keys()):
+            rows += (
+                f'                        <tr><td class="year-column">{year}</td>'
+                f'<td class="count-column">{series[year]:,}</td></tr>\n'
+            )
+        return dom, rows
 
+    dom1, rows1 = column(name1)
+    dom2, rows2 = column(name2)
+    body = f"""        <nav class="nav"><a href="/">← Back to all names</a></nav>
+        <h1>{name1} vs {name2}</h1>
+        <div style="display:flex; gap:2rem; flex-wrap:wrap;">
+            <div style="flex:1; min-width:280px;">
+                <h2 style="color:#3498db;">{name1} <span style="font-size:0.7em; color:#7f8c8d;">({sex_label(dom1)})</span></h2>
+                <table><thead><tr><th class="year-column">Year</th><th class="count-column">Babies</th></tr></thead>
+                <tbody>
+{rows1}                </tbody></table>
+            </div>
+            <div style="flex:1; min-width:280px;">
+                <h2 style="color:#3498db;">{name2} <span style="font-size:0.7em; color:#7f8c8d;">({sex_label(dom2)})</span></h2>
+                <table><thead><tr><th class="year-column">Year</th><th class="count-column">Babies</th></tr></thead>
+                <tbody>
+{rows2}                </tbody></table>
+            </div>
+        </div>"""
+    fname = f'{slugify(name1)}-vs-{slugify(name2)}.html'
+    (OUTPUT_DIR / 'compare' / fname).write_text(
+        page(f"{name1} vs {name2} - Baby Name Comparison", body), encoding='utf-8')
+
+
+# ---------------------------------------------------------------------------
 def main():
     print("Generating homepage...")
     generate_homepage()
-    
-    print(f"Generating name pages for top {len(top_names)} names...")
-    for i, (name, _) in enumerate(top_names):
-        if i % 100 == 0:
-            print(f"  Processed {i} names...")
+
+    print(f"Generating {len(pages_to_generate)} name pages...")
+    for i, name in enumerate(pages_to_generate):
+        if i % 200 == 0:
+            print(f"  {i} names...")
         generate_name_page(name)
-    
-    print("Generating year pages...")
+
+    print(f"Generating {len(YEARS)} year pages...")
     for year in YEARS:
         generate_year_page(year)
-    
-    print("Generating a few comparison pages...")
-    # Generate comparisons for the top 5 names
+
+    print("Generating comparison pages (top 5 names)...")
     top5 = [name for name, _ in top_names[:5]]
     for i in range(len(top5)):
-        for j in range(i+1, len(top5)):
+        for j in range(i + 1, len(top5)):
             generate_comparison_page(top5[i], top5[j])
-    
+
     print("Done!")
+
 
 if __name__ == '__main__':
     main()

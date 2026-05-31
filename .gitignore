@@ -1,2 +1,4 @@
-yob*.txt
+# yob*.txt (SSA national data) are committed so the build is reproducible in CI.
 names.zip
+*.tar.gz
+__pycache__/
