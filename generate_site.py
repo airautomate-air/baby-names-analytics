@@ -271,8 +271,8 @@ BASE_CSS = """
 
 FOOTER = f"""
         <div class="footer">
-            <p>Data source: U.S. Social Security Administration national data ({DATA_RANGE}).</p>
             <p>&copy; 2026 NameCharted</p>
+            <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.25rem;">Data: U.S. Social Security Administration ({DATA_RANGE})</p>
         </div>"""
 
 SITE_NAV = f"""
