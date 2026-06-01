@@ -2,3 +2,4 @@
 names.zip
 *.tar.gz
 __pycache__/
+.vercel
