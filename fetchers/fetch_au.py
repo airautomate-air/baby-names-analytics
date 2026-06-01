@@ -1,8 +1,9 @@
 """Fetch Australian name data from NSW BDM (1952–2025) + VIC BDM (2008–2025).
 
-These are the two most complete state-level datasets. We sum NSW + VIC counts per
-(year, sex, name) to approximate national popularity. (Other states publish smaller
-top-N lists; can be added later.)
+Also opportunistically reads manually-downloaded QLD + SA CSV files if present
+under data/raw/au/qld/*.csv and data/raw/au/sa/*.csv — both states publish to
+CKAN portals behind CloudFront WAFs that block scripted downloads, so the user
+must drop the files in via a browser. See README in those folders for URLs.
 """
 import csv
 import io
@@ -89,14 +90,59 @@ def vic_rows():
                 yield (year, 'F', row[4].strip(), int(row[5]))
 
 
+def manual_state_rows(state: str):
+    """Read any CSVs the user dropped under data/raw/au/<state>/.
+
+    Tolerant of column-name variation across QLD, SA, and other state portals.
+    Each CSV must contain identifiable Name / Count / Sex / Year columns.
+    """
+    folder = AU_RAW / state
+    if not folder.exists():
+        return
+    found = 0
+    for path in sorted(folder.glob('*.csv')):
+        try:
+            with path.open(encoding='utf-8-sig') as f:
+                reader = csv.DictReader(f)
+                cols = {c.lower(): c for c in (reader.fieldnames or [])}
+                col = lambda *names: next((cols[n] for n in names if n in cols), None)
+                c_year = col('year', 'birth year')
+                c_name = col('name', 'first name', 'firstname', 'given name')
+                c_count = col('number', 'count', 'frequency', 'total')
+                c_sex = col('gender', 'sex')
+                if not (c_year and c_name and c_count and c_sex):
+                    print(f"  [AU/{state}] skip {path.name}: missing columns")
+                    continue
+                n = 0
+                for row in reader:
+                    try:
+                        year = int(row[c_year])
+                        count = int(row[c_count])
+                        name = row[c_name]
+                        sex = row[c_sex]
+                    except (KeyError, ValueError, TypeError):
+                        continue
+                    if count > 0 and name:
+                        yield (year, sex, name, count)
+                        n += 1
+                found += n
+                print(f"  [AU/{state}] {path.name}: {n:,} rows")
+        except Exception as e:
+            print(f"  [AU/{state}] error {path.name}: {e}")
+    if not found:
+        print(f"  [AU/{state}] no data found (drop CSVs into data/raw/au/{state}/)")
+
+
 def main():
-    print("[AU] NSW BDM 1952–2025 + VIC BDM 2008–2025")
+    print("[AU] NSW BDM 1952–2025 + VIC BDM 2008–2025 (+ QLD/SA if present)")
     AU_RAW.mkdir(parents=True, exist_ok=True)
     rows = list(nsw_rows())
     print(f"  [AU] NSW: {len(rows):,} rows")
     vrows = list(vic_rows())
     print(f"  [AU] VIC: {len(vrows):,} rows")
     rows.extend(vrows)
+    rows.extend(manual_state_rows('qld'))
+    rows.extend(manual_state_rows('sa'))
     write_normalized('AU', rows)
 
 

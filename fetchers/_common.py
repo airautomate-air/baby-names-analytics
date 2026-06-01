@@ -10,6 +10,7 @@ Unified normalized schema (one row per country/year/sex/name):
 from __future__ import annotations
 import csv
 import re
+import unicodedata
 from pathlib import Path
 from typing import Iterable, Iterator
 
@@ -30,6 +31,16 @@ def titlecase_name(raw: str) -> str:
     return ''.join(p.capitalize() if not re.match(r"[\-' ]", p) else p for p in parts)
 
 
+def fold_accents(name: str) -> str:
+    """Strip diacritics for matching: 'André' -> 'Andre', 'Aärôn' -> 'Aaron'.
+
+    Uses NFKD decomposition + drops combining marks. Hyphens, apostrophes and
+    spaces are preserved. Result is uppercased for case-insensitive grouping."""
+    nfkd = unicodedata.normalize('NFKD', name)
+    stripped = ''.join(c for c in nfkd if not unicodedata.combining(c))
+    return stripped.upper()
+
+
 def normalize_sex(raw) -> str | None:
     """Map common sex encodings to 'F' or 'M'. Returns None if unrecognized."""
     if raw is None:
@@ -45,11 +56,14 @@ def normalize_sex(raw) -> str | None:
 def write_normalized(country: str, rows: Iterable[tuple[int, str, str, int]]) -> Path:
     """Write a normalized CSV. `rows` yields (year, sex, name, count) tuples for one country.
 
-    Aggregates duplicate (year,sex,name) triples by summing counts. Skips bad rows.
+    Two-step aggregation:
+      1. Sum exact (year, sex, name) duplicates.
+      2. Merge accent variants per (year, sex, fold_accents(name)): canonical name
+         is the variant with the highest individual count; counts are summed.
     Returns the output path.
     """
     out = NORMALIZED_DIR / f"{country.lower()}.csv"
-    agg: dict[tuple[int, str, str], int] = {}
+    exact: dict[tuple[int, str, str], int] = {}
     skipped = 0
     for row in rows:
         try:
@@ -62,17 +76,38 @@ def write_normalized(country: str, rows: Iterable[tuple[int, str, str, int]]) ->
                 skipped += 1
                 continue
             key = (year, sex, name)
-            agg[key] = agg.get(key, 0) + count
+            exact[key] = exact.get(key, 0) + count
         except (TypeError, ValueError):
             skipped += 1
             continue
+
+    # Group by (year, sex, folded_name) and pick canonical = max-count variant.
+    groups: dict[tuple[int, str, str], dict[str, int]] = {}
+    for (year, sex, name), count in exact.items():
+        gkey = (year, sex, fold_accents(name))
+        groups.setdefault(gkey, {})[name] = count
+    merged_count = 0
+    final: list[tuple[int, str, str, int]] = []
+    for (year, sex, _), variants in groups.items():
+        canonical = max(variants.items(), key=lambda kv: (kv[1], kv[0]))[0]
+        total = sum(variants.values())
+        if len(variants) > 1:
+            merged_count += len(variants) - 1
+        final.append((year, sex, canonical, total))
+    final.sort()
+
     with out.open('w', newline='', encoding='utf-8') as f:
         w = csv.writer(f)
         w.writerow(HEADER)
-        for (year, sex, name), count in sorted(agg.items()):
+        for year, sex, name, count in final:
             w.writerow((country, year, sex, name, count))
-    print(f"  [{country}] wrote {len(agg):,} rows -> {out.relative_to(ROOT)}"
-          + (f" (skipped {skipped:,} bad rows)" if skipped else ""))
+    extra = []
+    if merged_count:
+        extra.append(f"merged {merged_count:,} accent variants")
+    if skipped:
+        extra.append(f"skipped {skipped:,} bad rows")
+    suffix = f" ({', '.join(extra)})" if extra else ""
+    print(f"  [{country}] wrote {len(final):,} rows -> {out.relative_to(ROOT)}{suffix}")
     return out
 
 

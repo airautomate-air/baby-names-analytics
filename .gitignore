@@ -4,5 +4,11 @@ names.zip
 __pycache__/
 .vercel
 
-# Phase 1 fetcher raw downloads (reproducible from fetchers/)
-data/raw/
+# Phase 1 fetcher raw downloads (reproducible from fetchers/).
+# Ignore contents but keep the QLD/SA manual-drop READMEs tracked.
+data/raw/**
+!data/raw/au/
+!data/raw/au/qld/
+!data/raw/au/sa/
+!data/raw/au/qld/README.md
+!data/raw/au/sa/README.md
