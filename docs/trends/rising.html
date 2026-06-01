@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fastest-Rising Baby Names of 2024</title>
+    <meta name="description" content="The fastest-rising U.S. baby names heading into 2024, for girls and boys, based on official Social Security birth data.">
+    <link rel="canonical" href="https://baby-names-analytics.vercel.app/trends/rising.html">
+    <meta property="og:title" content="Fastest-Rising Baby Names of 2024">
+    <meta property="og:description" content="The fastest-rising U.S. baby names heading into 2024, for girls and boys, based on official Social Security birth data.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://baby-names-analytics.vercel.app/trends/rising.html">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        h1 { color: #2c3e50; }
+        .sitenav {
+            background: #2c3e50; padding: 0.9rem 2rem;
+        }
+        .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a:hover { color: #fff; text-decoration: underline; }
+        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .nav a { color: #3498db; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
+        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .insight {
+            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat {
+            background: #fff; padding: 1.5rem; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
+        }
+        .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
+        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
+        table {
+            width: 100%; border-collapse: collapse; margin-bottom: 2rem;
+            background: #fff; border-radius: 8px; overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #ecf0f1; font-weight: 600; }
+        tr:hover { background-color: #f8f9fa; }
+        .year-column { width: 12%; font-family: monospace; }
+        .count-column { width: 18%; text-align: right; }
+        .rank-column { width: 15%; text-align: right; }
+        .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
+        .related a {
+            background:#fff; border:1px solid #d6dde2; border-radius:20px;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+        }
+        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
+        .azindex a:hover { background:#3498db; color:#fff; }
+        .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
+        a { color: #3498db; }
+</style>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://baby-names-analytics.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Trends", "item": "https://baby-names-analytics.vercel.app/trends.html"}, {"@type": "ListItem", "position": 3, "name": "Rising", "item": "https://baby-names-analytics.vercel.app/trends/rising.html"}]}</script>
+</head>
+<body>
+    <div class="sitenav"><div class="sitenav-inner">
+        <a class="brand" href="/">Baby Names Analytics</a>
+        <a href="/">Home</a>
+        <a href="/names.html">Browse A–Z</a>
+        <a href="/trends.html">Trends</a>
+        <a href="/decades.html">Decades</a>
+        <a href="/year/2024.html">2024 Rankings</a>
+    </div></div>
+    <div class="container">
+        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/trends.html">Trends</a> &rsaquo; Rising</div>
+        <h1>Fastest-Rising Baby Names (2024)</h1>
+        <p>The girls' and boys' names growing fastest in popularity — comparing average births around
+        five years ago with the most recent years, from U.S. Social Security data. Only names with
+        meaningful current usage are included.</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2rem;">
+            <div><h2 style="color:#e84393;">Girls</h2><table><thead><tr><th>Name</th><th class="count-column">~5 yrs ago</th><th class="count-column">2024</th><th class="count-column">Change</th></tr></thead><tbody>
+                <tr><td><a href="/name/lainey.html">Lainey</a></td><td class="count-column">707</td><td class="count-column">3,594</td><td class="count-column" style="color:#27ae60;">▲ 408%</td></tr>
+                <tr><td><a href="/name/florence.html">Florence</a></td><td class="count-column">274</td><td class="count-column">589</td><td class="count-column" style="color:#27ae60;">▲ 115%</td></tr>
+                <tr><td><a href="/name/billie.html">Billie</a></td><td class="count-column">160</td><td class="count-column">333</td><td class="count-column" style="color:#27ae60;">▲ 108%</td></tr>
+                <tr><td><a href="/name/nellie.html">Nellie</a></td><td class="count-column">249</td><td class="count-column">507</td><td class="count-column" style="color:#27ae60;">▲ 104%</td></tr>
+                <tr><td><a href="/name/gianna.html">Gianna</a></td><td class="count-column">3,356</td><td class="count-column">6,219</td><td class="count-column" style="color:#27ae60;">▲ 85%</td></tr>
+                <tr><td><a href="/name/opal.html">Opal</a></td><td class="count-column">362</td><td class="count-column">639</td><td class="count-column" style="color:#27ae60;">▲ 77%</td></tr>
+                <tr><td><a href="/name/eloise.html">Eloise</a></td><td class="count-column">1,758</td><td class="count-column">3,085</td><td class="count-column" style="color:#27ae60;">▲ 75%</td></tr>
+                <tr><td><a href="/name/rosie.html">Rosie</a></td><td class="count-column">488</td><td class="count-column">838</td><td class="count-column" style="color:#27ae60;">▲ 72%</td></tr>
+                <tr><td><a href="/name/flora.html">Flora</a></td><td class="count-column">250</td><td class="count-column">427</td><td class="count-column" style="color:#27ae60;">▲ 71%</td></tr>
+                <tr><td><a href="/name/maxine.html">Maxine</a></td><td class="count-column">326</td><td class="count-column">555</td><td class="count-column" style="color:#27ae60;">▲ 70%</td></tr>
+                <tr><td><a href="/name/celeste.html">Celeste</a></td><td class="count-column">745</td><td class="count-column">1,258</td><td class="count-column" style="color:#27ae60;">▲ 69%</td></tr>
+                <tr><td><a href="/name/mabel.html">Mabel</a></td><td class="count-column">714</td><td class="count-column">1,179</td><td class="count-column" style="color:#27ae60;">▲ 65%</td></tr>
+                <tr><td><a href="/name/loretta.html">Loretta</a></td><td class="count-column">237</td><td class="count-column">379</td><td class="count-column" style="color:#27ae60;">▲ 60%</td></tr>
+                <tr><td><a href="/name/della.html">Della</a></td><td class="count-column">302</td><td class="count-column">473</td><td class="count-column" style="color:#27ae60;">▲ 57%</td></tr>
+                <tr><td><a href="/name/eliana.html">Eliana</a></td><td class="count-column">3,525</td><td class="count-column">5,527</td><td class="count-column" style="color:#27ae60;">▲ 57%</td></tr>
+                <tr><td><a href="/name/josie.html">Josie</a></td><td class="count-column">1,659</td><td class="count-column">2,592</td><td class="count-column" style="color:#27ae60;">▲ 56%</td></tr>
+                <tr><td><a href="/name/ivy.html">Ivy</a></td><td class="count-column">3,252</td><td class="count-column">5,063</td><td class="count-column" style="color:#27ae60;">▲ 56%</td></tr>
+                <tr><td><a href="/name/isla.html">Isla</a></td><td class="count-column">3,444</td><td class="count-column">5,344</td><td class="count-column" style="color:#27ae60;">▲ 55%</td></tr>
+                <tr><td><a href="/name/elaine.html">Elaine</a></td><td class="count-column">507</td><td class="count-column">777</td><td class="count-column" style="color:#27ae60;">▲ 53%</td></tr>
+                <tr><td><a href="/name/georgia.html">Georgia</a></td><td class="count-column">1,408</td><td class="count-column">2,126</td><td class="count-column" style="color:#27ae60;">▲ 51%</td></tr>
+                <tr><td><a href="/name/daisy.html">Daisy</a></td><td class="count-column">1,751</td><td class="count-column">2,613</td><td class="count-column" style="color:#27ae60;">▲ 49%</td></tr>
+                <tr><td><a href="/name/bonnie.html">Bonnie</a></td><td class="count-column">429</td><td class="count-column">633</td><td class="count-column" style="color:#27ae60;">▲ 48%</td></tr>
+                <tr><td><a href="/name/elsie.html">Elsie</a></td><td class="count-column">1,191</td><td class="count-column">1,740</td><td class="count-column" style="color:#27ae60;">▲ 46%</td></tr>
+                <tr><td><a href="/name/iris.html">Iris</a></td><td class="count-column">2,104</td><td class="count-column">2,998</td><td class="count-column" style="color:#27ae60;">▲ 42%</td></tr>
+                <tr><td><a href="/name/eden.html">Eden</a></td><td class="count-column">1,992</td><td class="count-column">2,821</td><td class="count-column" style="color:#27ae60;">▲ 42%</td></tr>
+                <tr><td><a href="/name/alma.html">Alma</a></td><td class="count-column">468</td><td class="count-column">659</td><td class="count-column" style="color:#27ae60;">▲ 41%</td></tr>
+                <tr><td><a href="/name/nova.html">Nova</a></td><td class="count-column">3,852</td><td class="count-column">5,413</td><td class="count-column" style="color:#27ae60;">▲ 41%</td></tr>
+                <tr><td><a href="/name/louise.html">Louise</a></td><td class="count-column">369</td><td class="count-column">511</td><td class="count-column" style="color:#27ae60;">▲ 39%</td></tr>
+                <tr><td><a href="/name/faye.html">Faye</a></td><td class="count-column">412</td><td class="count-column">569</td><td class="count-column" style="color:#27ae60;">▲ 38%</td></tr>
+                <tr><td><a href="/name/annie.html">Annie</a></td><td class="count-column">1,097</td><td class="count-column">1,488</td><td class="count-column" style="color:#27ae60;">▲ 36%</td></tr>
+            </tbody></table></div>
+            <div><h2 style="color:#0984e3;">Boys</h2><table><thead><tr><th>Name</th><th class="count-column">~5 yrs ago</th><th class="count-column">2024</th><th class="count-column">Change</th></tr></thead><tbody>
+                <tr><td><a href="/name/luca.html">Luca</a></td><td class="count-column">3,709</td><td class="count-column">7,870</td><td class="count-column" style="color:#27ae60;">▲ 112%</td></tr>
+                <tr><td><a href="/name/casey.html">Casey</a></td><td class="count-column">518</td><td class="count-column">1,052</td><td class="count-column" style="color:#27ae60;">▲ 103%</td></tr>
+                <tr><td><a href="/name/arthur.html">Arthur</a></td><td class="count-column">1,787</td><td class="count-column">2,946</td><td class="count-column" style="color:#27ae60;">▲ 65%</td></tr>
+                <tr><td><a href="/name/theodore.html">Theodore</a></td><td class="count-column">6,984</td><td class="count-column">11,303</td><td class="count-column" style="color:#27ae60;">▲ 62%</td></tr>
+                <tr><td><a href="/name/august.html">August</a></td><td class="count-column">2,246</td><td class="count-column">3,583</td><td class="count-column" style="color:#27ae60;">▲ 60%</td></tr>
+                <tr><td><a href="/name/beau.html">Beau</a></td><td class="count-column">2,680</td><td class="count-column">4,249</td><td class="count-column" style="color:#27ae60;">▲ 59%</td></tr>
+                <tr><td><a href="/name/myles.html">Myles</a></td><td class="count-column">2,189</td><td class="count-column">3,439</td><td class="count-column" style="color:#27ae60;">▲ 57%</td></tr>
+                <tr><td><a href="/name/miles.html">Miles</a></td><td class="count-column">4,171</td><td class="count-column">6,253</td><td class="count-column" style="color:#27ae60;">▲ 50%</td></tr>
+                <tr><td><a href="/name/leon.html">Leon</a></td><td class="count-column">1,662</td><td class="count-column">2,459</td><td class="count-column" style="color:#27ae60;">▲ 48%</td></tr>
+                <tr><td><a href="/name/santiago.html">Santiago</a></td><td class="count-column">4,640</td><td class="count-column">6,598</td><td class="count-column" style="color:#27ae60;">▲ 42%</td></tr>
+                <tr><td><a href="/name/harvey.html">Harvey</a></td><td class="count-column">771</td><td class="count-column">1,088</td><td class="count-column" style="color:#27ae60;">▲ 41%</td></tr>
+                <tr><td><a href="/name/kai.html">Kai</a></td><td class="count-column">3,453</td><td class="count-column">4,870</td><td class="count-column" style="color:#27ae60;">▲ 41%</td></tr>
+                <tr><td><a href="/name/ezra.html">Ezra</a></td><td class="count-column">5,981</td><td class="count-column">8,421</td><td class="count-column" style="color:#27ae60;">▲ 41%</td></tr>
+                <tr><td><a href="/name/rowan.html">Rowan</a></td><td class="count-column">3,037</td><td class="count-column">4,206</td><td class="count-column" style="color:#27ae60;">▲ 38%</td></tr>
+                <tr><td><a href="/name/bennett.html">Bennett</a></td><td class="count-column">3,337</td><td class="count-column">4,539</td><td class="count-column" style="color:#27ae60;">▲ 36%</td></tr>
+                <tr><td><a href="/name/elias.html">Elias</a></td><td class="count-column">5,333</td><td class="count-column">7,128</td><td class="count-column" style="color:#27ae60;">▲ 34%</td></tr>
+                <tr><td><a href="/name/maverick.html">Maverick</a></td><td class="count-column">5,178</td><td class="count-column">6,880</td><td class="count-column" style="color:#27ae60;">▲ 33%</td></tr>
+                <tr><td><a href="/name/mateo.html">Mateo</a></td><td class="count-column">8,338</td><td class="count-column">10,990</td><td class="count-column" style="color:#27ae60;">▲ 32%</td></tr>
+                <tr><td><a href="/name/wesley.html">Wesley</a></td><td class="count-column">3,656</td><td class="count-column">4,787</td><td class="count-column" style="color:#27ae60;">▲ 31%</td></tr>
+                <tr><td><a href="/name/malcolm.html">Malcolm</a></td><td class="count-column">880</td><td class="count-column">1,146</td><td class="count-column" style="color:#27ae60;">▲ 30%</td></tr>
+                <tr><td><a href="/name/lewis.html">Lewis</a></td><td class="count-column">513</td><td class="count-column">666</td><td class="count-column" style="color:#27ae60;">▲ 30%</td></tr>
+                <tr><td><a href="/name/hudson.html">Hudson</a></td><td class="count-column">6,286</td><td class="count-column">7,953</td><td class="count-column" style="color:#27ae60;">▲ 27%</td></tr>
+                <tr><td><a href="/name/lorenzo.html">Lorenzo</a></td><td class="count-column">2,299</td><td class="count-column">2,898</td><td class="count-column" style="color:#27ae60;">▲ 26%</td></tr>
+                <tr><td><a href="/name/otis.html">Otis</a></td><td class="count-column">331</td><td class="count-column">410</td><td class="count-column" style="color:#27ae60;">▲ 24%</td></tr>
+                <tr><td><a href="/name/cooper.html">Cooper</a></td><td class="count-column">4,548</td><td class="count-column">5,589</td><td class="count-column" style="color:#27ae60;">▲ 23%</td></tr>
+                <tr><td><a href="/name/felix.html">Felix</a></td><td class="count-column">1,620</td><td class="count-column">1,984</td><td class="count-column" style="color:#27ae60;">▲ 22%</td></tr>
+                <tr><td><a href="/name/asher.html">Asher</a></td><td class="count-column">6,664</td><td class="count-column">8,141</td><td class="count-column" style="color:#27ae60;">▲ 22%</td></tr>
+                <tr><td><a href="/name/ezekiel.html">Ezekiel</a></td><td class="count-column">4,692</td><td class="count-column">5,676</td><td class="count-column" style="color:#27ae60;">▲ 21%</td></tr>
+                <tr><td><a href="/name/wayne.html">Wayne</a></td><td class="count-column">300</td><td class="count-column">361</td><td class="count-column" style="color:#27ae60;">▲ 20%</td></tr>
+                <tr><td><a href="/name/graham.html">Graham</a></td><td class="count-column">2,147</td><td class="count-column">2,575</td><td class="count-column" style="color:#27ae60;">▲ 20%</td></tr>
+            </tbody></table></div>
+        </div>
+
+        <div class="footer">
+            <p>Data source: U.S. Social Security Administration national data (1880–2024).</p>
+            <p>&copy; 2026 Baby Names Analytics</p>
+        </div>
+    </div>
+</body>
+</html>
