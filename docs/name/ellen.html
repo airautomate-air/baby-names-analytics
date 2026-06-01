@@ -5,35 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ellen — Baby Name Popularity & Trends</title>
     <meta name="description" content="Ellen baby name popularity: 275,793 U.S. babies recorded 1880–2024, peaking in 1951 with 5,945. See yearly counts, rank, gender split and an interactive trend chart.">
-    <link rel="canonical" href="https://baby-names-analytics.vercel.app/name/ellen.html">
+    <link rel="canonical" href="https://namecharted.com/name/ellen.html">
     <meta property="og:title" content="Ellen — Baby Name Popularity & Trends">
     <meta property="og:description" content="Ellen baby name popularity: 275,793 U.S. babies recorded 1880–2024, peaking in 1951 with 5,945. See yearly counts, rank, gender split and an interactive trend chart.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://baby-names-analytics.vercel.app/name/ellen.html">
+    <meta property="og:url" content="https://namecharted.com/name/ellen.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="theme-color" content="#149E91">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            background-color: #F7F8FA;
             color: #333;
+            font-feature-settings: 'tnum' 1;
         }
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
-        h1 { color: #2c3e50; }
+        h1, h2, h3, h4 { font-family: 'Poppins', 'Inter', sans-serif; color: #1B2440; }
+        h1 { color: #1B2440; }
         .sitenav {
-            background: #2c3e50; padding: 0.9rem 2rem;
+            background: #1B2440; padding: 0.9rem 2rem;
         }
         .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
-        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a { color: #EEF2F4; text-decoration: none; font-weight: 500; }
         .sitenav a:hover { color: #fff; text-decoration: underline; }
-        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .sitenav .brand { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 700; color: #fff; margin-right: auto; display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.05rem; }
+        .sitenav .brand svg { display: block; }
+        .sitenav .brand .wm-teal { color: #149E91; }
         .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
-        .nav a { color: #3498db; text-decoration: none; }
+        .nav a { color: #149E91; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
-        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
-        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .breadcrumb { font-size: 0.85rem; color: #5B6678; margin-bottom: 1rem; }
+        .breadcrumb a { color: #149E91; text-decoration: none; }
         .insight {
-            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            background: #fff; border-left: 4px solid #149E91; padding: 1rem 1.25rem;
             border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
         }
         .stats {
@@ -46,8 +53,8 @@
             background: #fff; padding: 1.5rem; border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
-        .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
-        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .stat-value { font-family: 'Poppins', 'Inter', sans-serif; font-size: 2rem; font-weight: 700; color: #1B2440; }
+        .stat-label { color: #5B6678; margin-top: 0.5rem; font-size: 0.9rem; }
         .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
         table {
             width: 100%; border-collapse: collapse; margin-bottom: 2rem;
@@ -55,24 +62,24 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #ecf0f1; font-weight: 600; }
+        th { background-color: #EEF2F4; font-weight: 600; color: #1B2440; }
         tr:hover { background-color: #f8f9fa; }
         .year-column { width: 12%; font-family: monospace; }
-        .count-column { width: 18%; text-align: right; }
-        .rank-column { width: 15%; text-align: right; }
+        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; }
+        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; }
         .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
         .related a {
             background:#fff; border:1px solid #d6dde2; border-radius:20px;
-            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#1B2440; font-size:0.9rem;
         }
-        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .related a:hover { background:#149E91; color:#fff; border-color:#149E91; }
         .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
-        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
-        .azindex a:hover { background:#3498db; color:#fff; }
-        .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
-        a { color: #3498db; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#1B2440; font-weight:600; }
+        .azindex a:hover { background:#149E91; color:#fff; }
+        .footer { text-align: center; margin-top: 3rem; color: #5B6678; font-size: 0.9rem; }
+        a { color: #149E91; }
 </style>
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://baby-names-analytics.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://baby-names-analytics.vercel.app/names.html"}, {"@type": "ListItem", "position": 3, "name": "Ellen", "item": "https://baby-names-analytics.vercel.app/name/ellen.html"}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://namecharted.com/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://namecharted.com/names.html"}, {"@type": "ListItem", "position": 3, "name": "Ellen", "item": "https://namecharted.com/name/ellen.html"}]}</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
     <script>
     window.addEventListener('DOMContentLoaded', function() {
@@ -84,8 +91,8 @@
           datasets: [{
             label: 'Babies named Ellen per year (girls)',
             data: [411, 413, 452, 500, 597, 555, 551, 579, 691, 653, 659, 675, 760, 798, 759, 746, 811, 733, 786, 708, 922, 711, 753, 773, 774, 845, 898, 855, 848, 960, 1038, 1162, 1449, 1579, 2039, 2581, 2838, 2855, 3030, 2929, 3076, 3064, 2953, 2671, 2949, 2794, 2768, 2867, 2682, 2567, 2522, 2450, 2370, 2201, 2455, 2434, 2398, 2499, 2805, 3005, 3318, 3664, 4197, 4152, 3998, 4189, 5237, 5856, 5289, 5505, 5567, 5945, 5842, 5537, 5456, 5470, 5432, 5588, 5156, 5397, 5135, 4844, 4113, 3944, 3532, 3251, 2805, 2525, 2102, 1895, 1759, 1391, 1176, 1073, 1088, 1021, 941, 1018, 1012, 943, 988, 958, 1007, 953, 929, 854, 969, 1079, 1187, 1316, 1378, 1430, 1335, 1305, 1322, 1311, 1156, 812, 622, 675, 632, 609, 590, 668, 594, 517, 545, 513, 459, 416, 430, 401, 374, 403, 435, 406, 450, 385, 356, 347, 336, 289, 255, 239, 244],
-            borderColor: '#e84393',
-            backgroundColor: 'rgba(232,67,147,0.1)',
+            borderColor: '#149E91',
+            backgroundColor: 'rgba(20,158,145,0.12)',
             fill: true, tension: 0.2, pointRadius: 0, borderWidth: 2
           }]
         },
@@ -100,7 +107,7 @@
 </head>
 <body>
     <div class="sitenav"><div class="sitenav-inner">
-        <a class="brand" href="/">Baby Names Analytics</a>
+        <a class="brand" href="/"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span></a>
         <a href="/">Home</a>
         <a href="/names.html">Browse A–Z</a>
         <a href="/trends.html">Trends</a>
@@ -290,7 +297,7 @@
 
         <div class="footer">
             <p>Data source: U.S. Social Security Administration national data (1880–2024).</p>
-            <p>&copy; 2026 Baby Names Analytics</p>
+            <p>&copy; 2026 NameCharted</p>
         </div>
     </div>
 </body>

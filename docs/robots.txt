@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://baby-names-analytics.vercel.app/sitemap.xml
+Sitemap: https://namecharted.com/sitemap.xml

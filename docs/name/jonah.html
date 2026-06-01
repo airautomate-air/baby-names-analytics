@@ -5,35 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jonah — Baby Name Popularity & Trends</title>
     <meta name="description" content="Jonah baby name popularity: 83,176 U.S. babies recorded 1880–2024, peaking in 2008 with 2,981. See yearly counts, rank, gender split and an interactive trend chart.">
-    <link rel="canonical" href="https://baby-names-analytics.vercel.app/name/jonah.html">
+    <link rel="canonical" href="https://namecharted.com/name/jonah.html">
     <meta property="og:title" content="Jonah — Baby Name Popularity & Trends">
     <meta property="og:description" content="Jonah baby name popularity: 83,176 U.S. babies recorded 1880–2024, peaking in 2008 with 2,981. See yearly counts, rank, gender split and an interactive trend chart.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://baby-names-analytics.vercel.app/name/jonah.html">
+    <meta property="og:url" content="https://namecharted.com/name/jonah.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="theme-color" content="#149E91">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            background-color: #F7F8FA;
             color: #333;
+            font-feature-settings: 'tnum' 1;
         }
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
-        h1 { color: #2c3e50; }
+        h1, h2, h3, h4 { font-family: 'Poppins', 'Inter', sans-serif; color: #1B2440; }
+        h1 { color: #1B2440; }
         .sitenav {
-            background: #2c3e50; padding: 0.9rem 2rem;
+            background: #1B2440; padding: 0.9rem 2rem;
         }
         .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
-        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a { color: #EEF2F4; text-decoration: none; font-weight: 500; }
         .sitenav a:hover { color: #fff; text-decoration: underline; }
-        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .sitenav .brand { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 700; color: #fff; margin-right: auto; display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.05rem; }
+        .sitenav .brand svg { display: block; }
+        .sitenav .brand .wm-teal { color: #149E91; }
         .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
-        .nav a { color: #3498db; text-decoration: none; }
+        .nav a { color: #149E91; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
-        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
-        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .breadcrumb { font-size: 0.85rem; color: #5B6678; margin-bottom: 1rem; }
+        .breadcrumb a { color: #149E91; text-decoration: none; }
         .insight {
-            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            background: #fff; border-left: 4px solid #149E91; padding: 1rem 1.25rem;
             border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
         }
         .stats {
@@ -46,8 +53,8 @@
             background: #fff; padding: 1.5rem; border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
-        .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
-        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .stat-value { font-family: 'Poppins', 'Inter', sans-serif; font-size: 2rem; font-weight: 700; color: #1B2440; }
+        .stat-label { color: #5B6678; margin-top: 0.5rem; font-size: 0.9rem; }
         .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
         table {
             width: 100%; border-collapse: collapse; margin-bottom: 2rem;
@@ -55,24 +62,24 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #ecf0f1; font-weight: 600; }
+        th { background-color: #EEF2F4; font-weight: 600; color: #1B2440; }
         tr:hover { background-color: #f8f9fa; }
         .year-column { width: 12%; font-family: monospace; }
-        .count-column { width: 18%; text-align: right; }
-        .rank-column { width: 15%; text-align: right; }
+        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; }
+        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; }
         .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
         .related a {
             background:#fff; border:1px solid #d6dde2; border-radius:20px;
-            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#1B2440; font-size:0.9rem;
         }
-        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .related a:hover { background:#149E91; color:#fff; border-color:#149E91; }
         .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
-        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
-        .azindex a:hover { background:#3498db; color:#fff; }
-        .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
-        a { color: #3498db; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#1B2440; font-weight:600; }
+        .azindex a:hover { background:#149E91; color:#fff; }
+        .footer { text-align: center; margin-top: 3rem; color: #5B6678; font-size: 0.9rem; }
+        a { color: #149E91; }
 </style>
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://baby-names-analytics.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://baby-names-analytics.vercel.app/names.html"}, {"@type": "ListItem", "position": 3, "name": "Jonah", "item": "https://baby-names-analytics.vercel.app/name/jonah.html"}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://namecharted.com/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://namecharted.com/names.html"}, {"@type": "ListItem", "position": 3, "name": "Jonah", "item": "https://namecharted.com/name/jonah.html"}]}</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
     <script>
     window.addEventListener('DOMContentLoaded', function() {
@@ -84,8 +91,8 @@
           datasets: [{
             label: 'Babies named Jonah per year (boys)',
             data: [8, 5, 5, 10, 11, 16, 11, 6, 7, 9, 8, 8, 7, 7, 5, 6, 8, 7, 11, 6, 5, 5, 7, 5, 10, 17, 5, 6, 18, 15, 18, 19, 33, 32, 25, 31, 25, 47, 33, 44, 32, 33, 33, 21, 29, 30, 27, 19, 17, 23, 24, 36, 27, 33, 24, 18, 31, 29, 26, 25, 31, 20, 30, 26, 19, 26, 17, 22, 36, 38, 32, 20, 43, 32, 28, 25, 22, 28, 21, 33, 25, 31, 33, 20, 30, 39, 44, 70, 161, 154, 130, 151, 132, 185, 226, 168, 390, 394, 385, 287, 260, 269, 268, 235, 290, 243, 260, 239, 246, 224, 449, 1179, 1371, 1569, 1621, 1465, 1710, 1833, 1982, 2312, 2431, 2296, 2222, 2411, 2510, 2981, 2718, 2775, 2867, 2955, 2902, 2920, 2913, 2778, 2523, 2725, 2693, 2819, 2735, 2749, 2895, 2879],
-            borderColor: '#0984e3',
-            backgroundColor: 'rgba(9,132,227,0.1)',
+            borderColor: '#FF6B5C',
+            backgroundColor: 'rgba(255,107,92,0.12)',
             fill: true, tension: 0.2, pointRadius: 0, borderWidth: 2
           }]
         },
@@ -100,7 +107,7 @@
 </head>
 <body>
     <div class="sitenav"><div class="sitenav-inner">
-        <a class="brand" href="/">Baby Names Analytics</a>
+        <a class="brand" href="/"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span></a>
         <a href="/">Home</a>
         <a href="/names.html">Browse A–Z</a>
         <a href="/trends.html">Trends</a>
@@ -287,7 +294,7 @@
 
         <div class="footer">
             <p>Data source: U.S. Social Security Administration national data (1880–2024).</p>
-            <p>&copy; 2026 Baby Names Analytics</p>
+            <p>&copy; 2026 NameCharted</p>
         </div>
     </div>
 </body>

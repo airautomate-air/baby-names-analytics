@@ -5,35 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iris — Baby Name Popularity & Trends</title>
     <meta name="description" content="Iris baby name popularity: 98,551 U.S. babies recorded 1880–2024, peaking in 2024 with 3,124. See yearly counts, rank, gender split and an interactive trend chart.">
-    <link rel="canonical" href="https://baby-names-analytics.vercel.app/name/iris.html">
+    <link rel="canonical" href="https://namecharted.com/name/iris.html">
     <meta property="og:title" content="Iris — Baby Name Popularity & Trends">
     <meta property="og:description" content="Iris baby name popularity: 98,551 U.S. babies recorded 1880–2024, peaking in 2024 with 3,124. See yearly counts, rank, gender split and an interactive trend chart.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://baby-names-analytics.vercel.app/name/iris.html">
+    <meta property="og:url" content="https://namecharted.com/name/iris.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="theme-color" content="#149E91">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            background-color: #F7F8FA;
             color: #333;
+            font-feature-settings: 'tnum' 1;
         }
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
-        h1 { color: #2c3e50; }
+        h1, h2, h3, h4 { font-family: 'Poppins', 'Inter', sans-serif; color: #1B2440; }
+        h1 { color: #1B2440; }
         .sitenav {
-            background: #2c3e50; padding: 0.9rem 2rem;
+            background: #1B2440; padding: 0.9rem 2rem;
         }
         .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
-        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a { color: #EEF2F4; text-decoration: none; font-weight: 500; }
         .sitenav a:hover { color: #fff; text-decoration: underline; }
-        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .sitenav .brand { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 700; color: #fff; margin-right: auto; display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.05rem; }
+        .sitenav .brand svg { display: block; }
+        .sitenav .brand .wm-teal { color: #149E91; }
         .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
-        .nav a { color: #3498db; text-decoration: none; }
+        .nav a { color: #149E91; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
-        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
-        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .breadcrumb { font-size: 0.85rem; color: #5B6678; margin-bottom: 1rem; }
+        .breadcrumb a { color: #149E91; text-decoration: none; }
         .insight {
-            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            background: #fff; border-left: 4px solid #149E91; padding: 1rem 1.25rem;
             border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
         }
         .stats {
@@ -46,8 +53,8 @@
             background: #fff; padding: 1.5rem; border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
-        .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
-        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .stat-value { font-family: 'Poppins', 'Inter', sans-serif; font-size: 2rem; font-weight: 700; color: #1B2440; }
+        .stat-label { color: #5B6678; margin-top: 0.5rem; font-size: 0.9rem; }
         .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
         table {
             width: 100%; border-collapse: collapse; margin-bottom: 2rem;
@@ -55,24 +62,24 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #ecf0f1; font-weight: 600; }
+        th { background-color: #EEF2F4; font-weight: 600; color: #1B2440; }
         tr:hover { background-color: #f8f9fa; }
         .year-column { width: 12%; font-family: monospace; }
-        .count-column { width: 18%; text-align: right; }
-        .rank-column { width: 15%; text-align: right; }
+        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; }
+        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; }
         .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
         .related a {
             background:#fff; border:1px solid #d6dde2; border-radius:20px;
-            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#1B2440; font-size:0.9rem;
         }
-        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .related a:hover { background:#149E91; color:#fff; border-color:#149E91; }
         .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
-        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
-        .azindex a:hover { background:#3498db; color:#fff; }
-        .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
-        a { color: #3498db; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#1B2440; font-weight:600; }
+        .azindex a:hover { background:#149E91; color:#fff; }
+        .footer { text-align: center; margin-top: 3rem; color: #5B6678; font-size: 0.9rem; }
+        a { color: #149E91; }
 </style>
-    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://baby-names-analytics.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://baby-names-analytics.vercel.app/names.html"}, {"@type": "ListItem", "position": 3, "name": "Iris", "item": "https://baby-names-analytics.vercel.app/name/iris.html"}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://namecharted.com/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://namecharted.com/names.html"}, {"@type": "ListItem", "position": 3, "name": "Iris", "item": "https://namecharted.com/name/iris.html"}]}</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
     <script>
     window.addEventListener('DOMContentLoaded', function() {
@@ -84,8 +91,8 @@
           datasets: [{
             label: 'Babies named Iris per year (girls)',
             data: [11, 8, 5, 7, 14, 15, 12, 10, 17, 20, 19, 25, 29, 28, 28, 44, 49, 56, 52, 44, 62, 46, 52, 65, 84, 100, 123, 136, 131, 138, 143, 173, 220, 310, 425, 563, 577, 617, 655, 677, 633, 700, 653, 875, 887, 947, 965, 1021, 1010, 981, 938, 895, 850, 765, 823, 817, 788, 779, 731, 749, 750, 700, 774, 711, 717, 645, 797, 865, 935, 920, 986, 893, 920, 922, 819, 888, 977, 901, 796, 769, 777, 710, 660, 556, 535, 509, 435, 435, 585, 604, 645, 539, 436, 513, 391, 414, 430, 374, 449, 492, 504, 489, 471, 389, 472, 467, 486, 433, 487, 541, 610, 641, 564, 539, 519, 491, 453, 481, 570, 674, 685, 733, 772, 786, 832, 879, 880, 1066, 973, 1037, 1011, 1051, 1134, 1251, 1330, 1509, 1751, 1990, 2128, 2193, 2177, 2581, 2933, 2936, 3124],
-            borderColor: '#e84393',
-            backgroundColor: 'rgba(232,67,147,0.1)',
+            borderColor: '#149E91',
+            backgroundColor: 'rgba(20,158,145,0.12)',
             fill: true, tension: 0.2, pointRadius: 0, borderWidth: 2
           }]
         },
@@ -100,7 +107,7 @@
 </head>
 <body>
     <div class="sitenav"><div class="sitenav-inner">
-        <a class="brand" href="/">Baby Names Analytics</a>
+        <a class="brand" href="/"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span></a>
         <a href="/">Home</a>
         <a href="/names.html">Browse A–Z</a>
         <a href="/trends.html">Trends</a>
@@ -290,7 +297,7 @@
 
         <div class="footer">
             <p>Data source: U.S. Social Security Administration national data (1880–2024).</p>
-            <p>&copy; 2026 Baby Names Analytics</p>
+            <p>&copy; 2026 NameCharted</p>
         </div>
     </div>
 </body>

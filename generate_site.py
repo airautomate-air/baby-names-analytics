@@ -21,7 +21,7 @@ YEARS = [y for y in range(1880, 2025) if (DATA_DIR / f'yob{y}.txt').exists()]
 TOP_N_NAMES = 1000            # how many names get their own page
 DATA_RANGE = f"{YEARS[0]}–{YEARS[-1]}" if YEARS else ""
 LATEST_YEAR = YEARS[-1] if YEARS else 2024
-BASE_URL = "https://baby-names-analytics.vercel.app"
+BASE_URL = "https://namecharted.com"
 
 OUTPUT_DIR.mkdir(exist_ok=True)
 (OUTPUT_DIR / 'name').mkdir(exist_ok=True)
@@ -198,29 +198,34 @@ def similar_names(name, k=24):
 # Shared markup
 # ---------------------------------------------------------------------------
 BASE_CSS = """
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
+            background-color: #F7F8FA;
             color: #333;
+            font-feature-settings: 'tnum' 1;
         }
         .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
-        h1 { color: #2c3e50; }
+        h1, h2, h3, h4 { font-family: 'Poppins', 'Inter', sans-serif; color: #1B2440; }
+        h1 { color: #1B2440; }
         .sitenav {
-            background: #2c3e50; padding: 0.9rem 2rem;
+            background: #1B2440; padding: 0.9rem 2rem;
         }
         .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
-        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a { color: #EEF2F4; text-decoration: none; font-weight: 500; }
         .sitenav a:hover { color: #fff; text-decoration: underline; }
-        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .sitenav .brand { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 700; color: #fff; margin-right: auto; display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.05rem; }
+        .sitenav .brand svg { display: block; }
+        .sitenav .brand .wm-teal { color: #149E91; }
         .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
-        .nav a { color: #3498db; text-decoration: none; }
+        .nav a { color: #149E91; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
-        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
-        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .breadcrumb { font-size: 0.85rem; color: #5B6678; margin-bottom: 1rem; }
+        .breadcrumb a { color: #149E91; text-decoration: none; }
         .insight {
-            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            background: #fff; border-left: 4px solid #149E91; padding: 1rem 1.25rem;
             border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
         }
         .stats {
@@ -233,8 +238,8 @@ BASE_CSS = """
             background: #fff; padding: 1.5rem; border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
-        .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
-        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .stat-value { font-family: 'Poppins', 'Inter', sans-serif; font-size: 2rem; font-weight: 700; color: #1B2440; }
+        .stat-label { color: #5B6678; margin-top: 0.5rem; font-size: 0.9rem; }
         .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
         table {
             width: 100%; border-collapse: collapse; margin-bottom: 2rem;
@@ -242,33 +247,33 @@ BASE_CSS = """
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #ecf0f1; font-weight: 600; }
+        th { background-color: #EEF2F4; font-weight: 600; color: #1B2440; }
         tr:hover { background-color: #f8f9fa; }
         .year-column { width: 12%; font-family: monospace; }
-        .count-column { width: 18%; text-align: right; }
-        .rank-column { width: 15%; text-align: right; }
+        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; }
+        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; }
         .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
         .related a {
             background:#fff; border:1px solid #d6dde2; border-radius:20px;
-            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#1B2440; font-size:0.9rem;
         }
-        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .related a:hover { background:#149E91; color:#fff; border-color:#149E91; }
         .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
-        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
-        .azindex a:hover { background:#3498db; color:#fff; }
-        .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
-        a { color: #3498db; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#1B2440; font-weight:600; }
+        .azindex a:hover { background:#149E91; color:#fff; }
+        .footer { text-align: center; margin-top: 3rem; color: #5B6678; font-size: 0.9rem; }
+        a { color: #149E91; }
 """
 
 FOOTER = f"""
         <div class="footer">
             <p>Data source: U.S. Social Security Administration national data ({DATA_RANGE}).</p>
-            <p>&copy; 2026 Baby Names Analytics</p>
+            <p>&copy; 2026 NameCharted</p>
         </div>"""
 
 SITE_NAV = f"""
     <div class="sitenav"><div class="sitenav-inner">
-        <a class="brand" href="/">Baby Names Analytics</a>
+        <a class="brand" href="/"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span></a>
         <a href="/">Home</a>
         <a href="/names.html">Browse A–Z</a>
         <a href="/trends.html">Trends</a>
@@ -295,6 +300,8 @@ def page(title, body, description="", canonical="", extra_head=""):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>{desc_tag}{canon_tag}{og}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="theme-color" content="#149E91">
     <style>{BASE_CSS}</style>{extra_head}
 </head>
 <body>{SITE_NAV}
@@ -337,7 +344,8 @@ def generate_homepage():
             f'                <li><a href="/name/{slugify(name)}.html"><h3>{name}</h3></a>'
             f'<p>{total:,} total babies</p><p style="font-size:0.8rem">mostly {sex_label(dom)}</p></li>\n'
         )
-    body = f"""        <h1>Baby Names Analytics</h1>
+    body = f"""        <h1>NameCharted</h1>
+        <p style="color:#5B6678; font-size:1.05rem; margin-top:-0.25rem;">Names, charted.</p>
         <p>Explore the popularity and trends of U.S. baby names from {DATA_RANGE}, based on
         official Social Security Administration records. Search any name to see its yearly
         counts, popularity rank, gender split, and an interactive trend chart.</p>
@@ -350,7 +358,7 @@ def generate_homepage():
         </div>
 
         <div class="trending">
-            <h2 style="color:#3498db; border-bottom:2px solid #ecf0f1; padding-bottom:0.5rem;">Top Names of All Time (by total usage)</h2>
+            <h2 style="color:#149E91; border-bottom:2px solid #EEF2F4; padding-bottom:0.5rem;">Top Names of All Time (by total usage)</h2>
             <ul class="trending-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; list-style:none; padding:0;">
 {items}            </ul>
         </div>
@@ -367,7 +375,7 @@ def generate_homepage():
             f"Social Security data. Search {len(pages_to_generate):,}+ names for yearly counts, "
             f"rankings, and interactive charts.")
     (OUTPUT_DIR / 'index.html').write_text(
-        page("Baby Names Analytics — U.S. Name Popularity & Trends", body,
+        page("NameCharted — U.S. Name Popularity & Trends", body,
              description=desc, canonical=f"{BASE_URL}/"),
         encoding='utf-8')
 
@@ -523,8 +531,8 @@ def generate_name_page(name):
         "\n          datasets: [{"
         "\n            label: 'Babies named " + name.replace("'", "\\'") + " per year (" + label + ")',"
         "\n            data: " + json.dumps(chart_counts) + ","
-        "\n            borderColor: '" + ('#e84393' if dom == 'F' else '#0984e3') + "',"
-        "\n            backgroundColor: '" + ('rgba(232,67,147,0.1)' if dom == 'F' else 'rgba(9,132,227,0.1)') + "',"
+        "\n            borderColor: '" + ('#149E91' if dom == 'F' else '#FF6B5C') + "',"
+        "\n            backgroundColor: '" + ('rgba(20,158,145,0.12)' if dom == 'F' else 'rgba(255,107,92,0.12)') + "',"
         "\n            fill: true, tension: 0.2, pointRadius: 0, borderWidth: 2"
         "\n          }]"
         "\n        },"
@@ -593,7 +601,7 @@ def generate_browse_index():
         links = "".join(
             f'<a href="/name/{slugify(n)}.html">{n}</a>' for n in names)
         sections += (
-            f'        <h2 id="letter-{l}" style="border-bottom:2px solid #ecf0f1; padding-bottom:0.3rem;">{l} '
+            f'        <h2 id="letter-{l}" style="border-bottom:2px solid #EEF2F4; padding-bottom:0.3rem;">{l} '
             f'<span style="font-size:0.6em; color:#7f8c8d;">({len(names)})</span></h2>\n'
             f'        <div class="related">{links}</div>\n')
     girl_letters = "".join(
@@ -657,13 +665,13 @@ def generate_year_page(year):
         and <strong>{top_boy}</strong> for boys. Full top-50 lists below, from official SSA data.</p>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
             <div>
-                <h2 style="color:#e84393;">Girls</h2>
+                <h2 style="color:#149E91;">Girls</h2>
                 <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
                 <tbody>
 {table_for('F')}                </tbody></table>
             </div>
             <div>
-                <h2 style="color:#0984e3;">Boys</h2>
+                <h2 style="color:#FF6B5C;">Boys</h2>
                 <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
                 <tbody>
 {table_for('M')}                </tbody></table>
@@ -704,13 +712,13 @@ def generate_comparison_page(name1, name2):
         <strong>{name2}</strong> using U.S. Social Security data ({DATA_RANGE}).</p>
         <div style="display:flex; gap:2rem; flex-wrap:wrap;">
             <div style="flex:1; min-width:280px;">
-                <h2 style="color:#3498db;"><a href="/name/{slugify(name1)}.html">{name1}</a> <span style="font-size:0.7em; color:#7f8c8d;">({sex_label(dom1)})</span></h2>
+                <h2 style="color:#149E91;"><a href="/name/{slugify(name1)}.html">{name1}</a> <span style="font-size:0.7em; color:#7f8c8d;">({sex_label(dom1)})</span></h2>
                 <table><thead><tr><th class="year-column">Year</th><th class="count-column">Babies</th></tr></thead>
                 <tbody>
 {rows1}                </tbody></table>
             </div>
             <div style="flex:1; min-width:280px;">
-                <h2 style="color:#3498db;"><a href="/name/{slugify(name2)}.html">{name2}</a> <span style="font-size:0.7em; color:#7f8c8d;">({sex_label(dom2)})</span></h2>
+                <h2 style="color:#149E91;"><a href="/name/{slugify(name2)}.html">{name2}</a> <span style="font-size:0.7em; color:#7f8c8d;">({sex_label(dom2)})</span></h2>
                 <table><thead><tr><th class="year-column">Year</th><th class="count-column">Babies</th></tr></thead>
                 <tbody>
 {rows2}                </tbody></table>
@@ -793,13 +801,13 @@ def generate_decade_page(decade):
         The decade's #1 names were <strong>{gtop}</strong> for girls and <strong>{btop}</strong> for boys.</p>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
             <div>
-                <h2 style="color:#e84393;">Girls — Top 50</h2>
+                <h2 style="color:#149E91;">Girls — Top 50</h2>
                 <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
                 <tbody>
 {grows}                </tbody></table>
             </div>
             <div>
-                <h2 style="color:#0984e3;">Boys — Top 50</h2>
+                <h2 style="color:#FF6B5C;">Boys — Top 50</h2>
                 <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
                 <tbody>
 {brows}                </tbody></table>
@@ -891,9 +899,9 @@ def generate_trends_pages():
 
     def two_col(data, n=30):
         return f"""        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2rem;">
-            <div><h2 style="color:#e84393;">Girls</h2><table>{head}<tbody>
+            <div><h2 style="color:#149E91;">Girls</h2><table>{head}<tbody>
 {_trend_table(data['F'][:n], 'F')}            </tbody></table></div>
-            <div><h2 style="color:#0984e3;">Boys</h2><table>{head}<tbody>
+            <div><h2 style="color:#FF6B5C;">Boys</h2><table>{head}<tbody>
 {_trend_table(data['M'][:n], 'M')}            </tbody></table></div>
         </div>"""
 
@@ -942,7 +950,7 @@ def generate_trends_hub():
                 <div class="stat-value" style="color:#c0392b;">▼</div>
                 <div class="stat-label"><strong>Fastest-Falling Names</strong><br>Biggest declines of {LATEST_YEAR}</div></a>
             <a class="stat" style="text-decoration:none;" href="/decades.html">
-                <div class="stat-value" style="color:#3498db;">★</div>
+                <div class="stat-value" style="color:#149E91;">★</div>
                 <div class="stat-label"><strong>Names by Decade</strong><br>Top names of every era</div></a>
         </div>"""
     (OUTPUT_DIR / 'trends.html').write_text(
