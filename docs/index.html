@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NameCharted — U.S. Name Popularity & Trends</title>
-    <meta name="description" content="Explore U.S. baby name popularity and trends from 1880–2024 using official Social Security data. Search 1,011+ names for yearly counts, rankings, and interactive charts.">
+    <meta name="description" content="Explore U.S. baby name popularity and trends from 1880–2024 using official Social Security data. Search 18,085+ names for yearly counts, rankings, and interactive charts.">
     <link rel="canonical" href="https://namecharted.com/">
     <meta property="og:title" content="NameCharted — U.S. Name Popularity & Trends">
-    <meta property="og:description" content="Explore U.S. baby name popularity and trends from 1880–2024 using official Social Security data. Search 1,011+ names for yearly counts, rankings, and interactive charts.">
+    <meta property="og:description" content="Explore U.S. baby name popularity and trends from 1880–2024 using official Social Security data. Search 18,085+ names for yearly counts, rankings, and interactive charts.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://namecharted.com/">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -65,8 +65,8 @@
         th { background-color: #EEF2F4; font-weight: 600; color: #1B2440; }
         tr:hover { background-color: #f8f9fa; }
         .year-column { width: 12%; font-family: monospace; }
-        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; }
-        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; }
+        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
         .related a {
             background:#fff; border:1px solid #d6dde2; border-radius:20px;
@@ -100,7 +100,7 @@
             <input type="text" id="searchInput" placeholder="Enter a name to explore..."
                    style="padding:0.75rem; width:70%; max-width:400px; border:1px solid #ddd; border-radius:4px; font-size:1rem;">
             <p>Try names like Olivia, Liam, Emma, Noah, James &middot; or
-            <a href="/names.html">browse all 1,011 names A–Z</a></p>
+            <a href="/names.html">browse all 18,085 names A–Z</a></p>
         </div>
 
         <div class="trending">
@@ -130,12 +130,27 @@
         </div>
 
         <script>
+        var PAGE_SLUGS = null;
+        var SSA_SLUGS = null;
+        function loadIndex() {
+            if (PAGE_SLUGS) return Promise.resolve();
+            return fetch('/name-index.json').then(function(r) { return r.json(); })
+                .then(function(d) { PAGE_SLUGS = new Set(d.pages); SSA_SLUGS = new Set(d.ssa); });
+        }
+        function route(slug) {
+            if (!slug) return;
+            if (PAGE_SLUGS.has(slug)) { window.location.href = '/name/' + slug + '.html'; return; }
+            if (SSA_SLUGS.has(slug)) { window.location.href = '/rare-names.html?q=' + encodeURIComponent(slug); return; }
+            window.location.href = '/404.html';
+        }
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 var slug = this.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-                if (slug) window.location.href = '/name/' + slug + '.html';
+                if (!slug) return;
+                loadIndex().then(function() { route(slug); });
             }
         });
+        loadIndex();
         </script>
 
         <div class="footer">

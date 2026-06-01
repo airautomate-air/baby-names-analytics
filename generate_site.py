@@ -84,13 +84,17 @@ def dominant_sex(name: str) -> str:
 top_names = sorted(name_total.items(), key=lambda x: (-x[1], x[0]))[:TOP_N_NAMES]
 
 # Every name that gets its own page: the all-time top N, PLUS any name that ever
-# cracked a yearly top-50 (so year-page links never 404 and trending modern
-# names like Isla / Nova get pages even if their all-time total is modest).
+# cracked a yearly top-50, PLUS any name with at least 500 lifetime SSA births
+# (so searches for less-common-but-real names like Elon resolve to a page).
+PAGE_MIN_TOTAL = 500
 pages_to_generate = {name for name, _ in top_names}
 for (year, sex), ranks in rank_by_year_sex.items():
     for name, rank in ranks.items():
         if rank <= 50:
             pages_to_generate.add(name)
+for name, total in name_total.items():
+    if total >= PAGE_MIN_TOTAL:
+        pages_to_generate.add(name)
 pages_to_generate = sorted(pages_to_generate, key=lambda n: (-name_total[n], n))
 HAS_PAGE = set(pages_to_generate)
 
@@ -250,8 +254,8 @@ BASE_CSS = """
         th { background-color: #EEF2F4; font-weight: 600; color: #1B2440; }
         tr:hover { background-color: #f8f9fa; }
         .year-column { width: 12%; font-family: monospace; }
-        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; }
-        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; }
+        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
         .related a {
             background:#fff; border:1px solid #d6dde2; border-radius:20px;
@@ -364,12 +368,27 @@ def generate_homepage():
         </div>
 
         <script>
+        var PAGE_SLUGS = null;
+        var SSA_SLUGS = null;
+        function loadIndex() {{
+            if (PAGE_SLUGS) return Promise.resolve();
+            return fetch('/name-index.json').then(function(r) {{ return r.json(); }})
+                .then(function(d) {{ PAGE_SLUGS = new Set(d.pages); SSA_SLUGS = new Set(d.ssa); }});
+        }}
+        function route(slug) {{
+            if (!slug) return;
+            if (PAGE_SLUGS.has(slug)) {{ window.location.href = '/name/' + slug + '.html'; return; }}
+            if (SSA_SLUGS.has(slug)) {{ window.location.href = '/rare-names.html?q=' + encodeURIComponent(slug); return; }}
+            window.location.href = '/404.html';
+        }}
         document.getElementById('searchInput').addEventListener('keypress', function(e) {{
             if (e.key === 'Enter') {{
                 var slug = this.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-                if (slug) window.location.href = '/name/' + slug + '.html';
+                if (!slug) return;
+                loadIndex().then(function() {{ route(slug); }});
             }}
         }});
+        loadIndex();
         </script>"""
     desc = (f"Explore U.S. baby name popularity and trends from {DATA_RANGE} using official "
             f"Social Security data. Search {len(pages_to_generate):,}+ names for yearly counts, "
@@ -623,7 +642,8 @@ def generate_browse_index():
         </div>"""
     body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Browse A–Z</div>
         <h1>Browse All Baby Names A–Z</h1>
-        <p>All {len(pages_to_generate):,} names with a dedicated popularity page, grouped by first letter.</p>
+        <p>All {len(pages_to_generate):,} names with a dedicated popularity page, grouped by first letter.
+        Looking for a rarer name? See the full <a href="/rare-names.html">A–Z index of rare names</a>.</p>
 {explore}
         <h2>All names</h2>
         {jump}
@@ -873,7 +893,7 @@ def _trend_table(rows_data, sex):
         rows += (f'                <tr><td><a href="/name/{slugify(name)}.html">{name}</a></td>'
                  f'<td class="count-column">{round(older):,}</td>'
                  f'<td class="count-column">{round(recent):,}</td>'
-                 f'<td class="count-column" style="color:{color};">{arrow} {abs(pct):.0f}%</td></tr>\n')
+                 f'<td class="count-column" style="color:{color}; white-space:nowrap;">{arrow}&nbsp;{abs(pct):.0f}%</td></tr>\n')
     return rows
 
 
@@ -1038,6 +1058,103 @@ def generate_sitemap(compare_files):
 
 
 # ---------------------------------------------------------------------------
+# Rare-names index + branded 404
+# ---------------------------------------------------------------------------
+def generate_rare_names_page():
+    """One page listing every SSA name that does NOT have its own dedicated page,
+    grouped A–Z with lifetime totals, so they remain discoverable."""
+    rare = [n for n in name_total if n not in HAS_PAGE]
+    rare.sort(key=lambda n: n.lower())
+    by_letter = {}
+    for n in rare:
+        ch = n[0].upper() if n and n[0].isalpha() else '#'
+        by_letter.setdefault(ch, []).append(n)
+    letters = sorted(by_letter.keys())
+    jump = '<div class="azindex">' + ''.join(
+        f'<a href="#letter-{l}">{l}</a>' for l in letters) + '</div>'
+    sections = []
+    for l in letters:
+        items = []
+        for n in by_letter[l]:
+            dom = dominant_sex(n)
+            items.append(
+                f'<li id="n-{slugify(n)}" style="break-inside:avoid;">{n} '
+                f'<span style="color:#5B6678; font-size:0.85em;">'
+                f'({name_total[n]:,} · mostly {sex_label(dom)})</span></li>')
+        sections.append(
+            f'<details id="letter-{l}" style="margin:1rem 0; background:#fff; '
+            f'border:1px solid #EEF2F4; border-radius:8px; padding:1rem 1.25rem;">'
+            f'<summary style="cursor:pointer; font-family:\'Poppins\',sans-serif; '
+            f'font-weight:600; color:#1B2440;">{l} '
+            f'<span style="color:#5B6678; font-weight:400;">({len(by_letter[l]):,} names)</span>'
+            f'</summary>'
+            f'<ul style="columns:3; column-gap:1.5rem; list-style:none; padding:0; margin:1rem 0 0; font-size:0.92rem;">'
+            + ''.join(items) + '</ul></details>')
+    body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Browse A–Z</a> &rsaquo; Rare names</div>
+        <h1>Rare U.S. Baby Names</h1>
+        <p>These {len(rare):,} names appear in U.S. Social Security records ({DATA_RANGE}) but
+        have fewer than {PAGE_MIN_TOTAL:,} lifetime births, so they don't yet have their own
+        dedicated trend page. They're listed here A–Z with lifetime totals.</p>
+        <p style="color:#5B6678; font-size:0.9rem;">Tip: use <kbd>Ctrl</kbd>+<kbd>F</kbd> (or <kbd>⌘</kbd>+<kbd>F</kbd>) to search this page.</p>
+        {jump}
+{''.join(sections)}
+        <script>
+        (function() {{
+            var q = new URLSearchParams(window.location.search).get('q');
+            if (!q) return;
+            var letter = q[0].toUpperCase();
+            var section = document.getElementById('letter-' + letter);
+            if (section) section.open = true;
+            setTimeout(function() {{
+                var target = document.getElementById('n-' + q);
+                if (target) {{
+                    target.style.background = '#FFF4D6';
+                    target.style.padding = '0.25rem 0.5rem';
+                    target.style.borderRadius = '4px';
+                    target.scrollIntoView({{behavior:'smooth', block:'center'}});
+                }}
+            }}, 50);
+        }})();
+        </script>"""
+    desc = (f"Index of {len(rare):,} rare U.S. baby names from SSA data ({DATA_RANGE}) "
+            f"with fewer than {PAGE_MIN_TOTAL} lifetime births, listed A–Z.")
+    (OUTPUT_DIR / 'rare-names.html').write_text(
+        page("Rare U.S. Baby Names — Full A–Z Index", body,
+             description=desc, canonical=f"{BASE_URL}/rare-names.html"),
+        encoding='utf-8')
+
+
+def generate_name_index_json():
+    """Two slug arrays so the homepage search routes correctly:
+       pages = names with a dedicated /name/<slug>.html page
+       ssa   = names that exist in SSA data but only appear in /rare-names.html"""
+    pages = sorted({slugify(n) for n in pages_to_generate})
+    ssa = sorted({slugify(n) for n in name_total if n not in HAS_PAGE})
+    (OUTPUT_DIR / 'name-index.json').write_text(
+        json.dumps({"pages": pages, "ssa": ssa}, separators=(',', ':')),
+        encoding='utf-8')
+
+
+def generate_404_page():
+    body = """        <div style="text-align:center; padding:2rem 0;">
+        <h1>Name not found</h1>
+        <p style="color:#5B6678; max-width:520px; margin:1rem auto;">
+        We couldn't find a dedicated page for that name. NameCharted has full
+        trend pages for every name with at least 500 lifetime U.S. births. Rarer
+        names are listed in our complete A–Z index below.</p>
+        <p style="margin-top:2rem;">
+            <a href="/rare-names.html" style="display:inline-block; padding:0.75rem 1.5rem; background:#149E91; color:#fff; text-decoration:none; border-radius:6px; font-weight:600;">Browse rare names A–Z</a>
+            &nbsp;&nbsp;
+            <a href="/" style="display:inline-block; padding:0.75rem 1.5rem; background:#fff; color:#1B2440; border:1px solid #d6dde2; text-decoration:none; border-radius:6px; font-weight:600;">Back to search</a>
+        </p>
+        </div>"""
+    (OUTPUT_DIR / '404.html').write_text(
+        page("Name not found — NameCharted", body,
+             description="The name you searched isn't in our top-1,000 index. See the full A–Z list of rarer SSA-recorded names."),
+        encoding='utf-8')
+
+
+# ---------------------------------------------------------------------------
 def main():
     print("Generating homepage...")
     generate_homepage()
@@ -1085,6 +1202,11 @@ def main():
         for j in range(i + 1, len(top5)):
             generate_comparison_page(top5[i], top5[j])
             compare_files.append(f'{slugify(top5[i])}-vs-{slugify(top5[j])}.html')
+
+    print("Generating rare-names index + 404...")
+    generate_rare_names_page()
+    generate_404_page()
+    generate_name_index_json()
 
     print("Generating sitemap.xml + robots.txt...")
     generate_sitemap(compare_files)

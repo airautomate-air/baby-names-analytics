@@ -65,8 +65,8 @@
         th { background-color: #EEF2F4; font-weight: 600; color: #1B2440; }
         tr:hover { background-color: #f8f9fa; }
         .year-column { width: 12%; font-family: monospace; }
-        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; }
-        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; }
+        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
         .related a {
             background:#fff; border:1px solid #d6dde2; border-radius:20px;
@@ -99,28 +99,28 @@
         <ul class="trending-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:1rem; list-style:none; padding:0;">
             <li><a href="/name/maria.html"><h3 style="margin:0;">Maria</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">567,411 total &middot; #74 in 2024</p></li>
             <li><a href="/name/marsha.html"><h3 style="margin:0;">Marsha</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">104,427 total &middot; #7,102 in 2024</p></li>
-            <li><a href="/name/martha.html"><h3 style="margin:0;">Martha</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">553,316 total &middot; #667 in 2024</p></li>
-            <li><a href="/name/claudia.html"><h3 style="margin:0;">Claudia</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">128,853 total &middot; #1,090 in 2024</p></li>
-            <li><a href="/name/maureen.html"><h3 style="margin:0;">Maureen</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">144,573 total &middot; #4,969 in 2024</p></li>
-            <li><a href="/name/georgia.html"><h3 style="margin:0;">Georgia</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">164,380 total &middot; #110 in 2024</p></li>
-            <li><a href="/name/maryann.html"><h3 style="margin:0;">Maryann</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">62,883 total &middot; #2,222 in 2024</p></li>
-            <li><a href="/name/michele.html"><h3 style="margin:0;">Michele</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">226,031 total &middot; #4,156 in 2024</p></li>
-            <li><a href="/name/marilyn.html"><h3 style="margin:0;">Marilyn</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">374,490 total &middot; #666 in 2024</p></li>
-            <li><a href="/name/gloria.html"><h3 style="margin:0;">Gloria</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">416,573 total &middot; #654 in 2024</p></li>
-            <li><a href="/name/cynthia.html"><h3 style="margin:0;">Cynthia</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">713,161 total &middot; #826 in 2024</p></li>
-            <li><a href="/name/melinda.html"><h3 style="margin:0;">Melinda</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">136,061 total &middot; #2,104 in 2024</p></li>
-            <li><a href="/name/marissa.html"><h3 style="margin:0;">Marissa</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">120,981 total &middot; #1,495 in 2024</p></li>
-            <li><a href="/name/miranda.html"><h3 style="margin:0;">Miranda</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">114,730 total &middot; #622 in 2024</p></li>
-            <li><a href="/name/makayla.html"><h3 style="margin:0;">Makayla</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">107,627 total &middot; #542 in 2024</p></li>
-            <li><a href="/name/myra.html"><h3 style="margin:0;">Myra</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">63,534 total &middot; #646 in 2024</p></li>
-            <li><a href="/name/monica.html"><h3 style="margin:0;">Monica</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">251,883 total &middot; #726 in 2024</p></li>
-            <li><a href="/name/mia.html"><h3 style="margin:0;">Mia</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">299,424 total &middot; #5 in 2024</p></li>
-            <li><a href="/name/melissa.html"><h3 style="margin:0;">Melissa</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">761,881 total &middot; #378 in 2024</p></li>
-            <li><a href="/name/mattie.html"><h3 style="margin:0;">Mattie</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">133,593 total &middot; #1,057 in 2024</p></li>
-            <li><a href="/name/marlene.html"><h3 style="margin:0;">Marlene</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">130,755 total &middot; #1,551 in 2024</p></li>
-            <li><a href="/name/myrtle.html"><h3 style="margin:0;">Myrtle</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">136,976 total &middot; rare today</p></li>
-            <li><a href="/name/mabel.html"><h3 style="margin:0;">Mabel</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">141,163 total &middot; #222 in 2024</p></li>
-            <li><a href="/name/marian.html"><h3 style="margin:0;">Marian</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">143,077 total &middot; #1,151 in 2024</p></li>
+            <li><a href="/name/marla.html"><h3 style="margin:0;">Marla</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">38,728 total &middot; #2,334 in 2024</p></li>
+            <li><a href="/name/malia.html"><h3 style="margin:0;">Malia</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">30,729 total &middot; #326 in 2024</p></li>
+            <li><a href="/name/malinda.html"><h3 style="margin:0;">Malinda</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">21,394 total &middot; #2,905 in 2024</p></li>
+            <li><a href="/name/maura.html"><h3 style="margin:0;">Maura</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">19,844 total &middot; #1,810 in 2024</p></li>
+            <li><a href="/name/martina.html"><h3 style="margin:0;">Martina</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">18,376 total &middot; #1,165 in 2024</p></li>
+            <li><a href="/name/marta.html"><h3 style="margin:0;">Marta</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">17,486 total &middot; #2,123 in 2024</p></li>
+            <li><a href="/name/minerva.html"><h3 style="margin:0;">Minerva</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">15,734 total &middot; #2,446 in 2024</p></li>
+            <li><a href="/name/marva.html"><h3 style="margin:0;">Marva</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">10,369 total &middot; rare today</p></li>
+            <li><a href="/name/madonna.html"><h3 style="margin:0;">Madonna</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">9,554 total &middot; #10,730 in 2024</p></li>
+            <li><a href="/name/moira.html"><h3 style="margin:0;">Moira</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">7,847 total &middot; #1,901 in 2024</p></li>
+            <li><a href="/name/melia.html"><h3 style="margin:0;">Melia</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">5,251 total &middot; #2,470 in 2024</p></li>
+            <li><a href="/name/marita.html"><h3 style="margin:0;">Marita</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">5,071 total &middot; #11,734 in 2024</p></li>
+            <li><a href="/name/migdalia.html"><h3 style="margin:0;">Migdalia</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">4,294 total &middot; #12,981 in 2024</p></li>
+            <li><a href="/name/melania.html"><h3 style="margin:0;">Melania</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">3,372 total &middot; #1,609 in 2024</p></li>
+            <li><a href="/name/milania.html"><h3 style="margin:0;">Milania</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">3,304 total &middot; #1,983 in 2024</p></li>
+            <li><a href="/name/milissa.html"><h3 style="margin:0;">Milissa</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">3,003 total &middot; rare today</p></li>
+            <li><a href="/name/magda.html"><h3 style="margin:0;">Magda</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">2,860 total &middot; #6,802 in 2024</p></li>
+            <li><a href="/name/marna.html"><h3 style="margin:0;">Marna</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">2,678 total &middot; rare today</p></li>
+            <li><a href="/name/mahalia.html"><h3 style="margin:0;">Mahalia</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">2,316 total &middot; #3,196 in 2024</p></li>
+            <li><a href="/name/melissia.html"><h3 style="margin:0;">Melissia</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">1,926 total &middot; rare today</p></li>
+            <li><a href="/name/myasia.html"><h3 style="margin:0;">Myasia</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">1,689 total &middot; #6,302 in 2024</p></li>
+            <li><a href="/name/markia.html"><h3 style="margin:0;">Markia</h3></a><p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">1,616 total &middot; rare today</p></li>
         </ul>
 
         <div class="footer">
