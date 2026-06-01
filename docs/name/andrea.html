@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Andrea - Baby Name Popularity & Trends</title>
+    <title>Andrea — Baby Name Popularity & Trends</title>
+    <meta name="description" content="Andrea baby name popularity: 450,102 U.S. babies recorded 1880–2024, peaking in 1981 with 11,685. See yearly counts, rank, gender split and an interactive trend chart.">
+    <link rel="canonical" href="https://baby-names-analytics.vercel.app/name/andrea.html">
+    <meta property="og:title" content="Andrea — Baby Name Popularity & Trends">
+    <meta property="og:description" content="Andrea baby name popularity: 450,102 U.S. babies recorded 1880–2024, peaking in 1981 with 11,685. See yearly counts, rank, gender split and an interactive trend chart.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://baby-names-analytics.vercel.app/name/andrea.html">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
-            padding: 2rem;
+            padding: 0;
             background-color: #f5f5f5;
             color: #333;
         }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         h1 { color: #2c3e50; }
-        .nav { margin-bottom: 2rem; }
+        .sitenav {
+            background: #2c3e50; padding: 0.9rem 2rem;
+        }
+        .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a:hover { color: #fff; text-decoration: underline; }
+        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #3498db; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
+        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .insight {
+            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -28,7 +47,8 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
         .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
-        .stat-label { color: #7f8c8d; margin-top: 0.5rem; }
+        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
         table {
             width: 100%; border-collapse: collapse; margin-bottom: 2rem;
             background: #fff; border-radius: 8px; overflow: hidden;
@@ -40,15 +60,57 @@
         .year-column { width: 12%; font-family: monospace; }
         .count-column { width: 18%; text-align: right; }
         .rank-column { width: 15%; text-align: right; }
+        .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
+        .related a {
+            background:#fff; border:1px solid #d6dde2; border-radius:20px;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+        }
+        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
+        .azindex a:hover { background:#3498db; color:#fff; }
         .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
         a { color: #3498db; }
 </style>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://baby-names-analytics.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://baby-names-analytics.vercel.app/names.html"}, {"@type": "ListItem", "position": 3, "name": "Andrea", "item": "https://baby-names-analytics.vercel.app/name/andrea.html"}]}</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var ctx = document.getElementById('trendChart');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [1881, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1911, 1912, 1913, 1914, 1915, 1916, 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1926, 1927, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
+          datasets: [{
+            label: 'Babies named Andrea per year (girls)',
+            data: [5, 7, 6, 9, 7, 7, 10, 6, 8, 16, 13, 15, 12, 18, 11, 16, 16, 13, 12, 21, 14, 21, 11, 14, 22, 30, 27, 27, 24, 33, 58, 59, 69, 60, 66, 85, 92, 107, 104, 111, 93, 133, 148, 129, 111, 106, 107, 143, 88, 123, 158, 131, 133, 151, 181, 428, 648, 708, 721, 935, 1419, 2026, 1934, 2301, 2509, 2366, 2142, 2196, 2444, 2770, 2720, 2723, 2762, 3398, 3372, 3242, 3753, 4212, 4320, 4543, 5012, 5387, 6081, 7145, 7418, 7089, 7201, 7708, 8482, 8021, 7766, 7471, 8043, 8352, 9783, 10461, 10337, 10451, 11685, 11374, 10414, 10350, 10053, 8640, 8496, 8391, 8410, 8214, 7995, 8024, 7241, 6482, 6008, 5671, 5405, 5133, 5070, 5479, 5745, 5118, 4982, 5056, 4671, 5006, 4798, 4263, 4064, 3569, 3512, 3052, 2817, 2563, 2710, 2480, 2324, 2167, 1990, 1819, 1695, 1858, 1674, 1624],
+            borderColor: '#e84393',
+            backgroundColor: 'rgba(232,67,147,0.1)',
+            fill: true, tension: 0.2, pointRadius: 0, borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } },
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'Babies per year' } } }
+        }
+      });
+    });
+    </script>
 </head>
 <body>
+    <div class="sitenav"><div class="sitenav-inner">
+        <a class="brand" href="/">Baby Names Analytics</a>
+        <a href="/">Home</a>
+        <a href="/names.html">Browse A–Z</a>
+        <a href="/year/2024.html">2024 Rankings</a>
+    </div></div>
     <div class="container">
-        <nav class="nav"><a href="/">← Back to all names</a></nav>
+        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Names</a> &rsaquo; Andrea</div>
         <h1>Andrea</h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a girl's name &middot; 99% girls</p>
+
+        <div class="insight"><strong>Andrea</strong> first appears in the U.S. data in <strong>1881</strong> and has been recorded in 142 different years as a girl's name. Its single biggest year was <strong>1981</strong> with <strong>11,685</strong> babies (rank #24 that year). In 2024 it was given to 1,624 girls (rank <strong>#185</strong>). The name has been <strong>declining</strong> over the last five years.</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-value">450,102</div><div class="stat-label">Total babies (all years)</div></div>
@@ -57,6 +119,16 @@
         </div>
 
         <h2>Popularity Over Time — Girls</h2>
+        <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
+
+        <h3 style="margin-bottom:0.25rem;">More popular girls' names</h3>
+        <div class="related"><a href="/name/doris.html">Doris</a><a href="/name/hannah.html">Hannah</a><a href="/name/jean.html">Jean</a><a href="/name/kathryn.html">Kathryn</a><a href="/name/judith.html">Judith</a><a href="/name/mildred.html">Mildred</a></div>
+        <h3 style="margin-bottom:0.25rem;">Names ranked near Andrea in 2024</h3>
+        <div class="related"><a href="/name/bailey.html">Bailey</a><a href="/name/sara.html">Sara</a><a href="/name/brianna.html">Brianna</a><a href="/name/kylie.html">Kylie</a><a href="/name/rosalie.html">Rosalie</a><a href="/name/reese.html">Reese</a></div>
+        <h3 style="margin-bottom:0.25rem;">Other girls' names starting with A</h3>
+        <div class="related"><a href="/name/anna.html">Anna</a><a href="/name/ashley.html">Ashley</a><a href="/name/amanda.html">Amanda</a><a href="/name/amy.html">Amy</a><a href="/name/angela.html">Angela</a><a href="/name/alice.html">Alice</a></div>
+
+        <h2>Year-by-Year Detail</h2>
         <p style="color:#7f8c8d; font-size:0.9rem;">Rank is among all girls' names registered that year.</p>
         <table>
             <thead><tr>

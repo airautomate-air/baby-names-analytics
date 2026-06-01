@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spencer - Baby Name Popularity & Trends</title>
+    <title>Spencer — Baby Name Popularity & Trends</title>
+    <meta name="description" content="Spencer baby name popularity: 128,474 U.S. babies recorded 1880–2024, peaking in 1998 with 4,619. See yearly counts, rank, gender split and an interactive trend chart.">
+    <link rel="canonical" href="https://baby-names-analytics.vercel.app/name/spencer.html">
+    <meta property="og:title" content="Spencer — Baby Name Popularity & Trends">
+    <meta property="og:description" content="Spencer baby name popularity: 128,474 U.S. babies recorded 1880–2024, peaking in 1998 with 4,619. See yearly counts, rank, gender split and an interactive trend chart.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://baby-names-analytics.vercel.app/name/spencer.html">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
-            padding: 2rem;
+            padding: 0;
             background-color: #f5f5f5;
             color: #333;
         }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         h1 { color: #2c3e50; }
-        .nav { margin-bottom: 2rem; }
+        .sitenav {
+            background: #2c3e50; padding: 0.9rem 2rem;
+        }
+        .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a:hover { color: #fff; text-decoration: underline; }
+        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #3498db; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
+        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .insight {
+            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -28,7 +47,8 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
         .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
-        .stat-label { color: #7f8c8d; margin-top: 0.5rem; }
+        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
         table {
             width: 100%; border-collapse: collapse; margin-bottom: 2rem;
             background: #fff; border-radius: 8px; overflow: hidden;
@@ -40,15 +60,57 @@
         .year-column { width: 12%; font-family: monospace; }
         .count-column { width: 18%; text-align: right; }
         .rank-column { width: 15%; text-align: right; }
+        .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
+        .related a {
+            background:#fff; border:1px solid #d6dde2; border-radius:20px;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+        }
+        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
+        .azindex a:hover { background:#3498db; color:#fff; }
         .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
         a { color: #3498db; }
 </style>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://baby-names-analytics.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://baby-names-analytics.vercel.app/names.html"}, {"@type": "ListItem", "position": 3, "name": "Spencer", "item": "https://baby-names-analytics.vercel.app/name/spencer.html"}]}</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var ctx = document.getElementById('trendChart');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [1880, 1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1911, 1912, 1913, 1914, 1915, 1916, 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1926, 1927, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
+          datasets: [{
+            label: 'Babies named Spencer per year (boys)',
+            data: [35, 26, 33, 28, 32, 23, 29, 41, 38, 28, 30, 33, 33, 21, 27, 35, 28, 23, 40, 39, 44, 30, 32, 28, 44, 38, 29, 41, 61, 49, 54, 70, 105, 124, 124, 153, 169, 204, 210, 160, 229, 195, 197, 199, 188, 177, 176, 180, 168, 157, 153, 141, 151, 155, 185, 163, 193, 180, 206, 259, 261, 291, 313, 351, 282, 266, 303, 337, 314, 319, 322, 395, 340, 295, 291, 325, 308, 275, 284, 319, 357, 398, 380, 410, 425, 456, 366, 375, 540, 709, 717, 622, 621, 592, 564, 696, 771, 731, 737, 848, 721, 827, 927, 943, 935, 1114, 1644, 2251, 2695, 3126, 3420, 3564, 3696, 3884, 3813, 3618, 3609, 3766, 4619, 4194, 4044, 3732, 3448, 2908, 2664, 2317, 2186, 2365, 2092, 1696, 1555, 1585, 1536, 1459, 1520, 1433, 1371, 1210, 1114, 1038, 1046, 1049, 988, 902, 840],
+            borderColor: '#0984e3',
+            backgroundColor: 'rgba(9,132,227,0.1)',
+            fill: true, tension: 0.2, pointRadius: 0, borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } },
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'Babies per year' } } }
+        }
+      });
+    });
+    </script>
 </head>
 <body>
+    <div class="sitenav"><div class="sitenav-inner">
+        <a class="brand" href="/">Baby Names Analytics</a>
+        <a href="/">Home</a>
+        <a href="/names.html">Browse A–Z</a>
+        <a href="/year/2024.html">2024 Rankings</a>
+    </div></div>
     <div class="container">
-        <nav class="nav"><a href="/">← Back to all names</a></nav>
+        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Names</a> &rsaquo; Spencer</div>
         <h1>Spencer</h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a boy's name &middot; 96% boys</p>
+
+        <div class="insight"><strong>Spencer</strong> first appears in the U.S. data in <strong>1880</strong> and has been recorded in 145 different years as a boy's name. Its single biggest year was <strong>1998</strong> with <strong>4,619</strong> babies (rank #84 that year). In 2024 it was given to 840 boys (rank <strong>#388</strong>). The name has been <strong>declining</strong> over the last five years.</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-value">128,474</div><div class="stat-label">Total babies (all years)</div></div>
@@ -57,6 +119,16 @@
         </div>
 
         <h2>Popularity Over Time — Boys</h2>
+        <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
+
+        <h3 style="margin-bottom:0.25rem;">More popular boys' names</h3>
+        <div class="related"><a href="/name/harvey.html">Harvey</a><a href="/name/glen.html">Glen</a><a href="/name/diego.html">Diego</a><a href="/name/bryce.html">Bryce</a><a href="/name/grayson.html">Grayson</a><a href="/name/tristan.html">Tristan</a></div>
+        <h3 style="margin-bottom:0.25rem;">Names ranked near Spencer in 2024</h3>
+        <div class="related"><a href="/name/marco.html">Marco</a><a href="/name/julius.html">Julius</a><a href="/name/franklin.html">Franklin</a><a href="/name/marshall.html">Marshall</a><a href="/name/edwin.html">Edwin</a><a href="/name/jared.html">Jared</a></div>
+        <h3 style="margin-bottom:0.25rem;">Other boys' names starting with S</h3>
+        <div class="related"><a href="/name/steven.html">Steven</a><a href="/name/stephen.html">Stephen</a><a href="/name/samuel.html">Samuel</a><a href="/name/scott.html">Scott</a><a href="/name/sean.html">Sean</a><a href="/name/shawn.html">Shawn</a></div>
+
+        <h2>Year-by-Year Detail</h2>
         <p style="color:#7f8c8d; font-size:0.9rem;">Rank is among all boys' names registered that year.</p>
         <table>
             <thead><tr>

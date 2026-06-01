@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leroy - Baby Name Popularity & Trends</title>
+    <title>Leroy — Baby Name Popularity & Trends</title>
+    <meta name="description" content="Leroy baby name popularity: 201,884 U.S. babies recorded 1880–2024, peaking in 1924 with 3,922. See yearly counts, rank, gender split and an interactive trend chart.">
+    <link rel="canonical" href="https://baby-names-analytics.vercel.app/name/leroy.html">
+    <meta property="og:title" content="Leroy — Baby Name Popularity & Trends">
+    <meta property="og:description" content="Leroy baby name popularity: 201,884 U.S. babies recorded 1880–2024, peaking in 1924 with 3,922. See yearly counts, rank, gender split and an interactive trend chart.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://baby-names-analytics.vercel.app/name/leroy.html">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
-            padding: 2rem;
+            padding: 0;
             background-color: #f5f5f5;
             color: #333;
         }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         h1 { color: #2c3e50; }
-        .nav { margin-bottom: 2rem; }
+        .sitenav {
+            background: #2c3e50; padding: 0.9rem 2rem;
+        }
+        .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a:hover { color: #fff; text-decoration: underline; }
+        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #3498db; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
+        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .insight {
+            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -28,7 +47,8 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
         .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
-        .stat-label { color: #7f8c8d; margin-top: 0.5rem; }
+        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
         table {
             width: 100%; border-collapse: collapse; margin-bottom: 2rem;
             background: #fff; border-radius: 8px; overflow: hidden;
@@ -40,15 +60,57 @@
         .year-column { width: 12%; font-family: monospace; }
         .count-column { width: 18%; text-align: right; }
         .rank-column { width: 15%; text-align: right; }
+        .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
+        .related a {
+            background:#fff; border:1px solid #d6dde2; border-radius:20px;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+        }
+        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
+        .azindex a:hover { background:#3498db; color:#fff; }
         .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
         a { color: #3498db; }
 </style>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://baby-names-analytics.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://baby-names-analytics.vercel.app/names.html"}, {"@type": "ListItem", "position": 3, "name": "Leroy", "item": "https://baby-names-analytics.vercel.app/name/leroy.html"}]}</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var ctx = document.getElementById('trendChart');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [1880, 1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1911, 1912, 1913, 1914, 1915, 1916, 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1926, 1927, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
+          datasets: [{
+            label: 'Babies named Leroy per year (boys)',
+            data: [124, 129, 152, 143, 154, 162, 155, 177, 192, 186, 236, 190, 233, 244, 239, 249, 278, 291, 315, 269, 419, 268, 370, 340, 401, 441, 420, 550, 523, 568, 733, 706, 1306, 1582, 2004, 2450, 2699, 2951, 3422, 3422, 3549, 3749, 3671, 3686, 3922, 3884, 3808, 3912, 3871, 3818, 3804, 3648, 3677, 3357, 3774, 3918, 3644, 3555, 3491, 3388, 3311, 3524, 3717, 3740, 3409, 3172, 3471, 3347, 3234, 2938, 2835, 2716, 2645, 2579, 2639, 2415, 2352, 2316, 2074, 2018, 1867, 1829, 1703, 1644, 1585, 1538, 1349, 1277, 1197, 1230, 1169, 1012, 916, 807, 773, 799, 760, 735, 707, 730, 699, 616, 674, 524, 530, 539, 540, 499, 490, 488, 504, 449, 414, 361, 339, 341, 308, 308, 279, 252, 252, 215, 218, 225, 222, 187, 211, 195, 231, 201, 219, 187, 225, 206, 191, 209, 230, 227, 250, 224, 242, 254, 281, 270, 278],
+            borderColor: '#0984e3',
+            backgroundColor: 'rgba(9,132,227,0.1)',
+            fill: true, tension: 0.2, pointRadius: 0, borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } },
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'Babies per year' } } }
+        }
+      });
+    });
+    </script>
 </head>
 <body>
+    <div class="sitenav"><div class="sitenav-inner">
+        <a class="brand" href="/">Baby Names Analytics</a>
+        <a href="/">Home</a>
+        <a href="/names.html">Browse A–Z</a>
+        <a href="/year/2024.html">2024 Rankings</a>
+    </div></div>
     <div class="container">
-        <nav class="nav"><a href="/">← Back to all names</a></nav>
+        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Names</a> &rsaquo; Leroy</div>
         <h1>Leroy</h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a boy's name &middot; 99% boys</p>
+
+        <div class="insight"><strong>Leroy</strong> first appears in the U.S. data in <strong>1880</strong> and has been recorded in 145 different years as a boy's name. Its single biggest year was <strong>1924</strong> with <strong>3,922</strong> babies (rank #53 that year). In 2024 it was given to 278 boys (rank <strong>#862</strong>). The name has been <strong>rising</strong> over the last five years.</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-value">201,884</div><div class="stat-label">Total babies (all years)</div></div>
@@ -57,6 +119,16 @@
         </div>
 
         <h2>Popularity Over Time — Boys</h2>
+        <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
+
+        <h3 style="margin-bottom:0.25rem;">More popular boys' names</h3>
+        <div class="related"><a href="/name/mike.html">Mike</a><a href="/name/jared.html">Jared</a><a href="/name/levi.html">Levi</a><a href="/name/ray.html">Ray</a><a href="/name/wyatt.html">Wyatt</a><a href="/name/carter.html">Carter</a></div>
+        <h3 style="margin-bottom:0.25rem;">Names ranked near Leroy in 2024</h3>
+        <div class="related"><a href="/name/jimmy.html">Jimmy</a><a href="/name/neil.html">Neil</a><a href="/name/douglas.html">Douglas</a><a href="/name/jerry.html">Jerry</a><a href="/name/allan.html">Allan</a><a href="/name/dillon.html">Dillon</a></div>
+        <h3 style="margin-bottom:0.25rem;">Other boys' names starting with L</h3>
+        <div class="related"><a href="/name/larry.html">Larry</a><a href="/name/lawrence.html">Lawrence</a><a href="/name/logan.html">Logan</a><a href="/name/louis.html">Louis</a><a href="/name/liam.html">Liam</a><a href="/name/lucas.html">Lucas</a></div>
+
+        <h2>Year-by-Year Detail</h2>
         <p style="color:#7f8c8d; font-size:0.9rem;">Rank is among all boys' names registered that year.</p>
         <table>
             <thead><tr>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://baby-names-analytics.vercel.app/sitemap.xml

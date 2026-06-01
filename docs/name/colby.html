@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colby - Baby Name Popularity & Trends</title>
+    <title>Colby — Baby Name Popularity & Trends</title>
+    <meta name="description" content="Colby baby name popularity: 57,635 U.S. babies recorded 1880–2024, peaking in 2001 with 3,859. See yearly counts, rank, gender split and an interactive trend chart.">
+    <link rel="canonical" href="https://baby-names-analytics.vercel.app/name/colby.html">
+    <meta property="og:title" content="Colby — Baby Name Popularity & Trends">
+    <meta property="og:description" content="Colby baby name popularity: 57,635 U.S. babies recorded 1880–2024, peaking in 2001 with 3,859. See yearly counts, rank, gender split and an interactive trend chart.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://baby-names-analytics.vercel.app/name/colby.html">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
-            padding: 2rem;
+            padding: 0;
             background-color: #f5f5f5;
             color: #333;
         }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         h1 { color: #2c3e50; }
-        .nav { margin-bottom: 2rem; }
+        .sitenav {
+            background: #2c3e50; padding: 0.9rem 2rem;
+        }
+        .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a:hover { color: #fff; text-decoration: underline; }
+        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #3498db; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
+        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .insight {
+            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -28,7 +47,8 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
         .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
-        .stat-label { color: #7f8c8d; margin-top: 0.5rem; }
+        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
         table {
             width: 100%; border-collapse: collapse; margin-bottom: 2rem;
             background: #fff; border-radius: 8px; overflow: hidden;
@@ -40,15 +60,57 @@
         .year-column { width: 12%; font-family: monospace; }
         .count-column { width: 18%; text-align: right; }
         .rank-column { width: 15%; text-align: right; }
+        .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
+        .related a {
+            background:#fff; border:1px solid #d6dde2; border-radius:20px;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+        }
+        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
+        .azindex a:hover { background:#3498db; color:#fff; }
         .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
         a { color: #3498db; }
 </style>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://baby-names-analytics.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://baby-names-analytics.vercel.app/names.html"}, {"@type": "ListItem", "position": 3, "name": "Colby", "item": "https://baby-names-analytics.vercel.app/name/colby.html"}]}</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var ctx = document.getElementById('trendChart');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [1888, 1916, 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1926, 1927, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
+          datasets: [{
+            label: 'Babies named Colby per year (boys)',
+            data: [5, 8, 9, 7, 8, 13, 13, 8, 7, 9, 8, 8, 10, 9, 5, 8, 5, 5, 6, 6, 10, 7, 7, 10, 9, 6, 7, 9, 10, 16, 15, 8, 17, 25, 24, 14, 14, 26, 17, 19, 25, 28, 31, 22, 29, 33, 40, 26, 33, 29, 32, 38, 42, 74, 84, 142, 209, 209, 309, 330, 350, 320, 298, 289, 298, 262, 242, 494, 656, 759, 715, 892, 870, 922, 1032, 1129, 1515, 1574, 1519, 1449, 1411, 1344, 1357, 1456, 1507, 1465, 3859, 3118, 2170, 2066, 1603, 1272, 1221, 1256, 1152, 1207, 1026, 908, 745, 717, 665, 556, 465, 459, 447, 439, 420, 468, 467, 489],
+            borderColor: '#0984e3',
+            backgroundColor: 'rgba(9,132,227,0.1)',
+            fill: true, tension: 0.2, pointRadius: 0, borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } },
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'Babies per year' } } }
+        }
+      });
+    });
+    </script>
 </head>
 <body>
+    <div class="sitenav"><div class="sitenav-inner">
+        <a class="brand" href="/">Baby Names Analytics</a>
+        <a href="/">Home</a>
+        <a href="/names.html">Browse A–Z</a>
+        <a href="/year/2024.html">2024 Rankings</a>
+    </div></div>
     <div class="container">
-        <nav class="nav"><a href="/">← Back to all names</a></nav>
+        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Names</a> &rsaquo; Colby</div>
         <h1>Colby</h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a boy's name &middot; 93% boys</p>
+
+        <div class="insight"><strong>Colby</strong> first appears in the U.S. data in <strong>1888</strong> and has been recorded in 110 different years as a boy's name. Its single biggest year was <strong>2001</strong> with <strong>3,859</strong> babies (rank #99 that year). In 2024 it was given to 489 boys (rank <strong>#582</strong>). Its popularity has been <strong>fairly steady</strong> recently.</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-value">57,635</div><div class="stat-label">Total babies (all years)</div></div>
@@ -57,6 +119,16 @@
         </div>
 
         <h2>Popularity Over Time — Boys</h2>
+        <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
+
+        <h3 style="margin-bottom:0.25rem;">More popular boys' names</h3>
+        <div class="related"><a href="/name/salvatore.html">Salvatore</a><a href="/name/wilbur.html">Wilbur</a><a href="/name/alfredo.html">Alfredo</a><a href="/name/elliot.html">Elliot</a><a href="/name/conner.html">Conner</a><a href="/name/ira.html">Ira</a></div>
+        <h3 style="margin-bottom:0.25rem;">Names ranked near Colby in 2024</h3>
+        <div class="related"><a href="/name/ronald.html">Ronald</a><a href="/name/julio.html">Julio</a><a href="/name/allen.html">Allen</a><a href="/name/shane.html">Shane</a><a href="/name/armando.html">Armando</a><a href="/name/jaime.html">Jaime</a></div>
+        <h3 style="margin-bottom:0.25rem;">Other boys' names starting with C</h3>
+        <div class="related"><a href="/name/charles.html">Charles</a><a href="/name/christopher.html">Christopher</a><a href="/name/carl.html">Carl</a><a href="/name/christian.html">Christian</a><a href="/name/cameron.html">Cameron</a><a href="/name/caleb.html">Caleb</a></div>
+
+        <h2>Year-by-Year Detail</h2>
         <p style="color:#7f8c8d; font-size:0.9rem;">Rank is among all boys' names registered that year.</p>
         <table>
             <thead><tr>

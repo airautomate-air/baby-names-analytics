@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pearl - Baby Name Popularity & Trends</title>
+    <title>Pearl — Baby Name Popularity & Trends</title>
+    <meta name="description" content="Pearl baby name popularity: 162,657 U.S. babies recorded 1880–2024, peaking in 1918 with 4,521. See yearly counts, rank, gender split and an interactive trend chart.">
+    <link rel="canonical" href="https://baby-names-analytics.vercel.app/name/pearl.html">
+    <meta property="og:title" content="Pearl — Baby Name Popularity & Trends">
+    <meta property="og:description" content="Pearl baby name popularity: 162,657 U.S. babies recorded 1880–2024, peaking in 1918 with 4,521. See yearly counts, rank, gender split and an interactive trend chart.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://baby-names-analytics.vercel.app/name/pearl.html">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
-            padding: 2rem;
+            padding: 0;
             background-color: #f5f5f5;
             color: #333;
         }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         h1 { color: #2c3e50; }
-        .nav { margin-bottom: 2rem; }
+        .sitenav {
+            background: #2c3e50; padding: 0.9rem 2rem;
+        }
+        .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a:hover { color: #fff; text-decoration: underline; }
+        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #3498db; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
+        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .insight {
+            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -28,7 +47,8 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
         .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
-        .stat-label { color: #7f8c8d; margin-top: 0.5rem; }
+        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
         table {
             width: 100%; border-collapse: collapse; margin-bottom: 2rem;
             background: #fff; border-radius: 8px; overflow: hidden;
@@ -40,15 +60,57 @@
         .year-column { width: 12%; font-family: monospace; }
         .count-column { width: 18%; text-align: right; }
         .rank-column { width: 15%; text-align: right; }
+        .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
+        .related a {
+            background:#fff; border:1px solid #d6dde2; border-radius:20px;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+        }
+        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
+        .azindex a:hover { background:#3498db; color:#fff; }
         .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
         a { color: #3498db; }
 </style>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://baby-names-analytics.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://baby-names-analytics.vercel.app/names.html"}, {"@type": "ListItem", "position": 3, "name": "Pearl", "item": "https://baby-names-analytics.vercel.app/name/pearl.html"}]}</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var ctx = document.getElementById('trendChart');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [1880, 1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1911, 1912, 1913, 1914, 1915, 1916, 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1926, 1927, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
+          datasets: [{
+            label: 'Babies named Pearl per year (girls)',
+            data: [569, 641, 824, 886, 1138, 1146, 1204, 1316, 1591, 1588, 1741, 1605, 1831, 1796, 1789, 1958, 2101, 2076, 2158, 1999, 2512, 1866, 2100, 2046, 2015, 2108, 2035, 2108, 2075, 2048, 2177, 2075, 2528, 2756, 3223, 3976, 4073, 4232, 4521, 4273, 4204, 4175, 3848, 3543, 3635, 3213, 2899, 2718, 2367, 2172, 2069, 1648, 1618, 1384, 1338, 1187, 1120, 1024, 1005, 902, 907, 835, 1092, 879, 756, 654, 677, 713, 690, 575, 588, 531, 516, 516, 492, 465, 468, 443, 388, 350, 372, 346, 364, 284, 284, 259, 195, 175, 172, 143, 161, 163, 168, 142, 148, 148, 143, 123, 132, 143, 168, 184, 190, 171, 169, 165, 162, 141, 148, 140, 131, 142, 157, 156, 124, 159, 175, 138, 164, 162, 200, 208, 199, 203, 196, 190, 245, 269, 259, 269, 267, 335, 368, 424, 454, 461, 549, 455, 459, 387, 351, 385, 382, 351, 350],
+            borderColor: '#e84393',
+            backgroundColor: 'rgba(232,67,147,0.1)',
+            fill: true, tension: 0.2, pointRadius: 0, borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } },
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'Babies per year' } } }
+        }
+      });
+    });
+    </script>
 </head>
 <body>
+    <div class="sitenav"><div class="sitenav-inner">
+        <a class="brand" href="/">Baby Names Analytics</a>
+        <a href="/">Home</a>
+        <a href="/names.html">Browse A–Z</a>
+        <a href="/year/2024.html">2024 Rankings</a>
+    </div></div>
     <div class="container">
-        <nav class="nav"><a href="/">← Back to all names</a></nav>
+        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Names</a> &rsaquo; Pearl</div>
         <h1>Pearl</h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a girl's name &middot; 98% girls</p>
+
+        <div class="insight"><strong>Pearl</strong> first appears in the U.S. data in <strong>1880</strong> and has been recorded in 145 different years as a girl's name. Its single biggest year was <strong>1918</strong> with <strong>4,521</strong> babies (rank #56 that year). In 2024 it was given to 350 girls (rank <strong>#802</strong>). The name has been <strong>declining</strong> over the last five years.</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-value">162,657</div><div class="stat-label">Total babies (all years)</div></div>
@@ -57,6 +119,16 @@
         </div>
 
         <h2>Popularity Over Time — Girls</h2>
+        <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
+
+        <h3 style="margin-bottom:0.25rem;">More popular girls' names</h3>
+        <div class="related"><a href="/name/chelsea.html">Chelsea</a><a href="/name/rosemary.html">Rosemary</a><a href="/name/beth.html">Beth</a><a href="/name/agnes.html">Agnes</a><a href="/name/minnie.html">Minnie</a><a href="/name/haley.html">Haley</a></div>
+        <h3 style="margin-bottom:0.25rem;">Names ranked near Pearl in 2024</h3>
+        <div class="related"><a href="/name/robin.html">Robin</a><a href="/name/alexa.html">Alexa</a><a href="/name/erin.html">Erin</a><a href="/name/jessie.html">Jessie</a><a href="/name/brittany.html">Brittany</a><a href="/name/marjorie.html">Marjorie</a></div>
+        <h3 style="margin-bottom:0.25rem;">Other girls' names starting with P</h3>
+        <div class="related"><a href="/name/patricia.html">Patricia</a><a href="/name/pamela.html">Pamela</a><a href="/name/phyllis.html">Phyllis</a><a href="/name/peggy.html">Peggy</a><a href="/name/paula.html">Paula</a><a href="/name/pauline.html">Pauline</a></div>
+
+        <h2>Year-by-Year Detail</h2>
         <p style="color:#7f8c8d; font-size:0.9rem;">Rank is among all girls' names registered that year.</p>
         <table>
             <thead><tr>

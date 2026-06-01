@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diana - Baby Name Popularity & Trends</title>
+    <title>Diana — Baby Name Popularity & Trends</title>
+    <meta name="description" content="Diana baby name popularity: 368,475 U.S. babies recorded 1880–2024, peaking in 1957 with 9,433. See yearly counts, rank, gender split and an interactive trend chart.">
+    <link rel="canonical" href="https://baby-names-analytics.vercel.app/name/diana.html">
+    <meta property="og:title" content="Diana — Baby Name Popularity & Trends">
+    <meta property="og:description" content="Diana baby name popularity: 368,475 U.S. babies recorded 1880–2024, peaking in 1957 with 9,433. See yearly counts, rank, gender split and an interactive trend chart.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://baby-names-analytics.vercel.app/name/diana.html">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
-            padding: 2rem;
+            padding: 0;
             background-color: #f5f5f5;
             color: #333;
         }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         h1 { color: #2c3e50; }
-        .nav { margin-bottom: 2rem; }
+        .sitenav {
+            background: #2c3e50; padding: 0.9rem 2rem;
+        }
+        .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a:hover { color: #fff; text-decoration: underline; }
+        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #3498db; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
+        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .insight {
+            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -28,7 +47,8 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
         .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
-        .stat-label { color: #7f8c8d; margin-top: 0.5rem; }
+        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
         table {
             width: 100%; border-collapse: collapse; margin-bottom: 2rem;
             background: #fff; border-radius: 8px; overflow: hidden;
@@ -40,15 +60,57 @@
         .year-column { width: 12%; font-family: monospace; }
         .count-column { width: 18%; text-align: right; }
         .rank-column { width: 15%; text-align: right; }
+        .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
+        .related a {
+            background:#fff; border:1px solid #d6dde2; border-radius:20px;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+        }
+        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
+        .azindex a:hover { background:#3498db; color:#fff; }
         .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
         a { color: #3498db; }
 </style>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://baby-names-analytics.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://baby-names-analytics.vercel.app/names.html"}, {"@type": "ListItem", "position": 3, "name": "Diana", "item": "https://baby-names-analytics.vercel.app/name/diana.html"}]}</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var ctx = document.getElementById('trendChart');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [1880, 1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1911, 1912, 1913, 1914, 1915, 1916, 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1926, 1927, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
+          datasets: [{
+            label: 'Babies named Diana per year (girls)',
+            data: [10, 7, 8, 10, 15, 13, 13, 16, 6, 20, 13, 16, 20, 24, 23, 23, 30, 18, 27, 31, 29, 23, 36, 26, 36, 31, 38, 35, 55, 44, 55, 56, 86, 101, 152, 157, 159, 149, 209, 213, 232, 242, 267, 284, 277, 304, 320, 351, 407, 539, 564, 538, 661, 728, 861, 804, 834, 1333, 1466, 1712, 2195, 2544, 3857, 4337, 4311, 6047, 7544, 7622, 7706, 7535, 7447, 7396, 7393, 7439, 7624, 7846, 7851, 9433, 9169, 8637, 8327, 8198, 7841, 7309, 7070, 5927, 5505, 5339, 4994, 4525, 4373, 4211, 3547, 3519, 3513, 2912, 2760, 2845, 2885, 2781, 2615, 3971, 4430, 4039, 3964, 3686, 3669, 3355, 3489, 3686, 3547, 3342, 3251, 3388, 3369, 3167, 2950, 3585, 3853, 3328, 3166, 3198, 2907, 3149, 3554, 3159, 2841, 3182, 2444, 1943, 1622, 1544, 1286, 1178, 1092, 1091, 1183, 1367, 1608, 1435, 1236, 1329, 1316, 1312, 1293],
+            borderColor: '#e84393',
+            backgroundColor: 'rgba(232,67,147,0.1)',
+            fill: true, tension: 0.2, pointRadius: 0, borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } },
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'Babies per year' } } }
+        }
+      });
+    });
+    </script>
 </head>
 <body>
+    <div class="sitenav"><div class="sitenav-inner">
+        <a class="brand" href="/">Baby Names Analytics</a>
+        <a href="/">Home</a>
+        <a href="/names.html">Browse A–Z</a>
+        <a href="/year/2024.html">2024 Rankings</a>
+    </div></div>
     <div class="container">
-        <nav class="nav"><a href="/">← Back to all names</a></nav>
+        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Names</a> &rsaquo; Diana</div>
         <h1>Diana</h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a girl's name &middot; 100% girls</p>
+
+        <div class="insight"><strong>Diana</strong> first appears in the U.S. data in <strong>1880</strong> and has been recorded in 145 different years as a girl's name. Its single biggest year was <strong>1957</strong> with <strong>9,433</strong> babies (rank #43 that year). In 2024 it was given to 1,293 girls (rank <strong>#243</strong>). Its popularity has been <strong>fairly steady</strong> recently.</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-value">368,475</div><div class="stat-label">Total babies (all years)</div></div>
@@ -57,6 +119,16 @@
         </div>
 
         <h2>Popularity Over Time — Girls</h2>
+        <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
+
+        <h3 style="margin-bottom:0.25rem;">More popular girls' names</h3>
+        <div class="related"><a href="/name/natalie.html">Natalie</a><a href="/name/amber.html">Amber</a><a href="/name/marilyn.html">Marilyn</a><a href="/name/denise.html">Denise</a><a href="/name/ruby.html">Ruby</a><a href="/name/danielle.html">Danielle</a></div>
+        <h3 style="margin-bottom:0.25rem;">Names ranked near Diana in 2024</h3>
+        <div class="related"><a href="/name/camille.html">Camille</a><a href="/name/reagan.html">Reagan</a><a href="/name/khloe.html">Khloe</a><a href="/name/selena.html">Selena</a><a href="/name/amy.html">Amy</a><a href="/name/kimberly.html">Kimberly</a></div>
+        <h3 style="margin-bottom:0.25rem;">Other girls' names starting with D</h3>
+        <div class="related"><a href="/name/dorothy.html">Dorothy</a><a href="/name/donna.html">Donna</a><a href="/name/deborah.html">Deborah</a><a href="/name/debra.html">Debra</a><a href="/name/diane.html">Diane</a><a href="/name/doris.html">Doris</a></div>
+
+        <h2>Year-by-Year Detail</h2>
         <p style="color:#7f8c8d; font-size:0.9rem;">Rank is among all girls' names registered that year.</p>
         <table>
             <thead><tr>

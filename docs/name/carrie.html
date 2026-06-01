@@ -3,23 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrie - Baby Name Popularity & Trends</title>
+    <title>Carrie — Baby Name Popularity & Trends</title>
+    <meta name="description" content="Carrie baby name popularity: 267,476 U.S. babies recorded 1880–2024, peaking in 1977 with 8,661. See yearly counts, rank, gender split and an interactive trend chart.">
+    <link rel="canonical" href="https://baby-names-analytics.vercel.app/name/carrie.html">
+    <meta property="og:title" content="Carrie — Baby Name Popularity & Trends">
+    <meta property="og:description" content="Carrie baby name popularity: 267,476 U.S. babies recorded 1880–2024, peaking in 1977 with 8,661. See yearly counts, rank, gender split and an interactive trend chart.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://baby-names-analytics.vercel.app/name/carrie.html">
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
             margin: 0;
-            padding: 2rem;
+            padding: 0;
             background-color: #f5f5f5;
             color: #333;
         }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
         h1 { color: #2c3e50; }
-        .nav { margin-bottom: 2rem; }
+        .sitenav {
+            background: #2c3e50; padding: 0.9rem 2rem;
+        }
+        .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .sitenav a { color: #ecf0f1; text-decoration: none; font-weight: 500; }
+        .sitenav a:hover { color: #fff; text-decoration: underline; }
+        .sitenav .brand { font-weight: 700; color: #fff; margin-right: auto; }
+        .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #3498db; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
+        .breadcrumb { font-size: 0.85rem; color: #7f8c8d; margin-bottom: 1rem; }
+        .breadcrumb a { color: #3498db; text-decoration: none; }
+        .insight {
+            background: #fff; border-left: 4px solid #3498db; padding: 1rem 1.25rem;
+            border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
@@ -28,7 +47,8 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
         }
         .stat-value { font-size: 2rem; font-weight: bold; color: #2c3e50; }
-        .stat-label { color: #7f8c8d; margin-top: 0.5rem; }
+        .stat-label { color: #7f8c8d; margin-top: 0.5rem; font-size: 0.9rem; }
+        .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
         table {
             width: 100%; border-collapse: collapse; margin-bottom: 2rem;
             background: #fff; border-radius: 8px; overflow: hidden;
@@ -40,15 +60,57 @@
         .year-column { width: 12%; font-family: monospace; }
         .count-column { width: 18%; text-align: right; }
         .rank-column { width: 15%; text-align: right; }
+        .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
+        .related a {
+            background:#fff; border:1px solid #d6dde2; border-radius:20px;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#2c3e50; font-size:0.9rem;
+        }
+        .related a:hover { background:#3498db; color:#fff; border-color:#3498db; }
+        .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#2c3e50; font-weight:600; }
+        .azindex a:hover { background:#3498db; color:#fff; }
         .footer { text-align: center; margin-top: 3rem; color: #7f8c8d; font-size: 0.9rem; }
         a { color: #3498db; }
 </style>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://baby-names-analytics.vercel.app/"}, {"@type": "ListItem", "position": 2, "name": "Names", "item": "https://baby-names-analytics.vercel.app/names.html"}, {"@type": "ListItem", "position": 3, "name": "Carrie", "item": "https://baby-names-analytics.vercel.app/name/carrie.html"}]}</script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+    <script>
+    window.addEventListener('DOMContentLoaded', function() {
+      var ctx = document.getElementById('trendChart');
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: [1880, 1881, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 1895, 1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1911, 1912, 1913, 1914, 1915, 1916, 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1926, 1927, 1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1942, 1943, 1944, 1945, 1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
+          datasets: [{
+            label: 'Babies named Carrie per year (girls)',
+            data: [949, 958, 1037, 1108, 1245, 1283, 1396, 1344, 1647, 1547, 1510, 1342, 1588, 1451, 1452, 1463, 1388, 1365, 1371, 1346, 1711, 1247, 1376, 1252, 1280, 1288, 1188, 1283, 1239, 1276, 1381, 1281, 1580, 1517, 1798, 1968, 2159, 2073, 2130, 2180, 2108, 2081, 2120, 1930, 2051, 2025, 1860, 1789, 1653, 1510, 1465, 1307, 1396, 1261, 1260, 1278, 1183, 1176, 1123, 1076, 1093, 1030, 1187, 1136, 1020, 985, 1071, 1170, 1175, 1107, 976, 1065, 1109, 1282, 1308, 1212, 1529, 2156, 2581, 2961, 3150, 3178, 3029, 2817, 2975, 2484, 2476, 3195, 3979, 3888, 4977, 5976, 5422, 5836, 6437, 7854, 7991, 8661, 7318, 6355, 5762, 5093, 5186, 4296, 3691, 2943, 2560, 2389, 2204, 1957, 1708, 1465, 1285, 1117, 1012, 896, 876, 744, 629, 582, 536, 430, 321, 345, 310, 304, 308, 268, 264, 236, 181, 152, 154, 177, 150, 126, 143, 130, 115, 93, 82, 77, 68, 68, 53],
+            borderColor: '#e84393',
+            backgroundColor: 'rgba(232,67,147,0.1)',
+            fill: true, tension: 0.2, pointRadius: 0, borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } },
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'Babies per year' } } }
+        }
+      });
+    });
+    </script>
 </head>
 <body>
+    <div class="sitenav"><div class="sitenav-inner">
+        <a class="brand" href="/">Baby Names Analytics</a>
+        <a href="/">Home</a>
+        <a href="/names.html">Browse A–Z</a>
+        <a href="/year/2024.html">2024 Rankings</a>
+    </div></div>
     <div class="container">
-        <nav class="nav"><a href="/">← Back to all names</a></nav>
+        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Names</a> &rsaquo; Carrie</div>
         <h1>Carrie</h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a girl's name &middot; 100% girls</p>
+
+        <div class="insight"><strong>Carrie</strong> first appears in the U.S. data in <strong>1880</strong> and has been recorded in 145 different years as a girl's name. Its single biggest year was <strong>1977</strong> with <strong>8,661</strong> babies (rank #28 that year). In 2024 it was given to 53 girls (rank <strong>#3,050</strong>). The name has been <strong>declining</strong> over the last five years.</div>
 
         <div class="stats">
             <div class="stat"><div class="stat-value">267,476</div><div class="stat-label">Total babies (all years)</div></div>
@@ -57,6 +119,16 @@
         </div>
 
         <h2>Popularity Over Time — Girls</h2>
+        <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
+
+        <h3 style="margin-bottom:0.25rem;">More popular girls' names</h3>
+        <div class="related"><a href="/name/edith.html">Edith</a><a href="/name/leslie.html">Leslie</a><a href="/name/esther.html">Esther</a><a href="/name/amelia.html">Amelia</a><a href="/name/connie.html">Connie</a><a href="/name/gladys.html">Gladys</a></div>
+        <h3 style="margin-bottom:0.25rem;">Names ranked near Carrie in 2024</h3>
+        <div class="related"><a href="/name/beth.html">Beth</a><a href="/name/hilda.html">Hilda</a><a href="/name/brittney.html">Brittney</a><a href="/name/bradley.html">Bradley</a><a href="/name/monique.html">Monique</a><a href="/name/joann.html">Joann</a></div>
+        <h3 style="margin-bottom:0.25rem;">Other girls' names starting with C</h3>
+        <div class="related"><a href="/name/carol.html">Carol</a><a href="/name/cynthia.html">Cynthia</a><a href="/name/catherine.html">Catherine</a><a href="/name/christine.html">Christine</a><a href="/name/carolyn.html">Carolyn</a><a href="/name/christina.html">Christina</a></div>
+
+        <h2>Year-by-Year Detail</h2>
         <p style="color:#7f8c8d; font-size:0.9rem;">Rank is among all girls' names registered that year.</p>
         <table>
             <thead><tr>
