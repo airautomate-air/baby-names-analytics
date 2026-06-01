@@ -358,9 +358,8 @@ def generate_homepage():
         )
     body = f"""        <h1>NameCharted</h1>
         <p style="color:#5B6678; font-size:1.05rem; margin-top:-0.25rem;">Names, charted.</p>
-        <p>Explore the popularity and trends of U.S. baby names from {DATA_RANGE}, based on
-        official Social Security Administration records. Search any name to see its yearly
-        counts, popularity rank, gender split, and an interactive trend chart.</p>
+        <p>Explore the popularity and trends of names from {DATA_RANGE}. Search any name
+        to see its yearly counts, popularity rank, gender split, and an interactive trend chart.</p>
 
         <div class="search-box" style="margin:2rem 0; text-align:center;">
             <input type="text" id="searchInput" placeholder="Enter a name to explore..."
@@ -398,11 +397,11 @@ def generate_homepage():
         }});
         loadIndex();
         </script>"""
-    desc = (f"Explore U.S. baby name popularity and trends from {DATA_RANGE} using official "
-            f"Social Security data. Search {len(pages_to_generate):,}+ names for yearly counts, "
-            f"rankings, and interactive charts.")
+    desc = (f"Explore name popularity and trends from {DATA_RANGE}. "
+            f"Search {len(pages_to_generate):,}+ names for yearly counts, "
+            f"rankings, gender split, and interactive trend charts.")
     (OUTPUT_DIR / 'index.html').write_text(
-        page("NameCharted — U.S. Name Popularity & Trends", body,
+        page("NameCharted — Name Popularity & Trends", body,
              description=desc, canonical=f"{BASE_URL}/"),
         encoding='utf-8')
 
@@ -484,7 +483,7 @@ def generate_name_page(name):
     insight_parts = []
     if first_year is not None:
         insight_parts.append(
-            f"<strong>{name}</strong> first appears in the U.S. data in "
+            f"<strong>{name}</strong> first appears in the data in "
             f"<strong>{first_year}</strong> and has been recorded in {len(years)} different years "
             f"as a {singular}'s name.")
     if peak_year is not None:
@@ -606,7 +605,7 @@ def generate_name_page(name):
 {rows}            </tbody>
         </table>"""
 
-    desc = (f"{name} baby name popularity: {total:,} U.S. babies recorded {DATA_RANGE}, "
+    desc = (f"{name} name popularity: {total:,} births recorded {DATA_RANGE}, "
             f"peaking in {peak_year} with {peak:,}. See yearly counts, rank, gender split and "
             f"an interactive trend chart.")
     (OUTPUT_DIR / 'name' / f'{slugify(name)}.html').write_text(
@@ -649,17 +648,17 @@ def generate_browse_index():
             <div class="azindex">{boy_letters}</div>
         </div>"""
     body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Browse A–Z</div>
-        <h1>Browse All Baby Names A–Z</h1>
+        <h1>Browse All Names A–Z</h1>
         <p>All {len(pages_to_generate):,} names with a dedicated popularity page, grouped by first letter.
         Looking for a rarer name? See the full <a href="/rare-names.html">A–Z index of rare names</a>.</p>
 {explore}
         <h2>All names</h2>
         {jump}
 {sections}"""
-    desc = (f"Browse all {len(pages_to_generate):,} U.S. baby names A–Z. Click any name for "
+    desc = (f"Browse all {len(pages_to_generate):,} names A–Z. Click any name for "
             f"popularity trends, rankings and yearly counts from {DATA_RANGE}.")
     (OUTPUT_DIR / 'names.html').write_text(
-        page("Browse All Baby Names A–Z", body,
+        page("Browse All Names A–Z", body,
              description=desc, canonical=f"{BASE_URL}/names.html"),
         encoding='utf-8')
 
@@ -688,8 +687,8 @@ def generate_year_page(year):
     top_boy = sorted(rank_by_year_sex[(year, 'M')].items(), key=lambda x: x[1])[0][0]
     body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; {year}</div>
         <nav class="nav">{prev_link} &nbsp; {next_link}</nav>
-        <h1>Top Baby Names of {year}</h1>
-        <p>The most popular U.S. baby names in {year} were <strong>{top_girl}</strong> for girls
+        <h1>Top Names of {year}</h1>
+        <p>The most popular names recorded in {year} were <strong>{top_girl}</strong> for girls
         and <strong>{top_boy}</strong> for boys. Full top-50 lists below, from official SSA data.</p>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
             <div>
@@ -705,14 +704,14 @@ def generate_year_page(year):
 {table_for('M')}                </tbody></table>
             </div>
         </div>"""
-    desc = (f"Top 50 most popular U.S. baby names of {year} for girls and boys, with birth "
+    desc = (f"Top 50 most popular names of {year} for girls and boys, with birth "
             f"counts from official Social Security Administration data. #1: {top_girl} and {top_boy}.")
     extra_head = breadcrumb_jsonld([
         ("Home", BASE_URL + "/"),
         (str(year), f"{BASE_URL}/year/{year}.html"),
     ])
     (OUTPUT_DIR / 'year' / f'{year}.html').write_text(
-        page(f"Top Baby Names of {year} — Rankings & Counts", body,
+        page(f"Top Names of {year} — Rankings & Counts", body,
              description=desc, canonical=f"{BASE_URL}/year/{year}.html", extra_head=extra_head),
         encoding='utf-8')
 
@@ -737,7 +736,7 @@ def generate_comparison_page(name1, name2):
     body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Compare</div>
         <h1>{name1} vs {name2}</h1>
         <p>Side-by-side popularity comparison of <strong>{name1}</strong> and
-        <strong>{name2}</strong> using U.S. Social Security data ({DATA_RANGE}).</p>
+        <strong>{name2}</strong> year by year ({DATA_RANGE}).</p>
         <div style="display:flex; gap:2rem; flex-wrap:wrap;">
             <div style="flex:1; min-width:280px;">
                 <h2 style="color:#149E91;"><a href="/name/{slugify(name1)}.html">{name1}</a> <span style="font-size:0.7em; color:#7f8c8d;">({sex_label(dom1)})</span></h2>
@@ -752,7 +751,7 @@ def generate_comparison_page(name1, name2):
 {rows2}                </tbody></table>
             </div>
         </div>"""
-    desc = (f"{name1} vs {name2}: compare U.S. baby name popularity year by year using official "
+    desc = (f"{name1} vs {name2}: compare name popularity year by year using official "
             f"Social Security data from {DATA_RANGE}.")
     fname = f'{slugify(name1)}-vs-{slugify(name2)}.html'
     (OUTPUT_DIR / 'compare' / fname).write_text(
@@ -782,11 +781,11 @@ def generate_similar_page(name):
         <h1>Names Similar to {name}</h1>
         <p>If you like <a href="/name/{slugify(name)}.html"><strong>{name}</strong></a>, here are {len(sims)}
         {label}' names with a similar sound, length, or popularity era — ranked by how close they are.
-        Based on U.S. Social Security data ({DATA_RANGE}).</p>
+        Data range: {DATA_RANGE}.</p>
         <ul class="trending-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:1rem; list-style:none; padding:0;">
 {cards}        </ul>"""
     desc = (f"{len(sims)} names similar to {name} — comparable {label}' names by sound, length and "
-            f"popularity, from U.S. Social Security data. See popularity for each.")
+            f"popularity. See popularity for each.")
     extra_head = breadcrumb_jsonld([
         ("Home", BASE_URL + "/"),
         (name, f"{BASE_URL}/name/{slugify(name)}.html"),
@@ -824,8 +823,8 @@ def generate_decade_page(decade):
     next_link = f'<a href="/decade/{DECADES[idx+1]}s.html">{DECADES[idx+1]}s →</a>' if idx < len(DECADES) - 1 else ''
     body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/decades.html">Decades</a> &rsaquo; {label}</div>
         <nav class="nav">{prev_link} &nbsp; {next_link}</nav>
-        <h1>Most Popular Baby Names of the {label}</h1>
-        <p>The top U.S. baby names across the {label} ({span}), totaled over the whole decade.
+        <h1>Most Popular Names of the {label}</h1>
+        <p>The top names across the {label} ({span}), totaled over the whole decade.
         The decade's #1 names were <strong>{gtop}</strong> for girls and <strong>{btop}</strong> for boys.</p>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
             <div>
@@ -841,7 +840,7 @@ def generate_decade_page(decade):
 {brows}                </tbody></table>
             </div>
         </div>"""
-    desc = (f"Most popular U.S. baby names of the {label} ({span}). Top 50 girls and boys by total "
+    desc = (f"Most popular names of the {label} ({span}). Top 50 girls and boys by total "
             f"births over the decade, from official Social Security data. #1: {gtop} and {btop}.")
     canonical = f"{BASE_URL}/decade/{decade}s.html"
     extra_head = breadcrumb_jsonld([
@@ -850,7 +849,7 @@ def generate_decade_page(decade):
         (label, canonical),
     ])
     (OUTPUT_DIR / 'decade' / f'{decade}s.html').write_text(
-        page(f"Most Popular Baby Names of the {label}", body,
+        page(f"Most Popular Names of the {label}", body,
              description=desc, canonical=canonical, extra_head=extra_head),
         encoding='utf-8')
 
@@ -865,18 +864,18 @@ def generate_decades_hub():
         links += (f'                <tr><td><a href="/decade/{d}s.html"><strong>{d}s</strong></a></td>'
                   f'<td>{g}</td><td>{b}</td></tr>\n')
     body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Decades</div>
-        <h1>Baby Names by Decade</h1>
-        <p>Explore the most popular U.S. baby names of each decade from the {DECADES[0]}s to the
+        <h1>Names by Decade</h1>
+        <p>Explore the most popular names of each decade from the {DECADES[0]}s to the
         {DECADES[-1]}s, based on official Social Security Administration data.</p>
         <table>
             <thead><tr><th>Decade</th><th>#1 Girls' Name</th><th>#1 Boys' Name</th></tr></thead>
             <tbody>
 {links}            </tbody>
         </table>"""
-    desc = (f"Most popular U.S. baby names by decade, {DECADES[0]}s–{DECADES[-1]}s. See the top girls' "
+    desc = (f"Most popular names by decade, {DECADES[0]}s–{DECADES[-1]}s. See the top girls' "
             f"and boys' names of every decade from official Social Security data.")
     (OUTPUT_DIR / 'decades.html').write_text(
-        page("Baby Names by Decade — Top Names of Every Era", body,
+        page("Names by Decade — Top Names of Every Era", body,
              description=desc, canonical=f"{BASE_URL}/decades.html"),
         encoding='utf-8')
 
@@ -935,14 +934,14 @@ def generate_trends_pages():
 
     # Rising
     body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/trends.html">Trends</a> &rsaquo; Rising</div>
-        <h1>Fastest-Rising Baby Names ({LATEST_YEAR})</h1>
+        <h1>Fastest-Rising Names ({LATEST_YEAR})</h1>
         <p>The {label_join()} names growing fastest in popularity — comparing average births around
-        five years ago with the most recent years, from U.S. Social Security data. Only names with
+        five years ago with the most recent years. Only names with
         meaningful current usage are included.</p>
 {two_col(rising)}"""
     (OUTPUT_DIR / 'trends' / 'rising.html').write_text(
-        page(f"Fastest-Rising Baby Names of {LATEST_YEAR}", body,
-             description=f"The fastest-rising U.S. baby names heading into {LATEST_YEAR}, for girls and "
+        page(f"Fastest-Rising Names of {LATEST_YEAR}", body,
+             description=f"The fastest-rising names heading into {LATEST_YEAR}, for girls and "
                          f"boys, based on official Social Security birth data.",
              canonical=f"{BASE_URL}/trends/rising.html",
              extra_head=breadcrumb_jsonld([("Home", BASE_URL + "/"), ("Trends", BASE_URL + "/trends.html"),
@@ -951,13 +950,13 @@ def generate_trends_pages():
 
     # Falling
     body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/trends.html">Trends</a> &rsaquo; Falling</div>
-        <h1>Fastest-Falling Baby Names ({LATEST_YEAR})</h1>
+        <h1>Fastest-Falling Names ({LATEST_YEAR})</h1>
         <p>Once-common names declining fastest in popularity — comparing average births around five
-        years ago with the most recent years, from U.S. Social Security data.</p>
+        years ago with the most recent years.</p>
 {two_col(falling)}"""
     (OUTPUT_DIR / 'trends' / 'falling.html').write_text(
-        page(f"Fastest-Falling Baby Names of {LATEST_YEAR}", body,
-             description=f"U.S. baby names declining fastest in popularity heading into {LATEST_YEAR}, "
+        page(f"Fastest-Falling Names of {LATEST_YEAR}", body,
+             description=f"Names declining fastest in popularity heading into {LATEST_YEAR}, "
                          f"for girls and boys, from official Social Security birth data.",
              canonical=f"{BASE_URL}/trends/falling.html",
              extra_head=breadcrumb_jsonld([("Home", BASE_URL + "/"), ("Trends", BASE_URL + "/trends.html"),
@@ -969,7 +968,7 @@ def generate_trends_hub():
     body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Trends</div>
         <h1>Baby Name Trends</h1>
         <p>Which names are heating up and which are fading? These rankings compare recent birth
-        counts with five years earlier, using official U.S. Social Security data ({DATA_RANGE}).</p>
+        counts with five years earlier ({DATA_RANGE}).</p>
         <div class="stats">
             <a class="stat" style="text-decoration:none;" href="/trends/rising.html">
                 <div class="stat-value" style="color:#27ae60;">▲</div>
@@ -982,8 +981,8 @@ def generate_trends_hub():
                 <div class="stat-label"><strong>Names by Decade</strong><br>Top names of every era</div></a>
         </div>"""
     (OUTPUT_DIR / 'trends.html').write_text(
-        page("Baby Name Trends — Rising & Falling U.S. Names", body,
-             description=f"See which U.S. baby names are rising and falling in popularity heading into "
+        page("Name Trends — Rising & Falling Names", body,
+             description=f"See which names are rising and falling in popularity heading into "
                          f"{LATEST_YEAR}, plus top names by decade, from official Social Security data.",
              canonical=f"{BASE_URL}/trends.html"),
         encoding='utf-8')
@@ -1014,14 +1013,14 @@ def generate_letter_page(sex, letter):
     body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Names</a> &rsaquo; {label.capitalize()} / {letter}</div>
         <h1>{label.capitalize()} Names Starting With {letter}</h1>
         <p>All {len(names)} {label}' names beginning with <strong>{letter}</strong> that have a popularity
-        page, ranked by all-time U.S. births ({DATA_RANGE}). {('Looking for ' + cross + '?') if cross else ''}</p>
+        page, ranked by all-time births ({DATA_RANGE}). {('Looking for ' + cross + '?') if cross else ''}</p>
         <table>
             <thead><tr><th class="rank-column">#</th><th>Name</th>
                 <th class="count-column">Total babies</th><th class="rank-column">{LATEST_YEAR} rank</th></tr></thead>
             <tbody>
 {rows}            </tbody>
         </table>"""
-    desc = (f"{label.capitalize()} names that start with {letter}: {len(names)} options ranked by U.S. "
+    desc = (f"{label.capitalize()} names that start with {letter}: {len(names)} options ranked by "
             f"popularity, with total births and current rank from official Social Security data.")
     canonical = f"{BASE_URL}/letter/{label}-{letter.lower()}.html"
     extra_head = breadcrumb_jsonld([
@@ -1099,8 +1098,8 @@ def generate_rare_names_page():
             f'<ul style="columns:3; column-gap:1.5rem; list-style:none; padding:0; margin:1rem 0 0; font-size:0.92rem;">'
             + ''.join(items) + '</ul></details>')
     body = f"""        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Browse A–Z</a> &rsaquo; Rare names</div>
-        <h1>Rare U.S. Baby Names</h1>
-        <p>These {len(rare):,} names appear in U.S. Social Security records ({DATA_RANGE}) but
+        <h1>Rare Names — Full A–Z Index</h1>
+        <p>These {len(rare):,} names appear in the records ({DATA_RANGE}) but
         have fewer than {PAGE_MIN_TOTAL:,} lifetime births, so they don't yet have their own
         dedicated trend page. They're listed here A–Z with lifetime totals.</p>
         <p style="color:#5B6678; font-size:0.9rem;">Tip: use <kbd>Ctrl</kbd>+<kbd>F</kbd> (or <kbd>⌘</kbd>+<kbd>F</kbd>) to search this page.</p>
@@ -1124,10 +1123,10 @@ def generate_rare_names_page():
             }}, 50);
         }})();
         </script>"""
-    desc = (f"Index of {len(rare):,} rare U.S. baby names from SSA data ({DATA_RANGE}) "
+    desc = (f"Index of {len(rare):,} rare names ({DATA_RANGE}) "
             f"with fewer than {PAGE_MIN_TOTAL} lifetime births, listed A–Z.")
     (OUTPUT_DIR / 'rare-names.html').write_text(
-        page("Rare U.S. Baby Names — Full A–Z Index", body,
+        page("Rare Names — Full A–Z Index", body,
              description=desc, canonical=f"{BASE_URL}/rare-names.html"),
         encoding='utf-8')
 
@@ -1148,7 +1147,7 @@ def generate_404_page():
         <h1>Name not found</h1>
         <p style="color:#5B6678; max-width:520px; margin:1rem auto;">
         We couldn't find a dedicated page for that name. NameCharted has full
-        trend pages for every name with at least 500 lifetime U.S. births. Rarer
+        trend pages for every name with at least 500 lifetime births. Rarer
         names are listed in our complete A–Z index below.</p>
         <p style="margin-top:2rem;">
             <a href="/rare-names.html" style="display:inline-block; padding:0.75rem 1.5rem; background:#149E91; color:#fff; text-decoration:none; border-radius:6px; font-weight:600;">Browse rare names A–Z</a>

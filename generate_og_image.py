@@ -44,9 +44,9 @@ tag_font = ImageFont.truetype(INTER, 42)
 d.text((wordmark_x, 340), "Names, charted.", font=tag_font, fill=MUTED)
 
 sub_font = ImageFont.truetype(INTER, 28)
-d.text((wordmark_x, 410), "U.S. baby name popularity & trends, 1880–2024.",
+d.text((wordmark_x, 410), "Name popularity & trends, 1880–2024.",
        font=sub_font, fill=MUTED)
-d.text((wordmark_x, 450), "104,000+ names · interactive charts · SSA data.",
+d.text((wordmark_x, 450), "104,000+ names · interactive charts · open data.",
        font=sub_font, fill=MUTED)
 
 d.rectangle([(0, H - 12), (W, H)], fill=TEAL)
