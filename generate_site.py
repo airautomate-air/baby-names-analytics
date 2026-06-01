@@ -2,11 +2,11 @@
 """
 Generate static site for baby names analytics.
 
-Data: U.S. Social Security Administration national data (yob<year>.txt),
-one row per (name, sex, count) per year. NOTE: each name can appear twice in a
-year file -- once for F and once for M -- so counts MUST be tracked per sex and
-summed, never overwritten.
+Reads normalized per-country CSVs from data/normalized/<cc>.csv with schema
+(country, year, sex, name, count). All derived structures are country-scoped
+internally; the active build country is controlled by the COUNTRY constant.
 """
+import csv
 import json
 import re
 from collections import defaultdict
@@ -15,12 +15,10 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-DATA_DIR = Path('.')          # where the yob<year>.txt files live
-OUTPUT_DIR = Path('docs')     # site output (served by Vercel)
-YEARS = [y for y in range(1880, 2025) if (DATA_DIR / f'yob{y}.txt').exists()]
-TOP_N_NAMES = 1000            # how many names get their own page
-DATA_RANGE = f"{YEARS[0]}–{YEARS[-1]}" if YEARS else ""
-LATEST_YEAR = YEARS[-1] if YEARS else 2024
+COUNTRY = "US"                          # active build country (ISO-2)
+DATA_DIR = Path('data/normalized')      # where <cc>.csv files live
+OUTPUT_DIR = Path('docs')               # site output (served by Vercel)
+TOP_N_NAMES = 1000                      # how many names get their own page
 BASE_URL = "https://namecharted.com"
 
 OUTPUT_DIR.mkdir(exist_ok=True)
@@ -40,133 +38,189 @@ def slugify(name: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# Load data  ->  counts[name][sex][year] = count   (summed correctly)
+# Country-scoped data structures. Every dict is keyed by ISO-2 country code so
+# the build can support multiple countries; today only COUNTRY is populated.
 # ---------------------------------------------------------------------------
-counts = defaultdict(lambda: {'F': {}, 'M': {}})
-rank_by_year_sex = {}   # (year, sex) -> {name: rank}
+years_by_country: dict[str, list[int]] = {}
+counts_by_country: dict[str, dict] = {}
+rank_by_year_sex_by_country: dict[str, dict] = {}
+name_sex_total_by_country: dict[str, dict] = {}
+name_total_by_country: dict[str, dict] = {}
+pages_to_generate_by_country: dict[str, list] = {}
+has_page_by_country: dict[str, set] = {}
+same_sex_ranked_by_country: dict[str, dict] = {}
+same_sex_index_by_country: dict[str, dict] = {}
+latest_year_ranked_by_country: dict[str, dict] = {}
+latest_year_index_by_country: dict[str, dict] = {}
+by_initial_by_country: dict[str, dict] = {}
+letter_names_by_country: dict[str, dict] = {}
+name_meta_by_country: dict[str, dict] = {}
+decades_by_country: dict[str, list[int]] = {}
+decade_sex_counts_by_country: dict[str, dict] = {}
 
-print("Reading data...")
-for year in YEARS:
-    rows = {'F': [], 'M': []}
-    with open(DATA_DIR / f'yob{year}.txt', 'r', encoding='utf-8') as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            name, sex, count = line.split(',')
-            count = int(count)
+PAGE_MIN_TOTAL = 500
+
+
+def build_country(cc: str) -> None:
+    """Load data/normalized/<cc>.csv and populate every *_by_country dict for cc."""
+    csv_path = DATA_DIR / f'{cc.lower()}.csv'
+    print(f"Reading {csv_path}...")
+
+    counts = defaultdict(lambda: {'F': {}, 'M': {}})
+    per_year_rows: dict[tuple[int, str], list] = defaultdict(list)
+    years_seen: set[int] = set()
+
+    with csv_path.open(encoding='utf-8') as f:
+        r = csv.reader(f)
+        next(r, None)   # header
+        for row in r:
+            _country, year_s, sex, name, count_s = row
             if sex not in ('F', 'M'):
                 continue
-            # += guards against any accidental duplicate rows; the key fix is
-            # that F and M are stored separately and never overwrite each other.
+            year = int(year_s)
+            count = int(count_s)
             counts[name][sex][year] = counts[name][sex].get(year, 0) + count
-            rows[sex].append((name, count))
-    for sex in ('F', 'M'):
-        rows[sex].sort(key=lambda x: (-x[1], x[0]))
-        rank_by_year_sex[(year, sex)] = {n: i + 1 for i, (n, _) in enumerate(rows[sex])}
-    print(f"  {year}: F={len(rows['F'])}, M={len(rows['M'])}")
+            per_year_rows[(year, sex)].append((name, count))
+            years_seen.add(year)
 
-# Per-name totals (per sex and combined)
-name_sex_total = {}
-name_total = {}
-for name, d in counts.items():
-    ft = sum(d['F'].values())
-    mt = sum(d['M'].values())
-    name_sex_total[(name, 'F')] = ft
-    name_sex_total[(name, 'M')] = mt
-    name_total[name] = ft + mt
+    years = sorted(years_seen)
+    latest_year = years[-1]
+
+    rank_by_year_sex: dict = {}
+    for (year, sex), rows in per_year_rows.items():
+        rows.sort(key=lambda x: (-x[1], x[0]))
+        rank_by_year_sex[(year, sex)] = {n: i + 1 for i, (n, _) in enumerate(rows)}
+
+    name_sex_total: dict = {}
+    name_total: dict = {}
+    for name, d in counts.items():
+        ft = sum(d['F'].values())
+        mt = sum(d['M'].values())
+        name_sex_total[(name, 'F')] = ft
+        name_sex_total[(name, 'M')] = mt
+        name_total[name] = ft + mt
+
+    def _dom(n: str) -> str:
+        return 'F' if name_sex_total[(n, 'F')] >= name_sex_total[(n, 'M')] else 'M'
+
+    top_names_local = sorted(name_total.items(), key=lambda x: (-x[1], x[0]))[:TOP_N_NAMES]
+    pages = {n for n, _ in top_names_local}
+    for (_y, _s), ranks in rank_by_year_sex.items():
+        for n, rank in ranks.items():
+            if rank <= 50:
+                pages.add(n)
+    for n, total in name_total.items():
+        if total >= PAGE_MIN_TOTAL:
+            pages.add(n)
+    pages_to_generate = sorted(pages, key=lambda n: (-name_total[n], n))
+    has_page = set(pages_to_generate)
+
+    print(f"  Total unique names: {len(name_total):,}")
+    print(f"  Top {len(top_names_local)} all-time + yearly top-50 = {len(pages_to_generate)} name pages.")
+
+    same_sex_ranked = {'F': [], 'M': []}
+    for n in pages_to_generate:
+        same_sex_ranked[_dom(n)].append(n)
+    for sex in ('F', 'M'):
+        same_sex_ranked[sex].sort(key=lambda n: (-name_sex_total[(n, sex)], n))
+    same_sex_index = {
+        sex: {n: i for i, n in enumerate(lst)} for sex, lst in same_sex_ranked.items()
+    }
+
+    latest_year_ranked = {'F': [], 'M': []}
+    for sex in ('F', 'M'):
+        ranks = rank_by_year_sex.get((latest_year, sex), {})
+        have = [(n, r) for n, r in ranks.items() if n in has_page]
+        have.sort(key=lambda x: x[1])
+        latest_year_ranked[sex] = have
+    latest_year_index = {
+        sex: {n: i for i, (n, _) in enumerate(lst)} for sex, lst in latest_year_ranked.items()
+    }
+
+    by_initial = defaultdict(list)
+    for n in pages_to_generate:
+        by_initial[n[0].upper()].append(n)
+    for letter in by_initial:
+        by_initial[letter].sort(key=lambda n: (-name_total[n], n))
+
+    decades = list(range(years[0] - (years[0] % 10), latest_year + 1, 10))
+    decade_sex_counts = defaultdict(lambda: defaultdict(int))
+    for _n, _d in counts.items():
+        for _sex in ('F', 'M'):
+            for _y, _c in _d[_sex].items():
+                decade_sex_counts[((_y // 10) * 10, _sex)][_n] += _c
+
+    letter_names = {'F': defaultdict(list), 'M': defaultdict(list)}
+    for n in pages_to_generate:
+        letter_names[_dom(n)][n[0].upper()].append(n)
+    for sex in ('F', 'M'):
+        for letter in letter_names[sex]:
+            letter_names[sex][letter].sort(key=lambda n: (-name_sex_total[(n, sex)], n))
+
+    name_meta = {}
+    for n in pages_to_generate:
+        dom = _dom(n)
+        series = counts[n][dom]
+        peak_year = max(series, key=series.get)
+        low = n.lower()
+        name_meta[n] = {
+            'dom': dom,
+            'first': low[0],
+            'last': low[-1],
+            'last2': low[-2:],
+            'len': len(n),
+            'peak_dec': (peak_year // 10) * 10,
+            'latest_rank': rank_by_year_sex.get((latest_year, dom), {}).get(n),
+        }
+
+    years_by_country[cc] = years
+    counts_by_country[cc] = counts
+    rank_by_year_sex_by_country[cc] = rank_by_year_sex
+    name_sex_total_by_country[cc] = name_sex_total
+    name_total_by_country[cc] = name_total
+    pages_to_generate_by_country[cc] = pages_to_generate
+    has_page_by_country[cc] = has_page
+    same_sex_ranked_by_country[cc] = same_sex_ranked
+    same_sex_index_by_country[cc] = same_sex_index
+    latest_year_ranked_by_country[cc] = latest_year_ranked
+    latest_year_index_by_country[cc] = latest_year_index
+    by_initial_by_country[cc] = by_initial
+    letter_names_by_country[cc] = letter_names
+    name_meta_by_country[cc] = name_meta
+    decades_by_country[cc] = decades
+    decade_sex_counts_by_country[cc] = decade_sex_counts
+
+
+build_country(COUNTRY)
+
+# ---------------------------------------------------------------------------
+# Active-country aliases — the generator functions below all read these names.
+# ---------------------------------------------------------------------------
+YEARS = years_by_country[COUNTRY]
+YEARS_SET = set(YEARS)
+DATA_RANGE = f"{YEARS[0]}–{YEARS[-1]}" if YEARS else ""
+LATEST_YEAR = YEARS[-1] if YEARS else 2024
+DECADES = decades_by_country[COUNTRY]
+
+counts = counts_by_country[COUNTRY]
+rank_by_year_sex = rank_by_year_sex_by_country[COUNTRY]
+name_sex_total = name_sex_total_by_country[COUNTRY]
+name_total = name_total_by_country[COUNTRY]
+pages_to_generate = pages_to_generate_by_country[COUNTRY]
+HAS_PAGE = has_page_by_country[COUNTRY]
+same_sex_ranked = same_sex_ranked_by_country[COUNTRY]
+same_sex_index = same_sex_index_by_country[COUNTRY]
+latest_year_ranked = latest_year_ranked_by_country[COUNTRY]
+latest_year_index = latest_year_index_by_country[COUNTRY]
+by_initial = by_initial_by_country[COUNTRY]
+letter_names = letter_names_by_country[COUNTRY]
+name_meta = name_meta_by_country[COUNTRY]
+decade_sex_counts = decade_sex_counts_by_country[COUNTRY]
+top_names = sorted(name_total.items(), key=lambda x: (-x[1], x[0]))[:TOP_N_NAMES]
 
 
 def dominant_sex(name: str) -> str:
     return 'F' if name_sex_total[(name, 'F')] >= name_sex_total[(name, 'M')] else 'M'
-
-
-top_names = sorted(name_total.items(), key=lambda x: (-x[1], x[0]))[:TOP_N_NAMES]
-
-# Every name that gets its own page: the all-time top N, PLUS any name that ever
-# cracked a yearly top-50, PLUS any name with at least 500 lifetime SSA births
-# (so searches for less-common-but-real names like Elon resolve to a page).
-PAGE_MIN_TOTAL = 500
-pages_to_generate = {name for name, _ in top_names}
-for (year, sex), ranks in rank_by_year_sex.items():
-    for name, rank in ranks.items():
-        if rank <= 50:
-            pages_to_generate.add(name)
-for name, total in name_total.items():
-    if total >= PAGE_MIN_TOTAL:
-        pages_to_generate.add(name)
-pages_to_generate = sorted(pages_to_generate, key=lambda n: (-name_total[n], n))
-HAS_PAGE = set(pages_to_generate)
-
-print(f"Total unique names: {len(name_total):,}")
-print(f"Top {len(top_names)} all-time + yearly top-50 = {len(pages_to_generate)} name pages.")
-
-# ---------------------------------------------------------------------------
-# Precompute related-name structures (only names that actually have a page)
-# ---------------------------------------------------------------------------
-# Names with a page, grouped by dominant sex, sorted by all-time same-sex total.
-same_sex_ranked = {'F': [], 'M': []}
-for name in pages_to_generate:
-    dom = dominant_sex(name)
-    same_sex_ranked[dom].append(name)
-for sex in ('F', 'M'):
-    same_sex_ranked[sex].sort(key=lambda n: (-name_sex_total[(n, sex)], n))
-same_sex_index = {
-    sex: {n: i for i, n in enumerate(lst)} for sex, lst in same_sex_ranked.items()
-}
-
-# Names with a page that ranked in the latest year, by dominant sex, in rank order.
-latest_year_ranked = {'F': [], 'M': []}
-for sex in ('F', 'M'):
-    ranks = rank_by_year_sex.get((LATEST_YEAR, sex), {})
-    have = [(n, r) for n, r in ranks.items() if n in HAS_PAGE]
-    have.sort(key=lambda x: x[1])
-    latest_year_ranked[sex] = have
-latest_year_index = {
-    sex: {n: i for i, (n, _) in enumerate(lst)} for sex, lst in latest_year_ranked.items()
-}
-
-# Names with a page grouped by first letter (for "same initial" + A-Z index).
-by_initial = defaultdict(list)
-for name in pages_to_generate:
-    by_initial[name[0].upper()].append(name)
-for letter in by_initial:
-    by_initial[letter].sort(key=lambda n: (-name_total[n], n))
-
-# --- Decades (for /decade/<d>s.html roundups) ---
-YEARS_SET = set(YEARS)
-DECADES = list(range(1880, LATEST_YEAR + 1, 10))   # 1880, 1890, ... 2020
-# decade_sex_counts[(decade, sex)][name] = total babies in that decade
-decade_sex_counts = defaultdict(lambda: defaultdict(int))
-for _n, _d in counts.items():
-    for _sex in ('F', 'M'):
-        for _y, _c in _d[_sex].items():
-            decade_sex_counts[((_y // 10) * 10, _sex)][_n] += _c
-
-# Letters that actually have page-names for each dominant sex (so links never 404).
-letter_names = {'F': defaultdict(list), 'M': defaultdict(list)}
-for name in pages_to_generate:
-    letter_names[dominant_sex(name)][name[0].upper()].append(name)
-for sex in ('F', 'M'):
-    for letter in letter_names[sex]:
-        letter_names[sex][letter].sort(key=lambda n: (-name_sex_total[(n, sex)], n))
-
-# --- Per-name metadata for the similarity engine ("Names like X") ---
-name_meta = {}
-for name in pages_to_generate:
-    dom = dominant_sex(name)
-    series = counts[name][dom]
-    peak_year = max(series, key=series.get)
-    low = name.lower()
-    name_meta[name] = {
-        'dom': dom,
-        'first': low[0],
-        'last': low[-1],
-        'last2': low[-2:],
-        'len': len(name),
-        'peak_dec': (peak_year // 10) * 10,
-        'latest_rank': rank_by_year_sex.get((LATEST_YEAR, dom), {}).get(name),
-    }
 
 
 def similar_names(name, k=24):
