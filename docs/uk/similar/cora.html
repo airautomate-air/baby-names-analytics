@@ -158,6 +158,45 @@
         .ww-card .ww-bar { display: block; height: 4px; background: #EEF2F4; border-radius: 2px; overflow: hidden; margin-top: 0.3rem; }
         .ww-card .ww-bar-fill { display: block; height: 100%; background: linear-gradient(90deg, #149E91 0%, #FF6B5C 100%); }
         #ww-loading { color: #5B6678; font-size: 0.9rem; padding: 0.5rem 0; }
+        .pk-tabs { display: flex; gap: 0.4rem; margin: 1.5rem 0 1.25rem; flex-wrap: wrap; }
+        .pk-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.5rem 1.1rem; border-radius: 22px; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
+        .pk-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
+        .pk-panel { background: #fff; border: 1px solid #d6dde2; border-radius: 10px; padding: 1.25rem 1.4rem 1.5rem; }
+        .pk-controls { display: flex; gap: 0.75rem 1.25rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; font-size: 0.92rem; color: #5B6678; }
+        .pk-controls label { display: inline-flex; align-items: center; gap: 0.35rem; }
+        .pk-controls select { padding: 0.35rem 0.5rem; border: 1px solid #d6dde2; border-radius: 5px; background: #fff; font-size: 0.92rem; color: #1B2440; }
+        .pk-controls .pk-pill-group { display: inline-flex; gap: 0.3rem; flex-wrap: wrap; }
+        .pk-pill { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.3rem 0.75rem; border-radius: 18px; cursor: pointer; font-size: 0.85rem; }
+        .pk-pill.is-active { background: #149E91; color: #fff; border-color: #149E91; }
+        #pk-card { background: linear-gradient(135deg, #fff 0%, #f7fbfa 100%); border: 1px solid #d6dde2; border-radius: 14px; padding: 2.5rem 1.5rem 2rem; text-align: center; min-height: 200px; box-shadow: 0 4px 12px rgba(27,36,64,0.08); cursor: grab; user-select: none; touch-action: pan-y; transition: transform 0.18s ease-out; }
+        #pk-card:active { cursor: grabbing; transition: none; }
+        #pk-card h2 { font-size: 2.5rem; margin: 0; }
+        #pk-card h2 a { color: #1B2440; text-decoration: none; }
+        #pk-card h2 a:hover { color: #149E91; }
+        #pk-card .pk-card-meta { color: #5B6678; margin-top: 0.75rem; font-size: 0.95rem; }
+        .pk-swipe-buttons { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.25rem; flex-wrap: wrap; }
+        .pk-swipe-buttons button { padding: 0.7rem 1.4rem; border-radius: 24px; border: 0; cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+        .pk-btn-skip { background: #EEF2F4; color: #5B6678; }
+        .pk-btn-skip:hover { background: #dde3e8; }
+        .pk-btn-save { background: #FF6B5C; color: #fff; }
+        .pk-btn-save:hover { background: #e85a4c; }
+        .pk-btn-undo { background: #fff; border: 1px solid #d6dde2 !important; color: #1B2440; }
+        .pk-btn-restart { background: #149E91; color: #fff; }
+        #pk-status { color: #149E91; text-align: center; min-height: 1.2em; margin-top: 0.75rem; font-size: 0.9rem; font-weight: 500; }
+        #pk-exhausted { text-align: center; padding: 2rem 1rem; color: #5B6678; }
+        #pk-filter-count { color: #5B6678; font-size: 0.9rem; margin: 0.5rem 0 1rem; }
+        #pk-filter-results, #pk-random-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6rem; }
+        .pk-grid-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.7rem 0.9rem; text-decoration: none; display: flex; flex-direction: column; gap: 0.2rem; transition: border-color 0.15s, transform 0.1s; }
+        .pk-grid-card:hover { border-color: #149E91; transform: translateY(-1px); }
+        .pk-grid-name { font-weight: 600; color: #1B2440; font-size: 1rem; }
+        .pk-grid-meta { font-size: 0.78rem; color: #5B6678; }
+        .pk-random-form { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+        .pk-random-form button { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.6rem 1.2rem; font-weight: 600; cursor: pointer; }
+        .pk-random-form button:hover { background: #117f74; }
+        .pk-random-actions { display: flex; gap: 0.75rem; align-items: center; margin-top: 1rem; flex-wrap: wrap; }
+        #pk-r-share, #pk-r-again { background: #fff; border: 1px solid #d6dde2; color: #1B2440; border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; font-weight: 500; }
+        #pk-r-share:hover, #pk-r-again:hover { border-color: #149E91; color: #149E91; }
+        #pk-r-share-done { color: #149E91; font-size: 0.9rem; }
 </style>
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://namecharted.com/uk/"}, {"@type": "ListItem", "position": 2, "name": "Cora", "item": "https://namecharted.com/uk/name/cora.html"}, {"@type": "ListItem", "position": 3, "name": "Similar names", "item": "https://namecharted.com/uk/similar/cora.html"}]}</script>
     <link rel="alternate" hreflang="en-US" href="https://namecharted.com/similar/cora.html">
@@ -175,6 +214,7 @@
         <a href="/uk/year/2024.html">2024 Rankings</a>
         <a href="/uk/compare.html">Compare</a>
         <a href="/uk/works-with.html">Works with surname</a>
+        <a href="/uk/picker.html">Name picker</a>
         <a href="/uk/favorites.html">Favorites<span class="fav-nav-count"></span></a>
         <span class="ccswitch"><a href="/"><span class="flag" aria-hidden="true">🇺🇸</span>US</a><span class="sep">·</span><a href="/fr/"><span class="flag" aria-hidden="true">🇫🇷</span>FR</a><span class="sep">·</span><strong><span class="flag" aria-hidden="true">🇬🇧</span>UK</strong><span class="sep">·</span><a href="/au/"><span class="flag" aria-hidden="true">🇦🇺</span>AU</a></span>
     </div></div>
@@ -732,6 +772,364 @@
         var qs = new URLSearchParams(window.location.search);
         var qsn = qs.get('s');
         if (qsn) { input.value = qsn; run(); }
+    })();
+    </script>
+    <script>
+    (function() {
+        var root = document.getElementById('picker-root');
+        if (!root) return;
+        var CC = 'GB';
+        var PREFIX = '/uk';
+        var FAV_KEY = 'nc-favorites-' + CC;
+        var L_GIRLS = "Girls";
+        var L_BOYS = "Boys";
+        var L_PEAK = "Peaked in the {d}s";
+        var L_RANK = "#{rank} right now";
+        var L_OFFCHART = "Off the chart now";
+        var L_SAVED = "Saved to your favourites.";
+        var L_EXHAUSTED = "That's everyone for now \u2014 change the filter or restart.";
+        var L_MATCH_ONE = "1 name matches";
+        var L_MATCH_MANY = "{n} names match";
+        var L_MATCH_NONE = "No names match \u2014 try loosening the filters.";
+        var L_RANDOM_EMPTY = "Nothing matched \u2014 try a different combination.";
+        var L_SHARE_DONE = "Link copied!";
+
+        var IDX_FIRST = 0, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5;
+
+        function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
+
+        var META = null, SLUGS = null;
+        function loadMeta() {
+            if (META) return Promise.resolve();
+            return fetch(PREFIX + '/name-meta.json')
+                .then(function(r) { return r.json(); })
+                .then(function(d) { META = d; SLUGS = Object.keys(d); });
+        }
+
+        function favs() {
+            try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }
+            catch (e) { return []; }
+        }
+        function saveFavs(list) {
+            try { localStorage.setItem(FAV_KEY, JSON.stringify(list)); } catch (e) {}
+            var n = list.length;
+            var els = document.querySelectorAll('.fav-nav-count');
+            for (var i = 0; i < els.length; i++) {
+                els[i].textContent = n ? ' (' + n + ')' : '';
+            }
+        }
+        function addFav(slug, name) {
+            var list = favs();
+            for (var i = 0; i < list.length; i++) if (list[i].slug === slug) return false;
+            list.push({slug: slug, name: name});
+            saveFavs(list);
+            return true;
+        }
+        function removeFav(slug) {
+            var list = favs();
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].slug === slug) { list.splice(i, 1); saveFavs(list); return; }
+            }
+        }
+
+        function display(slug) {
+            return slug.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+        }
+        function metaLine(m) {
+            var parts = [m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS];
+            parts.push(L_PEAK.replace('{d}', m[IDX_PEAK]));
+            parts.push(m[IDX_RANK] ? L_RANK.replace('{rank}', m[IDX_RANK]) : L_OFFCHART);
+            return parts.join(' · ');
+        }
+
+        var tabs = root.querySelectorAll('.pk-tab');
+        var panels = root.querySelectorAll('.pk-panel');
+        tabs.forEach(function(t) {
+            t.addEventListener('click', function() {
+                var mode = t.getAttribute('data-mode');
+                tabs.forEach(function(x) { x.classList.toggle('is-active', x === t); });
+                panels.forEach(function(p) { p.style.display = p.getAttribute('data-mode') === mode ? '' : 'none'; });
+                if (mode === 'swipe' && !swipeStarted) startSwipe();
+            });
+        });
+
+        // ---- SWIPE MODE ----
+        var swipeStarted = false;
+        var swipeDeck = [];
+        var swipeHistory = [];
+        var swipeSexFilter = 'all';
+        var swipeEraFilter = 'all';
+        var cardEl, statusEl, exhaustedEl;
+
+        function rebuildDeck() {
+            var pool = SLUGS.filter(function(s) {
+                var m = META[s];
+                if (swipeSexFilter !== 'all' && m[IDX_DOM] !== swipeSexFilter) return false;
+                if (swipeEraFilter !== 'all' && m[IDX_PEAK] !== Number(swipeEraFilter)) return false;
+                return true;
+            });
+            for (var i = pool.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+            }
+            swipeDeck = pool.slice(0, 200);
+            swipeHistory = [];
+        }
+
+        function renderCard() {
+            clear(cardEl);
+            statusEl.textContent = '';
+            if (!swipeDeck.length) {
+                exhaustedEl.style.display = '';
+                cardEl.style.display = 'none';
+                return;
+            }
+            exhaustedEl.style.display = 'none';
+            cardEl.style.display = '';
+            var slug = swipeDeck[swipeDeck.length - 1];
+            var m = META[slug];
+            var name = display(slug);
+
+            var inner = document.createElement('div');
+            inner.className = 'pk-card-inner';
+            var h = document.createElement('h2');
+            var link = document.createElement('a');
+            link.href = PREFIX + '/name/' + slug + '.html';
+            link.textContent = name;
+            link.target = '_blank';
+            link.rel = 'noopener';
+            h.appendChild(link);
+            inner.appendChild(h);
+            var meta = document.createElement('p');
+            meta.className = 'pk-card-meta';
+            meta.textContent = metaLine(m);
+            inner.appendChild(meta);
+            cardEl.appendChild(inner);
+        }
+
+        function popCard(action) {
+            if (!swipeDeck.length) return;
+            var slug = swipeDeck.pop();
+            swipeHistory.push({slug: slug, action: action});
+            if (action === 'save') {
+                addFav(slug, display(slug));
+                statusEl.textContent = L_SAVED;
+            } else {
+                statusEl.textContent = '';
+            }
+            renderCard();
+        }
+
+        function undoCard() {
+            if (!swipeHistory.length) return;
+            var last = swipeHistory.pop();
+            if (last.action === 'save') removeFav(last.slug);
+            swipeDeck.push(last.slug);
+            renderCard();
+        }
+
+        function startSwipe() {
+            swipeStarted = true;
+            cardEl = root.querySelector('#pk-card');
+            statusEl = root.querySelector('#pk-status');
+            exhaustedEl = root.querySelector('#pk-exhausted');
+            rebuildDeck();
+            renderCard();
+            attachSwipeGestures();
+        }
+
+        root.querySelectorAll('.pk-swipe-sex').forEach(function(el) {
+            el.addEventListener('click', function() {
+                root.querySelectorAll('.pk-swipe-sex').forEach(function(x) { x.classList.remove('is-active'); });
+                el.classList.add('is-active');
+                swipeSexFilter = el.getAttribute('data-sex');
+                rebuildDeck();
+                renderCard();
+            });
+        });
+        var eraSel = root.querySelector('#pk-swipe-era');
+        if (eraSel) {
+            eraSel.addEventListener('change', function() {
+                swipeEraFilter = eraSel.value;
+                rebuildDeck();
+                renderCard();
+            });
+        }
+        root.querySelector('#pk-skip').addEventListener('click', function() { popCard('skip'); });
+        root.querySelector('#pk-save').addEventListener('click', function() { popCard('save'); });
+        root.querySelector('#pk-undo').addEventListener('click', undoCard);
+        root.querySelector('#pk-restart').addEventListener('click', function() {
+            rebuildDeck(); renderCard();
+        });
+
+        function attachSwipeGestures() {
+            var dragStartX = null;
+            ['mousedown', 'touchstart'].forEach(function(evt) {
+                cardEl.addEventListener(evt, function(e) {
+                    var p = e.touches ? e.touches[0] : e;
+                    dragStartX = p.clientX;
+                }, {passive: true});
+            });
+            ['mouseup', 'touchend'].forEach(function(evt) {
+                cardEl.addEventListener(evt, function(e) {
+                    if (dragStartX == null) return;
+                    var p = e.changedTouches ? e.changedTouches[0] : e;
+                    var dx = p.clientX - dragStartX;
+                    dragStartX = null;
+                    cardEl.style.transform = '';
+                    if (dx > 80) popCard('save');
+                    else if (dx < -80) popCard('skip');
+                }, {passive: true});
+            });
+            ['mousemove', 'touchmove'].forEach(function(evt) {
+                cardEl.addEventListener(evt, function(e) {
+                    if (dragStartX == null) return;
+                    var p = e.touches ? e.touches[0] : e;
+                    var dx = p.clientX - dragStartX;
+                    cardEl.style.transform = 'translateX(' + dx + 'px) rotate(' + (dx / 25) + 'deg)';
+                }, {passive: true});
+            });
+        }
+
+        // ---- FILTER MODE ----
+        var filterCount = root.querySelector('#pk-filter-count');
+        var filterResults = root.querySelector('#pk-filter-results');
+        function runFilter() {
+            var sex = root.querySelector('input[name=pk-f-sex]:checked').value;
+            var sylls = [];
+            root.querySelectorAll('input[name=pk-f-syll]:checked').forEach(function(c) { sylls.push(Number(c.value)); });
+            var era = root.querySelector('#pk-f-era').value;
+            var letter = root.querySelector('#pk-f-letter').value;
+            var rank = root.querySelector('#pk-f-rank').value;
+
+            var matches = [];
+            for (var i = 0; i < SLUGS.length; i++) {
+                var s = SLUGS[i], m = META[s];
+                if (sex !== 'all' && m[IDX_DOM] !== sex) continue;
+                if (sylls.length) {
+                    var syll = m[IDX_SYLL]; var key = syll >= 4 ? 4 : syll;
+                    if (sylls.indexOf(key) < 0) continue;
+                }
+                if (era !== 'all' && m[IDX_PEAK] !== Number(era)) continue;
+                if (letter !== 'all' && m[IDX_FIRST] !== letter) continue;
+                var r = m[IDX_RANK];
+                if (rank === 'top100' && (!r || r > 100)) continue;
+                if (rank === 'top1000' && (!r || r > 1000)) continue;
+                if (rank === 'rare' && r) continue;
+                matches.push([s, m]);
+            }
+            matches.sort(function(a, b) {
+                var ra = a[1][IDX_RANK] || 99999, rb = b[1][IDX_RANK] || 99999;
+                if (ra !== rb) return ra - rb;
+                return a[0] < b[0] ? -1 : 1;
+            });
+
+            if (!matches.length) {
+                filterCount.textContent = L_MATCH_NONE;
+                clear(filterResults);
+                return;
+            }
+            filterCount.textContent = matches.length === 1
+                ? L_MATCH_ONE
+                : L_MATCH_MANY.replace('{n}', matches.length.toLocaleString());
+            renderGrid(filterResults, matches.slice(0, 120));
+        }
+
+        function renderGrid(container, items) {
+            clear(container);
+            items.forEach(function(r) {
+                var slug = r[0], m = r[1];
+                var card = document.createElement('a');
+                card.className = 'pk-grid-card';
+                card.href = PREFIX + '/name/' + slug + '.html';
+                var nm = document.createElement('span'); nm.className = 'pk-grid-name';
+                nm.textContent = display(slug); card.appendChild(nm);
+                var meta = document.createElement('span'); meta.className = 'pk-grid-meta';
+                meta.textContent = metaLine(m); card.appendChild(meta);
+                container.appendChild(card);
+            });
+        }
+
+        root.querySelectorAll('.pk-filter-input').forEach(function(el) {
+            el.addEventListener('change', runFilter);
+        });
+
+        // ---- RANDOM MODE ----
+        var randResults = root.querySelector('#pk-random-results');
+        function runRandom(pushState) {
+            var sex = root.querySelector('input[name=pk-r-sex]:checked').value;
+            var era = root.querySelector('#pk-r-era').value;
+            var n = Number(root.querySelector('#pk-r-count').value);
+
+            var pool = SLUGS.filter(function(s) {
+                var m = META[s];
+                if (sex !== 'all' && m[IDX_DOM] !== sex) return false;
+                if (era !== 'all' && m[IDX_PEAK] !== Number(era)) return false;
+                return true;
+            });
+            for (var i = pool.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+            }
+            var picks = pool.slice(0, n);
+            clear(randResults);
+            if (!picks.length) {
+                var p = document.createElement('p');
+                p.textContent = L_RANDOM_EMPTY;
+                p.style.color = '#5B6678';
+                randResults.appendChild(p);
+                return;
+            }
+            renderGrid(randResults, picks.map(function(s) { return [s, META[s]]; }));
+
+            if (pushState) {
+                var qs = 'sex=' + sex + '&era=' + era + '&n=' + n;
+                history.replaceState(null, '', window.location.pathname + '?' + qs);
+            }
+        }
+        root.querySelector('#pk-r-go').addEventListener('click', function(e) { e.preventDefault(); runRandom(true); });
+        root.querySelector('#pk-r-again').addEventListener('click', function() { runRandom(true); });
+        root.querySelector('#pk-r-share').addEventListener('click', function() {
+            if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
+            var done = root.querySelector('#pk-r-share-done');
+            done.style.display = '';
+            setTimeout(function() { done.style.display = 'none'; }, 1800);
+        });
+
+        loadMeta().then(function() {
+            var decades = {};
+            for (var i = 0; i < SLUGS.length; i++) decades[META[SLUGS[i]][IDX_PEAK]] = true;
+            var sortedDecades = Object.keys(decades).map(Number).sort(function(a, b) { return a - b; });
+            ['pk-swipe-era', 'pk-f-era', 'pk-r-era'].forEach(function(id) {
+                var sel = root.querySelector('#' + id);
+                if (!sel) return;
+                sortedDecades.forEach(function(d) {
+                    var o = document.createElement('option');
+                    o.value = d; o.textContent = d + 's';
+                    sel.appendChild(o);
+                });
+            });
+            var qs = new URLSearchParams(window.location.search);
+            if (qs.get('sex')) {
+                var rb = root.querySelector('input[name=pk-r-sex][value=' + qs.get('sex') + ']');
+                if (rb) rb.checked = true;
+            }
+            if (qs.get('era')) {
+                var es = root.querySelector('#pk-r-era');
+                if (es) es.value = qs.get('era');
+            }
+            if (qs.get('n')) {
+                var ns = root.querySelector('#pk-r-count');
+                if (ns) ns.value = qs.get('n');
+            }
+            if (qs.get('sex') || qs.get('era') || qs.get('n')) {
+                root.querySelector('.pk-tab[data-mode=random]').click();
+                runRandom(false);
+            } else {
+                root.querySelector('.pk-tab[data-mode=swipe]').click();
+            }
+            runFilter();
+        });
     })();
     </script>
 </body>

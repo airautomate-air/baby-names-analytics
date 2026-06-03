@@ -736,6 +736,48 @@ STRINGS_EN: dict[str, str] = {
     "ww_desc": ("Find first names that pair well with any surname. We score names "
                 "on rhythm, sound clashes and shared initials so you can shortlist "
                 "good-sounding combinations fast."),
+
+    # Picker (swipe / filter / random)
+    "nav_picker": "Name picker",
+    "picker_title": "Baby name picker — swipe, filter, randomise — NameCharted",
+    "picker_h1": "Find your shortlist faster",
+    "picker_intro": ("Three ways to discover names you'll love: swipe through "
+                     "one at a time, filter by era and style, or roll the dice."),
+    "picker_tab_swipe": "Swipe",
+    "picker_tab_filter": "Filter",
+    "picker_tab_random": "Surprise me",
+    "picker_swipe_skip": "Skip",
+    "picker_swipe_save": "Save",
+    "picker_swipe_undo": "Undo",
+    "picker_swipe_saved": "Saved to your favourites.",
+    "picker_swipe_exhausted": "That's everyone for now — change the filter or restart.",
+    "picker_swipe_restart": "Restart",
+    "picker_swipe_filter_sex": "Show",
+    "picker_swipe_filter_era": "Era",
+    "picker_filter_sex": "Sex",
+    "picker_filter_syll": "Syllables",
+    "picker_filter_era": "Peak era",
+    "picker_filter_letter": "Starts with",
+    "picker_filter_rank": "Current popularity",
+    "picker_filter_any": "Any",
+    "picker_filter_rank_top100": "Top 100 right now",
+    "picker_filter_rank_top1000": "Top 1,000 right now",
+    "picker_filter_rank_rare": "Vintage / off the charts",
+    "picker_filter_match_one": "1 name matches",
+    "picker_filter_match_many": "{n} names match",
+    "picker_filter_match_none": "No names match — try loosening the filters.",
+    "picker_random_count": "How many",
+    "picker_random_go": "Roll the dice",
+    "picker_random_share": "Copy shareable link",
+    "picker_random_share_done": "Link copied!",
+    "picker_random_again": "Roll again",
+    "picker_random_empty": "Nothing matched — try a different combination.",
+    "picker_peak_decade": "Peaked in the {d}s",
+    "picker_currently_rank": "#{rank} right now",
+    "picker_not_ranked": "Off the chart now",
+    "picker_desc": ("Discover baby names by swiping, filtering by decade and "
+                    "syllables, or rolling for a random list. Save your favourites "
+                    "as you go."),
 }
 
 STRINGS_FR: dict[str, str] = {
@@ -965,6 +1007,48 @@ STRINGS_FR: dict[str, str] = {
     "ww_desc": ("Trouvez les prénoms qui sonnent bien avec n'importe quel nom de "
                 "famille. Score basé sur le rythme, les sons heurtés et les "
                 "initiales communes pour bâtir vite une short-list."),
+
+    # Picker (sélecteur de prénoms)
+    "nav_picker": "Sélecteur",
+    "picker_title": "Sélecteur de prénoms — swipez, filtrez, tirez au sort — NameCharted",
+    "picker_h1": "Bâtissez votre short-list plus vite",
+    "picker_intro": ("Trois façons de découvrir des prénoms : un par un en "
+                     "swipant, par filtres d'époque et de style, ou au hasard."),
+    "picker_tab_swipe": "Swiper",
+    "picker_tab_filter": "Filtres",
+    "picker_tab_random": "Surprise",
+    "picker_swipe_skip": "Passer",
+    "picker_swipe_save": "Garder",
+    "picker_swipe_undo": "Annuler",
+    "picker_swipe_saved": "Ajouté à vos favoris.",
+    "picker_swipe_exhausted": "Plus de prénoms — changez les filtres ou recommencez.",
+    "picker_swipe_restart": "Recommencer",
+    "picker_swipe_filter_sex": "Afficher",
+    "picker_swipe_filter_era": "Époque",
+    "picker_filter_sex": "Sexe",
+    "picker_filter_syll": "Syllabes",
+    "picker_filter_era": "Décennie record",
+    "picker_filter_letter": "Commence par",
+    "picker_filter_rank": "Popularité actuelle",
+    "picker_filter_any": "Indifférent",
+    "picker_filter_rank_top100": "Top 100 actuel",
+    "picker_filter_rank_top1000": "Top 1 000 actuel",
+    "picker_filter_rank_rare": "Vintage / hors classement",
+    "picker_filter_match_one": "1 prénom correspond",
+    "picker_filter_match_many": "{n} prénoms correspondent",
+    "picker_filter_match_none": "Aucun prénom — assouplissez les filtres.",
+    "picker_random_count": "Combien",
+    "picker_random_go": "Tirer au sort",
+    "picker_random_share": "Copier le lien à partager",
+    "picker_random_share_done": "Lien copié !",
+    "picker_random_again": "Re-tirer",
+    "picker_random_empty": "Rien trouvé — essayez une autre combinaison.",
+    "picker_peak_decade": "Pic dans les années {d}",
+    "picker_currently_rank": "#{rank} aujourd'hui",
+    "picker_not_ranked": "Hors classement",
+    "picker_desc": ("Découvrez des prénoms en swipant, en filtrant par décennie "
+                    "et syllabes, ou en tirant au sort. Ajoutez à vos favoris au "
+                    "fil de l'eau."),
 }
 
 STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN, "AU": STRINGS_EN}
@@ -1602,6 +1686,387 @@ def works_with_script() -> str:
             .replace('__L_LOADING__', S("ww_loading")))
 
 
+PICKER_SCRIPT = """
+    <script>
+    (function() {
+        var root = document.getElementById('picker-root');
+        if (!root) return;
+        var CC = '__ACTIVE_CC__';
+        var PREFIX = '__PREFIX__';
+        var FAV_KEY = 'nc-favorites-' + CC;
+        var L_GIRLS = __L_GIRLS__;
+        var L_BOYS = __L_BOYS__;
+        var L_PEAK = __L_PEAK__;
+        var L_RANK = __L_RANK__;
+        var L_OFFCHART = __L_OFFCHART__;
+        var L_SAVED = __L_SAVED__;
+        var L_EXHAUSTED = __L_EXHAUSTED__;
+        var L_MATCH_ONE = __L_MATCH_ONE__;
+        var L_MATCH_MANY = __L_MATCH_MANY__;
+        var L_MATCH_NONE = __L_MATCH_NONE__;
+        var L_RANDOM_EMPTY = __L_RANDOM_EMPTY__;
+        var L_SHARE_DONE = __L_SHARE_DONE__;
+
+        var IDX_FIRST = 0, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5;
+
+        function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
+
+        var META = null, SLUGS = null;
+        function loadMeta() {
+            if (META) return Promise.resolve();
+            return fetch(PREFIX + '/name-meta.json')
+                .then(function(r) { return r.json(); })
+                .then(function(d) { META = d; SLUGS = Object.keys(d); });
+        }
+
+        function favs() {
+            try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }
+            catch (e) { return []; }
+        }
+        function saveFavs(list) {
+            try { localStorage.setItem(FAV_KEY, JSON.stringify(list)); } catch (e) {}
+            var n = list.length;
+            var els = document.querySelectorAll('.fav-nav-count');
+            for (var i = 0; i < els.length; i++) {
+                els[i].textContent = n ? ' (' + n + ')' : '';
+            }
+        }
+        function addFav(slug, name) {
+            var list = favs();
+            for (var i = 0; i < list.length; i++) if (list[i].slug === slug) return false;
+            list.push({slug: slug, name: name});
+            saveFavs(list);
+            return true;
+        }
+        function removeFav(slug) {
+            var list = favs();
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].slug === slug) { list.splice(i, 1); saveFavs(list); return; }
+            }
+        }
+
+        function display(slug) {
+            return slug.replace(/-/g, ' ').replace(/\\b\\w/g, function(c) { return c.toUpperCase(); });
+        }
+        function metaLine(m) {
+            var parts = [m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS];
+            parts.push(L_PEAK.replace('{d}', m[IDX_PEAK]));
+            parts.push(m[IDX_RANK] ? L_RANK.replace('{rank}', m[IDX_RANK]) : L_OFFCHART);
+            return parts.join(' · ');
+        }
+
+        var tabs = root.querySelectorAll('.pk-tab');
+        var panels = root.querySelectorAll('.pk-panel');
+        tabs.forEach(function(t) {
+            t.addEventListener('click', function() {
+                var mode = t.getAttribute('data-mode');
+                tabs.forEach(function(x) { x.classList.toggle('is-active', x === t); });
+                panels.forEach(function(p) { p.style.display = p.getAttribute('data-mode') === mode ? '' : 'none'; });
+                if (mode === 'swipe' && !swipeStarted) startSwipe();
+            });
+        });
+
+        // ---- SWIPE MODE ----
+        var swipeStarted = false;
+        var swipeDeck = [];
+        var swipeHistory = [];
+        var swipeSexFilter = 'all';
+        var swipeEraFilter = 'all';
+        var cardEl, statusEl, exhaustedEl;
+
+        function rebuildDeck() {
+            var pool = SLUGS.filter(function(s) {
+                var m = META[s];
+                if (swipeSexFilter !== 'all' && m[IDX_DOM] !== swipeSexFilter) return false;
+                if (swipeEraFilter !== 'all' && m[IDX_PEAK] !== Number(swipeEraFilter)) return false;
+                return true;
+            });
+            for (var i = pool.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+            }
+            swipeDeck = pool.slice(0, 200);
+            swipeHistory = [];
+        }
+
+        function renderCard() {
+            clear(cardEl);
+            statusEl.textContent = '';
+            if (!swipeDeck.length) {
+                exhaustedEl.style.display = '';
+                cardEl.style.display = 'none';
+                return;
+            }
+            exhaustedEl.style.display = 'none';
+            cardEl.style.display = '';
+            var slug = swipeDeck[swipeDeck.length - 1];
+            var m = META[slug];
+            var name = display(slug);
+
+            var inner = document.createElement('div');
+            inner.className = 'pk-card-inner';
+            var h = document.createElement('h2');
+            var link = document.createElement('a');
+            link.href = PREFIX + '/name/' + slug + '.html';
+            link.textContent = name;
+            link.target = '_blank';
+            link.rel = 'noopener';
+            h.appendChild(link);
+            inner.appendChild(h);
+            var meta = document.createElement('p');
+            meta.className = 'pk-card-meta';
+            meta.textContent = metaLine(m);
+            inner.appendChild(meta);
+            cardEl.appendChild(inner);
+        }
+
+        function popCard(action) {
+            if (!swipeDeck.length) return;
+            var slug = swipeDeck.pop();
+            swipeHistory.push({slug: slug, action: action});
+            if (action === 'save') {
+                addFav(slug, display(slug));
+                statusEl.textContent = L_SAVED;
+            } else {
+                statusEl.textContent = '';
+            }
+            renderCard();
+        }
+
+        function undoCard() {
+            if (!swipeHistory.length) return;
+            var last = swipeHistory.pop();
+            if (last.action === 'save') removeFav(last.slug);
+            swipeDeck.push(last.slug);
+            renderCard();
+        }
+
+        function startSwipe() {
+            swipeStarted = true;
+            cardEl = root.querySelector('#pk-card');
+            statusEl = root.querySelector('#pk-status');
+            exhaustedEl = root.querySelector('#pk-exhausted');
+            rebuildDeck();
+            renderCard();
+            attachSwipeGestures();
+        }
+
+        root.querySelectorAll('.pk-swipe-sex').forEach(function(el) {
+            el.addEventListener('click', function() {
+                root.querySelectorAll('.pk-swipe-sex').forEach(function(x) { x.classList.remove('is-active'); });
+                el.classList.add('is-active');
+                swipeSexFilter = el.getAttribute('data-sex');
+                rebuildDeck();
+                renderCard();
+            });
+        });
+        var eraSel = root.querySelector('#pk-swipe-era');
+        if (eraSel) {
+            eraSel.addEventListener('change', function() {
+                swipeEraFilter = eraSel.value;
+                rebuildDeck();
+                renderCard();
+            });
+        }
+        root.querySelector('#pk-skip').addEventListener('click', function() { popCard('skip'); });
+        root.querySelector('#pk-save').addEventListener('click', function() { popCard('save'); });
+        root.querySelector('#pk-undo').addEventListener('click', undoCard);
+        root.querySelector('#pk-restart').addEventListener('click', function() {
+            rebuildDeck(); renderCard();
+        });
+
+        function attachSwipeGestures() {
+            var dragStartX = null;
+            ['mousedown', 'touchstart'].forEach(function(evt) {
+                cardEl.addEventListener(evt, function(e) {
+                    var p = e.touches ? e.touches[0] : e;
+                    dragStartX = p.clientX;
+                }, {passive: true});
+            });
+            ['mouseup', 'touchend'].forEach(function(evt) {
+                cardEl.addEventListener(evt, function(e) {
+                    if (dragStartX == null) return;
+                    var p = e.changedTouches ? e.changedTouches[0] : e;
+                    var dx = p.clientX - dragStartX;
+                    dragStartX = null;
+                    cardEl.style.transform = '';
+                    if (dx > 80) popCard('save');
+                    else if (dx < -80) popCard('skip');
+                }, {passive: true});
+            });
+            ['mousemove', 'touchmove'].forEach(function(evt) {
+                cardEl.addEventListener(evt, function(e) {
+                    if (dragStartX == null) return;
+                    var p = e.touches ? e.touches[0] : e;
+                    var dx = p.clientX - dragStartX;
+                    cardEl.style.transform = 'translateX(' + dx + 'px) rotate(' + (dx / 25) + 'deg)';
+                }, {passive: true});
+            });
+        }
+
+        // ---- FILTER MODE ----
+        var filterCount = root.querySelector('#pk-filter-count');
+        var filterResults = root.querySelector('#pk-filter-results');
+        function runFilter() {
+            var sex = root.querySelector('input[name=pk-f-sex]:checked').value;
+            var sylls = [];
+            root.querySelectorAll('input[name=pk-f-syll]:checked').forEach(function(c) { sylls.push(Number(c.value)); });
+            var era = root.querySelector('#pk-f-era').value;
+            var letter = root.querySelector('#pk-f-letter').value;
+            var rank = root.querySelector('#pk-f-rank').value;
+
+            var matches = [];
+            for (var i = 0; i < SLUGS.length; i++) {
+                var s = SLUGS[i], m = META[s];
+                if (sex !== 'all' && m[IDX_DOM] !== sex) continue;
+                if (sylls.length) {
+                    var syll = m[IDX_SYLL]; var key = syll >= 4 ? 4 : syll;
+                    if (sylls.indexOf(key) < 0) continue;
+                }
+                if (era !== 'all' && m[IDX_PEAK] !== Number(era)) continue;
+                if (letter !== 'all' && m[IDX_FIRST] !== letter) continue;
+                var r = m[IDX_RANK];
+                if (rank === 'top100' && (!r || r > 100)) continue;
+                if (rank === 'top1000' && (!r || r > 1000)) continue;
+                if (rank === 'rare' && r) continue;
+                matches.push([s, m]);
+            }
+            matches.sort(function(a, b) {
+                var ra = a[1][IDX_RANK] || 99999, rb = b[1][IDX_RANK] || 99999;
+                if (ra !== rb) return ra - rb;
+                return a[0] < b[0] ? -1 : 1;
+            });
+
+            if (!matches.length) {
+                filterCount.textContent = L_MATCH_NONE;
+                clear(filterResults);
+                return;
+            }
+            filterCount.textContent = matches.length === 1
+                ? L_MATCH_ONE
+                : L_MATCH_MANY.replace('{n}', matches.length.toLocaleString());
+            renderGrid(filterResults, matches.slice(0, 120));
+        }
+
+        function renderGrid(container, items) {
+            clear(container);
+            items.forEach(function(r) {
+                var slug = r[0], m = r[1];
+                var card = document.createElement('a');
+                card.className = 'pk-grid-card';
+                card.href = PREFIX + '/name/' + slug + '.html';
+                var nm = document.createElement('span'); nm.className = 'pk-grid-name';
+                nm.textContent = display(slug); card.appendChild(nm);
+                var meta = document.createElement('span'); meta.className = 'pk-grid-meta';
+                meta.textContent = metaLine(m); card.appendChild(meta);
+                container.appendChild(card);
+            });
+        }
+
+        root.querySelectorAll('.pk-filter-input').forEach(function(el) {
+            el.addEventListener('change', runFilter);
+        });
+
+        // ---- RANDOM MODE ----
+        var randResults = root.querySelector('#pk-random-results');
+        function runRandom(pushState) {
+            var sex = root.querySelector('input[name=pk-r-sex]:checked').value;
+            var era = root.querySelector('#pk-r-era').value;
+            var n = Number(root.querySelector('#pk-r-count').value);
+
+            var pool = SLUGS.filter(function(s) {
+                var m = META[s];
+                if (sex !== 'all' && m[IDX_DOM] !== sex) return false;
+                if (era !== 'all' && m[IDX_PEAK] !== Number(era)) return false;
+                return true;
+            });
+            for (var i = pool.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var t = pool[i]; pool[i] = pool[j]; pool[j] = t;
+            }
+            var picks = pool.slice(0, n);
+            clear(randResults);
+            if (!picks.length) {
+                var p = document.createElement('p');
+                p.textContent = L_RANDOM_EMPTY;
+                p.style.color = '#5B6678';
+                randResults.appendChild(p);
+                return;
+            }
+            renderGrid(randResults, picks.map(function(s) { return [s, META[s]]; }));
+
+            if (pushState) {
+                var qs = 'sex=' + sex + '&era=' + era + '&n=' + n;
+                history.replaceState(null, '', window.location.pathname + '?' + qs);
+            }
+        }
+        root.querySelector('#pk-r-go').addEventListener('click', function(e) { e.preventDefault(); runRandom(true); });
+        root.querySelector('#pk-r-again').addEventListener('click', function() { runRandom(true); });
+        root.querySelector('#pk-r-share').addEventListener('click', function() {
+            if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
+            var done = root.querySelector('#pk-r-share-done');
+            done.style.display = '';
+            setTimeout(function() { done.style.display = 'none'; }, 1800);
+        });
+
+        loadMeta().then(function() {
+            var decades = {};
+            for (var i = 0; i < SLUGS.length; i++) decades[META[SLUGS[i]][IDX_PEAK]] = true;
+            var sortedDecades = Object.keys(decades).map(Number).sort(function(a, b) { return a - b; });
+            ['pk-swipe-era', 'pk-f-era', 'pk-r-era'].forEach(function(id) {
+                var sel = root.querySelector('#' + id);
+                if (!sel) return;
+                sortedDecades.forEach(function(d) {
+                    var o = document.createElement('option');
+                    o.value = d; o.textContent = d + 's';
+                    sel.appendChild(o);
+                });
+            });
+            var qs = new URLSearchParams(window.location.search);
+            if (qs.get('sex')) {
+                var rb = root.querySelector('input[name=pk-r-sex][value=' + qs.get('sex') + ']');
+                if (rb) rb.checked = true;
+            }
+            if (qs.get('era')) {
+                var es = root.querySelector('#pk-r-era');
+                if (es) es.value = qs.get('era');
+            }
+            if (qs.get('n')) {
+                var ns = root.querySelector('#pk-r-count');
+                if (ns) ns.value = qs.get('n');
+            }
+            if (qs.get('sex') || qs.get('era') || qs.get('n')) {
+                root.querySelector('.pk-tab[data-mode=random]').click();
+                runRandom(false);
+            } else {
+                root.querySelector('.pk-tab[data-mode=swipe]').click();
+            }
+            runFilter();
+        });
+    })();
+    </script>"""
+
+
+def picker_script() -> str:
+    def js(v: str) -> str:
+        return json.dumps(v)
+    return (PICKER_SCRIPT
+            .replace('__ACTIVE_CC__', ACTIVE_CC)
+            .replace('__PREFIX__', PREFIX)
+            .replace('__L_GIRLS__', js(loc_label_cap('F')))
+            .replace('__L_BOYS__', js(loc_label_cap('M')))
+            .replace('__L_PEAK__', js(S("picker_peak_decade", d='{d}')))
+            .replace('__L_RANK__', js(S("picker_currently_rank", rank='{rank}')))
+            .replace('__L_OFFCHART__', js(S("picker_not_ranked")))
+            .replace('__L_SAVED__', js(S("picker_swipe_saved")))
+            .replace('__L_EXHAUSTED__', js(S("picker_swipe_exhausted")))
+            .replace('__L_MATCH_ONE__', js(S("picker_filter_match_one")))
+            .replace('__L_MATCH_MANY__', js(S("picker_filter_match_many", n='{n}')))
+            .replace('__L_MATCH_NONE__', js(S("picker_filter_match_none")))
+            .replace('__L_RANDOM_EMPTY__', js(S("picker_random_empty")))
+            .replace('__L_SHARE_DONE__', js(S("picker_random_share_done"))))
+
+
 # ---------------------------------------------------------------------------
 # Shared markup
 # ---------------------------------------------------------------------------
@@ -1742,6 +2207,45 @@ BASE_CSS = """
         .ww-card .ww-bar { display: block; height: 4px; background: #EEF2F4; border-radius: 2px; overflow: hidden; margin-top: 0.3rem; }
         .ww-card .ww-bar-fill { display: block; height: 100%; background: linear-gradient(90deg, #149E91 0%, #FF6B5C 100%); }
         #ww-loading { color: #5B6678; font-size: 0.9rem; padding: 0.5rem 0; }
+        .pk-tabs { display: flex; gap: 0.4rem; margin: 1.5rem 0 1.25rem; flex-wrap: wrap; }
+        .pk-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.5rem 1.1rem; border-radius: 22px; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
+        .pk-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
+        .pk-panel { background: #fff; border: 1px solid #d6dde2; border-radius: 10px; padding: 1.25rem 1.4rem 1.5rem; }
+        .pk-controls { display: flex; gap: 0.75rem 1.25rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; font-size: 0.92rem; color: #5B6678; }
+        .pk-controls label { display: inline-flex; align-items: center; gap: 0.35rem; }
+        .pk-controls select { padding: 0.35rem 0.5rem; border: 1px solid #d6dde2; border-radius: 5px; background: #fff; font-size: 0.92rem; color: #1B2440; }
+        .pk-controls .pk-pill-group { display: inline-flex; gap: 0.3rem; flex-wrap: wrap; }
+        .pk-pill { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.3rem 0.75rem; border-radius: 18px; cursor: pointer; font-size: 0.85rem; }
+        .pk-pill.is-active { background: #149E91; color: #fff; border-color: #149E91; }
+        #pk-card { background: linear-gradient(135deg, #fff 0%, #f7fbfa 100%); border: 1px solid #d6dde2; border-radius: 14px; padding: 2.5rem 1.5rem 2rem; text-align: center; min-height: 200px; box-shadow: 0 4px 12px rgba(27,36,64,0.08); cursor: grab; user-select: none; touch-action: pan-y; transition: transform 0.18s ease-out; }
+        #pk-card:active { cursor: grabbing; transition: none; }
+        #pk-card h2 { font-size: 2.5rem; margin: 0; }
+        #pk-card h2 a { color: #1B2440; text-decoration: none; }
+        #pk-card h2 a:hover { color: #149E91; }
+        #pk-card .pk-card-meta { color: #5B6678; margin-top: 0.75rem; font-size: 0.95rem; }
+        .pk-swipe-buttons { display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.25rem; flex-wrap: wrap; }
+        .pk-swipe-buttons button { padding: 0.7rem 1.4rem; border-radius: 24px; border: 0; cursor: pointer; font-weight: 600; font-size: 0.95rem; }
+        .pk-btn-skip { background: #EEF2F4; color: #5B6678; }
+        .pk-btn-skip:hover { background: #dde3e8; }
+        .pk-btn-save { background: #FF6B5C; color: #fff; }
+        .pk-btn-save:hover { background: #e85a4c; }
+        .pk-btn-undo { background: #fff; border: 1px solid #d6dde2 !important; color: #1B2440; }
+        .pk-btn-restart { background: #149E91; color: #fff; }
+        #pk-status { color: #149E91; text-align: center; min-height: 1.2em; margin-top: 0.75rem; font-size: 0.9rem; font-weight: 500; }
+        #pk-exhausted { text-align: center; padding: 2rem 1rem; color: #5B6678; }
+        #pk-filter-count { color: #5B6678; font-size: 0.9rem; margin: 0.5rem 0 1rem; }
+        #pk-filter-results, #pk-random-results { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.6rem; }
+        .pk-grid-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.7rem 0.9rem; text-decoration: none; display: flex; flex-direction: column; gap: 0.2rem; transition: border-color 0.15s, transform 0.1s; }
+        .pk-grid-card:hover { border-color: #149E91; transform: translateY(-1px); }
+        .pk-grid-name { font-weight: 600; color: #1B2440; font-size: 1rem; }
+        .pk-grid-meta { font-size: 0.78rem; color: #5B6678; }
+        .pk-random-form { display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; margin-bottom: 1rem; }
+        .pk-random-form button { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.6rem 1.2rem; font-weight: 600; cursor: pointer; }
+        .pk-random-form button:hover { background: #117f74; }
+        .pk-random-actions { display: flex; gap: 0.75rem; align-items: center; margin-top: 1rem; flex-wrap: wrap; }
+        #pk-r-share, #pk-r-again { background: #fff; border: 1px solid #d6dde2; color: #1B2440; border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; font-weight: 500; }
+        #pk-r-share:hover, #pk-r-again:hover { border-color: #149E91; color: #149E91; }
+        #pk-r-share-done { color: #149E91; font-size: 0.9rem; }
 """
 
 
@@ -1771,6 +2275,7 @@ def site_nav_html() -> str:
         <a href="{p}/year/{LATEST_YEAR}.html">{S("nav_rankings", year=LATEST_YEAR)}</a>
         <a href="{p}/compare.html">{S("nav_compare")}</a>
         <a href="{p}/works-with.html">{S("nav_works_with")}</a>
+        <a href="{p}/picker.html">{S("nav_picker")}</a>
         <a href="{p}/favorites.html">{S("nav_favorites")}<span class="fav-nav-count"></span></a>
         {country_switcher_html()}
     </div></div>"""
@@ -1823,7 +2328,7 @@ def page(title, body, description="", canonical="", extra_head=""):
     <div class="container">
 {body}
 {footer_html()}
-    </div>{lang_banner_script()}{favorites_script()}{compare_script()}{works_with_script()}
+    </div>{lang_banner_script()}{favorites_script()}{compare_script()}{works_with_script()}{picker_script()}
 </body>
 </html>"""
 
@@ -2739,7 +3244,8 @@ def generate_name_meta_json():
     out: dict[str, list] = {}
     for n in pages_to_generate:
         m = name_meta[n]
-        out[slugify(n)] = [m['first'], m['last2'], m['syll'], m['dom'], m['peak_dec']]
+        out[slugify(n)] = [m['first'], m['last2'], m['syll'], m['dom'], m['peak_dec'],
+                            m['latest_rank'] or 0]
     (OUT_DIR / 'name-meta.json').write_text(
         json.dumps(out, separators=(',', ':')), encoding='utf-8')
 
@@ -2773,6 +3279,126 @@ def generate_works_with_page():
         page(S("ww_title"), body,
              description=S("ww_desc"),
              canonical=f"{BASE_URL}{p}/works-with.html",
+             extra_head=extra_head),
+        encoding='utf-8')
+
+
+def generate_picker_page():
+    """Swipe / Filter / Random tool. All client-side off name-meta.json.
+    ?sex/era/n query params switch to the random tab and pre-fill it (so
+    'roll the dice' results are shareable). Query-param variants are
+    noindex'd as a fragment of the JS bootstrap."""
+    p = PREFIX
+    girls = loc_label_cap('F')
+    boys = loc_label_cap('M')
+    syll_labels = ['1', '2', '3', '4+']
+    syll_boxes = ''.join(
+        f'<label><input type="checkbox" name="pk-f-syll" class="pk-filter-input" '
+        f'value="{i+1}"> {syll_labels[i]}</label>'
+        for i in range(4)
+    )
+    az_options = ''.join(f'<option value="{c}">{c.upper()}</option>'
+                         for c in 'abcdefghijklmnopqrstuvwxyz')
+
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_picker")}</div>
+        <h1>{S("picker_h1")}</h1>
+        <p>{S("picker_intro")}</p>
+        <div id="picker-root">
+            <div class="pk-tabs" role="tablist">
+                <button type="button" class="pk-tab" data-mode="swipe">{S("picker_tab_swipe")}</button>
+                <button type="button" class="pk-tab" data-mode="filter">{S("picker_tab_filter")}</button>
+                <button type="button" class="pk-tab" data-mode="random">{S("picker_tab_random")}</button>
+            </div>
+
+            <div class="pk-panel" data-mode="swipe" style="display:none;">
+                <div class="pk-controls">
+                    <span>{S("picker_swipe_filter_sex")}:</span>
+                    <span class="pk-pill-group">
+                        <button type="button" class="pk-pill pk-swipe-sex is-active" data-sex="all">{S("ww_tab_all")}</button>
+                        <button type="button" class="pk-pill pk-swipe-sex" data-sex="F">{girls}</button>
+                        <button type="button" class="pk-pill pk-swipe-sex" data-sex="M">{boys}</button>
+                    </span>
+                    <label>{S("picker_swipe_filter_era")}:
+                        <select id="pk-swipe-era"><option value="all">{S("picker_filter_any")}</option></select>
+                    </label>
+                </div>
+                <div id="pk-card"></div>
+                <p id="pk-status"></p>
+                <div class="pk-swipe-buttons">
+                    <button type="button" id="pk-skip" class="pk-btn-skip">← {S("picker_swipe_skip")}</button>
+                    <button type="button" id="pk-undo" class="pk-btn-undo">{S("picker_swipe_undo")}</button>
+                    <button type="button" id="pk-save" class="pk-btn-save">♥ {S("picker_swipe_save")}</button>
+                </div>
+                <div id="pk-exhausted" style="display:none;">
+                    <p>{S("picker_swipe_exhausted")}</p>
+                    <button type="button" id="pk-restart" class="pk-btn-restart">{S("picker_swipe_restart")}</button>
+                </div>
+            </div>
+
+            <div class="pk-panel" data-mode="filter" style="display:none;">
+                <div class="pk-controls">
+                    <span>{S("picker_filter_sex")}:</span>
+                    <label><input type="radio" name="pk-f-sex" class="pk-filter-input" value="all" checked> {S("ww_tab_all")}</label>
+                    <label><input type="radio" name="pk-f-sex" class="pk-filter-input" value="F"> {girls}</label>
+                    <label><input type="radio" name="pk-f-sex" class="pk-filter-input" value="M"> {boys}</label>
+                </div>
+                <div class="pk-controls">
+                    <span>{S("picker_filter_syll")}:</span>{syll_boxes}
+                </div>
+                <div class="pk-controls">
+                    <label>{S("picker_filter_era")}:
+                        <select id="pk-f-era" class="pk-filter-input"><option value="all">{S("picker_filter_any")}</option></select>
+                    </label>
+                    <label>{S("picker_filter_letter")}:
+                        <select id="pk-f-letter" class="pk-filter-input">
+                            <option value="all">{S("picker_filter_any")}</option>{az_options}
+                        </select>
+                    </label>
+                    <label>{S("picker_filter_rank")}:
+                        <select id="pk-f-rank" class="pk-filter-input">
+                            <option value="all">{S("picker_filter_any")}</option>
+                            <option value="top100">{S("picker_filter_rank_top100")}</option>
+                            <option value="top1000">{S("picker_filter_rank_top1000")}</option>
+                            <option value="rare">{S("picker_filter_rank_rare")}</option>
+                        </select>
+                    </label>
+                </div>
+                <p id="pk-filter-count"></p>
+                <div id="pk-filter-results"></div>
+            </div>
+
+            <div class="pk-panel" data-mode="random" style="display:none;">
+                <form class="pk-random-form">
+                    <span>{S("picker_filter_sex")}:</span>
+                    <label><input type="radio" name="pk-r-sex" value="all" checked> {S("ww_tab_all")}</label>
+                    <label><input type="radio" name="pk-r-sex" value="F"> {girls}</label>
+                    <label><input type="radio" name="pk-r-sex" value="M"> {boys}</label>
+                    <label>{S("picker_filter_era")}:
+                        <select id="pk-r-era"><option value="all">{S("picker_filter_any")}</option></select>
+                    </label>
+                    <label>{S("picker_random_count")}:
+                        <select id="pk-r-count">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </label>
+                    <button type="submit" id="pk-r-go">{S("picker_random_go")}</button>
+                </form>
+                <div id="pk-random-results"></div>
+                <div class="pk-random-actions">
+                    <button type="button" id="pk-r-again">{S("picker_random_again")}</button>
+                    <button type="button" id="pk-r-share">{S("picker_random_share")}</button>
+                    <span id="pk-r-share-done" style="display:none;">{S("picker_random_share_done")}</span>
+                </div>
+            </div>
+        </div>"""
+    extra_head = hreflang_for_hub("picker.html")
+    (OUT_DIR / 'picker.html').write_text(
+        page(S("picker_title"), body,
+             description=S("picker_desc"),
+             canonical=f"{BASE_URL}{p}/picker.html",
              extra_head=extra_head),
         encoding='utf-8')
 
@@ -2831,7 +3457,8 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
             f"{BASE_URL}{p}/trends.html", f"{BASE_URL}{p}/decades.html",
             f"{BASE_URL}{p}/trends/rising.html", f"{BASE_URL}{p}/trends/falling.html",
             f"{BASE_URL}{p}/rare-names.html", f"{BASE_URL}{p}/compare.html",
-            f"{BASE_URL}{p}/works-with.html"]
+            f"{BASE_URL}{p}/works-with.html",
+            f"{BASE_URL}{p}/picker.html"]
     urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/year/{y}.html" for y in years_by_country[cc]]
@@ -2931,6 +3558,7 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
     generate_favorites_page()
     generate_compare_page()
     generate_works_with_page()
+    generate_picker_page()
     generate_name_index_json()
     generate_name_meta_json()
 
