@@ -432,6 +432,435 @@ def data_source_full() -> str:
 
 
 # ---------------------------------------------------------------------------
+# Localization. STRINGS holds UI copy per language; FR overrides English.
+# Gendered nouns ('girls'/'filles', 'boy's'/'de garçon') come from GENDERED.
+# fmt() handles per-country number formatting (FR uses thin spaces).
+# URL slugs stay English ('girls-a', 'name', etc.) — only visible text changes.
+# ---------------------------------------------------------------------------
+STRINGS_EN: dict[str, str] = {
+    "nav_home": "Home",
+    "nav_browse": "Browse A–Z",
+    "nav_trends": "Trends",
+    "nav_decades": "Decades",
+    "nav_rankings": "{year} Rankings",
+    "footer_data": "Data: {source} ({range})",
+
+    "crumb_home": "Home",
+    "crumb_names": "Names",
+    "crumb_browse": "Browse A–Z",
+    "crumb_decades": "Decades",
+    "crumb_trends": "Trends",
+    "crumb_rising": "Rising",
+    "crumb_falling": "Falling",
+    "crumb_similar": "Similar names",
+    "crumb_rare": "Rare names",
+
+    # Homepage
+    "home_tagline": "Names, charted.",
+    "home_intro": ("Explore the popularity and trends of names from {range}. "
+                   "Search any name to see its yearly counts, popularity rank, "
+                   "gender split, and an interactive trend chart."),
+    "home_search_placeholder": "Enter a name to explore...",
+    "home_try": "Try names like {samples} &middot; or",
+    "home_browse_link": "browse all {n} names A–Z",
+    "home_top_h2": "Top Names of All Time (by total usage)",
+    "home_total_babies": "{n} total babies",
+    "home_mostly": "mostly {label}",
+    "home_title": "NameCharted — {country} Name Popularity & Trends",
+    "home_desc": ("Explore {country} name popularity and trends from {range}. "
+                  "Search {n}+ names for yearly counts, rankings, gender split, "
+                  "and interactive trend charts."),
+
+    # Name page
+    "name_primarily": "Primarily a {singular}'s name",
+    "name_unisex": "Unisex — {f}% girls / {m}% boys",
+    "name_pct_one": "{pct}% {label}",
+    "insight_first": ("<strong>{name}</strong> first appears in the data in "
+                      "<strong>{year}</strong> and has been recorded in {n} different years "
+                      "as a {singular}'s name."),
+    "insight_peak_ranked": ("Its single biggest year was <strong>{year}</strong> with "
+                            "<strong>{count}</strong> babies (rank #{rank} that year)."),
+    "insight_peak": ("Its single biggest year was <strong>{year}</strong> with "
+                     "<strong>{count}</strong> babies."),
+    "insight_latest_ranked": ("In {year} it was given to {count} {label} "
+                              "(rank <strong>#{rank}</strong>)."),
+    "insight_latest": "In {year} it was given to {count} {label}.",
+    "insight_latest_missing": "It was not in the {year} data.",
+    "insight_rising": "The name has been <strong>rising</strong> over the last five years.",
+    "insight_declining": "The name has been <strong>declining</strong> over the last five years.",
+    "insight_steady": "Its popularity has been <strong>fairly steady</strong> recently.",
+    "stat_total": "Total babies (all years)",
+    "stat_years": "Years in the data",
+    "stat_peak": "Peak in a single year",
+    "name_popularity_h2": "Popularity Over Time — {label_cap}",
+    "name_yby_h2": "Year-by-Year Detail",
+    "name_rank_note": "Rank is among all {label}' names registered that year.",
+    "table_year": "Year",
+    "table_babies": "Babies",
+    "table_rank": "Rank",
+    "table_num": "#",
+    "table_name": "Name",
+    "table_total": "Total babies",
+    "table_year_rank": "{year} rank",
+    "rel_see_similar": "&rarr; See names similar to {name}",
+    "rel_pop_decade": "Popular names of the {d}s",
+    "rel_letter_link": "{label_cap} names starting with {letter}",
+    "rel_more_popular": "More popular {label}' names",
+    "rel_near_in": "Names ranked near {name} in {year}",
+    "rel_other_init": "Other {label}' names starting with {letter}",
+    "name_title": "{name} — Baby Name Popularity & Trends",
+    "name_desc": ("{name} name popularity: {total} births recorded {range}, "
+                  "peaking in {year} with {peak}. See yearly counts, rank, "
+                  "gender split and an interactive trend chart."),
+    "chart_label": "Babies named {name} per year ({label})",
+    "chart_y_axis": "Babies per year",
+
+    # Browse A–Z
+    "browse_h1": "Browse All Names A–Z",
+    "browse_title": "Browse All Names A–Z",
+    "browse_intro": ("All {n} names with a dedicated popularity page, grouped by "
+                     "first letter. Looking for a rarer name? See the full "
+                     "<a href=\"{url}\">A–Z index of rare names</a>."),
+    "browse_desc": ("Browse all {n} names A–Z. Click any name for popularity "
+                    "trends, rankings and yearly counts from {range}."),
+    "browse_explore_h2": "Explore by theme",
+    "browse_rising_link": "Rising names",
+    "browse_falling_link": "Falling names",
+    "browse_decades_link": "Names by decade",
+    "browse_girls_by_letter": "Girls' names by letter:",
+    "browse_boys_by_letter": "Boys' names by letter:",
+    "browse_all_h2": "All names",
+
+    # Year page
+    "year_h1": "Top Names of {year}",
+    "year_intro": ("The most popular names recorded in {year} were "
+                   "<strong>{g}</strong> for girls and <strong>{b}</strong> for boys. "
+                   "Full top-50 lists below, from {source} data."),
+    "year_girls_h2": "Girls",
+    "year_boys_h2": "Boys",
+    "year_title": "Top Names of {year} — Rankings & Counts",
+    "year_desc": ("Top 50 most popular names of {year} for girls and boys, "
+                  "with birth counts from {source} data. #1: {g} and {b}."),
+
+    # Decade
+    "decade_h1": "Most Popular Names of the {label}",
+    "decade_intro": ("The top names across the {label} ({span}), totaled over "
+                     "the whole decade. The decade's #1 names were "
+                     "<strong>{g}</strong> for girls and <strong>{b}</strong> for boys."),
+    "decade_girls_h2": "Girls — Top 50",
+    "decade_boys_h2": "Boys — Top 50",
+    "decade_title": "Most Popular Names of the {label}",
+    "decade_desc": ("Most popular names of the {label} ({span}). Top 50 girls "
+                    "and boys by total births over the decade, from {source} "
+                    "data. #1: {g} and {b}."),
+    "decades_h1": "Names by Decade",
+    "decades_title": "Names by Decade — Top Names of Every Era",
+    "decades_intro": ("Explore the most popular names of each decade from the "
+                      "{first}s to the {last}s, based on {source} data."),
+    "decades_desc": ("Most popular names by decade, {first}s–{last}s. See the "
+                     "top girls' and boys' names of every decade from {source} data."),
+    "decades_th_decade": "Decade",
+    "decades_th_g": "#1 Girls' Name",
+    "decades_th_b": "#1 Boys' Name",
+
+    # Trends
+    "trends_h1": "Baby Name Trends",
+    "trends_intro": ("Which names are heating up and which are fading? These "
+                     "rankings compare recent birth counts with five years "
+                     "earlier ({range})."),
+    "trends_title": "Name Trends — Rising & Falling Names",
+    "trends_desc": ("See which names are rising and falling in popularity "
+                    "heading into {year}, plus top names by decade, from {source} data."),
+    "trends_rising_h1": "Fastest-Rising Names ({year})",
+    "trends_rising_intro": ("The girls' and boys' names growing fastest in "
+                            "popularity — comparing average births around five "
+                            "years ago with the most recent years. Only names "
+                            "with meaningful current usage are included."),
+    "trends_rising_title": "Fastest-Rising Names of {year}",
+    "trends_rising_desc": ("The fastest-rising names heading into {year}, for "
+                           "girls and boys, based on {source} birth data."),
+    "trends_falling_h1": "Fastest-Falling Names ({year})",
+    "trends_falling_intro": ("Once-common names declining fastest in popularity "
+                             "— comparing average births around five years ago "
+                             "with the most recent years."),
+    "trends_falling_title": "Fastest-Falling Names of {year}",
+    "trends_falling_desc": ("Names declining fastest in popularity heading into "
+                            "{year}, for girls and boys, from {source} birth data."),
+    "trends_th_older": "~5 yrs ago",
+    "trends_th_change": "Change",
+    "trends_card_rising": "Fastest-Rising Names",
+    "trends_card_rising_sub": "Biggest gainers of {year}",
+    "trends_card_falling": "Fastest-Falling Names",
+    "trends_card_falling_sub": "Biggest declines of {year}",
+    "trends_card_decades": "Names by Decade",
+    "trends_card_decades_sub": "Top names of every era",
+
+    # Letter page
+    "letter_h1": "{label_cap} Names Starting With {letter}",
+    "letter_title": "{label_cap} Names Starting With {letter} — Popularity Ranked",
+    "letter_intro": ("All {n} {label}' names beginning with <strong>{letter}</strong> "
+                     "that have a popularity page, ranked by all-time births ({range}). "
+                     "{cross_q}"),
+    "letter_cross_link": "{label_cap} names starting with {letter}",
+    "letter_cross_q": "Looking for {link}?",
+    "letter_desc": ("{label_cap} names that start with {letter}: {n} options "
+                    "ranked by popularity, with total births and current rank "
+                    "from {source} data."),
+
+    # Rare names
+    "rare_h1": "Rare Names — Full A–Z Index",
+    "rare_title": "Rare Names — Full A–Z Index",
+    "rare_intro": ("These {n} names appear in the records ({range}) but have "
+                   "fewer than {min} lifetime births, so they don't yet have "
+                   "their own dedicated trend page. They're listed here A–Z "
+                   "with lifetime totals."),
+    "rare_tip": ("Tip: use <kbd>Ctrl</kbd>+<kbd>F</kbd> (or <kbd>⌘</kbd>+<kbd>F</kbd>) "
+                 "to search this page."),
+    "rare_letter_count": "({n} names)",
+    "rare_mostly": "({total} · mostly {label})",
+    "rare_desc": ("Index of {n} rare names ({range}) with fewer than {min} "
+                  "lifetime births, listed A–Z."),
+}
+
+STRINGS_FR: dict[str, str] = {
+    "nav_home": "Accueil",
+    "nav_browse": "Parcourir A–Z",
+    "nav_trends": "Tendances",
+    "nav_decades": "Décennies",
+    "nav_rankings": "Classement {year}",
+    "footer_data": "Données : {source} ({range})",
+
+    "crumb_home": "Accueil",
+    "crumb_names": "Prénoms",
+    "crumb_browse": "Parcourir A–Z",
+    "crumb_decades": "Décennies",
+    "crumb_trends": "Tendances",
+    "crumb_rising": "En hausse",
+    "crumb_falling": "En baisse",
+    "crumb_similar": "Prénoms similaires",
+    "crumb_rare": "Prénoms rares",
+
+    "home_tagline": "Les prénoms, en graphiques.",
+    "home_intro": ("Explorez la popularité et les tendances des prénoms de {range}. "
+                   "Recherchez un prénom pour voir ses effectifs annuels, son rang, "
+                   "sa répartition par sexe et un graphique interactif."),
+    "home_search_placeholder": "Tapez un prénom à explorer…",
+    "home_try": "Essayez par exemple {samples} &middot; ou",
+    "home_browse_link": "parcourez les {n} prénoms A–Z",
+    "home_top_h2": "Prénoms les plus donnés de tous les temps",
+    "home_total_babies": "{n} naissances au total",
+    "home_mostly": "majoritairement {label}",
+    "home_title": "NameCharted — Prénoms en France : popularité et tendances",
+    "home_desc": ("Explorez la popularité et les tendances des prénoms en France "
+                  "de {range}. Recherchez parmi plus de {n} prénoms : effectifs "
+                  "annuels, classements, répartition par sexe et graphiques interactifs."),
+
+    "name_primarily": "Principalement un prénom {of_singular}",
+    "name_unisex": "Mixte — {f} % filles / {m} % garçons",
+    "name_pct_one": "{pct} % {label}",
+    "insight_first": ("<strong>{name}</strong> apparaît pour la première fois "
+                      "dans les données en <strong>{year}</strong> et a été enregistré "
+                      "sur {n} années différentes comme prénom {of_singular}."),
+    "insight_peak_ranked": ("Son année record est <strong>{year}</strong> avec "
+                            "<strong>{count}</strong> naissances (rang n°{rank} cette année-là)."),
+    "insight_peak": ("Son année record est <strong>{year}</strong> avec "
+                     "<strong>{count}</strong> naissances."),
+    "insight_latest_ranked": ("En {year}, il a été donné à {count} {label} "
+                              "(rang <strong>n°{rank}</strong>)."),
+    "insight_latest": "En {year}, il a été donné à {count} {label}.",
+    "insight_latest_missing": "Il n'apparaît pas dans les données de {year}.",
+    "insight_rising": "Le prénom est en <strong>hausse</strong> depuis cinq ans.",
+    "insight_declining": "Le prénom est en <strong>baisse</strong> depuis cinq ans.",
+    "insight_steady": "Sa popularité est <strong>plutôt stable</strong> ces dernières années.",
+    "stat_total": "Naissances au total (toutes années)",
+    "stat_years": "Années couvertes",
+    "stat_peak": "Pic sur une seule année",
+    "name_popularity_h2": "Popularité au fil du temps — {label_cap}",
+    "name_yby_h2": "Détail année par année",
+    "name_rank_note": "Le rang est calculé parmi tous les prénoms {label} enregistrés cette année-là.",
+    "table_year": "Année",
+    "table_babies": "Naissances",
+    "table_rank": "Rang",
+    "table_num": "n°",
+    "table_name": "Prénom",
+    "table_total": "Naissances totales",
+    "table_year_rank": "Rang {year}",
+    "rel_see_similar": "&rarr; Voir des prénoms similaires à {name}",
+    "rel_pop_decade": "Prénoms populaires des années {d}",
+    "rel_letter_link": "Prénoms {label} commençant par {letter}",
+    "rel_more_popular": "Prénoms {label} plus populaires",
+    "rel_near_in": "Prénoms classés près de {name} en {year}",
+    "rel_other_init": "Autres prénoms {label} commençant par {letter}",
+    "name_title": "{name} — Popularité et tendances du prénom",
+    "name_desc": ("Popularité du prénom {name} : {total} naissances enregistrées "
+                  "{range}, pic en {year} avec {peak}. Effectifs annuels, rang, "
+                  "répartition par sexe et graphique interactif."),
+    "chart_label": "Naissances de {name} par an ({label})",
+    "chart_y_axis": "Naissances par an",
+
+    "browse_h1": "Tous les prénoms — A à Z",
+    "browse_title": "Tous les prénoms — A à Z",
+    "browse_intro": ("Les {n} prénoms disposant d'une page dédiée, regroupés par "
+                     "première lettre. Vous cherchez un prénom plus rare ? "
+                     "Voir l'<a href=\"{url}\">index A–Z complet des prénoms rares</a>."),
+    "browse_desc": ("Parcourez les {n} prénoms de A à Z. Cliquez sur un prénom "
+                    "pour voir ses tendances, son classement et ses effectifs annuels ({range})."),
+    "browse_explore_h2": "Explorer par thème",
+    "browse_rising_link": "Prénoms en hausse",
+    "browse_falling_link": "Prénoms en baisse",
+    "browse_decades_link": "Prénoms par décennie",
+    "browse_girls_by_letter": "Prénoms de filles par lettre :",
+    "browse_boys_by_letter": "Prénoms de garçons par lettre :",
+    "browse_all_h2": "Tous les prénoms",
+
+    "year_h1": "Prénoms les plus donnés en {year}",
+    "year_intro": ("Les prénoms les plus donnés en {year} étaient "
+                   "<strong>{g}</strong> chez les filles et <strong>{b}</strong> chez les garçons. "
+                   "Top 50 complet ci-dessous, d'après les données {source}."),
+    "year_girls_h2": "Filles",
+    "year_boys_h2": "Garçons",
+    "year_title": "Prénoms les plus donnés en {year} — classements et effectifs",
+    "year_desc": ("Top 50 des prénoms les plus donnés en {year}, filles et garçons, "
+                  "avec les effectifs (données {source}). N°1 : {g} et {b}."),
+
+    "decade_h1": "Prénoms les plus populaires des années {label}",
+    "decade_intro": ("Les prénoms les plus donnés au cours des années {label} "
+                     "({span}), cumulés sur la décennie. Les n°1 de la décennie "
+                     "étaient <strong>{g}</strong> chez les filles et "
+                     "<strong>{b}</strong> chez les garçons."),
+    "decade_girls_h2": "Filles — Top 50",
+    "decade_boys_h2": "Garçons — Top 50",
+    "decade_title": "Prénoms les plus populaires des années {label}",
+    "decade_desc": ("Prénoms les plus donnés des années {label} ({span}). Top 50 "
+                    "filles et garçons par naissances cumulées sur la décennie, "
+                    "d'après {source}. N°1 : {g} et {b}."),
+    "decades_h1": "Prénoms par décennie",
+    "decades_title": "Prénoms par décennie — les plus populaires de chaque époque",
+    "decades_intro": ("Découvrez les prénoms les plus donnés de chaque décennie, "
+                      "des années {first} aux années {last}, d'après les données {source}."),
+    "decades_desc": ("Prénoms les plus populaires par décennie, années {first} "
+                     "à {last}. Les n°1 filles et garçons de chaque décennie, "
+                     "d'après {source}."),
+    "decades_th_decade": "Décennie",
+    "decades_th_g": "N°1 filles",
+    "decades_th_b": "N°1 garçons",
+
+    "trends_h1": "Tendances des prénoms",
+    "trends_intro": ("Quels prénoms montent, lesquels reculent ? Ces classements "
+                     "comparent les naissances récentes à celles d'il y a cinq ans ({range})."),
+    "trends_title": "Tendances des prénoms — en hausse et en baisse",
+    "trends_desc": ("Découvrez quels prénoms montent et lesquels reculent à "
+                    "l'approche de {year}, ainsi que les prénoms phares de "
+                    "chaque décennie, d'après {source}."),
+    "trends_rising_h1": "Prénoms en plus forte hausse ({year})",
+    "trends_rising_intro": ("Les prénoms filles et garçons qui progressent le "
+                            "plus vite en popularité — comparaison entre les "
+                            "naissances d'il y a environ cinq ans et les années "
+                            "les plus récentes. Seuls les prénoms avec un usage "
+                            "actuel significatif sont inclus."),
+    "trends_rising_title": "Prénoms en plus forte hausse en {year}",
+    "trends_rising_desc": ("Les prénoms qui progressent le plus vite à l'approche "
+                           "de {year}, filles et garçons, d'après les données {source}."),
+    "trends_falling_h1": "Prénoms en plus forte baisse ({year})",
+    "trends_falling_intro": ("Prénoms autrefois courants qui reculent le plus "
+                             "vite — comparaison entre les naissances d'il y a "
+                             "environ cinq ans et les années les plus récentes."),
+    "trends_falling_title": "Prénoms en plus forte baisse en {year}",
+    "trends_falling_desc": ("Les prénoms qui reculent le plus vite à l'approche "
+                            "de {year}, filles et garçons, d'après {source}."),
+    "trends_th_older": "il y a ~5 ans",
+    "trends_th_change": "Évolution",
+    "trends_card_rising": "Prénoms en hausse",
+    "trends_card_rising_sub": "Plus fortes progressions en {year}",
+    "trends_card_falling": "Prénoms en baisse",
+    "trends_card_falling_sub": "Plus fortes baisses en {year}",
+    "trends_card_decades": "Prénoms par décennie",
+    "trends_card_decades_sub": "Les phares de chaque époque",
+
+    "letter_h1": "Prénoms {label} commençant par {letter}",
+    "letter_title": "Prénoms {label} commençant par {letter} — classement par popularité",
+    "letter_intro": ("Les {n} prénoms {label} commençant par <strong>{letter}</strong> "
+                     "qui ont une page dédiée, classés par naissances cumulées ({range}). "
+                     "{cross_q}"),
+    "letter_cross_link": "les prénoms {label} commençant par {letter}",
+    "letter_cross_q": "Vous cherchez {link} ?",
+    "letter_desc": ("Prénoms {label} qui commencent par {letter} : {n} options "
+                    "classées par popularité, avec les naissances cumulées et "
+                    "le rang actuel, d'après {source}."),
+
+    "rare_h1": "Prénoms rares — index A–Z complet",
+    "rare_title": "Prénoms rares — index A–Z complet",
+    "rare_intro": ("Ces {n} prénoms apparaissent dans les données ({range}) mais "
+                   "comptent moins de {min} naissances cumulées, et n'ont donc "
+                   "pas encore leur propre page. Ils sont listés ici de A à Z "
+                   "avec le total des naissances."),
+    "rare_tip": ("Astuce : utilisez <kbd>Ctrl</kbd>+<kbd>F</kbd> (ou "
+                 "<kbd>⌘</kbd>+<kbd>F</kbd>) pour chercher dans cette page."),
+    "rare_letter_count": "({n} prénoms)",
+    "rare_mostly": "({total} · majoritairement {label})",
+    "rare_desc": ("Index de {n} prénoms rares ({range}) comptant moins de {min} "
+                  "naissances cumulées, listés de A à Z."),
+}
+
+STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN, "AU": STRINGS_EN}
+
+# Gendered forms per language. Used for "girls"/"filles", "boy's"/"de garçon", etc.
+# URL slugs always use the English form ('girls'/'boys') for cross-country URL parity.
+GENDERED_EN = {
+    "label_F": "girls", "label_M": "boys",
+    "label_cap_F": "Girls", "label_cap_M": "Boys",
+    "singular_F": "girl", "singular_M": "boy",
+    "of_singular_F": "girl's", "of_singular_M": "boy's",
+}
+GENDERED_FR = {
+    "label_F": "filles", "label_M": "garçons",
+    "label_cap_F": "Filles", "label_cap_M": "Garçons",
+    "singular_F": "fille", "singular_M": "garçon",
+    "of_singular_F": "de fille", "of_singular_M": "de garçon",
+}
+GENDERED = {"US": GENDERED_EN, "FR": GENDERED_FR, "GB": GENDERED_EN, "AU": GENDERED_EN}
+
+
+def S(key: str, **kwargs) -> str:
+    tpl = STRINGS[ACTIVE_CC].get(key) or STRINGS_EN[key]
+    return tpl.format(**kwargs) if kwargs else tpl
+
+
+def fmt(n: int) -> str:
+    """Locale-aware integer formatting. FR uses narrow no-break space, others ','."""
+    s = f"{n:,}"
+    if ACTIVE_CC == "FR":
+        return s.replace(",", " ")
+    return s
+
+
+def lang_attr() -> str:
+    return "fr" if ACTIVE_CC == "FR" else "en"
+
+
+def loc_label(sex: str) -> str:
+    return GENDERED[ACTIVE_CC][f"label_{sex}"]
+
+
+def loc_label_cap(sex: str) -> str:
+    return GENDERED[ACTIVE_CC][f"label_cap_{sex}"]
+
+
+def loc_singular(sex: str) -> str:
+    return GENDERED[ACTIVE_CC][f"singular_{sex}"]
+
+
+def loc_of_singular(sex: str) -> str:
+    """The 'X's' possessive form in English / 'de X' construction in French."""
+    return GENDERED[ACTIVE_CC][f"of_singular_{sex}"]
+
+
+def slug_label(sex: str) -> str:
+    """English form used in URLs ('girls'/'boys') — always English regardless of locale."""
+    return 'girls' if sex == 'F' else 'boys'
+
+
+# ---------------------------------------------------------------------------
 # Shared markup
 # ---------------------------------------------------------------------------
 BASE_CSS = """
@@ -524,11 +953,11 @@ def site_nav_html() -> str:
     return f"""
     <div class="sitenav"><div class="sitenav-inner">
         <a class="brand" href="{home_path()}"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span></a>
-        <a href="{home_path()}">Home</a>
-        <a href="{p}/names.html">Browse A–Z</a>
-        <a href="{p}/trends.html">Trends</a>
-        <a href="{p}/decades.html">Decades</a>
-        <a href="{p}/year/{LATEST_YEAR}.html">{LATEST_YEAR} Rankings</a>
+        <a href="{home_path()}">{S("nav_home")}</a>
+        <a href="{p}/names.html">{S("nav_browse")}</a>
+        <a href="{p}/trends.html">{S("nav_trends")}</a>
+        <a href="{p}/decades.html">{S("nav_decades")}</a>
+        <a href="{p}/year/{LATEST_YEAR}.html">{S("nav_rankings", year=LATEST_YEAR)}</a>
         {country_switcher_html()}
     </div></div>"""
 
@@ -537,7 +966,7 @@ def footer_html() -> str:
     return f"""
         <div class="footer">
             <p>&copy; 2026 NameCharted</p>
-            <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.25rem;">Data: {data_source_full()} ({DATA_RANGE})</p>
+            <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.25rem;">{S("footer_data", source=data_source_full(), range=DATA_RANGE)}</p>
         </div>"""
 
 
@@ -562,7 +991,7 @@ def page(title, body, description="", canonical="", extra_head=""):
         if canonical:
             og += f'\n    <meta property="og:url" content="{canonical}">'
     return f"""<!DOCTYPE html>
-<html lang="en">
+<html lang="{lang_attr()}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -605,22 +1034,24 @@ def generate_homepage():
         dom = dominant_sex(name)
         items += (
             f'                <li><a href="{p}/name/{slugify(name)}.html"><h3>{name}</h3></a>'
-            f'<p>{total:,} total babies</p><p style="font-size:0.8rem">mostly {sex_label(dom)}</p></li>\n'
+            f'<p>{S("home_total_babies", n=fmt(total))}</p>'
+            f'<p style="font-size:0.8rem">{S("home_mostly", label=loc_label(dom))}</p></li>\n'
         )
+    samples = ", ".join(n for n, _ in top_names[:5])
+    n_pages = len(pages_to_generate)
     body = f"""        <h1>NameCharted — {COUNTRY_NAME[ACTIVE_CC]}</h1>
-        <p style="color:#5B6678; font-size:1.05rem; margin-top:-0.25rem;">Names, charted.</p>
-        <p>Explore the popularity and trends of names from {DATA_RANGE}. Search any name
-        to see its yearly counts, popularity rank, gender split, and an interactive trend chart.</p>
+        <p style="color:#5B6678; font-size:1.05rem; margin-top:-0.25rem;">{S("home_tagline")}</p>
+        <p>{S("home_intro", range=DATA_RANGE)}</p>
 
         <div class="search-box" style="margin:2rem 0; text-align:center;">
-            <input type="text" id="searchInput" placeholder="Enter a name to explore..."
+            <input type="text" id="searchInput" placeholder="{S("home_search_placeholder")}"
                    style="padding:0.75rem; width:70%; max-width:400px; border:1px solid #ddd; border-radius:4px; font-size:1rem;">
-            <p>Try names like {", ".join(n for n, _ in top_names[:5])} &middot; or
-            <a href="{p}/names.html">browse all {len(pages_to_generate):,} names A–Z</a></p>
+            <p>{S("home_try", samples=samples)}
+            <a href="{p}/names.html">{S("home_browse_link", n=fmt(n_pages))}</a></p>
         </div>
 
         <div class="trending">
-            <h2 style="color:#149E91; border-bottom:2px solid #EEF2F4; padding-bottom:0.5rem;">Top Names of All Time (by total usage)</h2>
+            <h2 style="color:#149E91; border-bottom:2px solid #EEF2F4; padding-bottom:0.5rem;">{S("home_top_h2")}</h2>
             <ul class="trending-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; list-style:none; padding:0;">
 {items}            </ul>
         </div>
@@ -648,10 +1079,8 @@ def generate_homepage():
         }});
         loadIndex();
         </script>"""
-    desc = (f"Explore {COUNTRY_NAME[ACTIVE_CC]} name popularity and trends from {DATA_RANGE}. "
-            f"Search {len(pages_to_generate):,}+ names for yearly counts, "
-            f"rankings, gender split, and interactive trend charts.")
-    title = f"NameCharted — {COUNTRY_NAME[ACTIVE_CC]} Name Popularity & Trends"
+    desc = S("home_desc", country=COUNTRY_NAME[ACTIVE_CC], range=DATA_RANGE, n=fmt(n_pages))
+    title = S("home_title", country=COUNTRY_NAME[ACTIVE_CC])
     (OUT_DIR / 'index.html').write_text(
         page(title, body, description=desc, canonical=home_url(),
              extra_head=hreflang_for_hub("")),
@@ -722,37 +1151,39 @@ def generate_name_page(name):
     peak = max(series.values()) if series else 0
     peak_year = max(series, key=series.get) if series else None
     f_pct = round(100 * ft / total) if total else 0
-    label = sex_label(dom)
-    singular = label[:-1]
+    label = loc_label(dom)
+    singular_of = loc_of_singular(dom)
 
     if ft and mt and min(ft, mt) / total >= 0.10:
-        gender_text = f"Unisex — {f_pct}% girls / {100 - f_pct}% boys"
+        gender_text = S("name_unisex", f=f_pct, m=100 - f_pct)
     else:
-        gender_text = f"{f_pct}% girls" if dom == 'F' else f"{100 - f_pct}% boys"
+        pct = f_pct if dom == 'F' else (100 - f_pct)
+        gender_text = S("name_pct_one", pct=pct, label=label)
 
     first_year = years[0] if years else None
     latest_rank = rank_by_year_sex.get((LATEST_YEAR, dom), {}).get(name)
     latest_count = series.get(LATEST_YEAR)
     insight_parts = []
     if first_year is not None:
-        insight_parts.append(
-            f"<strong>{name}</strong> first appears in the data in "
-            f"<strong>{first_year}</strong> and has been recorded in {len(years)} different years "
-            f"as a {singular}'s name.")
+        insight_parts.append(S("insight_first", name=name, year=first_year,
+                               n=len(years), of_singular=singular_of,
+                               singular=loc_singular(dom)))
     if peak_year is not None:
         peak_rank = rank_by_year_sex.get((peak_year, dom), {}).get(name)
-        rank_txt = f" (rank #{peak_rank:,} that year)" if peak_rank else ""
-        insight_parts.append(
-            f"Its single biggest year was <strong>{peak_year}</strong> with "
-            f"<strong>{peak:,}</strong> babies{rank_txt}.")
+        if peak_rank:
+            insight_parts.append(S("insight_peak_ranked", year=peak_year,
+                                   count=fmt(peak), rank=fmt(peak_rank)))
+        else:
+            insight_parts.append(S("insight_peak", year=peak_year, count=fmt(peak)))
     if latest_count and latest_rank:
-        insight_parts.append(
-            f"In {LATEST_YEAR} it was given to {latest_count:,} {label} (rank "
-            f"<strong>#{latest_rank:,}</strong>).")
+        insight_parts.append(S("insight_latest_ranked", year=LATEST_YEAR,
+                               count=fmt(latest_count), label=label,
+                               rank=fmt(latest_rank)))
     elif latest_count:
-        insight_parts.append(f"In {LATEST_YEAR} it was given to {latest_count:,} {label}.")
+        insight_parts.append(S("insight_latest", year=LATEST_YEAR,
+                               count=fmt(latest_count), label=label))
     else:
-        insight_parts.append(f"It was not in the {LATEST_YEAR} data.")
+        insight_parts.append(S("insight_latest_missing", year=LATEST_YEAR))
 
     recent = [series.get(y, 0) for y in range(LATEST_YEAR - 4, LATEST_YEAR + 1)]
     prior = [series.get(y, 0) for y in range(LATEST_YEAR - 9, LATEST_YEAR - 4)]
@@ -760,11 +1191,11 @@ def generate_name_page(name):
     if pa > 0:
         change = (ra - pa) / pa
         if change > 0.15:
-            insight_parts.append("The name has been <strong>rising</strong> over the last five years.")
+            insight_parts.append(S("insight_rising"))
         elif change < -0.15:
-            insight_parts.append("The name has been <strong>declining</strong> over the last five years.")
+            insight_parts.append(S("insight_declining"))
         else:
-            insight_parts.append("Its popularity has been <strong>fairly steady</strong> recently.")
+            insight_parts.append(S("insight_steady"))
 
     insight = " ".join(insight_parts)
 
@@ -772,29 +1203,33 @@ def generate_name_page(name):
     for year in years:
         count = series[year]
         rank = rank_by_year_sex.get((year, dom), {}).get(name)
-        rank_disp = f"#{rank:,}" if rank else "–"
+        rank_disp = f"#{fmt(rank)}" if rank else "–"
         rows += (
             f'                <tr><td class="year-column">{year}</td>'
-            f'<td class="count-column">{count:,}</td>'
+            f'<td class="count-column">{fmt(count)}</td>'
             f'<td class="rank-column">{rank_disp}</td></tr>\n'
         )
 
     peak_dec = name_meta[name]['peak_dec']
+    letter = name[0].upper()
     rel = (
         f'        <p style="margin:0.75rem 0 1.5rem;">'
-        f'<a href="{p}/similar/{slugify(name)}.html"><strong>&rarr; See names similar to {name}</strong></a>'
-        f' &nbsp;&middot;&nbsp; <a href="{p}/decade/{peak_dec}s.html">Popular names of the {peak_dec}s</a>'
-        f' &nbsp;&middot;&nbsp; <a href="{p}/letter/{label}-{name[0].lower()}.html">'
-        f'{label.capitalize()} names starting with {name[0].upper()}</a></p>\n'
+        f'<a href="{p}/similar/{slugify(name)}.html"><strong>{S("rel_see_similar", name=name)}</strong></a>'
+        f' &nbsp;&middot;&nbsp; <a href="{p}/decade/{peak_dec}s.html">{S("rel_pop_decade", d=peak_dec)}</a>'
+        f' &nbsp;&middot;&nbsp; <a href="{p}/letter/{slug_label(dom)}-{name[0].lower()}.html">'
+        f'{S("rel_letter_link", label=label, label_cap=loc_label_cap(dom), letter=letter)}</a></p>\n'
     )
-    rel += related_block("More popular " + label + "' names", related_more_popular(name, dom))
-    rel += related_block(f"Names ranked near {name} in {LATEST_YEAR}",
+    rel += related_block(S("rel_more_popular", label=label),
+                         related_more_popular(name, dom))
+    rel += related_block(S("rel_near_in", name=name, year=LATEST_YEAR),
                          related_latest_neighbors(name, dom))
-    rel += related_block(f"Other {label}' names starting with {name[0].upper()}",
+    rel += related_block(S("rel_other_init", label=label, letter=letter),
                          related_same_initial(name, dom))
 
     canonical = f"{BASE_URL}{p}/name/{slugify(name)}.html"
     chart_id = "trendChart"
+    chart_label_text = S("chart_label", name=name, label=label).replace("'", "\\'")
+    chart_y_text = S("chart_y_axis")
     chart_js = (
         "\n    <script src=\"https://cdn.jsdelivr.net/npm/chart.js@4\"></script>"
         "\n    <script>"
@@ -805,7 +1240,7 @@ def generate_name_page(name):
         "\n        data: {"
         "\n          labels: " + json.dumps(years) + ","
         "\n          datasets: [{"
-        "\n            label: 'Babies named " + name.replace("'", "\\'") + " per year (" + label + ")',"
+        "\n            label: '" + chart_label_text + "',"
         "\n            data: " + json.dumps(chart_counts) + ","
         "\n            borderColor: '" + ('#149E91' if dom == 'F' else '#FF6B5C') + "',"
         "\n            backgroundColor: '" + ('rgba(20,158,145,0.12)' if dom == 'F' else 'rgba(255,107,92,0.12)') + "',"
@@ -815,51 +1250,50 @@ def generate_name_page(name):
         "\n        options: {"
         "\n          responsive: true,"
         "\n          plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } },"
-        "\n          scales: { y: { beginAtZero: true, title: { display: true, text: 'Babies per year' } } }"
+        "\n          scales: { y: { beginAtZero: true, title: { display: true, text: '" + chart_y_text + "' } } }"
         "\n        }"
         "\n      });"
         "\n    });"
         "\n    </script>"
     )
     extra_head = breadcrumb_jsonld([
-        ("Home", home_url()),
-        ("Names", f"{BASE_URL}{p}/names.html"),
+        (S("crumb_home"), home_url()),
+        (S("crumb_names"), f"{BASE_URL}{p}/names.html"),
         (name, canonical),
     ]) + chart_js + hreflang_for_name(slugify(name))
 
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; <a href="{p}/names.html">Names</a> &rsaquo; {name}</div>
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/names.html">{S("crumb_names")}</a> &rsaquo; {name}</div>
         <h1>{name}</h1>
-        <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a {singular}'s name &middot; {gender_text}</p>
+        <p style="color:#7f8c8d; margin-top:-0.5rem;">{S("name_primarily", singular=loc_singular(dom), of_singular=singular_of)} &middot; {gender_text}</p>
 
         <div class="insight">{insight}</div>
 
         <div class="stats">
-            <div class="stat"><div class="stat-value">{total:,}</div><div class="stat-label">Total babies (all years)</div></div>
-            <div class="stat"><div class="stat-value">{len(years)}</div><div class="stat-label">Years in the data</div></div>
-            <div class="stat"><div class="stat-value">{peak:,}</div><div class="stat-label">Peak in a single year</div></div>
+            <div class="stat"><div class="stat-value">{fmt(total)}</div><div class="stat-label">{S("stat_total")}</div></div>
+            <div class="stat"><div class="stat-value">{len(years)}</div><div class="stat-label">{S("stat_years")}</div></div>
+            <div class="stat"><div class="stat-value">{fmt(peak)}</div><div class="stat-label">{S("stat_peak")}</div></div>
         </div>
 
-        <h2>Popularity Over Time — {label.capitalize()}</h2>
+        <h2>{S("name_popularity_h2", label_cap=loc_label_cap(dom))}</h2>
         <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
 
 {rel}
-        <h2>Year-by-Year Detail</h2>
-        <p style="color:#7f8c8d; font-size:0.9rem;">Rank is among all {label}' names registered that year.</p>
+        <h2>{S("name_yby_h2")}</h2>
+        <p style="color:#7f8c8d; font-size:0.9rem;">{S("name_rank_note", label=label)}</p>
         <table>
             <thead><tr>
-                <th class="year-column">Year</th>
-                <th class="count-column">Babies</th>
-                <th class="rank-column">Rank</th>
+                <th class="year-column">{S("table_year")}</th>
+                <th class="count-column">{S("table_babies")}</th>
+                <th class="rank-column">{S("table_rank")}</th>
             </tr></thead>
             <tbody>
 {rows}            </tbody>
         </table>"""
 
-    desc = (f"{name} name popularity: {total:,} births recorded {DATA_RANGE}, "
-            f"peaking in {peak_year} with {peak:,}. See yearly counts, rank, gender split and "
-            f"an interactive trend chart.")
+    desc = S("name_desc", name=name, total=fmt(total), range=DATA_RANGE,
+             year=peak_year, peak=fmt(peak))
     (OUT_DIR / 'name' / f'{slugify(name)}.html').write_text(
-        page(f"{name} — Baby Name Popularity & Trends", body,
+        page(S("name_title", name=name), body,
              description=desc, canonical=canonical, extra_head=extra_head),
         encoding='utf-8')
 
@@ -888,28 +1322,27 @@ def generate_browse_index():
         f'<a href="{p}/letter/boys-{l.lower()}.html">{l}</a>'
         for l in sorted(letter_names['M'].keys()))
     explore = f"""        <div style="background:#fff; padding:1.25rem 1.5rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.06); margin-bottom:2rem;">
-            <h2 style="margin-top:0;">Explore by theme</h2>
-            <p style="margin:0.25rem 0;"><a href="{p}/trends.html"><strong>Trends</strong></a> &middot;
-            <a href="{p}/trends/rising.html">Rising names</a> &middot;
-            <a href="{p}/trends/falling.html">Falling names</a> &middot;
-            <a href="{p}/decades.html"><strong>Names by decade</strong></a></p>
-            <p style="margin:0.75rem 0 0.25rem;"><strong>Girls' names by letter:</strong></p>
+            <h2 style="margin-top:0;">{S("browse_explore_h2")}</h2>
+            <p style="margin:0.25rem 0;"><a href="{p}/trends.html"><strong>{S("nav_trends")}</strong></a> &middot;
+            <a href="{p}/trends/rising.html">{S("browse_rising_link")}</a> &middot;
+            <a href="{p}/trends/falling.html">{S("browse_falling_link")}</a> &middot;
+            <a href="{p}/decades.html"><strong>{S("browse_decades_link")}</strong></a></p>
+            <p style="margin:0.75rem 0 0.25rem;"><strong>{S("browse_girls_by_letter")}</strong></p>
             <div class="azindex">{girl_letters}</div>
-            <p style="margin:0.5rem 0 0.25rem;"><strong>Boys' names by letter:</strong></p>
+            <p style="margin:0.5rem 0 0.25rem;"><strong>{S("browse_boys_by_letter")}</strong></p>
             <div class="azindex">{boy_letters}</div>
         </div>"""
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; Browse A–Z</div>
-        <h1>Browse All Names A–Z</h1>
-        <p>All {len(pages_to_generate):,} names with a dedicated popularity page, grouped by first letter.
-        Looking for a rarer name? See the full <a href="{p}/rare-names.html">A–Z index of rare names</a>.</p>
+    n_pages = len(pages_to_generate)
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("crumb_browse")}</div>
+        <h1>{S("browse_h1")}</h1>
+        <p>{S("browse_intro", n=fmt(n_pages), url=f"{p}/rare-names.html")}</p>
 {explore}
-        <h2>All names</h2>
+        <h2>{S("browse_all_h2")}</h2>
         {jump}
 {sections}"""
-    desc = (f"Browse all {len(pages_to_generate):,} names A–Z. Click any name for "
-            f"popularity trends, rankings and yearly counts from {DATA_RANGE}.")
+    desc = S("browse_desc", n=fmt(n_pages), range=DATA_RANGE)
     (OUT_DIR / 'names.html').write_text(
-        page("Browse All Names A–Z", body,
+        page(S("browse_title"), body,
              description=desc, canonical=f"{BASE_URL}{p}/names.html",
              extra_head=hreflang_for_hub("names.html")),
         encoding='utf-8')
@@ -930,7 +1363,7 @@ def generate_year_page(year):
             rows += (
                 f'                <tr><td class="rank-column">{rank}</td>'
                 f'<td>{link}</td>'
-                f'<td class="count-column">{c:,}</td></tr>\n'
+                f'<td class="count-column">{fmt(c)}</td></tr>\n'
             )
         return rows
 
@@ -938,34 +1371,32 @@ def generate_year_page(year):
     next_link = f'<a href="{p}/year/{year+1}.html">{year+1} →</a>' if (year + 1) in YEARS_SET else ''
     top_girl = sorted(rank_by_year_sex[(year, 'F')].items(), key=lambda x: x[1])[0][0]
     top_boy = sorted(rank_by_year_sex[(year, 'M')].items(), key=lambda x: x[1])[0][0]
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; {year}</div>
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {year}</div>
         <nav class="nav">{prev_link} &nbsp; {next_link}</nav>
-        <h1>Top Names of {year}</h1>
-        <p>The most popular names recorded in {year} were <strong>{top_girl}</strong> for girls
-        and <strong>{top_boy}</strong> for boys. Full top-50 lists below, from {data_source_label()} data.</p>
+        <h1>{S("year_h1", year=year)}</h1>
+        <p>{S("year_intro", year=year, g=top_girl, b=top_boy, source=data_source_label())}</p>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
             <div>
-                <h2 style="color:#149E91;">Girls</h2>
-                <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
+                <h2 style="color:#149E91;">{S("year_girls_h2")}</h2>
+                <table><thead><tr><th class="rank-column">{S("table_num")}</th><th>{S("table_name")}</th><th class="count-column">{S("table_babies")}</th></tr></thead>
                 <tbody>
 {table_for('F')}                </tbody></table>
             </div>
             <div>
-                <h2 style="color:#FF6B5C;">Boys</h2>
-                <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
+                <h2 style="color:#FF6B5C;">{S("year_boys_h2")}</h2>
+                <table><thead><tr><th class="rank-column">{S("table_num")}</th><th>{S("table_name")}</th><th class="count-column">{S("table_babies")}</th></tr></thead>
                 <tbody>
 {table_for('M')}                </tbody></table>
             </div>
         </div>"""
-    desc = (f"Top 50 most popular names of {year} for girls and boys, with birth "
-            f"counts from {data_source_label()} data. #1: {top_girl} and {top_boy}.")
+    desc = S("year_desc", year=year, g=top_girl, b=top_boy, source=data_source_label())
     canonical = f"{BASE_URL}{p}/year/{year}.html"
     extra_head = breadcrumb_jsonld([
-        ("Home", home_url()),
+        (S("crumb_home"), home_url()),
         (str(year), canonical),
     ]) + hreflang_for_year(year)
     (OUT_DIR / 'year' / f'{year}.html').write_text(
-        page(f"Top Names of {year} — Rankings & Counts", body,
+        page(S("year_title", year=year), body,
              description=desc, canonical=canonical, extra_head=extra_head),
         encoding='utf-8')
 
@@ -1021,34 +1452,51 @@ def generate_comparison_page(name1, name2):
 def generate_similar_page(name):
     p = PREFIX
     dom = dominant_sex(name)
-    label = sex_label(dom)
+    label = loc_label(dom)
+    label_cap = loc_label_cap(dom)
     sims = similar_names(name)
     cards = ""
     for n in sims:
         lr = name_meta[n]['latest_rank']
-        rank_txt = f"#{lr:,} in {LATEST_YEAR}" if lr else "rare today"
+        if lr:
+            rank_txt = S("rank_in_year", rank=fmt(lr), year=LATEST_YEAR) if "rank_in_year" in STRINGS[ACTIVE_CC] else (f"n°{fmt(lr)} en {LATEST_YEAR}" if ACTIVE_CC == "FR" else f"#{fmt(lr)} in {LATEST_YEAR}")
+        else:
+            rank_txt = "rare aujourd'hui" if ACTIVE_CC == "FR" else "rare today"
+        total_txt = f"{fmt(name_total[n])} au total" if ACTIVE_CC == "FR" else f"{fmt(name_total[n])} total"
         cards += (
             f'            <li><a href="{p}/name/{slugify(n)}.html"><h3 style="margin:0;">{n}</h3></a>'
-            f'<p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">{name_total[n]:,} total &middot; {rank_txt}</p></li>\n'
+            f'<p style="margin:0.2rem 0; color:#7f8c8d; font-size:0.85rem;">{total_txt} &middot; {rank_txt}</p></li>\n'
         )
     canonical = f"{BASE_URL}{p}/similar/{slugify(name)}.html"
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; <a href="{p}/name/{slugify(name)}.html">{name}</a> &rsaquo; Similar names</div>
-        <h1>Names Similar to {name}</h1>
-        <p>If you like <a href="{p}/name/{slugify(name)}.html"><strong>{name}</strong></a>, here are {len(sims)}
-        {label}' names with a similar sound, length, or popularity era — ranked by how close they are.
-        Data range: {DATA_RANGE}.</p>
+    similar_h1 = f"Prénoms similaires à {name}" if ACTIVE_CC == "FR" else f"Names Similar to {name}"
+    similar_title = (f"Prénoms similaires à {name} — idées de prénoms {label}"
+                     if ACTIVE_CC == "FR"
+                     else f"Names Similar to {name} — {label_cap}' Name Ideas")
+    if ACTIVE_CC == "FR":
+        similar_intro = (f"Si vous aimez <a href=\"{p}/name/{slugify(name)}.html\"><strong>{name}</strong></a>, voici {len(sims)} "
+                         f"prénoms {label} au son, à la longueur ou à l'époque de popularité similaires — classés par proximité. "
+                         f"Période couverte : {DATA_RANGE}.")
+        similar_desc = (f"{len(sims)} prénoms similaires à {name} — prénoms {label} comparables par sonorité, "
+                        f"longueur et popularité. Voir la popularité de chacun.")
+    else:
+        similar_intro = (f"If you like <a href=\"{p}/name/{slugify(name)}.html\"><strong>{name}</strong></a>, here are {len(sims)} "
+                         f"{label}' names with a similar sound, length, or popularity era — ranked by how close they are. "
+                         f"Data range: {DATA_RANGE}.")
+        similar_desc = (f"{len(sims)} names similar to {name} — comparable {label}' names by sound, length and "
+                        f"popularity. See popularity for each.")
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/name/{slugify(name)}.html">{name}</a> &rsaquo; {S("crumb_similar")}</div>
+        <h1>{similar_h1}</h1>
+        <p>{similar_intro}</p>
         <ul class="trending-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:1rem; list-style:none; padding:0;">
 {cards}        </ul>"""
-    desc = (f"{len(sims)} names similar to {name} — comparable {label}' names by sound, length and "
-            f"popularity. See popularity for each.")
     extra_head = breadcrumb_jsonld([
-        ("Home", home_url()),
+        (S("crumb_home"), home_url()),
         (name, f"{BASE_URL}{p}/name/{slugify(name)}.html"),
-        ("Similar names", canonical),
+        (S("crumb_similar"), canonical),
     ]) + hreflang_for_similar(slugify(name))
     (OUT_DIR / 'similar' / f'{slugify(name)}.html').write_text(
-        page(f"Names Similar to {name} — {label.capitalize()}' Name Ideas", body,
-             description=desc, canonical=canonical, extra_head=extra_head),
+        page(similar_title, body,
+             description=similar_desc, canonical=canonical, extra_head=extra_head),
         encoding='utf-8')
 
 
@@ -1068,7 +1516,7 @@ def generate_decade_page(decade):
             link = (f'<a href="{p}/name/{slugify(name)}.html">{name}</a>'
                     if name in HAS_PAGE else name)
             rows += (f'                <tr><td class="rank-column">{i+1}</td>'
-                     f'<td>{link}</td><td class="count-column">{tot:,}</td></tr>\n')
+                     f'<td>{link}</td><td class="count-column">{fmt(tot)}</td></tr>\n')
         top = items[0][0] if items else ''
         return rows, top
 
@@ -1077,35 +1525,34 @@ def generate_decade_page(decade):
     idx = DECADES.index(decade)
     prev_link = f'<a href="{p}/decade/{DECADES[idx-1]}s.html">← {DECADES[idx-1]}s</a>' if idx > 0 else ''
     next_link = f'<a href="{p}/decade/{DECADES[idx+1]}s.html">{DECADES[idx+1]}s →</a>' if idx < len(DECADES) - 1 else ''
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; <a href="{p}/decades.html">Decades</a> &rsaquo; {label}</div>
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/decades.html">{S("crumb_decades")}</a> &rsaquo; {label}</div>
         <nav class="nav">{prev_link} &nbsp; {next_link}</nav>
-        <h1>Most Popular Names of the {label}</h1>
-        <p>The top names across the {label} ({span}), totaled over the whole decade.
-        The decade's #1 names were <strong>{gtop}</strong> for girls and <strong>{btop}</strong> for boys.</p>
+        <h1>{S("decade_h1", label=label)}</h1>
+        <p>{S("decade_intro", label=label, span=span, g=gtop, b=btop)}</p>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
             <div>
-                <h2 style="color:#149E91;">Girls — Top 50</h2>
-                <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
+                <h2 style="color:#149E91;">{S("decade_girls_h2")}</h2>
+                <table><thead><tr><th class="rank-column">{S("table_num")}</th><th>{S("table_name")}</th><th class="count-column">{S("table_babies")}</th></tr></thead>
                 <tbody>
 {grows}                </tbody></table>
             </div>
             <div>
-                <h2 style="color:#FF6B5C;">Boys — Top 50</h2>
-                <table><thead><tr><th class="rank-column">#</th><th>Name</th><th class="count-column">Babies</th></tr></thead>
+                <h2 style="color:#FF6B5C;">{S("decade_boys_h2")}</h2>
+                <table><thead><tr><th class="rank-column">{S("table_num")}</th><th>{S("table_name")}</th><th class="count-column">{S("table_babies")}</th></tr></thead>
                 <tbody>
 {brows}                </tbody></table>
             </div>
         </div>"""
-    desc = (f"Most popular names of the {label} ({span}). Top 50 girls and boys by total "
-            f"births over the decade, from {data_source_label()} data. #1: {gtop} and {btop}.")
+    desc = S("decade_desc", label=label, span=span, source=data_source_label(),
+             g=gtop, b=btop)
     canonical = f"{BASE_URL}{p}/decade/{decade}s.html"
     extra_head = breadcrumb_jsonld([
-        ("Home", home_url()),
-        ("Decades", f"{BASE_URL}{p}/decades.html"),
+        (S("crumb_home"), home_url()),
+        (S("crumb_decades"), f"{BASE_URL}{p}/decades.html"),
         (label, canonical),
     ]) + hreflang_for_decade(decade)
     (OUT_DIR / 'decade' / f'{decade}s.html').write_text(
-        page(f"Most Popular Names of the {label}", body,
+        page(S("decade_title", label=label), body,
              description=desc, canonical=canonical, extra_head=extra_head),
         encoding='utf-8')
 
@@ -1120,19 +1567,17 @@ def generate_decades_hub():
         b = btop[0][0] if btop else '—'
         links += (f'                <tr><td><a href="{p}/decade/{d}s.html"><strong>{d}s</strong></a></td>'
                   f'<td>{g}</td><td>{b}</td></tr>\n')
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; Decades</div>
-        <h1>Names by Decade</h1>
-        <p>Explore the most popular names of each decade from the {DECADES[0]}s to the
-        {DECADES[-1]}s, based on {data_source_label()} data.</p>
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("crumb_decades")}</div>
+        <h1>{S("decades_h1")}</h1>
+        <p>{S("decades_intro", first=DECADES[0], last=DECADES[-1], source=data_source_label())}</p>
         <table>
-            <thead><tr><th>Decade</th><th>#1 Girls' Name</th><th>#1 Boys' Name</th></tr></thead>
+            <thead><tr><th>{S("decades_th_decade")}</th><th>{S("decades_th_g")}</th><th>{S("decades_th_b")}</th></tr></thead>
             <tbody>
 {links}            </tbody>
         </table>"""
-    desc = (f"Most popular names by decade, {DECADES[0]}s–{DECADES[-1]}s. See the top girls' "
-            f"and boys' names of every decade from {data_source_label()} data.")
+    desc = S("decades_desc", first=DECADES[0], last=DECADES[-1], source=data_source_label())
     (OUT_DIR / 'decades.html').write_text(
-        page("Names by Decade — Top Names of Every Era", body,
+        page(S("decades_title"), body,
              description=desc, canonical=f"{BASE_URL}{p}/decades.html",
              extra_head=hreflang_for_hub("decades.html")),
         encoding='utf-8')
@@ -1156,8 +1601,8 @@ def _trend_table(rows_data, sex):
         arrow = "▲" if pct >= 0 else "▼"
         color = "#27ae60" if pct >= 0 else "#c0392b"
         rows += (f'                <tr><td><a href="{p}/name/{slugify(name)}.html">{name}</a></td>'
-                 f'<td class="count-column">{round(older):,}</td>'
-                 f'<td class="count-column">{round(recent):,}</td>'
+                 f'<td class="count-column">{fmt(round(older))}</td>'
+                 f'<td class="count-column">{fmt(round(recent))}</td>'
                  f'<td class="count-column" style="color:{color}; white-space:nowrap;">{arrow}&nbsp;{abs(pct):.0f}%</td></tr>\n')
     return rows
 
@@ -1179,72 +1624,65 @@ def generate_trends_pages():
         rising[sex].sort(key=lambda r: -r[3])
         falling[sex].sort(key=lambda r: r[3])
 
-    head = ('<thead><tr><th>Name</th><th class="count-column">~5 yrs ago</th>'
-            f'<th class="count-column">{LATEST_YEAR}</th><th class="count-column">Change</th></tr></thead>')
+    head = (f'<thead><tr><th>{S("table_name")}</th><th class="count-column">{S("trends_th_older")}</th>'
+            f'<th class="count-column">{LATEST_YEAR}</th><th class="count-column">{S("trends_th_change")}</th></tr></thead>')
 
     def two_col(data, n=30):
         return f"""        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2rem;">
-            <div><h2 style="color:#149E91;">Girls</h2><table>{head}<tbody>
+            <div><h2 style="color:#149E91;">{S("year_girls_h2")}</h2><table>{head}<tbody>
 {_trend_table(data['F'][:n], 'F')}            </tbody></table></div>
-            <div><h2 style="color:#FF6B5C;">Boys</h2><table>{head}<tbody>
+            <div><h2 style="color:#FF6B5C;">{S("year_boys_h2")}</h2><table>{head}<tbody>
 {_trend_table(data['M'][:n], 'M')}            </tbody></table></div>
         </div>"""
 
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; <a href="{p}/trends.html">Trends</a> &rsaquo; Rising</div>
-        <h1>Fastest-Rising Names ({LATEST_YEAR})</h1>
-        <p>The girls' and boys' names growing fastest in popularity — comparing average births around
-        five years ago with the most recent years. Only names with
-        meaningful current usage are included.</p>
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/trends.html">{S("crumb_trends")}</a> &rsaquo; {S("crumb_rising")}</div>
+        <h1>{S("trends_rising_h1", year=LATEST_YEAR)}</h1>
+        <p>{S("trends_rising_intro")}</p>
 {two_col(rising)}"""
     (OUT_DIR / 'trends' / 'rising.html').write_text(
-        page(f"Fastest-Rising Names of {LATEST_YEAR}", body,
-             description=f"The fastest-rising names heading into {LATEST_YEAR}, for girls and "
-                         f"boys, based on {data_source_label()} birth data.",
+        page(S("trends_rising_title", year=LATEST_YEAR), body,
+             description=S("trends_rising_desc", year=LATEST_YEAR, source=data_source_label()),
              canonical=f"{BASE_URL}{p}/trends/rising.html",
-             extra_head=breadcrumb_jsonld([("Home", home_url()),
-                                           ("Trends", f"{BASE_URL}{p}/trends.html"),
-                                           ("Rising", f"{BASE_URL}{p}/trends/rising.html")])
+             extra_head=breadcrumb_jsonld([(S("crumb_home"), home_url()),
+                                           (S("crumb_trends"), f"{BASE_URL}{p}/trends.html"),
+                                           (S("crumb_rising"), f"{BASE_URL}{p}/trends/rising.html")])
                         + hreflang_for_hub("trends/rising.html")),
         encoding='utf-8')
 
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; <a href="{p}/trends.html">Trends</a> &rsaquo; Falling</div>
-        <h1>Fastest-Falling Names ({LATEST_YEAR})</h1>
-        <p>Once-common names declining fastest in popularity — comparing average births around five
-        years ago with the most recent years.</p>
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/trends.html">{S("crumb_trends")}</a> &rsaquo; {S("crumb_falling")}</div>
+        <h1>{S("trends_falling_h1", year=LATEST_YEAR)}</h1>
+        <p>{S("trends_falling_intro")}</p>
 {two_col(falling)}"""
     (OUT_DIR / 'trends' / 'falling.html').write_text(
-        page(f"Fastest-Falling Names of {LATEST_YEAR}", body,
-             description=f"Names declining fastest in popularity heading into {LATEST_YEAR}, "
-                         f"for girls and boys, from {data_source_label()} birth data.",
+        page(S("trends_falling_title", year=LATEST_YEAR), body,
+             description=S("trends_falling_desc", year=LATEST_YEAR, source=data_source_label()),
              canonical=f"{BASE_URL}{p}/trends/falling.html",
-             extra_head=breadcrumb_jsonld([("Home", home_url()),
-                                           ("Trends", f"{BASE_URL}{p}/trends.html"),
-                                           ("Falling", f"{BASE_URL}{p}/trends/falling.html")])
+             extra_head=breadcrumb_jsonld([(S("crumb_home"), home_url()),
+                                           (S("crumb_trends"), f"{BASE_URL}{p}/trends.html"),
+                                           (S("crumb_falling"), f"{BASE_URL}{p}/trends/falling.html")])
                         + hreflang_for_hub("trends/falling.html")),
         encoding='utf-8')
 
 
 def generate_trends_hub():
     p = PREFIX
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; Trends</div>
-        <h1>Baby Name Trends</h1>
-        <p>Which names are heating up and which are fading? These rankings compare recent birth
-        counts with five years earlier ({DATA_RANGE}).</p>
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("crumb_trends")}</div>
+        <h1>{S("trends_h1")}</h1>
+        <p>{S("trends_intro", range=DATA_RANGE)}</p>
         <div class="stats">
             <a class="stat" style="text-decoration:none;" href="{p}/trends/rising.html">
                 <div class="stat-value" style="color:#27ae60;">▲</div>
-                <div class="stat-label"><strong>Fastest-Rising Names</strong><br>Biggest gainers of {LATEST_YEAR}</div></a>
+                <div class="stat-label"><strong>{S("trends_card_rising")}</strong><br>{S("trends_card_rising_sub", year=LATEST_YEAR)}</div></a>
             <a class="stat" style="text-decoration:none;" href="{p}/trends/falling.html">
                 <div class="stat-value" style="color:#c0392b;">▼</div>
-                <div class="stat-label"><strong>Fastest-Falling Names</strong><br>Biggest declines of {LATEST_YEAR}</div></a>
+                <div class="stat-label"><strong>{S("trends_card_falling")}</strong><br>{S("trends_card_falling_sub", year=LATEST_YEAR)}</div></a>
             <a class="stat" style="text-decoration:none;" href="{p}/decades.html">
                 <div class="stat-value" style="color:#149E91;">★</div>
-                <div class="stat-label"><strong>Names by Decade</strong><br>Top names of every era</div></a>
+                <div class="stat-label"><strong>{S("trends_card_decades")}</strong><br>{S("trends_card_decades_sub")}</div></a>
         </div>"""
     (OUT_DIR / 'trends.html').write_text(
-        page("Name Trends — Rising & Falling Names", body,
-             description=f"See which names are rising and falling in popularity heading into "
-                         f"{LATEST_YEAR}, plus top names by decade, from {data_source_label()} data.",
+        page(S("trends_title"), body,
+             description=S("trends_desc", year=LATEST_YEAR, source=data_source_label()),
              canonical=f"{BASE_URL}{p}/trends.html",
              extra_head=hreflang_for_hub("trends.html")),
         encoding='utf-8')
@@ -1255,40 +1693,47 @@ def generate_trends_hub():
 # ---------------------------------------------------------------------------
 def generate_letter_page(sex, letter):
     p = PREFIX
-    label = sex_label(sex)
+    label = loc_label(sex)
+    label_cap = loc_label_cap(sex)
+    url_slug = slug_label(sex)
     names = letter_names[sex].get(letter, [])
     rows = ""
     for i, name in enumerate(names):
         lr = rank_by_year_sex.get((LATEST_YEAR, sex), {}).get(name)
-        lr_disp = f"#{lr:,}" if lr else "–"
+        lr_disp = f"#{fmt(lr)}" if lr else "–"
         rows += (f'                <tr><td class="rank-column">{i+1}</td>'
                  f'<td><a href="{p}/name/{slugify(name)}.html">{name}</a></td>'
-                 f'<td class="count-column">{name_sex_total[(name, sex)]:,}</td>'
+                 f'<td class="count-column">{fmt(name_sex_total[(name, sex)])}</td>'
                  f'<td class="rank-column">{lr_disp}</td></tr>\n')
     other_sex = 'M' if sex == 'F' else 'F'
-    other_label = sex_label(other_sex)
-    cross = (f'<a href="{p}/letter/{other_label}-{letter.lower()}.html">{other_label.capitalize()} names starting with {letter}</a>'
-             if letter in letter_names[other_sex] else '')
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; <a href="{p}/names.html">Names</a> &rsaquo; {label.capitalize()} / {letter}</div>
-        <h1>{label.capitalize()} Names Starting With {letter}</h1>
-        <p>All {len(names)} {label}' names beginning with <strong>{letter}</strong> that have a popularity
-        page, ranked by all-time births ({DATA_RANGE}). {('Looking for ' + cross + '?') if cross else ''}</p>
+    other_label = loc_label(other_sex)
+    other_label_cap = loc_label_cap(other_sex)
+    other_url_slug = slug_label(other_sex)
+    if letter in letter_names[other_sex]:
+        cross_link = (f'<a href="{p}/letter/{other_url_slug}-{letter.lower()}.html">'
+                      f'{S("letter_cross_link", label=other_label, label_cap=other_label_cap, letter=letter)}</a>')
+        cross_q = S("letter_cross_q", link=cross_link)
+    else:
+        cross_q = ''
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/names.html">{S("crumb_names")}</a> &rsaquo; {label_cap} / {letter}</div>
+        <h1>{S("letter_h1", label=label, label_cap=label_cap, letter=letter)}</h1>
+        <p>{S("letter_intro", n=len(names), label=label, letter=letter, range=DATA_RANGE, cross_q=cross_q)}</p>
         <table>
-            <thead><tr><th class="rank-column">#</th><th>Name</th>
-                <th class="count-column">Total babies</th><th class="rank-column">{LATEST_YEAR} rank</th></tr></thead>
+            <thead><tr><th class="rank-column">{S("table_num")}</th><th>{S("table_name")}</th>
+                <th class="count-column">{S("table_total")}</th><th class="rank-column">{S("table_year_rank", year=LATEST_YEAR)}</th></tr></thead>
             <tbody>
 {rows}            </tbody>
         </table>"""
-    desc = (f"{label.capitalize()} names that start with {letter}: {len(names)} options ranked by "
-            f"popularity, with total births and current rank from {data_source_label()} data.")
-    canonical = f"{BASE_URL}{p}/letter/{label}-{letter.lower()}.html"
+    desc = S("letter_desc", label=label, label_cap=label_cap, letter=letter,
+             n=len(names), source=data_source_label())
+    canonical = f"{BASE_URL}{p}/letter/{url_slug}-{letter.lower()}.html"
     extra_head = breadcrumb_jsonld([
-        ("Home", home_url()),
-        ("Names", f"{BASE_URL}{p}/names.html"),
-        (f"{label.capitalize()} {letter}", canonical),
+        (S("crumb_home"), home_url()),
+        (S("crumb_names"), f"{BASE_URL}{p}/names.html"),
+        (f"{label_cap} {letter}", canonical),
     ]) + hreflang_for_letter(sex, letter)
-    (OUT_DIR / 'letter' / f'{label}-{letter.lower()}.html').write_text(
-        page(f"{label.capitalize()} Names Starting With {letter} — Popularity Ranked", body,
+    (OUT_DIR / 'letter' / f'{url_slug}-{letter.lower()}.html').write_text(
+        page(S("letter_title", label=label, label_cap=label_cap, letter=letter), body,
              description=desc, canonical=canonical, extra_head=extra_head),
         encoding='utf-8')
 
@@ -1315,22 +1760,20 @@ def generate_rare_names_page():
             items.append(
                 f'<li id="n-{slugify(n)}" style="break-inside:avoid;">{n} '
                 f'<span style="color:#5B6678; font-size:0.85em;">'
-                f'({name_total[n]:,} · mostly {sex_label(dom)})</span></li>')
+                f'{S("rare_mostly", total=fmt(name_total[n]), label=loc_label(dom))}</span></li>')
         sections.append(
             f'<details id="letter-{l}" style="margin:1rem 0; background:#fff; '
             f'border:1px solid #EEF2F4; border-radius:8px; padding:1rem 1.25rem;">'
             f'<summary style="cursor:pointer; font-family:\'Poppins\',sans-serif; '
             f'font-weight:600; color:#1B2440;">{l} '
-            f'<span style="color:#5B6678; font-weight:400;">({len(by_letter[l]):,} names)</span>'
+            f'<span style="color:#5B6678; font-weight:400;">{S("rare_letter_count", n=fmt(len(by_letter[l])))}</span>'
             f'</summary>'
             f'<ul style="columns:3; column-gap:1.5rem; list-style:none; padding:0; margin:1rem 0 0; font-size:0.92rem;">'
             + ''.join(items) + '</ul></details>')
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; <a href="{p}/names.html">Browse A–Z</a> &rsaquo; Rare names</div>
-        <h1>Rare Names — Full A–Z Index</h1>
-        <p>These {len(rare):,} names appear in the records ({DATA_RANGE}) but
-        have fewer than {PAGE_MIN_TOTAL:,} lifetime births, so they don't yet have their own
-        dedicated trend page. They're listed here A–Z with lifetime totals.</p>
-        <p style="color:#5B6678; font-size:0.9rem;">Tip: use <kbd>Ctrl</kbd>+<kbd>F</kbd> (or <kbd>⌘</kbd>+<kbd>F</kbd>) to search this page.</p>
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/names.html">{S("crumb_browse")}</a> &rsaquo; {S("crumb_rare")}</div>
+        <h1>{S("rare_h1")}</h1>
+        <p>{S("rare_intro", n=fmt(len(rare)), range=DATA_RANGE, min=fmt(PAGE_MIN_TOTAL))}</p>
+        <p style="color:#5B6678; font-size:0.9rem;">{S("rare_tip")}</p>
         {jump}
 {''.join(sections)}
         <script>
@@ -1351,10 +1794,9 @@ def generate_rare_names_page():
             }}, 50);
         }})();
         </script>"""
-    desc = (f"Index of {len(rare):,} rare names ({DATA_RANGE}) "
-            f"with fewer than {PAGE_MIN_TOTAL} lifetime births, listed A–Z.")
+    desc = S("rare_desc", n=fmt(len(rare)), range=DATA_RANGE, min=fmt(PAGE_MIN_TOTAL))
     (OUT_DIR / 'rare-names.html').write_text(
-        page("Rare Names — Full A–Z Index", body,
+        page(S("rare_title"), body,
              description=desc, canonical=f"{BASE_URL}{p}/rare-names.html",
              extra_head=hreflang_for_hub("rare-names.html")),
         encoding='utf-8')
