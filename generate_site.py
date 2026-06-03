@@ -1627,6 +1627,10 @@ BASE_CSS = """
         .sitenav .brand { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 700; color: #fff; margin-right: auto; display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.05rem; }
         .sitenav .brand svg { display: block; }
         .sitenav .brand .wm-teal { color: #149E91; }
+        .sitenav .brand-cc { color: #c8cfdb; font-weight: 500; font-size: 0.95rem; margin-left: 0.15rem; display: inline-flex; align-items: center; gap: 0.3rem; }
+        .sitenav .brand-cc-dash { color: #4a5269; }
+        .sitenav .brand-cc .flag { font-size: 1.05rem; line-height: 1; }
+        @media (max-width: 560px) { .sitenav .brand-cc { display: none; } }
         .ccswitch { margin-left: auto; font-size: 0.95rem; color: #8a93a3; display: inline-flex; gap: 0.45rem; align-items: center; }
         .ccswitch a { color: #c8cfdb; text-decoration: none; }
         .ccswitch a:hover { color: #fff; }
@@ -1759,7 +1763,7 @@ def site_nav_html() -> str:
     p = PREFIX
     return f"""
     <div class="sitenav"><div class="sitenav-inner">
-        <a class="brand" href="{home_path()}"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span></a>
+        <a class="brand" href="{home_path()}"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span><span class="brand-cc"><span class="brand-cc-dash">—</span> {COUNTRY_NAMES_IN_UI[ACTIVE_CC][ACTIVE_CC]} <span class="flag" aria-hidden="true">{FLAG[ACTIVE_CC]}</span></span></a>
         <a href="{home_path()}">{S("nav_home")}</a>
         <a href="{p}/names.html">{S("nav_browse")}</a>
         <a href="{p}/trends.html">{S("nav_trends")}</a>
