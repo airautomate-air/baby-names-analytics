@@ -332,6 +332,145 @@ def label_to_slug(label: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Wikipedia article + first-paragraph extracts (lightweight name meanings)
+# ---------------------------------------------------------------------------
+WP_ARTICLE_QUERY = """
+SELECT ?item ?en_url ?fr_url WHERE {
+  VALUES ?item { %(values)s }
+  OPTIONAL { ?en_url schema:about ?item; schema:isPartOf <https://en.wikipedia.org/>. }
+  OPTIONAL { ?fr_url schema:about ?item; schema:isPartOf <https://fr.wikipedia.org/>. }
+}
+"""
+
+
+def fetch_wp_articles(qids: list[str], cache_path: Path) -> dict:
+    """Resolve each name Q-ID to its en + fr Wikipedia article title."""
+    cache = load_cache(cache_path)
+    todo = [q for q in qids if q not in cache]
+    if not todo:
+        print(f'  wp articles: 0 to fetch ({len(cache)} cached)')
+        return cache
+    print(f'  wp articles: {len(todo)} Q-IDs to resolve ({len(cache)} cached)')
+    BATCH = 80
+    for i in range(0, len(todo), BATCH):
+        batch = todo[i:i + BATCH]
+        values = ' '.join(f'wd:{q}' for q in batch)
+        try:
+            res = sparql(WP_ARTICLE_QUERY % {'values': values})
+        except Exception as e:
+            print(f'  wp-art batch {i}: skip ({e})', file=sys.stderr)
+            continue
+        for q in batch:
+            cache[q] = {'en': None, 'fr': None}
+        for b in res.get('results', {}).get('bindings', []):
+            qid = b['item']['value'].rsplit('/', 1)[-1]
+            if qid not in cache:
+                continue
+            for lang in ('en', 'fr'):
+                u = b.get(f'{lang}_url', {}).get('value', '')
+                if u and not cache[qid].get(lang):
+                    title = urllib.parse.unquote(u.rsplit('/', 1)[-1]).replace('_', ' ')
+                    cache[qid][lang] = title
+        if (i // BATCH) % 5 == 4:
+            save_cache(cache_path, cache)
+            print(f'    saved at {i + BATCH}/{len(todo)}')
+        time.sleep(0.4)
+    save_cache(cache_path, cache)
+    return cache
+
+
+def fetch_wp_extracts(host: str, titles: list[str], cache_path: Path) -> dict:
+    """MediaWiki API for first-paragraph plain-text extracts.
+    Up to 20 titles per call (API caps extracts at 20)."""
+    cache = load_cache(cache_path)
+    todo = sorted({t for t in titles if t and t not in cache})
+    if not todo:
+        print(f'  {host} extracts: 0 to fetch ({len(cache)} cached)')
+        return cache
+    print(f'  {host} extracts: {len(todo)} titles to fetch ({len(cache)} cached)')
+    BATCH = 20
+    for i in range(0, len(todo), BATCH):
+        batch = todo[i:i + BATCH]
+        params = urllib.parse.urlencode({
+            'action': 'query', 'prop': 'extracts', 'exintro': 1,
+            'explaintext': 1, 'redirects': 1, 'format': 'json',
+            'titles': '|'.join(batch),
+        })
+        url = f'https://{host}/w/api.php?{params}'
+        req = urllib.request.Request(url, headers={'User-Agent': USER_AGENT,
+                                                   'Accept-Encoding': 'gzip'})
+        try:
+            with urllib.request.urlopen(req, timeout=60) as resp:
+                raw = resp.read()
+                if resp.headers.get('Content-Encoding') == 'gzip':
+                    raw = gzip.decompress(raw)
+                data = json.loads(raw)
+        except Exception as e:
+            print(f'  {host} batch {i}: skip ({e})', file=sys.stderr)
+            continue
+        # Map MediaWiki's returned title back to our requested title (redirects
+        # resolved). Use the 'normalized' + 'redirects' arrays to track.
+        norm_map = {n['from']: n['to'] for n in
+                    data.get('query', {}).get('normalized', [])}
+        redir_map = {r['from']: r['to'] for r in
+                     data.get('query', {}).get('redirects', [])}
+        pages = data.get('query', {}).get('pages', {})
+        # First collect by final title
+        by_title = {p.get('title'): p.get('extract', '') for p in pages.values()}
+        for t in batch:
+            final = redir_map.get(norm_map.get(t, t), norm_map.get(t, t))
+            cache[t] = by_title.get(final, '')
+        if (i // BATCH) % 10 == 9:
+            save_cache(cache_path, cache)
+            print(f'    saved at {i + BATCH}/{len(todo)}')
+        time.sleep(0.3)
+    save_cache(cache_path, cache)
+    return cache
+
+
+_PAREN_RE = re.compile(r'\s*\([^()]*\)')
+_PRON_RE = re.compile(r'(?:pronounced|prononcé|/[^/]+/)[^.]*\.\s*', re.IGNORECASE)
+
+
+def first_sentences(text: str, max_chars: int = 280) -> str:
+    """Trim a Wikipedia extract down to its first 1-2 sentences.
+    Strips IPA/pronunciation parentheticals which read poorly out of context."""
+    if not text:
+        return ''
+    # Drop nested parentheticals (often pronunciation/IPA)
+    cleaned = text
+    for _ in range(3):
+        new = _PAREN_RE.sub('', cleaned)
+        if new == cleaned:
+            break
+        cleaned = new
+    cleaned = _PRON_RE.sub('', cleaned)
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+    # Take whole sentences up to max_chars
+    out = ''
+    for sent in re.split(r'(?<=[.!?])\s+', cleaned):
+        if not sent:
+            continue
+        if out and len(out) + 1 + len(sent) > max_chars:
+            break
+        out = (out + ' ' + sent).strip() if out else sent
+    return out
+
+
+def looks_like_disambiguation(text: str) -> bool:
+    """Disambiguation pages start with 'X may refer to:' (en) or 'X est un
+    prénom' followed by very short list-y content."""
+    if not text:
+        return True
+    head = text[:200].lower()
+    if 'may refer to' in head or 'peut faire référence' in head:
+        return True
+    if len(text.strip()) < 40:
+        return True
+    return False
+
+
+# ---------------------------------------------------------------------------
 # Merge into final enrichment file
 # ---------------------------------------------------------------------------
 def canonicalise_origin(qid: str, lang_labels: dict) -> str | None:
@@ -350,7 +489,9 @@ def canonicalise_origin(qid: str, lang_labels: dict) -> str | None:
     return slug
 
 
-def write_enrichment(origins: dict, famous: dict, lang_labels: dict, out_path: Path) -> None:
+def write_enrichment(origins: dict, famous: dict, lang_labels: dict,
+                     wp_articles: dict, wp_en: dict, wp_fr: dict,
+                     out_path: Path) -> None:
     enriched: dict[str, dict] = {}
     for name, rec in origins.items():
         slug = slugify(name)
@@ -384,11 +525,30 @@ def write_enrichment(origins: dict, famous: dict, lang_labels: dict, out_path: P
             cand = famous.get(qid)
             if cand and (not bearers or len(cand) > len(bearers)):
                 bearers = cand
+        # Meanings: pick the first name Q-ID with a usable Wikipedia extract.
+        meaning_en = ''
+        meaning_fr = ''
+        for qid in rec.get('qids', []):
+            arts = wp_articles.get(qid) or {}
+            if not meaning_en and arts.get('en'):
+                raw = wp_en.get(arts['en'], '')
+                if not looks_like_disambiguation(raw):
+                    meaning_en = first_sentences(raw)
+            if not meaning_fr and arts.get('fr'):
+                raw = wp_fr.get(arts['fr'], '')
+                if not looks_like_disambiguation(raw):
+                    meaning_fr = first_sentences(raw)
+            if meaning_en and meaning_fr:
+                break
         entry = {}
         if origin_slug:
             entry['origin'] = origin_slug
         if bearers:
             entry['famous'] = bearers
+        if meaning_en:
+            entry['meaning_en'] = meaning_en
+        if meaning_fr:
+            entry['meaning_fr'] = meaning_fr
         if entry:
             enriched[slug] = entry
     with out_path.open('w') as f:
@@ -401,6 +561,7 @@ def main() -> None:
     ap.add_argument('--limit', type=int, help='Process only the first N names')
     ap.add_argument('--names', help='Comma-separated list of names to process')
     ap.add_argument('--skip-famous', action='store_true')
+    ap.add_argument('--skip-meanings', action='store_true')
     args = ap.parse_args()
 
     if args.names:
@@ -418,21 +579,37 @@ def main() -> None:
     all_origin_qids = sorted({q for rec in origins.values() for q in rec.get('origin_qids', [])})
     lang_labels = fetch_language_labels(all_origin_qids, CACHE / 'wikidata_lang_labels.json')
 
+    qids: list[str] = []
+    seen = set()
+    for rec in origins.values():
+        for q in rec.get('qids', []):
+            if q not in seen:
+                seen.add(q)
+                qids.append(q)
+    print(f'Discovered {len(qids):,} given-name Q-IDs')
+
     if not args.skip_famous:
-        qids: list[str] = []
-        seen = set()
-        for rec in origins.values():
-            for q in rec.get('qids', []):
-                if q not in seen:
-                    seen.add(q)
-                    qids.append(q)
-        print(f'Discovered {len(qids):,} given-name Q-IDs')
         famous_cache = CACHE / 'wikidata_famous.json'
         famous = fetch_famous(qids, famous_cache)
     else:
         famous = load_cache(CACHE / 'wikidata_famous.json')
 
-    write_enrichment(origins, famous, lang_labels, NORMALIZED / 'name_enrichment.json')
+    if not args.skip_meanings:
+        wp_articles = fetch_wp_articles(qids, CACHE / 'wikipedia_articles.json')
+        en_titles = sorted({a['en'] for a in wp_articles.values() if a.get('en')})
+        fr_titles = sorted({a['fr'] for a in wp_articles.values() if a.get('fr')})
+        wp_en = fetch_wp_extracts('en.wikipedia.org', en_titles,
+                                  CACHE / 'wikipedia_extracts_en.json')
+        wp_fr = fetch_wp_extracts('fr.wikipedia.org', fr_titles,
+                                  CACHE / 'wikipedia_extracts_fr.json')
+    else:
+        wp_articles = load_cache(CACHE / 'wikipedia_articles.json')
+        wp_en = load_cache(CACHE / 'wikipedia_extracts_en.json')
+        wp_fr = load_cache(CACHE / 'wikipedia_extracts_fr.json')
+
+    write_enrichment(origins, famous, lang_labels,
+                     wp_articles, wp_en, wp_fr,
+                     NORMALIZED / 'name_enrichment.json')
     print('Done.')
 
 

@@ -901,6 +901,8 @@ STRINGS_EN: dict[str, str] = {
     "origin_page_boys_h2": "{label} boys' names",
     "origin_back_to_hub": "← All origins",
     "name_origin_badge": "Origin: {label}",
+    "name_meaning_h2": "Meaning",
+    "name_meaning_source": "From Wikipedia",
     "name_famous_h2": "Famous people named {name}",
     "name_famous_occ_sep": " · ",
     "name_famous_born": "b. {year}",
@@ -1270,6 +1272,8 @@ STRINGS_FR: dict[str, str] = {
     "origin_page_boys_h2": "Prénoms garçons d'origine {label}",
     "origin_back_to_hub": "← Toutes les origines",
     "name_origin_badge": "Origine : {label}",
+    "name_meaning_h2": "Signification",
+    "name_meaning_source": "D'après Wikipédia",
     "name_famous_h2": "Personnalités prénommées {name}",
     "name_famous_occ_sep": " · ",
     "name_famous_born": "né en {year}",
@@ -3294,6 +3298,10 @@ BASE_CSS = """
         .origin-card:hover { border-color: #149E91; transform: translateY(-1px); }
         .origin-card-label { font-weight: 600; color: #1B2440; font-size: 1rem; }
         .origin-card-count { color: #5B6678; font-size: 0.82rem; }
+        .meaning-box { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.85rem 1.1rem 0.6rem; margin: 1rem 0 1.5rem; }
+        .meaning-box h2 { margin: 0 0 0.4rem; font-size: 1rem; font-family: 'Inter', sans-serif; font-weight: 600; color: #1B2440; }
+        .meaning-box p { margin: 0; color: #1B2440; font-size: 0.95rem; line-height: 1.5; }
+        .meaning-box .meaning-source { color: #8a93a3; font-size: 0.78rem; margin-top: 0.4rem; }
         .famous-list { list-style: none; padding: 0; margin: 1rem 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
         @media (max-width: 600px) { .famous-list { grid-template-columns: 1fr; } }
         .famous-item { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.65rem 0.9rem; display: flex; flex-direction: column; gap: 0.2rem; }
@@ -3776,6 +3784,18 @@ def generate_name_page(name):
             f'{S("name_origin_badge", label=origin_lbl)}</a>'
         )
     famous = enrich.get('famous', [])
+    meaning_key = 'meaning_fr' if ACTIVE_CC == 'FR' else 'meaning_en'
+    meaning_text = enrich.get(meaning_key) or enrich.get('meaning_en') or ''
+    meaning_section_html = ''
+    if meaning_text:
+        safe = (meaning_text.replace('&', '&amp;')
+                            .replace('<', '&lt;')
+                            .replace('>', '&gt;'))
+        meaning_section_html = (
+            f'<div class="meaning-box"><h2>{S("name_meaning_h2")}</h2>'
+            f'<p>{safe}</p>'
+            f'<p class="meaning-source">{S("name_meaning_source")}</p></div>'
+        )
     # Fiction appearances — "Also a character in:" block (Phase 6h)
     fiction_section_html = ''
     appearances = FICTION_BY_NAME.get(slugify(name), [])
@@ -3820,6 +3840,8 @@ def generate_name_page(name):
         <h1>{name}{fav_btn}</h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">{S("name_primarily", singular=loc_singular(dom), of_singular=singular_of)} &middot; {gender_text}</p>{variants_line}
         {origin_badge_html}
+
+        {meaning_section_html}
 
         <div class="insight">{insight}</div>
 
