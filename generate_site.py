@@ -125,6 +125,30 @@ def load_enrichment() -> None:
     print(f'  enrichment: {len(ENRICHMENT):,} names have origin or famous data')
 
 
+# Fiction data (Phase 6h). Shared across countries — each country's
+# /fiction/<slug>.html links to its own /name/<slug>.html when the name exists.
+FICTION: dict = {"franchises": []}
+# Reverse index: name slug -> list of franchise dicts that include that name
+FICTION_BY_NAME: dict[str, list[dict]] = {}
+
+
+def load_fiction() -> None:
+    global FICTION, FICTION_BY_NAME
+    p = Path('data/fiction.json')
+    if not p.exists():
+        return
+    with p.open() as f:
+        FICTION = json.load(f)
+    for fr in FICTION.get('franchises', []):
+        for entry in fr.get('names', []):
+            slug = slugify(entry['name'])
+            FICTION_BY_NAME.setdefault(slug, []).append({
+                'slug': fr['slug'], 'title': fr['title'], 'role': entry.get('role', '')
+            })
+    print(f'  fiction: {len(FICTION.get("franchises", []))} franchises, '
+          f'{sum(len(f.get("names", [])) for f in FICTION.get("franchises", []))} characters')
+
+
 def build_country(cc: str) -> None:
     """Load data/normalized/<cc>.csv and populate every *_by_country dict for cc."""
     csv_path = DATA_DIR / f'{cc.lower()}.csv'
@@ -858,6 +882,29 @@ STRINGS_EN: dict[str, str] = {
     "name_famous_h2": "Famous people named {name}",
     "name_famous_occ_sep": " · ",
     "name_famous_born": "b. {year}",
+
+    # Fiction (curated franchises)
+    "nav_fiction": "Fictional names",
+    "fiction_hub_title": "Names from books, films and TV — fictional baby names",
+    "fiction_hub_h1": "Fictional names",
+    "fiction_hub_intro": ("Curated character rosters from {n} franchises — Harry "
+                          "Potter, Star Wars, Bridgerton, Jane Austen and more. "
+                          "When a fictional name matches a real-world name we have "
+                          "data for, we link straight to its popularity page."),
+    "fiction_hub_desc": ("Baby names from books, films and TV. Curated rosters "
+                         "from Harry Potter, Game of Thrones, Star Wars, "
+                         "Bridgerton and more."),
+    "fiction_franchise_title": "{title} character names",
+    "fiction_franchise_intro": ("{n} character names from {title}. Names linked "
+                                "in teal have their own popularity page with "
+                                "yearly birth counts."),
+    "fiction_franchise_desc": ("Baby names from {title}. Curated character roster "
+                               "with links to real-world popularity data."),
+    "fiction_back_to_hub": "← All franchises",
+    "fiction_card_count": "{n} characters",
+    "fiction_year": "since {year}",
+    "name_fiction_h2": "Also a character in",
+    "name_fiction_in": "In <a href=\"{url}\">{title}</a>: {role}",
 }
 
 STRINGS_FR: dict[str, str] = {
@@ -1181,6 +1228,29 @@ STRINGS_FR: dict[str, str] = {
     "name_famous_h2": "Personnalités prénommées {name}",
     "name_famous_occ_sep": " · ",
     "name_famous_born": "né en {year}",
+
+    # Fiction
+    "nav_fiction": "Prénoms de fiction",
+    "fiction_hub_title": "Prénoms tirés de livres, films et séries",
+    "fiction_hub_h1": "Prénoms de fiction",
+    "fiction_hub_intro": ("Sélection de personnages de {n} franchises — Harry "
+                          "Potter, Star Wars, Bridgerton, Jane Austen et plus. "
+                          "Quand un prénom fictif correspond à un prénom réel "
+                          "dans nos données, nous lions vers sa page de popularité."),
+    "fiction_hub_desc": ("Prénoms tirés de livres, films et séries. Sélection "
+                         "issue de Harry Potter, Game of Thrones, Star Wars, "
+                         "Bridgerton et plus."),
+    "fiction_franchise_title": "Personnages de {title}",
+    "fiction_franchise_intro": ("{n} personnages de {title}. Les prénoms en teal "
+                                "ont leur propre page de popularité avec leurs "
+                                "courbes de naissances."),
+    "fiction_franchise_desc": ("Prénoms tirés de {title}. Personnages "
+                               "sélectionnés avec liens vers les données réelles."),
+    "fiction_back_to_hub": "← Toutes les œuvres",
+    "fiction_card_count": "{n} personnages",
+    "fiction_year": "depuis {year}",
+    "name_fiction_h2": "Aussi un personnage de",
+    "name_fiction_in": "Dans <a href=\"{url}\">{title}</a> : {role}",
 }
 
 STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN, "AU": STRINGS_EN}
@@ -2746,6 +2816,17 @@ BASE_CSS = """
         .famous-name a { color: #1B2440; text-decoration: none; font-weight: 600; }
         .famous-name a:hover { color: #149E91; text-decoration: underline; }
         .famous-sub { color: #5B6678; font-size: 0.82rem; }
+        .fiction-list { list-style: none; padding: 0; margin: 1.5rem 0 2rem; display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+        .fiction-row { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.7rem 1rem; display: flex; gap: 0.85rem; align-items: baseline; }
+        .fiction-name { font-weight: 600; min-width: 110px; flex-shrink: 0; }
+        .fiction-name a { color: #149E91; text-decoration: none; }
+        .fiction-name a:hover { text-decoration: underline; }
+        .fiction-name .name-unlinked { color: #1B2440; }
+        .fiction-role { color: #5B6678; font-size: 0.9rem; }
+        .fiction-appears { list-style: disc; padding-left: 1.25rem; margin: 1rem 0 2rem; color: #1B2440; }
+        .fiction-appears li { margin: 0.35rem 0; }
+        .fiction-appears a { color: #149E91; text-decoration: none; font-weight: 500; }
+        .fiction-appears a:hover { text-decoration: underline; }
         .pk-tabs { display: flex; gap: 0.4rem; margin: 1.5rem 0 1.25rem; flex-wrap: wrap; }
         .pk-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.5rem 1.1rem; border-radius: 22px; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
         .pk-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
@@ -2837,6 +2918,7 @@ def site_nav_html() -> str:
         <a href="{p}/picker.html">{S("nav_picker")}</a>
         <a href="{p}/sibling.html">{S("nav_sibling")}</a>
         <a href="{p}/origins.html">{S("nav_origins")}</a>
+        <a href="{p}/fiction.html">{S("nav_fiction")}</a>
         <a href="{p}/favorites.html">{S("nav_favorites")}<span class="fav-nav-count"></span></a>
         {country_switcher_html()}
     </div></div>"""
@@ -3179,6 +3261,21 @@ def generate_name_page(name):
             f'{S("name_origin_badge", label=origin_lbl)}</a>'
         )
     famous = enrich.get('famous', [])
+    # Fiction appearances — "Also a character in:" block (Phase 6h)
+    fiction_section_html = ''
+    appearances = FICTION_BY_NAME.get(slugify(name), [])
+    if appearances:
+        items = []
+        for app in appearances:
+            url = f"{p}/fiction/{app['slug']}.html"
+            items.append('<li>' + S("name_fiction_in",
+                                    url=url, title=app['title'],
+                                    role=app['role']) + '</li>')
+        fiction_section_html = (
+            f'<h2>{S("name_fiction_h2")}</h2>'
+            f'<ul class="fiction-appears">{"".join(items)}</ul>'
+        )
+
     famous_section_html = ''
     if famous:
         items = []
@@ -3220,6 +3317,7 @@ def generate_name_page(name):
         <h2>{S("name_popularity_h2", label_cap=loc_label_cap(dom))}</h2>
         <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
 
+        {fiction_section_html}
         {famous_section_html}
 
 {rel}
@@ -4149,6 +4247,67 @@ def generate_origin_page(origin: str, names: list[str]) -> None:
 
 
 # ---------------------------------------------------------------------------
+# Fiction hub + per-franchise pages (Phase 6h). Fiction data is global; each
+# country's pages link to the country's own /name/<slug>.html when available.
+# ---------------------------------------------------------------------------
+def generate_fiction_hub_page() -> None:
+    if not FICTION.get('franchises'):
+        return
+    p = PREFIX
+    items = []
+    for fr in FICTION['franchises']:
+        items.append(
+            f'<a class="origin-card" href="{p}/fiction/{fr["slug"]}.html">'
+            f'<span class="origin-card-label">{fr["title"]}</span>'
+            f'<span class="origin-card-count">{S("fiction_card_count", n=len(fr.get("names", [])))}'
+            f' &middot; {fr.get("kind", "")}</span>'
+            f'</a>'
+        )
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_fiction")}</div>
+        <h1>{S("fiction_hub_h1")}</h1>
+        <p>{S("fiction_hub_intro", n=len(FICTION["franchises"]))}</p>
+        <div class="origin-grid">
+{''.join(items)}
+        </div>"""
+    (OUT_DIR / 'fiction.html').write_text(
+        page(S("fiction_hub_title"), body,
+             description=S("fiction_hub_desc"),
+             canonical=f"{BASE_URL}{p}/fiction.html",
+             extra_head=hreflang_for_hub("fiction.html")),
+        encoding='utf-8')
+
+
+def generate_fiction_franchise_page(fr: dict) -> None:
+    p = PREFIX
+    items = []
+    for entry in fr.get('names', []):
+        name = entry['name']
+        slug = slugify(name)
+        role = entry.get('role', '')
+        if slug in SLUGS_WITH_PAGE_BY_CC[ACTIVE_CC]:
+            name_html = f'<a href="{p}/name/{slug}.html">{name}</a>'
+        else:
+            name_html = f'<span class="name-unlinked">{name}</span>'
+        items.append(
+            f'<li class="fiction-row"><span class="fiction-name">{name_html}</span>'
+            f'<span class="fiction-role">{role}</span></li>'
+        )
+    title = fr['title']
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/fiction.html">{S("nav_fiction")}</a> &rsaquo; {title}</div>
+        <h1>{S("fiction_franchise_title", title=title)}</h1>
+        <p>{fr.get("blurb", "")}</p>
+        <p style="color:#5B6678; font-size:0.9rem;">{S("fiction_franchise_intro", n=len(fr.get("names", [])), title=title)}</p>
+        <ul class="fiction-list">{''.join(items)}</ul>
+        <p style="margin-top:2rem;"><a href="{p}/fiction.html">{S("fiction_back_to_hub")}</a></p>"""
+    (OUT_DIR / 'fiction' / f'{fr["slug"]}.html').write_text(
+        page(S("fiction_franchise_title", title=title), body,
+             description=S("fiction_franchise_desc", title=title),
+             canonical=f"{BASE_URL}{p}/fiction/{fr['slug']}.html",
+             extra_head=hreflang_for_hub(f"fiction/{fr['slug']}.html")),
+        encoding='utf-8')
+
+
+# ---------------------------------------------------------------------------
 # Single 404 (country-neutral), single sitemap + robots (root)
 # ---------------------------------------------------------------------------
 def generate_favorites_page():
@@ -4209,6 +4368,10 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
         urls.append(f"{BASE_URL}{p}/origins.html")
         urls += [f"{BASE_URL}{p}/origin/{o}.html"
                  for o in ORIGIN_TO_NAMES_BY_CC[cc]]
+    if FICTION.get('franchises'):
+        urls.append(f"{BASE_URL}{p}/fiction.html")
+        urls += [f"{BASE_URL}{p}/fiction/{fr['slug']}.html"
+                 for fr in FICTION['franchises']]
     urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/year/{y}.html" for y in years_by_country[cc]]
@@ -4319,12 +4482,20 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
             generate_origin_page(origin, names)
         ORIGIN_TO_NAMES_BY_CC[ACTIVE_CC] = by_origin
         print(f"  origins: {len(by_origin)} pages")
+    # Fiction (Phase 6h)
+    if FICTION.get('franchises'):
+        (OUT_DIR / 'fiction').mkdir(parents=True, exist_ok=True)
+        generate_fiction_hub_page()
+        for fr in FICTION['franchises']:
+            generate_fiction_franchise_page(fr)
+        print(f"  fiction: {len(FICTION['franchises'])} pages")
     generate_name_index_json()
     generate_name_meta_json()
 
 
 def main():
     load_enrichment()
+    load_fiction()
     for cc in COUNTRIES:
         build_country(cc)
     build_presence_indices()
