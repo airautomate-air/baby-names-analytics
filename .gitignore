@@ -3,6 +3,7 @@ names.zip
 *.tar.gz
 __pycache__/
 .vercel
+.claude/
 
 # Phase 1 fetcher raw downloads (reproducible from fetchers/).
 # Ignore contents but keep the QLD/SA manual-drop READMEs tracked.
