@@ -159,6 +159,9 @@
         .ww-card .ww-bar { display: block; height: 4px; background: #EEF2F4; border-radius: 2px; overflow: hidden; margin-top: 0.3rem; }
         .ww-card .ww-bar-fill { display: block; height: 100%; background: linear-gradient(90deg, #149E91 0%, #FF6B5C 100%); }
         #ww-loading { color: #5B6678; font-size: 0.9rem; padding: 0.5rem 0; }
+        .ww-more-wrap { text-align: center; margin-top: 1.5rem; }
+        #ww-more { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.6rem 1.4rem; border-radius: 24px; cursor: pointer; font-weight: 500; font-size: 0.92rem; }
+        #ww-more:hover { border-color: #149E91; color: #149E91; }
         .pk-tabs { display: flex; gap: 0.4rem; margin: 1.5rem 0 1.25rem; flex-wrap: wrap; }
         .pk-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.5rem 1.1rem; border-radius: 22px; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
         .pk-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
@@ -803,8 +806,12 @@
                 .then(function(d) { META = d; loadingEl.style.display = 'none'; return META; });
         }
 
-        // Order matches the python emit: [first, last2, syll, dom, peak_dec]
-        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3;
+        // Order matches the python emit: [first, last2, syll, dom, peak_dec, rank]
+        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_RANK = 5;
+        var PAGE_SIZE = 12;
+        var currentResults = [];
+        var scoreRange = [0, 1];
+        var shown = 0;
 
         function fold(s) {
             return (s || '').toLowerCase()
@@ -858,6 +865,18 @@
             // Slight bonus for 2-3 syllable first names — they read best with most surnames
             if (nameSyll === 2 || nameSyll === 3) s += 2;
 
+            // Familiarity nudge: well-known names get a small bonus so the meter
+            // actually shows variance and the top isn't a flat tie of obscure
+            // alphabetical clusters. Capped at +5 so it doesn't overpower phonetics.
+            var rank = m[IDX_RANK];
+            if (rank) {
+                if (rank <= 50) s += 5;
+                else if (rank <= 200) s += 4;
+                else if (rank <= 500) s += 3;
+                else if (rank <= 1000) s += 2;
+                else if (rank <= 3000) s += 1;
+            }
+
             return s;
         }
 
@@ -883,36 +902,54 @@
                     if (slug === lastFold) continue;
                     rows.push([score(slug, m, lastFold, lastFirst, lastLast2, lastSyll), slug, m]);
                 }
-                rows.sort(function(a, b) { return b[0] - a[0] || (a[1] < b[1] ? -1 : 1); });
-                var top = rows.slice(0, 60);
+                rows.sort(function(a, b) {
+                    if (b[0] !== a[0]) return b[0] - a[0];
+                    // Tie-break by current popularity so well-known names surface
+                    // instead of A-name clusters from the alphabetical fall-through.
+                    var ra = a[2][IDX_RANK] || 99999, rb = b[2][IDX_RANK] || 99999;
+                    if (ra !== rb) return ra - rb;
+                    return a[1] < b[1] ? -1 : 1;
+                });
+                currentResults = rows.slice(0, 60);
+                shown = 0;
+                // Normalise the meter to the displayed score range so the bars
+                // actually show variance instead of all sitting at the same pct.
+                if (currentResults.length) {
+                    var lo = currentResults[currentResults.length - 1][0];
+                    var hi = currentResults[0][0];
+                    scoreRange = [lo, Math.max(hi, lo + 1)];
+                }
 
                 headerEl.textContent = L_RESULT_FOR.replace('{surname}',
                     raw.replace(/\b\w/g, function(c) { return c.toUpperCase(); }));
                 while (listEl.firstChild) listEl.removeChild(listEl.firstChild);
-                top.forEach(function(r) {
-                    var sc = r[0], slug = r[1], m = r[2];
-                    var card = document.createElement('a');
-                    card.className = 'ww-card';
-                    card.href = PREFIX + '/name/' + slug + '.html';
-                    var nm = document.createElement('span');
-                    nm.className = 'ww-name';
-                    nm.textContent = display(slug);
-                    var meta2 = document.createElement('span');
-                    meta2.className = 'ww-meta';
-                    meta2.textContent = (m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS) + ' · ' + m[IDX_SYLL] + ' syll';
-                    var bar = document.createElement('span');
-                    bar.className = 'ww-bar';
-                    var fill = document.createElement('span');
-                    fill.className = 'ww-bar-fill';
-                    var pct = Math.max(8, Math.min(100, sc));
-                    fill.style.width = pct + '%';
-                    bar.appendChild(fill);
-                    card.appendChild(nm); card.appendChild(meta2); card.appendChild(bar);
-                    listEl.appendChild(card);
-                });
+                renderMore();
                 resultEl.style.display = '';
             });
         }
+
+        function renderMore() {
+            var next = currentResults.slice(shown, shown + PAGE_SIZE);
+            next.forEach(function(r) {
+                var slug = r[1], m = r[2];
+                var card = document.createElement('a');
+                card.className = 'ww-card';
+                card.href = PREFIX + '/name/' + slug + '.html';
+                var nm = document.createElement('span');
+                nm.className = 'ww-name';
+                nm.textContent = display(slug);
+                var meta2 = document.createElement('span');
+                meta2.className = 'ww-meta';
+                meta2.textContent = (m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS) + ' · ' + m[IDX_SYLL] + ' syll';
+                card.appendChild(nm); card.appendChild(meta2);
+                listEl.appendChild(card);
+            });
+            shown += next.length;
+            var moreBtn = document.getElementById('ww-more');
+            if (moreBtn) moreBtn.style.display = shown < currentResults.length ? '' : 'none';
+        }
+        var moreBtn = document.getElementById('ww-more');
+        if (moreBtn) moreBtn.addEventListener('click', renderMore);
 
         form.addEventListener('submit', function(e) { e.preventDefault(); run(); });
         var debounce = null;
