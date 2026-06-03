@@ -101,11 +101,56 @@ def manual_state_rows(state: str):
     if not folder.exists():
         return
     found = 0
+    seen_year_sex: set[tuple[int, str]] = set()  # SA has duplicate-content files; first wins
     for path in sorted(folder.glob('*.csv')):
         try:
-            with path.open(encoding='utf-8-sig') as f:
+            # SA's 2017 files are cp1252 (non-UTF-8). Sniff by trying to decode
+            # the full bytes; fall back to cp1252 if UTF-8 fails.
+            raw = path.read_bytes()
+            try:
+                text = raw.decode('utf-8-sig')
+            except UnicodeDecodeError:
+                text = raw.decode('cp1252')
+            with io.StringIO(text) as f:
                 reader = csv.DictReader(f)
                 cols = {c.lower(): c for c in (reader.fieldnames or [])}
+
+                # SA top-N format: "Given Name, Amount, Position" (sometimes prefixed
+                # with _id). Year + sex come from the filename, e.g.
+                # malecy2016top.csv → 2016/M, female_cy2020_top100.csv → 2020/F.
+                # Amended re-uploads end in " (1).csv" and sort before the
+                # original (space < dot), so first-wins dedup picks the amended.
+                if 'given name' in cols and ('amount' in cols or 'number' in cols):
+                    base = path.name.lower()
+                    m = re.search(r'cy[_ ]?(\d{4})', base)
+                    if not m:
+                        print(f"  [AU/{state}] skip {path.name}: no year in filename")
+                        continue
+                    year = int(m.group(1))
+                    sex = 'F' if 'female' in base else ('M' if 'male' in base else None)
+                    if not sex:
+                        print(f"  [AU/{state}] skip {path.name}: no sex in filename")
+                        continue
+                    if (year, sex) in seen_year_sex:
+                        print(f"  [AU/{state}] skip dup {path.name} (have {year}/{sex})")
+                        continue
+                    seen_year_sex.add((year, sex))
+                    c_name = cols['given name']
+                    c_count = cols.get('amount') or cols.get('number')
+                    n = 0
+                    for row in reader:
+                        name = (row.get(c_name) or '').strip()
+                        count_s = (row.get(c_count) or '').strip()
+                        try:
+                            count = int(count_s)
+                        except ValueError:
+                            continue
+                        if name and count > 0:
+                            yield (year, sex, name, count)
+                            n += 1
+                    found += n
+                    print(f"  [AU/{state}] {path.name}: {n:,} rows ({year}/{sex})")
+                    continue
 
                 # QLD annual format: "Girl Names, Count of Girl Names, Boy Names,
                 # Count of Boy Names". Year lives in the filename, not the rows.
