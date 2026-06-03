@@ -929,6 +929,25 @@ STRINGS_EN: dict[str, str] = {
 
     # Saint stubs — FR-only feature, EN keys exist only for S() fallback safety
     "nav_saints": "Saint of the day",
+
+    # Initials maker
+    "nav_initials": "Initials maker",
+    "initials_title": "Baby name initials generator — pick names from initials",
+    "initials_h1": "Spell out the initials",
+    "initials_intro": ("Enter the initials you want and we'll roll 20 baby-name "
+                       "combinations matching them — a quirky way to brainstorm "
+                       "monogram-friendly names."),
+    "initials_input": "e.g. A.J.K",
+    "initials_go": "Roll combinations",
+    "initials_again": "Roll again",
+    "initials_filter_sex": "First-name sex",
+    "initials_empty": "Type 2 or 3 initials above to get started.",
+    "initials_no_match": "We have no first names starting with {letter} in our data — try a different letter.",
+    "initials_share": "Copy shareable link",
+    "initials_share_done": "Link copied!",
+    "initials_desc": ("Generate baby-name combinations from chosen initials. "
+                      "First, middle, and last name picks drawn from our "
+                      "ranked name database."),
 }
 
 STRINGS_FR: dict[str, str] = {
@@ -1303,6 +1322,24 @@ STRINGS_FR: dict[str, str] = {
     "saint_page_popularity_link": "Voir la popularité du prénom {name} →",
     "saint_page_desc": "Date(s) de fête, signification et popularité du prénom {name} en France.",
     "saint_back_to_hub": "← Voir tout le calendrier",
+
+    # Initials
+    "nav_initials": "Initiales",
+    "initials_title": "Générateur de prénoms par initiales",
+    "initials_h1": "Composez les initiales",
+    "initials_intro": ("Saisissez les initiales souhaitées et nous générons 20 "
+                       "combinaisons de prénoms correspondantes — un brainstorming "
+                       "ludique pour les monogrammes."),
+    "initials_input": "ex. A.J.K",
+    "initials_go": "Tirer 20 combinaisons",
+    "initials_again": "Re-tirer",
+    "initials_filter_sex": "Sexe du prénom",
+    "initials_empty": "Saisissez 2 ou 3 initiales pour commencer.",
+    "initials_no_match": "Aucun prénom commençant par {letter} dans nos données — essayez une autre lettre.",
+    "initials_share": "Copier le lien à partager",
+    "initials_share_done": "Lien copié !",
+    "initials_desc": ("Générez des combinaisons de prénoms à partir des initiales "
+                      "choisies. Tirées de notre base de prénoms classés par popularité."),
 }
 
 STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN, "AU": STRINGS_EN}
@@ -1420,6 +1457,113 @@ ORIGIN_LABELS_FR: dict[str, str] = {
 }
 ORIGIN_LABELS = {"US": ORIGIN_LABELS_EN, "FR": ORIGIN_LABELS_FR,
                  "GB": ORIGIN_LABELS_EN, "AU": ORIGIN_LABELS_EN}
+
+
+# Common surnames per country, grouped by first letter — used by the
+# initials maker (Phase 6j) to fill in last-name slots. Drawn from public
+# census / electoral roll top-lists. Keep it small (~3-6 per letter) — the
+# tool is meant to be playful, not exhaustive.
+SURNAMES_BY_CC: dict[str, dict[str, list[str]]] = {
+    "US": {
+        "A": ["Adams", "Allen", "Anderson", "Alvarez"],
+        "B": ["Brown", "Baker", "Bell", "Bennett", "Bailey"],
+        "C": ["Clark", "Carter", "Collins", "Campbell", "Cooper", "Cook"],
+        "D": ["Davis", "Diaz", "Davidson", "Dixon", "Duncan"],
+        "E": ["Edwards", "Evans", "Ellis"],
+        "F": ["Foster", "Fisher", "Ferguson", "Fox", "Flores"],
+        "G": ["Garcia", "Green", "Gray", "Griffin", "Gonzalez"],
+        "H": ["Hernandez", "Harris", "Hall", "Hill", "Howard", "Hughes"],
+        "I": ["Ingram", "Irwin"],
+        "J": ["Johnson", "Jones", "Jackson", "James"],
+        "K": ["King", "Kim", "Kelly", "Kennedy"],
+        "L": ["Lopez", "Lee", "Lewis", "Long", "Lane"],
+        "M": ["Martinez", "Miller", "Moore", "Mitchell", "Murphy", "Morris"],
+        "N": ["Nelson", "Nguyen", "Nichols"],
+        "O": ["Owens", "Oliver", "Oconnor"],
+        "P": ["Perez", "Parker", "Patel", "Phillips", "Price"],
+        "Q": ["Quinn", "Quintana"],
+        "R": ["Rodriguez", "Robinson", "Roberts", "Russell", "Reed", "Reyes"],
+        "S": ["Smith", "Sanchez", "Stewart", "Scott", "Sullivan", "Sanders"],
+        "T": ["Taylor", "Thomas", "Thompson", "Turner", "Tucker"],
+        "U": ["Underwood", "Upton"],
+        "V": ["Vasquez", "Vaughn", "Valdez"],
+        "W": ["Williams", "Walker", "Wright", "Wilson", "Ward", "Wood"],
+        "X": ["Xavier", "Xiong"],
+        "Y": ["Young", "Yang"],
+        "Z": ["Zimmerman", "Zhang"],
+    },
+    "FR": {
+        "A": ["Allard", "Arnaud", "Aubry", "Albert"],
+        "B": ["Bernard", "Blanc", "Boyer", "Brun", "Bertrand"],
+        "C": ["Caron", "Chevalier", "Clément", "Colin", "Charpentier"],
+        "D": ["Dubois", "Durand", "Dupont", "David", "Denis"],
+        "E": ["Étienne", "Evrard"],
+        "F": ["Fontaine", "Faure", "Fournier", "François"],
+        "G": ["Garcia", "Gauthier", "Girard", "Guérin", "Gérard"],
+        "H": ["Henry", "Hubert"],
+        "I": ["Imbert"],
+        "J": ["Jacquet", "Joly", "Julien"],
+        "K": ["Klein"],
+        "L": ["Lefebvre", "Leroy", "Laurent", "Lambert", "Legrand", "Lemoine"],
+        "M": ["Martin", "Morel", "Michel", "Marchand", "Mercier", "Moreau"],
+        "N": ["Noël", "Nicolas"],
+        "O": ["Olivier"],
+        "P": ["Petit", "Perrin", "Pierre", "Picard"],
+        "Q": ["Quintin"],
+        "R": ["Roux", "Robert", "Richard", "Rousseau", "Renaud"],
+        "S": ["Simon", "Schmitt", "Sanchez"],
+        "T": ["Thomas", "Thibault"],
+        "U": ["Urvoy"],
+        "V": ["Vincent", "Vidal"],
+        "W": ["Weber"],
+        "Z": ["Zimmer"],
+    },
+    "GB": {
+        "A": ["Allen", "Adams", "Anderson"],
+        "B": ["Brown", "Baker", "Bennett", "Bailey", "Butler"],
+        "C": ["Clark", "Cooper", "Campbell", "Cox", "Carter", "Collins"],
+        "D": ["Davies", "Dixon", "Davis", "Dawson"],
+        "E": ["Edwards", "Evans", "Ellis"],
+        "F": ["Fisher", "Ford", "Fox"],
+        "G": ["Green", "Gray", "Griffiths"],
+        "H": ["Harris", "Hughes", "Hall", "Hill", "Hunt"],
+        "I": ["Ingram"],
+        "J": ["Jones", "Johnson", "Jackson", "James"],
+        "K": ["King", "Knight", "Kelly"],
+        "L": ["Lewis", "Lee", "Lloyd"],
+        "M": ["Murphy", "Miller", "Morris", "Mitchell", "Moore"],
+        "N": ["Nicholson", "Norris"],
+        "O": ["Owen", "Oliver"],
+        "P": ["Patel", "Phillips", "Parker", "Price"],
+        "R": ["Roberts", "Robinson", "Reed", "Russell"],
+        "S": ["Smith", "Stewart", "Stone", "Scott", "Shaw"],
+        "T": ["Taylor", "Thomas", "Thompson", "Turner"],
+        "W": ["Williams", "Wilson", "Walker", "Wright", "Wood"],
+        "Y": ["Young"],
+    },
+    "AU": {
+        "A": ["Anderson", "Adams", "Allen"],
+        "B": ["Brown", "Bailey", "Bennett", "Baker"],
+        "C": ["Campbell", "Clark", "Collins", "Cooper", "Carter"],
+        "D": ["Davis", "Dixon", "Dawson"],
+        "E": ["Edwards", "Evans"],
+        "F": ["Fisher", "Foster", "Fox"],
+        "G": ["Green", "Gray", "Griffin"],
+        "H": ["Harris", "Hughes", "Hall", "Hill", "Harrison"],
+        "J": ["Jones", "Johnson", "Jackson"],
+        "K": ["King", "Kelly", "Kennedy"],
+        "L": ["Lee", "Lewis", "Lloyd"],
+        "M": ["Murphy", "Miller", "Mitchell", "Morris", "McKenzie"],
+        "N": ["Nguyen", "Nichols"],
+        "O": ["Oconnor", "Oliver"],
+        "P": ["Phillips", "Parker", "Price", "Patel"],
+        "R": ["Roberts", "Robinson", "Reed", "Ryan"],
+        "S": ["Smith", "Stewart", "Scott", "Sullivan", "Singh"],
+        "T": ["Taylor", "Thomas", "Thompson", "Turner"],
+        "W": ["Williams", "Wilson", "Walker", "Wright", "Walsh"],
+        "Y": ["Young"],
+    },
+}
 
 
 def origin_label(slug: str) -> str:
@@ -2695,6 +2839,175 @@ SIBLING_SCRIPT = """
     </script>"""
 
 
+INITIALS_SCRIPT = """
+    <script>
+    (function() {
+        var form = document.getElementById('in-form');
+        if (!form) return;
+        var PREFIX = __PREFIX__;
+        var SURNAMES = __SURNAMES__;
+        var L_NO_MATCH = __L_NO_MATCH__;
+        var L_SHARE_DONE = __L_SHARE_DONE__;
+
+        var input = document.getElementById('in-input');
+        var resultEl = document.getElementById('in-result');
+        var emptyEl = document.getElementById('in-empty');
+        var errorEl = document.getElementById('in-error');
+        var sexTabs = document.querySelectorAll('.in-sex-tab');
+        var firstSex = 'all';
+
+        var META = null, BY_LETTER = null;
+        function loadMeta() {
+            if (META) return Promise.resolve();
+            return fetch(PREFIX + '/name-meta.json')
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    META = d;
+                    BY_LETTER = {};
+                    Object.keys(d).forEach(function(s) {
+                        var letter = d[s][0].toUpperCase();
+                        (BY_LETTER[letter] = BY_LETTER[letter] || []).push(s);
+                    });
+                });
+        }
+
+        function display(slug) {
+            return slug.replace(/-/g, ' ').replace(/\\b\\w/g, function(c) { return c.toUpperCase(); });
+        }
+        function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
+        function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+        // Index 5 in name-meta is current rank (0 if unranked). Names with a
+        // current rank read more naturally — fall back to the full pool only
+        // if the ranked pool for this letter is empty.
+        function rankedPool(letter, sexFilter) {
+            var all = BY_LETTER[letter] || [];
+            var filtered = all.filter(function(s) {
+                var m = META[s];
+                if (!m[5]) return false;
+                if (sexFilter && sexFilter !== 'all' && m[3] !== sexFilter) return false;
+                return true;
+            });
+            return filtered.length ? filtered : all;
+        }
+        function pickFirstNameForLetter(letter, sexFilter) {
+            var pool = rankedPool(letter, sexFilter);
+            return pool.length ? pickRandom(pool) : null;
+        }
+        function pickMidNameForLetter(letter) {
+            var pool = rankedPool(letter, 'all');
+            return pool.length ? pickRandom(pool) : null;
+        }
+        function pickSurnameForLetter(letter) {
+            var pool = SURNAMES[letter] || [];
+            return pool.length ? pickRandom(pool) : null;
+        }
+
+        function parseInitials(raw) {
+            return (raw || '').toUpperCase().replace(/[^A-Z]/g, '').split('').slice(0, 4);
+        }
+
+        function run(pushState) {
+            errorEl.style.display = 'none';
+            var letters = parseInitials(input.value);
+            if (letters.length < 2) {
+                emptyEl.style.display = '';
+                resultEl.style.display = 'none';
+                return;
+            }
+            emptyEl.style.display = 'none';
+            loadMeta().then(function() {
+                // Validate first-name letter has matches
+                var firstPool = BY_LETTER[letters[0]] || [];
+                if (firstSex !== 'all') {
+                    firstPool = firstPool.filter(function(s) { return META[s][3] === firstSex; });
+                }
+                if (!firstPool.length) {
+                    errorEl.textContent = L_NO_MATCH.replace('{letter}', letters[0]);
+                    errorEl.style.display = '';
+                    resultEl.style.display = 'none';
+                    return;
+                }
+                clear(resultEl);
+                var seen = {};
+                var tries = 0;
+                while (Object.keys(seen).length < 20 && tries < 120) {
+                    tries++;
+                    var parts = [];
+                    var firstSlug = pickFirstNameForLetter(letters[0], firstSex);
+                    parts.push(display(firstSlug));
+                    var firstHref = PREFIX + '/name/' + firstSlug + '.html';
+                    for (var i = 1; i < letters.length - 1; i++) {
+                        var ms = pickMidNameForLetter(letters[i]);
+                        parts.push(ms ? display(ms) : letters[i] + '.');
+                    }
+                    var lastLetter = letters[letters.length - 1];
+                    var sn = pickSurnameForLetter(lastLetter);
+                    parts.push(sn || (lastLetter + '.'));
+                    var combo = parts.join(' ');
+                    if (seen[combo]) continue;
+                    seen[combo] = true;
+                    var li = document.createElement('li');
+                    li.className = 'in-combo';
+                    var firstSpan = document.createElement('a');
+                    firstSpan.href = firstHref;
+                    firstSpan.textContent = parts[0];
+                    firstSpan.className = 'in-first';
+                    li.appendChild(firstSpan);
+                    li.appendChild(document.createTextNode(' ' + parts.slice(1).join(' ')));
+                    resultEl.appendChild(li);
+                }
+                resultEl.style.display = '';
+
+                if (pushState) {
+                    var qs = 'i=' + letters.join('') + (firstSex !== 'all' ? '&sex=' + firstSex : '');
+                    history.replaceState(null, '', window.location.pathname + '?' + qs);
+                }
+            });
+        }
+
+        form.addEventListener('submit', function(e) { e.preventDefault(); run(true); });
+        document.getElementById('in-again').addEventListener('click', function() { run(true); });
+        document.getElementById('in-share').addEventListener('click', function() {
+            if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
+            var done = document.getElementById('in-share-done');
+            done.style.display = '';
+            setTimeout(function() { done.style.display = 'none'; }, 1800);
+        });
+        sexTabs.forEach(function(t) {
+            t.addEventListener('click', function() {
+                sexTabs.forEach(function(x) { x.classList.remove('is-active'); });
+                t.classList.add('is-active');
+                firstSex = t.getAttribute('data-sex');
+                if (input.value.trim()) run(false);
+            });
+        });
+
+        var qs = new URLSearchParams(window.location.search);
+        if (qs.get('i')) {
+            input.value = qs.get('i');
+            if (qs.get('sex')) {
+                var s = qs.get('sex');
+                var tab = document.querySelector('.in-sex-tab[data-sex=' + s + ']');
+                if (tab) tab.click();
+                firstSex = s;
+            }
+            loadMeta().then(function() { run(false); });
+        }
+    })();
+    </script>"""
+
+
+def initials_script() -> str:
+    if not SURNAMES_BY_CC.get(ACTIVE_CC):
+        return ''
+    return (INITIALS_SCRIPT
+            .replace('__PREFIX__', json.dumps(PREFIX))
+            .replace('__SURNAMES__', json.dumps(SURNAMES_BY_CC[ACTIVE_CC]))
+            .replace('__L_NO_MATCH__', json.dumps(S("initials_no_match", letter='{letter}')))
+            .replace('__L_SHARE_DONE__', json.dumps(S("initials_share_done"))))
+
+
 SAINTS_SCRIPT = """
     <script>
     (function() {
@@ -2963,6 +3276,21 @@ BASE_CSS = """
         .sf-days li a { color: #1B2440; text-decoration: none; }
         .sf-days li a:hover { color: #149E91; }
         .sf-dates { color: #1B2440; font-size: 1.05rem; }
+        .in-form { display: flex; gap: 0.6rem; margin: 1.5rem 0 1rem; flex-wrap: wrap; }
+        .in-form input { flex: 1; min-width: 180px; padding: 0.7rem 0.9rem; font-size: 1.1rem; border: 1px solid #d6dde2; border-radius: 6px; background: #fff; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Poppins', sans-serif; }
+        .in-form button { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 600; cursor: pointer; font-size: 1rem; }
+        .in-form button:hover { background: #117f74; }
+        .in-sex-tabs { display: flex; gap: 0.4rem; margin: 0 0 1rem; }
+        .in-sex-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.4rem 0.95rem; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; }
+        .in-sex-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
+        .in-error { background: #fdecea; border-left: 4px solid #c0392b; padding: 0.7rem 1rem; border-radius: 6px; color: #7a1f12; }
+        .in-list { list-style: none; padding: 0; margin: 1.25rem 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.5rem; }
+        .in-combo { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.7rem 0.95rem; font-size: 1rem; color: #1B2440; font-family: 'Poppins', sans-serif; font-weight: 500; }
+        .in-combo .in-first { color: #149E91; text-decoration: none; font-weight: 600; }
+        .in-combo .in-first:hover { text-decoration: underline; }
+        .in-actions { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-top: 1rem; }
+        .in-actions button { background: #fff; border: 1px solid #d6dde2; color: #1B2440; border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; font-weight: 500; }
+        .in-actions button:hover { border-color: #149E91; color: #149E91; }
         .pk-tabs { display: flex; gap: 0.4rem; margin: 1.5rem 0 1.25rem; flex-wrap: wrap; }
         .pk-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.5rem 1.1rem; border-radius: 22px; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
         .pk-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
@@ -3053,6 +3381,7 @@ def site_nav_html() -> str:
         <a href="{p}/works-with.html">{S("nav_works_with")}</a>
         <a href="{p}/picker.html">{S("nav_picker")}</a>
         <a href="{p}/sibling.html">{S("nav_sibling")}</a>
+        <a href="{p}/initials.html">{S("nav_initials")}</a>
         <a href="{p}/origins.html">{S("nav_origins")}</a>
         <a href="{p}/fiction.html">{S("nav_fiction")}</a>
         {f'<a href="{p}/jour-de-fete.html">{S("nav_saints")}</a>' if ACTIVE_CC == 'FR' else ''}
@@ -3108,7 +3437,7 @@ def page(title, body, description="", canonical="", extra_head=""):
     <div class="container">
 {body}
 {footer_html()}
-    </div>{lang_banner_script()}{favorites_script()}{compare_script()}{works_with_script()}{picker_script()}{sibling_script()}{saints_script()}
+    </div>{lang_banner_script()}{favorites_script()}{compare_script()}{works_with_script()}{picker_script()}{sibling_script()}{saints_script()}{initials_script()}
 </body>
 </html>"""
 
@@ -4507,6 +4836,42 @@ def generate_saint_page(slug: str, dates: list[str]) -> None:
         encoding='utf-8')
 
 
+def generate_initials_page() -> None:
+    """Empty shell. JS reads ?i=ABC[&sex=F|M] and rolls 20 combos drawn from
+    name-meta.json (first + optional middle) plus the bundled surname list."""
+    p = PREFIX
+    girls = loc_label_cap('F')
+    boys = loc_label_cap('M')
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_initials")}</div>
+        <h1>{S("initials_h1")}</h1>
+        <p>{S("initials_intro")}</p>
+        <form id="in-form" autocomplete="off">
+            <div class="in-form">
+                <input type="text" id="in-input" placeholder="{S("initials_input")}" aria-label="{S("initials_input")}" maxlength="8">
+                <button type="submit">{S("initials_go")}</button>
+            </div>
+        </form>
+        <div class="in-sex-tabs" role="tablist" aria-label="{S("initials_filter_sex")}">
+            <button type="button" class="in-sex-tab is-active" data-sex="all">{S("ww_tab_all")}</button>
+            <button type="button" class="in-sex-tab" data-sex="F">{girls}</button>
+            <button type="button" class="in-sex-tab" data-sex="M">{boys}</button>
+        </div>
+        <p id="in-empty">{S("initials_empty")}</p>
+        <p id="in-error" class="in-error" style="display:none;"></p>
+        <ul id="in-result" class="in-list" style="display:none;"></ul>
+        <div class="in-actions">
+            <button type="button" id="in-again">{S("initials_again")}</button>
+            <button type="button" id="in-share">{S("initials_share")}</button>
+            <span id="in-share-done" style="display:none; color:#149E91; font-size:0.9rem;">{S("initials_share_done")}</span>
+        </div>"""
+    (OUT_DIR / 'initials.html').write_text(
+        page(S("initials_title"), body,
+             description=S("initials_desc"),
+             canonical=f"{BASE_URL}{p}/initials.html",
+             extra_head=hreflang_for_hub("initials.html")),
+        encoding='utf-8')
+
+
 def generate_fiction_franchise_page(fr: dict) -> None:
     p = PREFIX
     items = []
@@ -4593,7 +4958,8 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
             f"{BASE_URL}{p}/rare-names.html", f"{BASE_URL}{p}/compare.html",
             f"{BASE_URL}{p}/works-with.html",
             f"{BASE_URL}{p}/picker.html",
-            f"{BASE_URL}{p}/sibling.html"]
+            f"{BASE_URL}{p}/sibling.html",
+            f"{BASE_URL}{p}/initials.html"]
     if cc in ORIGIN_TO_NAMES_BY_CC and ORIGIN_TO_NAMES_BY_CC[cc]:
         urls.append(f"{BASE_URL}{p}/origins.html")
         urls += [f"{BASE_URL}{p}/origin/{o}.html"
@@ -4715,6 +5081,7 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
             generate_origin_page(origin, names)
         ORIGIN_TO_NAMES_BY_CC[ACTIVE_CC] = by_origin
         print(f"  origins: {len(by_origin)} pages")
+    generate_initials_page()
     # Fiction (Phase 6h)
     if FICTION.get('franchises'):
         (OUT_DIR / 'fiction').mkdir(parents=True, exist_ok=True)

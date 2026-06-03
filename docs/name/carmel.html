@@ -202,6 +202,21 @@
         .sf-days li a { color: #1B2440; text-decoration: none; }
         .sf-days li a:hover { color: #149E91; }
         .sf-dates { color: #1B2440; font-size: 1.05rem; }
+        .in-form { display: flex; gap: 0.6rem; margin: 1.5rem 0 1rem; flex-wrap: wrap; }
+        .in-form input { flex: 1; min-width: 180px; padding: 0.7rem 0.9rem; font-size: 1.1rem; border: 1px solid #d6dde2; border-radius: 6px; background: #fff; letter-spacing: 0.1em; text-transform: uppercase; font-family: 'Poppins', sans-serif; }
+        .in-form button { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 600; cursor: pointer; font-size: 1rem; }
+        .in-form button:hover { background: #117f74; }
+        .in-sex-tabs { display: flex; gap: 0.4rem; margin: 0 0 1rem; }
+        .in-sex-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.4rem 0.95rem; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; }
+        .in-sex-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
+        .in-error { background: #fdecea; border-left: 4px solid #c0392b; padding: 0.7rem 1rem; border-radius: 6px; color: #7a1f12; }
+        .in-list { list-style: none; padding: 0; margin: 1.25rem 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.5rem; }
+        .in-combo { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.7rem 0.95rem; font-size: 1rem; color: #1B2440; font-family: 'Poppins', sans-serif; font-weight: 500; }
+        .in-combo .in-first { color: #149E91; text-decoration: none; font-weight: 600; }
+        .in-combo .in-first:hover { text-decoration: underline; }
+        .in-actions { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-top: 1rem; }
+        .in-actions button { background: #fff; border: 1px solid #d6dde2; color: #1B2440; border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; font-weight: 500; }
+        .in-actions button:hover { border-color: #149E91; color: #149E91; }
         .pk-tabs { display: flex; gap: 0.4rem; margin: 1.5rem 0 1.25rem; flex-wrap: wrap; }
         .pk-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.5rem 1.1rem; border-radius: 22px; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
         .pk-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
@@ -303,6 +318,7 @@
         <a href="/works-with.html">Works with surname</a>
         <a href="/picker.html">Name picker</a>
         <a href="/sibling.html">Sibling ideas</a>
+        <a href="/initials.html">Initials maker</a>
         <a href="/origins.html">Origins</a>
         <a href="/fiction.html">Fictional names</a>
         
@@ -1674,6 +1690,162 @@
             hp.innerHTML = '<a href="' + href + '">' + label + '</a>'
                 + (isEvent ? '' : ' &middot; ' + L_WISH.replace('{name}', saint));
             hp.style.display = '';
+        }
+    })();
+    </script>
+    <script>
+    (function() {
+        var form = document.getElementById('in-form');
+        if (!form) return;
+        var PREFIX = "";
+        var SURNAMES = {"A": ["Adams", "Allen", "Anderson", "Alvarez"], "B": ["Brown", "Baker", "Bell", "Bennett", "Bailey"], "C": ["Clark", "Carter", "Collins", "Campbell", "Cooper", "Cook"], "D": ["Davis", "Diaz", "Davidson", "Dixon", "Duncan"], "E": ["Edwards", "Evans", "Ellis"], "F": ["Foster", "Fisher", "Ferguson", "Fox", "Flores"], "G": ["Garcia", "Green", "Gray", "Griffin", "Gonzalez"], "H": ["Hernandez", "Harris", "Hall", "Hill", "Howard", "Hughes"], "I": ["Ingram", "Irwin"], "J": ["Johnson", "Jones", "Jackson", "James"], "K": ["King", "Kim", "Kelly", "Kennedy"], "L": ["Lopez", "Lee", "Lewis", "Long", "Lane"], "M": ["Martinez", "Miller", "Moore", "Mitchell", "Murphy", "Morris"], "N": ["Nelson", "Nguyen", "Nichols"], "O": ["Owens", "Oliver", "Oconnor"], "P": ["Perez", "Parker", "Patel", "Phillips", "Price"], "Q": ["Quinn", "Quintana"], "R": ["Rodriguez", "Robinson", "Roberts", "Russell", "Reed", "Reyes"], "S": ["Smith", "Sanchez", "Stewart", "Scott", "Sullivan", "Sanders"], "T": ["Taylor", "Thomas", "Thompson", "Turner", "Tucker"], "U": ["Underwood", "Upton"], "V": ["Vasquez", "Vaughn", "Valdez"], "W": ["Williams", "Walker", "Wright", "Wilson", "Ward", "Wood"], "X": ["Xavier", "Xiong"], "Y": ["Young", "Yang"], "Z": ["Zimmerman", "Zhang"]};
+        var L_NO_MATCH = "We have no first names starting with {letter} in our data \u2014 try a different letter.";
+        var L_SHARE_DONE = "Link copied!";
+
+        var input = document.getElementById('in-input');
+        var resultEl = document.getElementById('in-result');
+        var emptyEl = document.getElementById('in-empty');
+        var errorEl = document.getElementById('in-error');
+        var sexTabs = document.querySelectorAll('.in-sex-tab');
+        var firstSex = 'all';
+
+        var META = null, BY_LETTER = null;
+        function loadMeta() {
+            if (META) return Promise.resolve();
+            return fetch(PREFIX + '/name-meta.json')
+                .then(function(r) { return r.json(); })
+                .then(function(d) {
+                    META = d;
+                    BY_LETTER = {};
+                    Object.keys(d).forEach(function(s) {
+                        var letter = d[s][0].toUpperCase();
+                        (BY_LETTER[letter] = BY_LETTER[letter] || []).push(s);
+                    });
+                });
+        }
+
+        function display(slug) {
+            return slug.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+        }
+        function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
+        function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+        // Index 5 in name-meta is current rank (0 if unranked). Names with a
+        // current rank read more naturally — fall back to the full pool only
+        // if the ranked pool for this letter is empty.
+        function rankedPool(letter, sexFilter) {
+            var all = BY_LETTER[letter] || [];
+            var filtered = all.filter(function(s) {
+                var m = META[s];
+                if (!m[5]) return false;
+                if (sexFilter && sexFilter !== 'all' && m[3] !== sexFilter) return false;
+                return true;
+            });
+            return filtered.length ? filtered : all;
+        }
+        function pickFirstNameForLetter(letter, sexFilter) {
+            var pool = rankedPool(letter, sexFilter);
+            return pool.length ? pickRandom(pool) : null;
+        }
+        function pickMidNameForLetter(letter) {
+            var pool = rankedPool(letter, 'all');
+            return pool.length ? pickRandom(pool) : null;
+        }
+        function pickSurnameForLetter(letter) {
+            var pool = SURNAMES[letter] || [];
+            return pool.length ? pickRandom(pool) : null;
+        }
+
+        function parseInitials(raw) {
+            return (raw || '').toUpperCase().replace(/[^A-Z]/g, '').split('').slice(0, 4);
+        }
+
+        function run(pushState) {
+            errorEl.style.display = 'none';
+            var letters = parseInitials(input.value);
+            if (letters.length < 2) {
+                emptyEl.style.display = '';
+                resultEl.style.display = 'none';
+                return;
+            }
+            emptyEl.style.display = 'none';
+            loadMeta().then(function() {
+                // Validate first-name letter has matches
+                var firstPool = BY_LETTER[letters[0]] || [];
+                if (firstSex !== 'all') {
+                    firstPool = firstPool.filter(function(s) { return META[s][3] === firstSex; });
+                }
+                if (!firstPool.length) {
+                    errorEl.textContent = L_NO_MATCH.replace('{letter}', letters[0]);
+                    errorEl.style.display = '';
+                    resultEl.style.display = 'none';
+                    return;
+                }
+                clear(resultEl);
+                var seen = {};
+                var tries = 0;
+                while (Object.keys(seen).length < 20 && tries < 120) {
+                    tries++;
+                    var parts = [];
+                    var firstSlug = pickFirstNameForLetter(letters[0], firstSex);
+                    parts.push(display(firstSlug));
+                    var firstHref = PREFIX + '/name/' + firstSlug + '.html';
+                    for (var i = 1; i < letters.length - 1; i++) {
+                        var ms = pickMidNameForLetter(letters[i]);
+                        parts.push(ms ? display(ms) : letters[i] + '.');
+                    }
+                    var lastLetter = letters[letters.length - 1];
+                    var sn = pickSurnameForLetter(lastLetter);
+                    parts.push(sn || (lastLetter + '.'));
+                    var combo = parts.join(' ');
+                    if (seen[combo]) continue;
+                    seen[combo] = true;
+                    var li = document.createElement('li');
+                    li.className = 'in-combo';
+                    var firstSpan = document.createElement('a');
+                    firstSpan.href = firstHref;
+                    firstSpan.textContent = parts[0];
+                    firstSpan.className = 'in-first';
+                    li.appendChild(firstSpan);
+                    li.appendChild(document.createTextNode(' ' + parts.slice(1).join(' ')));
+                    resultEl.appendChild(li);
+                }
+                resultEl.style.display = '';
+
+                if (pushState) {
+                    var qs = 'i=' + letters.join('') + (firstSex !== 'all' ? '&sex=' + firstSex : '');
+                    history.replaceState(null, '', window.location.pathname + '?' + qs);
+                }
+            });
+        }
+
+        form.addEventListener('submit', function(e) { e.preventDefault(); run(true); });
+        document.getElementById('in-again').addEventListener('click', function() { run(true); });
+        document.getElementById('in-share').addEventListener('click', function() {
+            if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
+            var done = document.getElementById('in-share-done');
+            done.style.display = '';
+            setTimeout(function() { done.style.display = 'none'; }, 1800);
+        });
+        sexTabs.forEach(function(t) {
+            t.addEventListener('click', function() {
+                sexTabs.forEach(function(x) { x.classList.remove('is-active'); });
+                t.classList.add('is-active');
+                firstSex = t.getAttribute('data-sex');
+                if (input.value.trim()) run(false);
+            });
+        });
+
+        var qs = new URLSearchParams(window.location.search);
+        if (qs.get('i')) {
+            input.value = qs.get('i');
+            if (qs.get('sex')) {
+                var s = qs.get('sex');
+                var tab = document.querySelector('.in-sex-tab[data-sex=' + s + ']');
+                if (tab) tab.click();
+                firstSex = s;
+            }
+            loadMeta().then(function() { run(false); });
         }
     })();
     </script>
