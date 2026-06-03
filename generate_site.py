@@ -778,6 +778,28 @@ STRINGS_EN: dict[str, str] = {
     "picker_desc": ("Discover baby names by swiping, filtering by decade and "
                     "syllables, or rolling for a random list. Save your favourites "
                     "as you go."),
+
+    # Sibling suggester
+    "nav_sibling": "Sibling ideas",
+    "sibling_title": "Sibling name ideas — find names that pair well — NameCharted",
+    "sibling_h1": "Find a sibling name",
+    "sibling_intro": ("Give us one child's name and we'll suggest names that "
+                      "share a similar era and rhythm — without rhyming or "
+                      "starting with the same letter."),
+    "sibling_input": "Existing child's name",
+    "sibling_target_sex": "Next baby",
+    "sibling_go": "Suggest names",
+    "sibling_empty": "Type a name above to see sibling suggestions.",
+    "sibling_unknown": ("We don't have data for that name, so we'll just match "
+                        "on rhythm. For best results pick a name with its own "
+                        "popularity page."),
+    "sibling_result_for": "Names that pair well with {name}",
+    "sibling_why_era": "Same era",
+    "sibling_why_rhythm": "Matches rhythm",
+    "sibling_why_contrast": "Different initial",
+    "sibling_desc": ("Find sibling names that pair well with a child you've "
+                     "already named. We match on peak era, syllable rhythm and "
+                     "complementary starting letters."),
 }
 
 STRINGS_FR: dict[str, str] = {
@@ -1049,6 +1071,29 @@ STRINGS_FR: dict[str, str] = {
     "picker_desc": ("Découvrez des prénoms en swipant, en filtrant par décennie "
                     "et syllabes, ou en tirant au sort. Ajoutez à vos favoris au "
                     "fil de l'eau."),
+
+    # Suggesteur de prénoms de fratrie
+    "nav_sibling": "Idées fratrie",
+    "sibling_title": "Idées de prénoms pour la fratrie — NameCharted",
+    "sibling_h1": "Trouver un prénom pour la fratrie",
+    "sibling_intro": ("Donnez-nous le prénom d'un premier enfant : nous "
+                      "proposons des prénoms d'époque et de rythme similaires, "
+                      "sans rimer ni commencer par la même lettre."),
+    "sibling_input": "Prénom du premier enfant",
+    "sibling_target_sex": "Prochain bébé",
+    "sibling_go": "Suggérer",
+    "sibling_empty": "Saisissez un prénom pour voir des idées.",
+    "sibling_unknown": ("Nous n'avons pas de données pour ce prénom : nous "
+                        "ne ferons que la correspondance de rythme. Pour de "
+                        "meilleurs résultats, choisissez un prénom ayant sa "
+                        "propre page de popularité."),
+    "sibling_result_for": "Prénoms qui vont bien avec {name}",
+    "sibling_why_era": "Même époque",
+    "sibling_why_rhythm": "Rythme proche",
+    "sibling_why_contrast": "Initiale différente",
+    "sibling_desc": ("Trouvez des prénoms pour la fratrie qui s'accordent avec "
+                     "le prénom d'un enfant déjà choisi. Score basé sur "
+                     "l'époque, le nombre de syllabes et l'initiale."),
 }
 
 STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN, "AU": STRINGS_EN}
@@ -2067,6 +2112,259 @@ def picker_script() -> str:
             .replace('__L_SHARE_DONE__', js(S("picker_random_share_done"))))
 
 
+SIBLING_SCRIPT = """
+    <script>
+    (function() {
+        var form = document.getElementById('sib-form');
+        if (!form) return;
+        var PREFIX = __PREFIX__;
+        var L_GIRLS = __L_GIRLS__;
+        var L_BOYS = __L_BOYS__;
+        var L_RESULT_FOR = __L_RESULT_FOR__;
+        var L_UNKNOWN = __L_UNKNOWN__;
+        var L_PEAK = __L_PEAK__;
+        var L_WHY_ERA = __L_WHY_ERA__;
+        var L_WHY_RHYTHM = __L_WHY_RHYTHM__;
+        var L_WHY_CONTRAST = __L_WHY_CONTRAST__;
+
+        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5;
+
+        var input = document.getElementById('sib-input');
+        var ac = document.getElementById('sib-ac');
+        var resultEl = document.getElementById('sib-result');
+        var headerEl = document.getElementById('sib-header');
+        var listEl = document.getElementById('sib-list');
+        var emptyEl = document.getElementById('sib-empty');
+        var noteEl = document.getElementById('sib-note');
+        var sexTabs = document.querySelectorAll('.sib-sex-tab');
+        var targetSex = 'all';
+
+        function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
+
+        var META = null, INDEX = null;
+        function loadData() {
+            if (META && INDEX) return Promise.resolve();
+            return Promise.all([
+                fetch(PREFIX + '/name-meta.json').then(function(r) { return r.json(); }),
+                fetch(PREFIX + '/name-index.json').then(function(r) { return r.json(); })
+            ]).then(function(both) { META = both[0]; INDEX = both[1].pages || []; });
+        }
+
+        function slugify(s) {
+            return (s || '').toLowerCase()
+                .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        }
+        function display(slug) {
+            return slug.replace(/-/g, ' ').replace(/\\b\\w/g, function(c) { return c.toUpperCase(); });
+        }
+        function countSyllables(s) {
+            var f = (s || '').toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/[^a-z]/g, '');
+            if (!f) return 1;
+            var n = 0, prev = false;
+            for (var i = 0; i < f.length; i++) {
+                var v = 'aeiouy'.indexOf(f[i]) >= 0;
+                if (v && !prev) n++;
+                prev = v;
+            }
+            if (f.slice(-1) === 'e' && n > 1 && f.slice(-2) !== 'le') n--;
+            return Math.max(1, n);
+        }
+
+        // Autocomplete (mirrors compare/works-with pattern)
+        (function() {
+            var sel = -1, items = [];
+            function render(matches) {
+                clear(ac); items = matches;
+                if (!matches.length) { ac.style.display = 'none'; return; }
+                ac.style.display = '';
+                matches.forEach(function(slug, i) {
+                    var d = document.createElement('div');
+                    d.textContent = display(slug);
+                    if (i === sel) d.className = 'sel';
+                    d.addEventListener('mousedown', function(e) {
+                        e.preventDefault();
+                        input.value = display(slug);
+                        ac.style.display = 'none';
+                        run();
+                    });
+                    ac.appendChild(d);
+                });
+            }
+            function search() {
+                var q = slugify(input.value);
+                if (!q || !INDEX) { ac.style.display = 'none'; return; }
+                var starts = [], contains = [];
+                for (var i = 0; i < INDEX.length && starts.length + contains.length < 8; i++) {
+                    var s = INDEX[i];
+                    if (s.indexOf(q) === 0) starts.push(s);
+                    else if (s.indexOf(q) > 0) contains.push(s);
+                }
+                sel = -1;
+                render(starts.concat(contains).slice(0, 8));
+            }
+            input.addEventListener('input', function() { loadData().then(search); });
+            input.addEventListener('focus', function() { loadData().then(search); });
+            input.addEventListener('blur', function() { setTimeout(function() { ac.style.display = 'none'; }, 150); });
+            input.addEventListener('keydown', function(e) {
+                if (ac.style.display === 'none') return;
+                if (e.key === 'ArrowDown') { sel = (sel + 1) % items.length; render(items); e.preventDefault(); }
+                else if (e.key === 'ArrowUp') { sel = (sel - 1 + items.length) % items.length; render(items); e.preventDefault(); }
+                else if (e.key === 'Enter' && sel >= 0) { input.value = display(items[sel]); ac.style.display = 'none'; e.preventDefault(); run(); }
+                else if (e.key === 'Escape') { ac.style.display = 'none'; }
+            });
+        })();
+
+        function score(cand, m, ref) {
+            // ref: {first, last2, syll, peak}, m = candidate meta array
+            var s = 0;
+            var reasons = [];
+
+            // Era match
+            var peakDiff = Math.abs(m[IDX_PEAK] - ref.peak);
+            if (peakDiff === 0) { s += 22; reasons.push('era'); }
+            else if (peakDiff <= 10) { s += 14; reasons.push('era'); }
+            else if (peakDiff <= 20) s += 6;
+
+            // Syllable similarity
+            var syllDiff = Math.abs(m[IDX_SYLL] - ref.syll);
+            if (syllDiff === 0) { s += 8; reasons.push('rhythm'); }
+            else if (syllDiff === 1) { s += 5; reasons.push('rhythm'); }
+
+            // Penalty: same starting letter (less variety) — unless both vowels match
+            if (m[IDX_FIRST] === ref.first) s -= 10;
+            else { s += 3; reasons.push('contrast'); }
+
+            // Penalty: rhyming endings
+            if (m[IDX_LAST2] === ref.last2) s -= 14;
+
+            // Penalty: candidate is sibling itself
+            // handled by caller (skips slug === refSlug)
+
+            // Familiarity bonus — break ties toward currently-popular names.
+            // Use rank-band rather than raw rank so we don't overweight the very top.
+            var r = m[IDX_RANK];
+            if (r) {
+                if (r <= 50) s += 5;
+                else if (r <= 200) s += 4;
+                else if (r <= 1000) s += 2;
+                else s += 1;
+            }
+
+            return [s, reasons];
+        }
+
+        function run() {
+            var rawName = input.value.trim();
+            if (!rawName) { emptyEl.style.display = ''; resultEl.style.display = 'none'; noteEl.style.display = 'none'; return; }
+            emptyEl.style.display = 'none';
+            loadData().then(function() {
+                var slug = slugify(rawName);
+                var ref;
+                if (META[slug]) {
+                    var rm = META[slug];
+                    ref = { first: rm[IDX_FIRST], last2: rm[IDX_LAST2], syll: rm[IDX_SYLL], peak: rm[IDX_PEAK] };
+                    noteEl.style.display = 'none';
+                } else {
+                    // Fallback: derive what we can from raw text. No era match possible.
+                    var folded = rawName.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/[^a-z]/g, '');
+                    ref = { first: folded[0] || 'a', last2: folded.slice(-2) || '', syll: countSyllables(rawName), peak: null };
+                    noteEl.style.display = '';
+                }
+
+                var rows = [];
+                for (var s in META) {
+                    if (s === slug) continue;
+                    var m = META[s];
+                    if (targetSex !== 'all' && m[IDX_DOM] !== targetSex) continue;
+                    var sc;
+                    if (ref.peak === null) {
+                        // Without era data, just score syllables + initial
+                        var local = 0;
+                        var sd = Math.abs(m[IDX_SYLL] - ref.syll);
+                        if (sd === 0) local += 8;
+                        else if (sd === 1) local += 5;
+                        if (m[IDX_FIRST] !== ref.first) local += 3; else local -= 10;
+                        if (m[IDX_LAST2] === ref.last2) local -= 14;
+                        sc = [local, []];
+                    } else {
+                        sc = score(s, m, ref);
+                    }
+                    rows.push([sc[0], s, m, sc[1]]);
+                }
+                rows.sort(function(a, b) {
+                    if (b[0] !== a[0]) return b[0] - a[0];
+                    var ra = a[2][IDX_RANK] || 99999, rb = b[2][IDX_RANK] || 99999;
+                    if (ra !== rb) return ra - rb;
+                    return a[1] < b[1] ? -1 : 1;
+                });
+                var top = rows.slice(0, 48);
+
+                headerEl.textContent = L_RESULT_FOR.replace('{name}', display(slug));
+                clear(listEl);
+                top.forEach(function(r) {
+                    var sc = r[0], cslug = r[1], m = r[2], reasons = r[3];
+                    var card = document.createElement('a');
+                    card.className = 'sib-card';
+                    card.href = PREFIX + '/name/' + cslug + '.html';
+                    var nm = document.createElement('span');
+                    nm.className = 'sib-name';
+                    nm.textContent = display(cslug);
+                    card.appendChild(nm);
+                    var meta = document.createElement('span');
+                    meta.className = 'sib-meta';
+                    meta.textContent = (m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS) + ' · ' + L_PEAK.replace('{d}', m[IDX_PEAK]);
+                    card.appendChild(meta);
+                    if (reasons.length) {
+                        var tags = document.createElement('span');
+                        tags.className = 'sib-tags';
+                        reasons.forEach(function(r) {
+                            var tag = document.createElement('span');
+                            tag.className = 'sib-tag';
+                            tag.textContent = r === 'era' ? L_WHY_ERA : r === 'rhythm' ? L_WHY_RHYTHM : L_WHY_CONTRAST;
+                            tags.appendChild(tag);
+                        });
+                        card.appendChild(tags);
+                    }
+                    listEl.appendChild(card);
+                });
+                resultEl.style.display = '';
+            });
+        }
+
+        sexTabs.forEach(function(t) {
+            t.addEventListener('click', function() {
+                sexTabs.forEach(function(x) { x.classList.remove('is-active'); });
+                t.classList.add('is-active');
+                targetSex = t.getAttribute('data-sex');
+                if (input.value.trim()) run();
+            });
+        });
+        form.addEventListener('submit', function(e) { e.preventDefault(); ac.style.display = 'none'; run(); });
+
+        // Pre-fill from ?name=
+        var qs = new URLSearchParams(window.location.search);
+        var qn = qs.get('name');
+        if (qn) { input.value = qn; loadData().then(run); }
+    })();
+    </script>"""
+
+
+def sibling_script() -> str:
+    def js(v: str) -> str:
+        return json.dumps(v)
+    return (SIBLING_SCRIPT
+            .replace('__PREFIX__', js(PREFIX))
+            .replace('__L_GIRLS__', js(loc_label_cap('F')))
+            .replace('__L_BOYS__', js(loc_label_cap('M')))
+            .replace('__L_RESULT_FOR__', js(S("sibling_result_for", name='{name}')))
+            .replace('__L_UNKNOWN__', js(S("sibling_unknown")))
+            .replace('__L_PEAK__', js(S("picker_peak_decade", d='{d}')))
+            .replace('__L_WHY_ERA__', js(S("sibling_why_era")))
+            .replace('__L_WHY_RHYTHM__', js(S("sibling_why_rhythm")))
+            .replace('__L_WHY_CONTRAST__', js(S("sibling_why_contrast"))))
+
+
 # ---------------------------------------------------------------------------
 # Shared markup
 # ---------------------------------------------------------------------------
@@ -2247,6 +2545,25 @@ BASE_CSS = """
         #pk-r-share, #pk-r-again { background: #fff; border: 1px solid #d6dde2; color: #1B2440; border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; font-weight: 500; }
         #pk-r-share:hover, #pk-r-again:hover { border-color: #149E91; color: #149E91; }
         #pk-r-share-done { color: #149E91; font-size: 0.9rem; }
+        .sib-form { display: flex; gap: 0.6rem; margin: 1.5rem 0 1rem; flex-wrap: wrap; }
+        .sib-form .ac-wrap { position: relative; flex: 1; min-width: 220px; }
+        .sib-form input { width: 100%; box-sizing: border-box; padding: 0.7rem 0.9rem; font-size: 1rem; border: 1px solid #d6dde2; border-radius: 6px; background: #fff; }
+        .sib-form button { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 600; cursor: pointer; font-size: 1rem; }
+        .sib-form button:hover { background: #117f74; }
+        #sib-ac { position: absolute; left: 0; right: 0; top: 100%; background: #fff; border: 1px solid #d6dde2; border-top: 0; border-radius: 0 0 6px 6px; max-height: 260px; overflow-y: auto; z-index: 10; }
+        #sib-ac div { padding: 0.5rem 0.9rem; cursor: pointer; }
+        #sib-ac div:hover, #sib-ac div.sel { background: #EEF2F4; }
+        .sib-sex-tabs { display: flex; gap: 0.4rem; margin: 0 0 1rem; }
+        .sib-sex-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.4rem 0.95rem; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; }
+        .sib-sex-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
+        #sib-note { background: #FFF4D6; border-left: 4px solid #f0c14b; padding: 0.7rem 0.95rem; border-radius: 6px; color: #5b4a16; margin: 0.75rem 0 1rem; font-size: 0.9rem; }
+        #sib-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.6rem; margin-top: 1rem; }
+        .sib-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.7rem 0.9rem; text-decoration: none; display: flex; flex-direction: column; gap: 0.3rem; transition: border-color 0.15s, transform 0.1s; }
+        .sib-card:hover { border-color: #149E91; transform: translateY(-1px); }
+        .sib-name { font-weight: 600; color: #1B2440; font-size: 1rem; }
+        .sib-meta { font-size: 0.78rem; color: #5B6678; }
+        .sib-tags { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.15rem; }
+        .sib-tag { background: #EEF2F4; color: #1B2440; font-size: 0.7rem; padding: 0.1rem 0.5rem; border-radius: 10px; font-weight: 500; }
 """
 
 
@@ -2277,6 +2594,7 @@ def site_nav_html() -> str:
         <a href="{p}/compare.html">{S("nav_compare")}</a>
         <a href="{p}/works-with.html">{S("nav_works_with")}</a>
         <a href="{p}/picker.html">{S("nav_picker")}</a>
+        <a href="{p}/sibling.html">{S("nav_sibling")}</a>
         <a href="{p}/favorites.html">{S("nav_favorites")}<span class="fav-nav-count"></span></a>
         {country_switcher_html()}
     </div></div>"""
@@ -2329,7 +2647,7 @@ def page(title, body, description="", canonical="", extra_head=""):
     <div class="container">
 {body}
 {footer_html()}
-    </div>{lang_banner_script()}{favorites_script()}{compare_script()}{works_with_script()}{picker_script()}
+    </div>{lang_banner_script()}{favorites_script()}{compare_script()}{works_with_script()}{picker_script()}{sibling_script()}
 </body>
 </html>"""
 
@@ -3404,6 +3722,45 @@ def generate_picker_page():
         encoding='utf-8')
 
 
+def generate_sibling_page():
+    """Empty shell — JS reads the typed name (or ?name=), looks it up in
+    name-meta.json, and scores candidates on era, syllable rhythm and
+    starting letter."""
+    p = PREFIX
+    girls = loc_label_cap('F')
+    boys = loc_label_cap('M')
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_sibling")}</div>
+        <h1>{S("sibling_h1")}</h1>
+        <p>{S("sibling_intro")}</p>
+        <form id="sib-form" autocomplete="off">
+            <div class="sib-form">
+                <span class="ac-wrap">
+                    <input type="text" id="sib-input" placeholder="{S("sibling_input")}" aria-label="{S("sibling_input")}">
+                    <div id="sib-ac" style="display:none;"></div>
+                </span>
+                <button type="submit">{S("sibling_go")}</button>
+            </div>
+        </form>
+        <div class="sib-sex-tabs" role="tablist" aria-label="{S("sibling_target_sex")}">
+            <button type="button" class="sib-sex-tab is-active" data-sex="all">{S("ww_tab_all")}</button>
+            <button type="button" class="sib-sex-tab" data-sex="F">{girls}</button>
+            <button type="button" class="sib-sex-tab" data-sex="M">{boys}</button>
+        </div>
+        <p id="sib-empty">{S("sibling_empty")}</p>
+        <div id="sib-note" style="display:none;">{S("sibling_unknown")}</div>
+        <div id="sib-result" style="display:none;">
+            <h2 id="sib-header"></h2>
+            <div id="sib-list"></div>
+        </div>"""
+    extra_head = hreflang_for_hub("sibling.html")
+    (OUT_DIR / 'sibling.html').write_text(
+        page(S("sibling_title"), body,
+             description=S("sibling_desc"),
+             canonical=f"{BASE_URL}{p}/sibling.html",
+             extra_head=extra_head),
+        encoding='utf-8')
+
+
 # ---------------------------------------------------------------------------
 # Single 404 (country-neutral), single sitemap + robots (root)
 # ---------------------------------------------------------------------------
@@ -3459,7 +3816,8 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
             f"{BASE_URL}{p}/trends/rising.html", f"{BASE_URL}{p}/trends/falling.html",
             f"{BASE_URL}{p}/rare-names.html", f"{BASE_URL}{p}/compare.html",
             f"{BASE_URL}{p}/works-with.html",
-            f"{BASE_URL}{p}/picker.html"]
+            f"{BASE_URL}{p}/picker.html",
+            f"{BASE_URL}{p}/sibling.html"]
     urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/year/{y}.html" for y in years_by_country[cc]]
@@ -3560,6 +3918,7 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
     generate_compare_page()
     generate_works_with_page()
     generate_picker_page()
+    generate_sibling_page()
     generate_name_index_json()
     generate_name_meta_json()
 
