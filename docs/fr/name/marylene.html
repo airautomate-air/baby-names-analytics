@@ -139,6 +139,21 @@
         .azindex a:hover { background:#149E91; color:#fff; }
         .footer { text-align: center; margin-top: 3rem; color: #5B6678; font-size: 0.9rem; }
         a { color: #149E91; }
+        .ww-form { display: flex; gap: 0.6rem; margin: 1.5rem 0 1rem; flex-wrap: wrap; }
+        .ww-form input { flex: 1; min-width: 200px; padding: 0.7rem 0.9rem; font-size: 1rem; border: 1px solid #d6dde2; border-radius: 6px; background: #fff; }
+        .ww-form button { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 600; cursor: pointer; font-size: 1rem; }
+        .ww-form button:hover { background: #117f74; }
+        .ww-tabs { display: flex; gap: 0.4rem; margin: 0 0 1.25rem; }
+        .ww-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.4rem 0.95rem; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; }
+        .ww-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
+        #ww-result-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.6rem; margin-top: 1rem; }
+        .ww-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.7rem 0.9rem; text-decoration: none; display: flex; flex-direction: column; gap: 0.25rem; transition: border-color 0.15s ease, transform 0.1s ease; }
+        .ww-card:hover { border-color: #149E91; transform: translateY(-1px); }
+        .ww-card .ww-name { font-weight: 600; color: #1B2440; font-size: 1rem; }
+        .ww-card .ww-meta { font-size: 0.8rem; color: #5B6678; }
+        .ww-card .ww-bar { display: block; height: 4px; background: #EEF2F4; border-radius: 2px; overflow: hidden; margin-top: 0.3rem; }
+        .ww-card .ww-bar-fill { display: block; height: 100%; background: linear-gradient(90deg, #149E91 0%, #FF6B5C 100%); }
+        #ww-loading { color: #5B6678; font-size: 0.9rem; padding: 0.5rem 0; }
 </style>
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://namecharted.com/fr/"}, {"@type": "ListItem", "position": 2, "name": "Pr\u00e9noms", "item": "https://namecharted.com/fr/names.html"}, {"@type": "ListItem", "position": 3, "name": "Marylene", "item": "https://namecharted.com/fr/name/marylene.html"}]}</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
@@ -177,6 +192,7 @@
         <a href="/fr/decades.html">Décennies</a>
         <a href="/fr/year/2024.html">Classement 2024</a>
         <a href="/fr/compare.html">Comparer</a>
+        <a href="/fr/works-with.html">Avec votre nom</a>
         <a href="/fr/favorites.html">Favoris<span class="fav-nav-count"></span></a>
         <span class="ccswitch"><a href="/"><span class="flag" aria-hidden="true">🇺🇸</span>US</a><span class="sep">·</span><strong><span class="flag" aria-hidden="true">🇫🇷</span>FR</strong><span class="sep">·</span><a href="/uk/"><span class="flag" aria-hidden="true">🇬🇧</span>UK</a><span class="sep">·</span><a href="/au/"><span class="flag" aria-hidden="true">🇦🇺</span>AU</a></span>
     </div></div>
@@ -649,6 +665,167 @@
         if (qa) aIn.value = qa;
         if (qb) bIn.value = qb;
         if (qa && qb) { setNoindex(); go(slug(qa), slug(qb)); }
+    })();
+    </script>
+    <script>
+    (function() {
+        var form = document.getElementById('ww-form');
+        if (!form) return;
+        var PREFIX = '/fr';
+        var L_GIRLS = 'Filles';
+        var L_BOYS = 'Garçons';
+        var L_SCORE = 'Score';
+        var L_RESULT_FOR = 'Meilleurs prénoms pour {surname}';
+        var L_LOADING = 'Calcul des scores…';
+
+        var input = document.getElementById('ww-input');
+        var loadingEl = document.getElementById('ww-loading');
+        var emptyEl = document.getElementById('ww-empty');
+        var resultEl = document.getElementById('ww-result');
+        var headerEl = document.getElementById('ww-result-header');
+        var listEl = document.getElementById('ww-result-list');
+        var tabs = document.querySelectorAll('.ww-tab');
+        var activeSex = 'all';
+
+        var META = null;
+        function loadMeta() {
+            if (META) return Promise.resolve(META);
+            loadingEl.style.display = '';
+            return fetch(PREFIX + '/name-meta.json')
+                .then(function(r) { return r.json(); })
+                .then(function(d) { META = d; loadingEl.style.display = 'none'; return META; });
+        }
+
+        // Order matches the python emit: [first, last2, syll, dom, peak_dec]
+        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3;
+
+        function fold(s) {
+            return (s || '').toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z]/g, '');
+        }
+        function countSyllables(s) {
+            var f = fold(s);
+            if (!f) return 1;
+            var n = 0, prev = false;
+            for (var i = 0; i < f.length; i++) {
+                var v = 'aeiouy'.indexOf(f[i]) >= 0;
+                if (v && !prev) n++;
+                prev = v;
+            }
+            if (f.slice(-1) === 'e' && n > 1 && f.slice(-2) !== 'le') n--;
+            return Math.max(1, n);
+        }
+        var VOWELS = {a:1, e:1, i:1, o:1, u:1, y:1};
+
+        function score(name, m, lastFold, lastFirst, lastLast2, lastSyll) {
+            // m = [first, last2, syll, dom, peak_dec]
+            var nameFirst = m[IDX_FIRST];
+            var nameLast2 = m[IDX_LAST2];
+            var nameLast = nameLast2.slice(-1);
+            var nameSyll = m[IDX_SYLL];
+            var s = 70;
+
+            // Alliteration / shared starting consonant: -15
+            if (nameFirst === lastFirst) {
+                s -= VOWELS[nameFirst] ? 6 : 15;
+            }
+            // Boundary repeat (last letter of name == first letter of surname): -12
+            if (nameLast === lastFirst) {
+                s -= VOWELS[nameLast] ? 5 : 12;
+            }
+            // Consonant cluster at boundary: -6
+            if (!VOWELS[nameLast] && !VOWELS[lastFirst] && nameLast !== lastFirst) {
+                s -= 6;
+            }
+            // Ending rhyme (same last 2 letters): -10
+            if (nameLast2 === lastLast2) s -= 10;
+
+            // Rhythm: reward syllable contrast
+            var diff = Math.abs(nameSyll - lastSyll);
+            if (diff === 0 && nameSyll <= 2) s -= 8;
+            else if (diff === 0) s += 0;
+            else if (diff === 1) s += 4;
+            else s += 9;
+
+            // Slight bonus for 2-3 syllable first names — they read best with most surnames
+            if (nameSyll === 2 || nameSyll === 3) s += 2;
+
+            return s;
+        }
+
+        function display(slug) {
+            return slug.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+        }
+
+        function run() {
+            var raw = input.value.trim();
+            if (!raw) { emptyEl.style.display = ''; resultEl.style.display = 'none'; return; }
+            emptyEl.style.display = 'none';
+            loadMeta().then(function(meta) {
+                var lastFold = fold(raw);
+                if (!lastFold) { emptyEl.style.display = ''; resultEl.style.display = 'none'; return; }
+                var lastFirst = lastFold[0];
+                var lastLast2 = lastFold.slice(-2);
+                var lastSyll = countSyllables(raw);
+
+                var rows = [];
+                for (var slug in meta) {
+                    var m = meta[slug];
+                    if (activeSex !== 'all' && m[IDX_DOM] !== activeSex) continue;
+                    if (slug === lastFold) continue;
+                    rows.push([score(slug, m, lastFold, lastFirst, lastLast2, lastSyll), slug, m]);
+                }
+                rows.sort(function(a, b) { return b[0] - a[0] || (a[1] < b[1] ? -1 : 1); });
+                var top = rows.slice(0, 60);
+
+                headerEl.textContent = L_RESULT_FOR.replace('{surname}',
+                    raw.replace(/\b\w/g, function(c) { return c.toUpperCase(); }));
+                while (listEl.firstChild) listEl.removeChild(listEl.firstChild);
+                top.forEach(function(r) {
+                    var sc = r[0], slug = r[1], m = r[2];
+                    var card = document.createElement('a');
+                    card.className = 'ww-card';
+                    card.href = PREFIX + '/name/' + slug + '.html';
+                    var nm = document.createElement('span');
+                    nm.className = 'ww-name';
+                    nm.textContent = display(slug);
+                    var meta2 = document.createElement('span');
+                    meta2.className = 'ww-meta';
+                    meta2.textContent = (m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS) + ' · ' + m[IDX_SYLL] + ' syll';
+                    var bar = document.createElement('span');
+                    bar.className = 'ww-bar';
+                    var fill = document.createElement('span');
+                    fill.className = 'ww-bar-fill';
+                    var pct = Math.max(8, Math.min(100, sc));
+                    fill.style.width = pct + '%';
+                    bar.appendChild(fill);
+                    card.appendChild(nm); card.appendChild(meta2); card.appendChild(bar);
+                    listEl.appendChild(card);
+                });
+                resultEl.style.display = '';
+            });
+        }
+
+        form.addEventListener('submit', function(e) { e.preventDefault(); run(); });
+        var debounce = null;
+        input.addEventListener('input', function() {
+            clearTimeout(debounce);
+            debounce = setTimeout(run, 220);
+        });
+        tabs.forEach(function(t) {
+            t.addEventListener('click', function() {
+                tabs.forEach(function(x) { x.classList.remove('is-active'); });
+                t.classList.add('is-active');
+                activeSex = t.getAttribute('data-sex');
+                if (input.value.trim()) run();
+            });
+        });
+
+        // Pre-fill from ?s= for shareable links
+        var qs = new URLSearchParams(window.location.search);
+        var qsn = qs.get('s');
+        if (qsn) { input.value = qsn; run(); }
     })();
     </script>
 </body>

@@ -52,6 +52,26 @@ PAGE_MIN_TOTAL = 500
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 
+def count_syllables(name: str) -> int:
+    """Cheap heuristic: count vowel groups in the diacritic-folded name,
+    drop a trailing silent 'e'. Good enough for rhythm scoring."""
+    folded = unicodedata.normalize('NFD', name.lower())
+    folded = ''.join(c for c in folded if unicodedata.category(c) != 'Mn')
+    folded = re.sub(r'[^a-z]', '', folded)
+    if not folded:
+        return 1
+    n = 0
+    prev_vowel = False
+    for c in folded:
+        is_vowel = c in 'aeiouy'
+        if is_vowel and not prev_vowel:
+            n += 1
+        prev_vowel = is_vowel
+    if folded.endswith('e') and n > 1 and not folded.endswith('le'):
+        n -= 1
+    return max(1, n)
+
+
 def slugify(name: str) -> str:
     """Consistent URL slug used for every internal link and file name.
     Strips diacritics so 'Léa' → 'lea' (not 'l-a') — keeps URLs ASCII-clean
@@ -224,6 +244,7 @@ def build_country(cc: str) -> None:
             'last': low[-1],
             'last2': low[-2:],
             'len': len(n),
+            'syll': count_syllables(n),
             'peak_dec': (peak_year // 10) * 10,
             'latest_rank': rank_by_year_sex.get((latest_year, dom), {}).get(n),
         }
@@ -695,6 +716,26 @@ STRINGS_EN: dict[str, str] = {
     "rare_mostly": "({total} · mostly {label})",
     "rare_desc": ("Index of {n} rare names ({range}) with fewer than {min} "
                   "lifetime births, listed A–Z."),
+
+    # Works with (lastname compatibility)
+    "nav_works_with": "Works with surname",
+    "ww_title": "First names that work with your surname — NameCharted",
+    "ww_h1": "First names that work with your surname",
+    "ww_intro": ("Type your surname and we'll score every first name against it — "
+                 "rewarding rhythm contrast and penalising clashing sounds at the "
+                 "first-name / surname boundary."),
+    "ww_input": "Your surname",
+    "ww_go": "Find names",
+    "ww_loading": "Scoring names…",
+    "ww_empty": "Type a surname above to see suggestions.",
+    "ww_tab_all": "All",
+    "ww_tab_girls": "Girls",
+    "ww_tab_boys": "Boys",
+    "ww_result_for": "Best matches for {surname}",
+    "ww_score": "Score",
+    "ww_desc": ("Find first names that pair well with any surname. We score names "
+                "on rhythm, sound clashes and shared initials so you can shortlist "
+                "good-sounding combinations fast."),
 }
 
 STRINGS_FR: dict[str, str] = {
@@ -904,6 +945,26 @@ STRINGS_FR: dict[str, str] = {
     "rare_mostly": "({total} · majoritairement {label})",
     "rare_desc": ("Index de {n} prénoms rares ({range}) comptant moins de {min} "
                   "naissances cumulées, listés de A à Z."),
+
+    # Works with (compatibilité nom de famille)
+    "nav_works_with": "Avec votre nom",
+    "ww_title": "Prénoms qui vont bien avec votre nom — NameCharted",
+    "ww_h1": "Prénoms qui vont bien avec votre nom",
+    "ww_intro": ("Saisissez votre nom de famille : nous évaluons chaque prénom "
+                 "selon le rythme, les sons à la jonction prénom / nom et les "
+                 "initiales partagées."),
+    "ww_input": "Votre nom de famille",
+    "ww_go": "Trouver des prénoms",
+    "ww_loading": "Calcul des scores…",
+    "ww_empty": "Saisissez un nom ci-dessus pour voir les suggestions.",
+    "ww_tab_all": "Tous",
+    "ww_tab_girls": "Filles",
+    "ww_tab_boys": "Garçons",
+    "ww_result_for": "Meilleurs prénoms pour {surname}",
+    "ww_score": "Score",
+    "ww_desc": ("Trouvez les prénoms qui sonnent bien avec n'importe quel nom de "
+                "famille. Score basé sur le rythme, les sons heurtés et les "
+                "initiales communes pour bâtir vite une short-list."),
 }
 
 STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN, "AU": STRINGS_EN}
@@ -1367,6 +1428,180 @@ def compare_script() -> str:
             .replace('__L_CHART__', S("chart_y_axis")))
 
 
+WORKS_WITH_SCRIPT = """
+    <script>
+    (function() {
+        var form = document.getElementById('ww-form');
+        if (!form) return;
+        var PREFIX = '__PREFIX__';
+        var L_GIRLS = '__L_GIRLS__';
+        var L_BOYS = '__L_BOYS__';
+        var L_SCORE = '__L_SCORE__';
+        var L_RESULT_FOR = '__L_RESULT_FOR__';
+        var L_LOADING = '__L_LOADING__';
+
+        var input = document.getElementById('ww-input');
+        var loadingEl = document.getElementById('ww-loading');
+        var emptyEl = document.getElementById('ww-empty');
+        var resultEl = document.getElementById('ww-result');
+        var headerEl = document.getElementById('ww-result-header');
+        var listEl = document.getElementById('ww-result-list');
+        var tabs = document.querySelectorAll('.ww-tab');
+        var activeSex = 'all';
+
+        var META = null;
+        function loadMeta() {
+            if (META) return Promise.resolve(META);
+            loadingEl.style.display = '';
+            return fetch(PREFIX + '/name-meta.json')
+                .then(function(r) { return r.json(); })
+                .then(function(d) { META = d; loadingEl.style.display = 'none'; return META; });
+        }
+
+        // Order matches the python emit: [first, last2, syll, dom, peak_dec]
+        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3;
+
+        function fold(s) {
+            return (s || '').toLowerCase()
+                .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
+                .replace(/[^a-z]/g, '');
+        }
+        function countSyllables(s) {
+            var f = fold(s);
+            if (!f) return 1;
+            var n = 0, prev = false;
+            for (var i = 0; i < f.length; i++) {
+                var v = 'aeiouy'.indexOf(f[i]) >= 0;
+                if (v && !prev) n++;
+                prev = v;
+            }
+            if (f.slice(-1) === 'e' && n > 1 && f.slice(-2) !== 'le') n--;
+            return Math.max(1, n);
+        }
+        var VOWELS = {a:1, e:1, i:1, o:1, u:1, y:1};
+
+        function score(name, m, lastFold, lastFirst, lastLast2, lastSyll) {
+            // m = [first, last2, syll, dom, peak_dec]
+            var nameFirst = m[IDX_FIRST];
+            var nameLast2 = m[IDX_LAST2];
+            var nameLast = nameLast2.slice(-1);
+            var nameSyll = m[IDX_SYLL];
+            var s = 70;
+
+            // Alliteration / shared starting consonant: -15
+            if (nameFirst === lastFirst) {
+                s -= VOWELS[nameFirst] ? 6 : 15;
+            }
+            // Boundary repeat (last letter of name == first letter of surname): -12
+            if (nameLast === lastFirst) {
+                s -= VOWELS[nameLast] ? 5 : 12;
+            }
+            // Consonant cluster at boundary: -6
+            if (!VOWELS[nameLast] && !VOWELS[lastFirst] && nameLast !== lastFirst) {
+                s -= 6;
+            }
+            // Ending rhyme (same last 2 letters): -10
+            if (nameLast2 === lastLast2) s -= 10;
+
+            // Rhythm: reward syllable contrast
+            var diff = Math.abs(nameSyll - lastSyll);
+            if (diff === 0 && nameSyll <= 2) s -= 8;
+            else if (diff === 0) s += 0;
+            else if (diff === 1) s += 4;
+            else s += 9;
+
+            // Slight bonus for 2-3 syllable first names — they read best with most surnames
+            if (nameSyll === 2 || nameSyll === 3) s += 2;
+
+            return s;
+        }
+
+        function display(slug) {
+            return slug.replace(/-/g, ' ').replace(/\\b\\w/g, function(c) { return c.toUpperCase(); });
+        }
+
+        function run() {
+            var raw = input.value.trim();
+            if (!raw) { emptyEl.style.display = ''; resultEl.style.display = 'none'; return; }
+            emptyEl.style.display = 'none';
+            loadMeta().then(function(meta) {
+                var lastFold = fold(raw);
+                if (!lastFold) { emptyEl.style.display = ''; resultEl.style.display = 'none'; return; }
+                var lastFirst = lastFold[0];
+                var lastLast2 = lastFold.slice(-2);
+                var lastSyll = countSyllables(raw);
+
+                var rows = [];
+                for (var slug in meta) {
+                    var m = meta[slug];
+                    if (activeSex !== 'all' && m[IDX_DOM] !== activeSex) continue;
+                    if (slug === lastFold) continue;
+                    rows.push([score(slug, m, lastFold, lastFirst, lastLast2, lastSyll), slug, m]);
+                }
+                rows.sort(function(a, b) { return b[0] - a[0] || (a[1] < b[1] ? -1 : 1); });
+                var top = rows.slice(0, 60);
+
+                headerEl.textContent = L_RESULT_FOR.replace('{surname}',
+                    raw.replace(/\\b\\w/g, function(c) { return c.toUpperCase(); }));
+                while (listEl.firstChild) listEl.removeChild(listEl.firstChild);
+                top.forEach(function(r) {
+                    var sc = r[0], slug = r[1], m = r[2];
+                    var card = document.createElement('a');
+                    card.className = 'ww-card';
+                    card.href = PREFIX + '/name/' + slug + '.html';
+                    var nm = document.createElement('span');
+                    nm.className = 'ww-name';
+                    nm.textContent = display(slug);
+                    var meta2 = document.createElement('span');
+                    meta2.className = 'ww-meta';
+                    meta2.textContent = (m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS) + ' · ' + m[IDX_SYLL] + ' syll';
+                    var bar = document.createElement('span');
+                    bar.className = 'ww-bar';
+                    var fill = document.createElement('span');
+                    fill.className = 'ww-bar-fill';
+                    var pct = Math.max(8, Math.min(100, sc));
+                    fill.style.width = pct + '%';
+                    bar.appendChild(fill);
+                    card.appendChild(nm); card.appendChild(meta2); card.appendChild(bar);
+                    listEl.appendChild(card);
+                });
+                resultEl.style.display = '';
+            });
+        }
+
+        form.addEventListener('submit', function(e) { e.preventDefault(); run(); });
+        var debounce = null;
+        input.addEventListener('input', function() {
+            clearTimeout(debounce);
+            debounce = setTimeout(run, 220);
+        });
+        tabs.forEach(function(t) {
+            t.addEventListener('click', function() {
+                tabs.forEach(function(x) { x.classList.remove('is-active'); });
+                t.classList.add('is-active');
+                activeSex = t.getAttribute('data-sex');
+                if (input.value.trim()) run();
+            });
+        });
+
+        // Pre-fill from ?s= for shareable links
+        var qs = new URLSearchParams(window.location.search);
+        var qsn = qs.get('s');
+        if (qsn) { input.value = qsn; run(); }
+    })();
+    </script>"""
+
+
+def works_with_script() -> str:
+    return (WORKS_WITH_SCRIPT
+            .replace('__PREFIX__', PREFIX)
+            .replace('__L_GIRLS__', loc_label_cap('F'))
+            .replace('__L_BOYS__', loc_label_cap('M'))
+            .replace('__L_SCORE__', S("ww_score"))
+            .replace('__L_RESULT_FOR__', S("ww_result_for", surname='{surname}'))
+            .replace('__L_LOADING__', S("ww_loading")))
+
+
 # ---------------------------------------------------------------------------
 # Shared markup
 # ---------------------------------------------------------------------------
@@ -1488,6 +1723,21 @@ BASE_CSS = """
         .azindex a:hover { background:#149E91; color:#fff; }
         .footer { text-align: center; margin-top: 3rem; color: #5B6678; font-size: 0.9rem; }
         a { color: #149E91; }
+        .ww-form { display: flex; gap: 0.6rem; margin: 1.5rem 0 1rem; flex-wrap: wrap; }
+        .ww-form input { flex: 1; min-width: 200px; padding: 0.7rem 0.9rem; font-size: 1rem; border: 1px solid #d6dde2; border-radius: 6px; background: #fff; }
+        .ww-form button { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 600; cursor: pointer; font-size: 1rem; }
+        .ww-form button:hover { background: #117f74; }
+        .ww-tabs { display: flex; gap: 0.4rem; margin: 0 0 1.25rem; }
+        .ww-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.4rem 0.95rem; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; }
+        .ww-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
+        #ww-result-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.6rem; margin-top: 1rem; }
+        .ww-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.7rem 0.9rem; text-decoration: none; display: flex; flex-direction: column; gap: 0.25rem; transition: border-color 0.15s ease, transform 0.1s ease; }
+        .ww-card:hover { border-color: #149E91; transform: translateY(-1px); }
+        .ww-card .ww-name { font-weight: 600; color: #1B2440; font-size: 1rem; }
+        .ww-card .ww-meta { font-size: 0.8rem; color: #5B6678; }
+        .ww-card .ww-bar { display: block; height: 4px; background: #EEF2F4; border-radius: 2px; overflow: hidden; margin-top: 0.3rem; }
+        .ww-card .ww-bar-fill { display: block; height: 100%; background: linear-gradient(90deg, #149E91 0%, #FF6B5C 100%); }
+        #ww-loading { color: #5B6678; font-size: 0.9rem; padding: 0.5rem 0; }
 """
 
 
@@ -1516,6 +1766,7 @@ def site_nav_html() -> str:
         <a href="{p}/decades.html">{S("nav_decades")}</a>
         <a href="{p}/year/{LATEST_YEAR}.html">{S("nav_rankings", year=LATEST_YEAR)}</a>
         <a href="{p}/compare.html">{S("nav_compare")}</a>
+        <a href="{p}/works-with.html">{S("nav_works_with")}</a>
         <a href="{p}/favorites.html">{S("nav_favorites")}<span class="fav-nav-count"></span></a>
         {country_switcher_html()}
     </div></div>"""
@@ -1568,7 +1819,7 @@ def page(title, body, description="", canonical="", extra_head=""):
     <div class="container">
 {body}
 {footer_html()}
-    </div>{lang_banner_script()}{favorites_script()}{compare_script()}
+    </div>{lang_banner_script()}{favorites_script()}{compare_script()}{works_with_script()}
 </body>
 </html>"""
 
@@ -2477,6 +2728,51 @@ def generate_name_index_json():
         encoding='utf-8')
 
 
+def generate_name_meta_json():
+    """Compact per-name metadata feeding works-with-surname (6c) and future
+    picker/sibling tools (6e/6f). Array form keeps the file small enough to
+    fetch lazily on the client (~150–250 KB per country, gzip ~50 KB)."""
+    out: dict[str, list] = {}
+    for n in pages_to_generate:
+        m = name_meta[n]
+        out[slugify(n)] = [m['first'], m['last2'], m['syll'], m['dom'], m['peak_dec']]
+    (OUT_DIR / 'name-meta.json').write_text(
+        json.dumps(out, separators=(',', ':')), encoding='utf-8')
+
+
+def generate_works_with_page():
+    """Empty shell — JS reads ?s= and scores names from name-meta.json against
+    the surname. Query-param variants get noindex'd by JS."""
+    p = PREFIX
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_works_with")}</div>
+        <h1>{S("ww_h1")}</h1>
+        <p>{S("ww_intro")}</p>
+        <form id="ww-form" autocomplete="off">
+            <div class="ww-form">
+                <input type="text" id="ww-input" placeholder="{S("ww_input")}" aria-label="{S("ww_input")}">
+                <button type="submit">{S("ww_go")}</button>
+            </div>
+        </form>
+        <div class="ww-tabs">
+            <button type="button" class="ww-tab is-active" data-sex="all">{S("ww_tab_all")}</button>
+            <button type="button" class="ww-tab" data-sex="F">{S("ww_tab_girls")}</button>
+            <button type="button" class="ww-tab" data-sex="M">{S("ww_tab_boys")}</button>
+        </div>
+        <div id="ww-loading" style="display:none;">{S("ww_loading")}</div>
+        <p id="ww-empty">{S("ww_empty")}</p>
+        <div id="ww-result" style="display:none;">
+            <h2 id="ww-result-header"></h2>
+            <div id="ww-result-list"></div>
+        </div>"""
+    extra_head = hreflang_for_hub("works-with.html")
+    (OUT_DIR / 'works-with.html').write_text(
+        page(S("ww_title"), body,
+             description=S("ww_desc"),
+             canonical=f"{BASE_URL}{p}/works-with.html",
+             extra_head=extra_head),
+        encoding='utf-8')
+
+
 # ---------------------------------------------------------------------------
 # Single 404 (country-neutral), single sitemap + robots (root)
 # ---------------------------------------------------------------------------
@@ -2530,7 +2826,8 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
     urls = [f"{BASE_URL}{p}/", f"{BASE_URL}{p}/names.html",
             f"{BASE_URL}{p}/trends.html", f"{BASE_URL}{p}/decades.html",
             f"{BASE_URL}{p}/trends/rising.html", f"{BASE_URL}{p}/trends/falling.html",
-            f"{BASE_URL}{p}/rare-names.html", f"{BASE_URL}{p}/compare.html"]
+            f"{BASE_URL}{p}/rare-names.html", f"{BASE_URL}{p}/compare.html",
+            f"{BASE_URL}{p}/works-with.html"]
     urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/year/{y}.html" for y in years_by_country[cc]]
@@ -2629,7 +2926,9 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
     generate_rare_names_page()
     generate_favorites_page()
     generate_compare_page()
+    generate_works_with_page()
     generate_name_index_json()
+    generate_name_meta_json()
 
 
 def main():
