@@ -794,9 +794,7 @@ STRINGS_EN: dict[str, str] = {
                         "on rhythm. For best results pick a name with its own "
                         "popularity page."),
     "sibling_result_for": "Names that pair well with {name}",
-    "sibling_why_era": "Same era",
-    "sibling_why_rhythm": "Matches rhythm",
-    "sibling_why_contrast": "Different initial",
+    "sibling_show_more": "Show more",
     "sibling_desc": ("Find sibling names that pair well with a child you've "
                      "already named. We match on peak era, syllable rhythm and "
                      "complementary starting letters."),
@@ -1088,9 +1086,7 @@ STRINGS_FR: dict[str, str] = {
                         "meilleurs résultats, choisissez un prénom ayant sa "
                         "propre page de popularité."),
     "sibling_result_for": "Prénoms qui vont bien avec {name}",
-    "sibling_why_era": "Même époque",
-    "sibling_why_rhythm": "Rythme proche",
-    "sibling_why_contrast": "Initiale différente",
+    "sibling_show_more": "Voir plus",
     "sibling_desc": ("Trouvez des prénoms pour la fratrie qui s'accordent avec "
                      "le prénom d'un enfant déjà choisi. Score basé sur "
                      "l'époque, le nombre de syllabes et l'initiale."),
@@ -2123,9 +2119,8 @@ SIBLING_SCRIPT = """
         var L_RESULT_FOR = __L_RESULT_FOR__;
         var L_UNKNOWN = __L_UNKNOWN__;
         var L_PEAK = __L_PEAK__;
-        var L_WHY_ERA = __L_WHY_ERA__;
-        var L_WHY_RHYTHM = __L_WHY_RHYTHM__;
-        var L_WHY_CONTRAST = __L_WHY_CONTRAST__;
+        var L_SHOW_MORE = __L_SHOW_MORE__;
+        var PAGE_SIZE = 12;
 
         var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5;
 
@@ -2134,10 +2129,13 @@ SIBLING_SCRIPT = """
         var resultEl = document.getElementById('sib-result');
         var headerEl = document.getElementById('sib-header');
         var listEl = document.getElementById('sib-list');
+        var moreBtn = document.getElementById('sib-more');
         var emptyEl = document.getElementById('sib-empty');
         var noteEl = document.getElementById('sib-note');
         var sexTabs = document.querySelectorAll('.sib-sex-tab');
         var targetSex = 'all';
+        var currentResults = [];
+        var shown = 0;
 
         function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
 
@@ -2298,39 +2296,39 @@ SIBLING_SCRIPT = """
                     if (ra !== rb) return ra - rb;
                     return a[1] < b[1] ? -1 : 1;
                 });
-                var top = rows.slice(0, 48);
+                currentResults = rows.slice(0, 60);
+                shown = 0;
 
                 headerEl.textContent = L_RESULT_FOR.replace('{name}', display(slug));
                 clear(listEl);
-                top.forEach(function(r) {
-                    var sc = r[0], cslug = r[1], m = r[2], reasons = r[3];
-                    var card = document.createElement('a');
-                    card.className = 'sib-card';
-                    card.href = PREFIX + '/name/' + cslug + '.html';
-                    var nm = document.createElement('span');
-                    nm.className = 'sib-name';
-                    nm.textContent = display(cslug);
-                    card.appendChild(nm);
-                    var meta = document.createElement('span');
-                    meta.className = 'sib-meta';
-                    meta.textContent = (m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS) + ' · ' + L_PEAK.replace('{d}', m[IDX_PEAK]);
-                    card.appendChild(meta);
-                    if (reasons.length) {
-                        var tags = document.createElement('span');
-                        tags.className = 'sib-tags';
-                        reasons.forEach(function(r) {
-                            var tag = document.createElement('span');
-                            tag.className = 'sib-tag';
-                            tag.textContent = r === 'era' ? L_WHY_ERA : r === 'rhythm' ? L_WHY_RHYTHM : L_WHY_CONTRAST;
-                            tags.appendChild(tag);
-                        });
-                        card.appendChild(tags);
-                    }
-                    listEl.appendChild(card);
-                });
+                renderMore();
                 resultEl.style.display = '';
             });
         }
+
+        function renderMore() {
+            var next = currentResults.slice(shown, shown + PAGE_SIZE);
+            next.forEach(function(r) {
+                var cslug = r[1], m = r[2];
+                var card = document.createElement('a');
+                card.className = 'sib-card';
+                card.href = PREFIX + '/name/' + cslug + '.html';
+                var nm = document.createElement('span');
+                nm.className = 'sib-name';
+                nm.textContent = display(cslug);
+                card.appendChild(nm);
+                var meta = document.createElement('span');
+                meta.className = 'sib-meta';
+                meta.textContent = (m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS) + ' · ' + L_PEAK.replace('{d}', m[IDX_PEAK]);
+                card.appendChild(meta);
+                listEl.appendChild(card);
+            });
+            shown += next.length;
+            moreBtn.style.display = shown < currentResults.length ? '' : 'none';
+            moreBtn.textContent = L_SHOW_MORE;
+        }
+
+        moreBtn.addEventListener('click', renderMore);
 
         sexTabs.forEach(function(t) {
             t.addEventListener('click', function() {
@@ -2360,9 +2358,7 @@ def sibling_script() -> str:
             .replace('__L_RESULT_FOR__', js(S("sibling_result_for", name='{name}')))
             .replace('__L_UNKNOWN__', js(S("sibling_unknown")))
             .replace('__L_PEAK__', js(S("picker_peak_decade", d='{d}')))
-            .replace('__L_WHY_ERA__', js(S("sibling_why_era")))
-            .replace('__L_WHY_RHYTHM__', js(S("sibling_why_rhythm")))
-            .replace('__L_WHY_CONTRAST__', js(S("sibling_why_contrast"))))
+            .replace('__L_SHOW_MORE__', js(S("sibling_show_more"))))
 
 
 # ---------------------------------------------------------------------------
@@ -2562,8 +2558,9 @@ BASE_CSS = """
         .sib-card:hover { border-color: #149E91; transform: translateY(-1px); }
         .sib-name { font-weight: 600; color: #1B2440; font-size: 1rem; }
         .sib-meta { font-size: 0.78rem; color: #5B6678; }
-        .sib-tags { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.15rem; }
-        .sib-tag { background: #EEF2F4; color: #1B2440; font-size: 0.7rem; padding: 0.1rem 0.5rem; border-radius: 10px; font-weight: 500; }
+        .sib-more-wrap { text-align: center; margin-top: 1.5rem; }
+        #sib-more { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.6rem 1.4rem; border-radius: 24px; cursor: pointer; font-weight: 500; font-size: 0.92rem; }
+        #sib-more:hover { border-color: #149E91; color: #149E91; }
 """
 
 
@@ -3751,6 +3748,9 @@ def generate_sibling_page():
         <div id="sib-result" style="display:none;">
             <h2 id="sib-header"></h2>
             <div id="sib-list"></div>
+            <div class="sib-more-wrap">
+                <button type="button" id="sib-more" style="display:none;">{S("sibling_show_more")}</button>
+            </div>
         </div>"""
     extra_head = hreflang_for_hub("sibling.html")
     (OUT_DIR / 'sibling.html').write_text(
