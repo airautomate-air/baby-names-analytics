@@ -149,6 +149,27 @@ def load_fiction() -> None:
           f'{sum(len(f.get("names", [])) for f in FICTION.get("franchises", []))} characters')
 
 
+# Saint-of-the-day calendar (Phase 6i, FR-only).
+SAINTS_FR: dict[str, str] = {}        # 'MM-DD' -> 'Marie'
+SAINT_TO_DATES: dict[str, list[str]] = {}  # 'marie' -> ['01-01', '08-15', ...]
+
+
+def load_saints_fr() -> None:
+    global SAINTS_FR, SAINT_TO_DATES
+    p = Path('data/saints_fr.json')
+    if not p.exists():
+        return
+    with p.open() as f:
+        SAINTS_FR = json.load(f).get('calendar', {})
+    # Build saint slug -> list of dates that celebrate them
+    for date, saint in SAINTS_FR.items():
+        # Some entries are events (Toussaint, Noël, Assomption) — keep them, slug them
+        slug = slugify(saint)
+        SAINT_TO_DATES.setdefault(slug, []).append(date)
+    print(f'  saints (FR): {len(SAINTS_FR)} calendar days, '
+          f'{len(SAINT_TO_DATES)} unique saint slugs')
+
+
 def build_country(cc: str) -> None:
     """Load data/normalized/<cc>.csv and populate every *_by_country dict for cc."""
     csv_path = DATA_DIR / f'{cc.lower()}.csv'
@@ -905,6 +926,9 @@ STRINGS_EN: dict[str, str] = {
     "fiction_year": "since {year}",
     "name_fiction_h2": "Also a character in",
     "name_fiction_in": "In <a href=\"{url}\">{title}</a>: {role}",
+
+    # Saint stubs — FR-only feature, EN keys exist only for S() fallback safety
+    "nav_saints": "Saint of the day",
 }
 
 STRINGS_FR: dict[str, str] = {
@@ -1251,6 +1275,34 @@ STRINGS_FR: dict[str, str] = {
     "fiction_year": "depuis {year}",
     "name_fiction_h2": "Aussi un personnage de",
     "name_fiction_in": "Dans <a href=\"{url}\">{title}</a> : {role}",
+
+    # Saints / fête du jour (FR-only)
+    "nav_saints": "Fête du jour",
+    "saints_hub_title": "Fête du jour — calendrier des saints et des prénoms",
+    "saints_hub_h1": "Fête du jour",
+    "saints_hub_intro": ("Le calendrier civil français des saints, jour par jour. "
+                         "Trouvez le saint du jour, la date d'une fête, ou la "
+                         "page de popularité du prénom correspondant."),
+    "saints_hub_desc": ("Calendrier français des saints jour par jour. "
+                        "Trouvez la fête d'un prénom, le saint du jour, "
+                        "et la popularité de chaque prénom en France."),
+    "saints_today_label": "Aujourd'hui c'est la Saint-{name}",
+    "saints_today_label_fem": "Aujourd'hui c'est la Sainte-{name}",
+    "saints_today_event": "Aujourd'hui : {name}",
+    "saints_today_wish": "Bonne fête à tous les {name} !",
+    "saints_month_jan": "Janvier", "saints_month_feb": "Février",
+    "saints_month_mar": "Mars",    "saints_month_apr": "Avril",
+    "saints_month_may": "Mai",     "saints_month_jun": "Juin",
+    "saints_month_jul": "Juillet", "saints_month_aug": "Août",
+    "saints_month_sep": "Septembre", "saints_month_oct": "Octobre",
+    "saints_month_nov": "Novembre", "saints_month_dec": "Décembre",
+    "saint_page_title": "Saint{e} {name} — fête, dates, popularité du prénom",
+    "saint_page_h1": "Saint{e} {name}",
+    "saint_page_dates_one": "Sa fête est célébrée le <strong>{date}</strong>.",
+    "saint_page_dates_multi": "Fêté(e) les <strong>{dates}</strong>.",
+    "saint_page_popularity_link": "Voir la popularité du prénom {name} →",
+    "saint_page_desc": "Date(s) de fête, signification et popularité du prénom {name} en France.",
+    "saint_back_to_hub": "← Voir tout le calendrier",
 }
 
 STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN, "AU": STRINGS_EN}
@@ -2643,6 +2695,77 @@ SIBLING_SCRIPT = """
     </script>"""
 
 
+SAINTS_SCRIPT = """
+    <script>
+    (function() {
+        if (__SKIP__) return;
+        var CAL = __CAL__;
+        var EVENTS = __EVENTS__;
+        var L_TODAY_M = __L_TODAY_M__;
+        var L_TODAY_F = __L_TODAY_F__;
+        var L_TODAY_E = __L_TODAY_E__;
+        var L_WISH = __L_WISH__;
+
+        function slugify(s) {
+            return (s || '').toLowerCase()
+                .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        }
+        function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+        var d = new Date();
+        var key = pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+        var saint = CAL[key];
+        if (!saint) return;
+        var slug = slugify(saint);
+        var isEvent = EVENTS.indexOf(slug) >= 0;
+        var last = saint.slice(-1).toLowerCase();
+        var fem = (last === 'e' || last === 'a') && !isEvent;
+        var template = isEvent ? L_TODAY_E : (fem ? L_TODAY_F : L_TODAY_M);
+        var label = template.replace('{name}', saint);
+        var href = '/fr/saint/' + slug + '.html';
+
+        var box = document.getElementById('sf-today');
+        if (box) {
+            box.innerHTML = '<a href="' + href + '">' + label + '</a>'
+                + (isEvent ? '' : ' &middot; ' + L_WISH.replace('{name}', saint));
+            box.style.display = '';
+        }
+        // Highlight today's cell on the calendar grid
+        var todayCell = document.querySelector('.sf-days li[data-key="' + key + '"]');
+        if (todayCell) todayCell.classList.add('is-today');
+
+        // Optional: homepage callout container
+        var hp = document.getElementById('sf-today-hp');
+        if (hp) {
+            hp.innerHTML = '<a href="' + href + '">' + label + '</a>'
+                + (isEvent ? '' : ' &middot; ' + L_WISH.replace('{name}', saint));
+            hp.style.display = '';
+        }
+    })();
+    </script>"""
+
+
+def saints_script() -> str:
+    if ACTIVE_CC != 'FR' or not SAINTS_FR:
+        return (SAINTS_SCRIPT
+                .replace('__SKIP__', 'true')
+                .replace('__CAL__', '{}')
+                .replace('__EVENTS__', '[]')
+                .replace('__L_TODAY_M__', '""')
+                .replace('__L_TODAY_F__', '""')
+                .replace('__L_TODAY_E__', '""')
+                .replace('__L_WISH__', '""'))
+    return (SAINTS_SCRIPT
+            .replace('__SKIP__', 'false')
+            .replace('__CAL__', json.dumps(SAINTS_FR, ensure_ascii=False))
+            .replace('__EVENTS__', json.dumps(sorted(SAINT_EVENTS)))
+            .replace('__L_TODAY_M__', json.dumps(S("saints_today_label")))
+            .replace('__L_TODAY_F__', json.dumps(S("saints_today_label_fem")))
+            .replace('__L_TODAY_E__', json.dumps(S("saints_today_event")))
+            .replace('__L_WISH__', json.dumps(S("saints_today_wish"))))
+
+
 def sibling_script() -> str:
     def js(v: str) -> str:
         return json.dumps(v)
@@ -2827,6 +2950,19 @@ BASE_CSS = """
         .fiction-appears li { margin: 0.35rem 0; }
         .fiction-appears a { color: #149E91; text-decoration: none; font-weight: 500; }
         .fiction-appears a:hover { text-decoration: underline; }
+        .sf-today { background: #149E91; color: #fff; padding: 0.85rem 1.25rem; border-radius: 8px; margin: 1rem 0 1.5rem; font-size: 1rem; }
+        .sf-today a { color: #fff; font-weight: 700; text-decoration: underline; }
+        .sf-calendar { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+        .sf-month { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 1rem 1.1rem; }
+        .sf-month h2 { font-size: 1.05rem; margin: 0 0 0.6rem; }
+        .sf-days { list-style: none; padding: 0; margin: 0; }
+        .sf-days li { display: flex; gap: 0.5rem; padding: 0.2rem 0; font-size: 0.9rem; border-bottom: 1px dashed #EEF2F4; }
+        .sf-days li:last-child { border-bottom: 0; }
+        .sf-days li.is-today { background: #FFF4D6; border-radius: 4px; padding-left: 0.3rem; padding-right: 0.3rem; }
+        .sf-days .sf-day { color: #5B6678; min-width: 1.6em; font-variant-numeric: tabular-nums; text-align: right; }
+        .sf-days li a { color: #1B2440; text-decoration: none; }
+        .sf-days li a:hover { color: #149E91; }
+        .sf-dates { color: #1B2440; font-size: 1.05rem; }
         .pk-tabs { display: flex; gap: 0.4rem; margin: 1.5rem 0 1.25rem; flex-wrap: wrap; }
         .pk-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.5rem 1.1rem; border-radius: 22px; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
         .pk-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
@@ -2919,6 +3055,7 @@ def site_nav_html() -> str:
         <a href="{p}/sibling.html">{S("nav_sibling")}</a>
         <a href="{p}/origins.html">{S("nav_origins")}</a>
         <a href="{p}/fiction.html">{S("nav_fiction")}</a>
+        {f'<a href="{p}/jour-de-fete.html">{S("nav_saints")}</a>' if ACTIVE_CC == 'FR' else ''}
         <a href="{p}/favorites.html">{S("nav_favorites")}<span class="fav-nav-count"></span></a>
         {country_switcher_html()}
     </div></div>"""
@@ -2971,7 +3108,7 @@ def page(title, body, description="", canonical="", extra_head=""):
     <div class="container">
 {body}
 {footer_html()}
-    </div>{lang_banner_script()}{favorites_script()}{compare_script()}{works_with_script()}{picker_script()}{sibling_script()}
+    </div>{lang_banner_script()}{favorites_script()}{compare_script()}{works_with_script()}{picker_script()}{sibling_script()}{saints_script()}
 </body>
 </html>"""
 
@@ -3006,10 +3143,11 @@ def generate_homepage():
         )
     samples = ", ".join(n for n, _ in top_names[:5])
     n_pages = len(pages_to_generate)
+    saints_callout = '<div id="sf-today-hp" class="sf-today" style="display:none;"></div>\n' if ACTIVE_CC == 'FR' else ''
     body = f"""        <h1>NameCharted — <span class="h1-flag" aria-hidden="true">{FLAG[ACTIVE_CC]}</span> {COUNTRY_NAME[ACTIVE_CC]}</h1>
         <p style="color:#5B6678; font-size:1.05rem; margin-top:-0.25rem;">{S("home_tagline")}</p>
         <p>{S("home_intro", range=DATA_RANGE)}</p>
-{homepage_cc_callout()}
+{saints_callout}{homepage_cc_callout()}
         <div class="search-box" style="margin:2rem 0; text-align:center;">
             <input type="text" id="searchInput" placeholder="{S("home_search_placeholder")}"
                    style="padding:0.75rem; width:70%; max-width:400px; border:1px solid #ddd; border-radius:4px; font-size:1rem;">
@@ -4277,6 +4415,98 @@ def generate_fiction_hub_page() -> None:
         encoding='utf-8')
 
 
+FR_MONTH_NAMES = ['', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+
+# Saints that are events rather than personal names — never get an "à tous les
+# X" wish, no name-page link, and slugged but treated as events on hub.
+SAINT_EVENTS = {
+    'marie', 'presentation-de-jesus', 'notre-dame-de-lourdes', 'conversion-de-saint-paul',
+    'annonciation', 'visitation', 'transfiguration', 'assomption',
+    'nativite-de-marie', 'croix-glorieuse', 'toussaint', 'defunts',
+    'presentation-de-marie', 'immaculee-conception', 'noel', 'innocents',
+    'pierre-et-paul', 'anne-et-joachim', 'cosme-et-damien', 'cote-et-damien',
+    'come-et-damien', 'simon-et-jude',
+}
+
+
+def generate_saints_hub_page() -> None:
+    """One big calendar — 12 month sections × ~30 days each, with today's
+    cell highlighted client-side via JS. Pure HTML so it's all crawlable."""
+    if not SAINTS_FR:
+        return
+    p = PREFIX
+    sections = []
+    for month in range(1, 13):
+        rows = []
+        for day in range(1, 32):
+            key = f'{month:02d}-{day:02d}'
+            if key not in SAINTS_FR:
+                continue
+            saint = SAINTS_FR[key]
+            slug = slugify(saint)
+            # Link to per-saint page when one exists (i.e. saint is a personal
+            # name we'll generate a page for).
+            href = f'{p}/saint/{slug}.html'
+            rows.append(
+                f'<li data-key="{key}"><span class="sf-day">{day}</span>'
+                f'<a href="{href}">{saint}</a></li>'
+            )
+        sections.append(
+            f'<section class="sf-month" id="m{month:02d}">'
+            f'<h2>{FR_MONTH_NAMES[month]}</h2>'
+            f'<ol class="sf-days">{"".join(rows)}</ol>'
+            f'</section>'
+        )
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_saints")}</div>
+        <h1>{S("saints_hub_h1")}</h1>
+        <p>{S("saints_hub_intro")}</p>
+        <div id="sf-today" class="sf-today" style="display:none;"></div>
+        <div class="sf-calendar">{''.join(sections)}</div>"""
+    (OUT_DIR / 'jour-de-fete.html').write_text(
+        page(S("saints_hub_title"), body,
+             description=S("saints_hub_desc"),
+             canonical=f"{BASE_URL}{p}/jour-de-fete.html"),
+        encoding='utf-8')
+
+
+def generate_saint_page(slug: str, dates: list[str]) -> None:
+    p = PREFIX
+    saint_name = SAINTS_FR[dates[0]]   # first occurrence's official spelling
+    is_event = slug in SAINT_EVENTS
+    has_name_page = slug in SLUGS_WITH_PAGE_BY_CC['FR']
+    # Sainte vs Saint — naive heuristic: ends in 'e' or 'a' → fem
+    last = saint_name[-1].lower()
+    fem_suffix = 'e' if last in 'ae' and not is_event else ''
+
+    def pretty_date(d: str) -> str:
+        m, dd = d.split('-')
+        return f'{int(dd)} {FR_MONTH_NAMES[int(m)].lower()}'
+
+    if len(dates) == 1:
+        dates_html = S("saint_page_dates_one", date=pretty_date(dates[0]))
+    else:
+        ds = ', '.join(pretty_date(d) for d in dates)
+        dates_html = S("saint_page_dates_multi", dates=ds)
+
+    pop_link = ''
+    if has_name_page and not is_event:
+        pop_link = (f'<p><a href="{p}/name/{slug}.html"><strong>'
+                    + S("saint_page_popularity_link", name=saint_name)
+                    + '</strong></a></p>')
+
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/jour-de-fete.html">{S("nav_saints")}</a> &rsaquo; {saint_name}</div>
+        <h1>{S("saint_page_h1", e=fem_suffix, name=saint_name)}</h1>
+        <p class="sf-dates">{dates_html}</p>
+        {pop_link}
+        <p style="margin-top:2.5rem;"><a href="{p}/jour-de-fete.html">{S("saint_back_to_hub")}</a></p>"""
+    (OUT_DIR / 'saint' / f'{slug}.html').write_text(
+        page(S("saint_page_title", e=fem_suffix, name=saint_name), body,
+             description=S("saint_page_desc", name=saint_name),
+             canonical=f"{BASE_URL}{p}/saint/{slug}.html"),
+        encoding='utf-8')
+
+
 def generate_fiction_franchise_page(fr: dict) -> None:
     p = PREFIX
     items = []
@@ -4372,6 +4602,9 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
         urls.append(f"{BASE_URL}{p}/fiction.html")
         urls += [f"{BASE_URL}{p}/fiction/{fr['slug']}.html"
                  for fr in FICTION['franchises']]
+    if cc == 'FR' and SAINTS_FR:
+        urls.append(f"{BASE_URL}{p}/jour-de-fete.html")
+        urls += [f"{BASE_URL}{p}/saint/{s}.html" for s in SAINT_TO_DATES.keys()]
     urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/year/{y}.html" for y in years_by_country[cc]]
@@ -4489,6 +4722,13 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
         for fr in FICTION['franchises']:
             generate_fiction_franchise_page(fr)
         print(f"  fiction: {len(FICTION['franchises'])} pages")
+    # Saints calendar (Phase 6i, FR-only)
+    if cc == 'FR' and SAINTS_FR:
+        (OUT_DIR / 'saint').mkdir(parents=True, exist_ok=True)
+        generate_saints_hub_page()
+        for slug, dates in SAINT_TO_DATES.items():
+            generate_saint_page(slug, dates)
+        print(f"  saints: hub + {len(SAINT_TO_DATES)} saint pages")
     generate_name_index_json()
     generate_name_meta_json()
 
@@ -4496,6 +4736,7 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
 def main():
     load_enrichment()
     load_fiction()
+    load_saints_fr()
     for cc in COUNTRIES:
         build_country(cc)
     build_presence_indices()

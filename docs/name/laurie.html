@@ -189,6 +189,19 @@
         .fiction-appears li { margin: 0.35rem 0; }
         .fiction-appears a { color: #149E91; text-decoration: none; font-weight: 500; }
         .fiction-appears a:hover { text-decoration: underline; }
+        .sf-today { background: #149E91; color: #fff; padding: 0.85rem 1.25rem; border-radius: 8px; margin: 1rem 0 1.5rem; font-size: 1rem; }
+        .sf-today a { color: #fff; font-weight: 700; text-decoration: underline; }
+        .sf-calendar { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+        .sf-month { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 1rem 1.1rem; }
+        .sf-month h2 { font-size: 1.05rem; margin: 0 0 0.6rem; }
+        .sf-days { list-style: none; padding: 0; margin: 0; }
+        .sf-days li { display: flex; gap: 0.5rem; padding: 0.2rem 0; font-size: 0.9rem; border-bottom: 1px dashed #EEF2F4; }
+        .sf-days li:last-child { border-bottom: 0; }
+        .sf-days li.is-today { background: #FFF4D6; border-radius: 4px; padding-left: 0.3rem; padding-right: 0.3rem; }
+        .sf-days .sf-day { color: #5B6678; min-width: 1.6em; font-variant-numeric: tabular-nums; text-align: right; }
+        .sf-days li a { color: #1B2440; text-decoration: none; }
+        .sf-days li a:hover { color: #149E91; }
+        .sf-dates { color: #1B2440; font-size: 1.05rem; }
         .pk-tabs { display: flex; gap: 0.4rem; margin: 1.5rem 0 1.25rem; flex-wrap: wrap; }
         .pk-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.5rem 1.1rem; border-radius: 22px; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
         .pk-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
@@ -293,6 +306,7 @@
         <a href="/sibling.html">Sibling ideas</a>
         <a href="/origins.html">Origins</a>
         <a href="/fiction.html">Fictional names</a>
+        
         <a href="/favorites.html">Favorites<span class="fav-nav-count"></span></a>
         <span class="ccswitch"><strong><span class="flag" aria-hidden="true">🇺🇸</span>US</strong><span class="sep">·</span><a href="/fr/"><span class="flag" aria-hidden="true">🇫🇷</span>FR</a><span class="sep">·</span><a href="/uk/"><span class="flag" aria-hidden="true">🇬🇧</span>UK</a><span class="sep">·</span><a href="/au/"><span class="flag" aria-hidden="true">🇦🇺</span>AU</a></span>
     </div></div>
@@ -1621,6 +1635,54 @@
         var qs = new URLSearchParams(window.location.search);
         var qn = qs.get('name');
         if (qn) { input.value = qn; loadData().then(run); }
+    })();
+    </script>
+    <script>
+    (function() {
+        if (true) return;
+        var CAL = {};
+        var EVENTS = [];
+        var L_TODAY_M = "";
+        var L_TODAY_F = "";
+        var L_TODAY_E = "";
+        var L_WISH = "";
+
+        function slugify(s) {
+            return (s || '').toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        }
+        function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+        var d = new Date();
+        var key = pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+        var saint = CAL[key];
+        if (!saint) return;
+        var slug = slugify(saint);
+        var isEvent = EVENTS.indexOf(slug) >= 0;
+        var last = saint.slice(-1).toLowerCase();
+        var fem = (last === 'e' || last === 'a') && !isEvent;
+        var template = isEvent ? L_TODAY_E : (fem ? L_TODAY_F : L_TODAY_M);
+        var label = template.replace('{name}', saint);
+        var href = '/fr/saint/' + slug + '.html';
+
+        var box = document.getElementById('sf-today');
+        if (box) {
+            box.innerHTML = '<a href="' + href + '">' + label + '</a>'
+                + (isEvent ? '' : ' &middot; ' + L_WISH.replace('{name}', saint));
+            box.style.display = '';
+        }
+        // Highlight today's cell on the calendar grid
+        var todayCell = document.querySelector('.sf-days li[data-key="' + key + '"]');
+        if (todayCell) todayCell.classList.add('is-today');
+
+        // Optional: homepage callout container
+        var hp = document.getElementById('sf-today-hp');
+        if (hp) {
+            hp.innerHTML = '<a href="' + href + '">' + label + '</a>'
+                + (isEvent ? '' : ' &middot; ' + L_WISH.replace('{name}', saint));
+            hp.style.display = '';
+        }
     })();
     </script>
 </body>
