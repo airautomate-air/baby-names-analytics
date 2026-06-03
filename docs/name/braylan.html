@@ -57,6 +57,25 @@
         #lang-banner a { color: #fff; font-weight: 700; text-decoration: underline; }
         #lang-banner button { background: none; border: 0; color: #fff; font-size: 1.25rem; cursor: pointer; line-height: 1; padding: 0 0.3rem; opacity: 0.8; }
         #lang-banner button:hover { opacity: 1; }
+        .fav-nav-count { font-size: 0.78rem; color: #c8cfdb; margin-left: 0.2rem; }
+        .fav-btn { background: none; border: 0; cursor: pointer; padding: 0.3rem 0.5rem; vertical-align: middle; display: inline-flex; align-items: center; }
+        .fav-btn svg { width: 24px; height: 24px; display: block; transition: transform 0.12s ease; }
+        .fav-btn:hover svg { transform: scale(1.12); }
+        .fav-btn .heart-empty { stroke: #5B6678; fill: none; stroke-width: 2; }
+        .fav-btn .heart-full { fill: #FF6B5C; stroke: none; }
+        .fav-btn.is-fav .heart-empty { display: none; }
+        .fav-btn:not(.is-fav) .heart-full { display: none; }
+        h1 .fav-btn { margin-left: 0.5rem; vertical-align: -4px; }
+        .fav-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
+        .fav-list li { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between; }
+        .fav-list a { color: #1B2440; text-decoration: none; font-weight: 600; flex: 1; }
+        .fav-list a:hover { color: #149E91; }
+        .fav-remove-btn { background: none; border: 0; cursor: pointer; color: #c0392b; font-size: 1.2rem; line-height: 1; padding: 0 0.25rem; }
+        .fav-remove-btn:hover { color: #7a1f12; }
+        .fav-actions { display: flex; gap: 0.75rem; align-items: center; margin: 1rem 0 2rem; }
+        .fav-share-btn { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.55rem 1rem; font-weight: 600; cursor: pointer; font-size: 0.92rem; }
+        .fav-share-btn:hover { background: #117f74; }
+        .fav-share-done { color: #27ae60; font-size: 0.9rem; }
         .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #149E91; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
@@ -138,11 +157,12 @@
         <a href="/trends.html">Trends</a>
         <a href="/decades.html">Decades</a>
         <a href="/year/2024.html">2024 Rankings</a>
+        <a href="/favorites.html">Favorites<span class="fav-nav-count"></span></a>
         <span class="ccswitch"><strong><span class="flag" aria-hidden="true">🇺🇸</span>US</strong><span class="sep">·</span><a href="/fr/"><span class="flag" aria-hidden="true">🇫🇷</span>FR</a><span class="sep">·</span><a href="/uk/"><span class="flag" aria-hidden="true">🇬🇧</span>UK</a><span class="sep">·</span><a href="/au/"><span class="flag" aria-hidden="true">🇦🇺</span>AU</a></span>
     </div></div>
     <div class="container">
         <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Names</a> &rsaquo; Braylan</div>
-        <h1>Braylan</h1>
+        <h1>Braylan<button class="fav-btn" data-slug="braylan" data-name="Braylan" aria-label="Save to your favorites" title="Save to your favorites"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="heart-empty" d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/><path class="heart-full" d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></button></h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a boy's name &middot; 96% boys</p>
 
         <div class="insight"><strong>Braylan</strong> first appears in the data in <strong>1990</strong> and has been recorded in 32 different years as a boy's name. Its single biggest year was <strong>2011</strong> with <strong>102</strong> babies (rank #1,545 that year). In 2024 it was given to 29 boys (rank <strong>#3,793</strong>). The name has been <strong>declining</strong> over the last five years.</div>
@@ -247,6 +267,137 @@
         } else {
             document.body.appendChild(bar);
         }
+    })();
+    </script>
+    <script>
+    (function() {
+        var CC = 'US';
+        var PREFIX = '';
+        var KEY = 'nc-favorites-' + CC;
+
+        function read() {
+            try { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
+            catch (e) { return []; }
+        }
+        function write(list) {
+            try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {}
+        }
+        function findIdx(list, slug) {
+            for (var i = 0; i < list.length; i++) if (list[i].slug === slug) return i;
+            return -1;
+        }
+        function updateBadge() {
+            var n = read().length;
+            var els = document.querySelectorAll('.fav-nav-count');
+            for (var i = 0; i < els.length; i++) {
+                els[i].textContent = n ? ' (' + n + ')' : '';
+            }
+        }
+        function clearChildren(el) {
+            while (el.firstChild) el.removeChild(el.firstChild);
+        }
+
+        // Heart button on name page
+        var btn = document.querySelector('.fav-btn[data-slug]');
+        if (btn) {
+            var slug = btn.getAttribute('data-slug');
+            var name = btn.getAttribute('data-name');
+            var addTip = btn.getAttribute('title');
+            var removeTip = 'Remove from favorites';
+            function syncBtn() {
+                var on = findIdx(read(), slug) >= 0;
+                btn.classList.toggle('is-fav', on);
+                btn.setAttribute('title', on ? removeTip : addTip);
+                btn.setAttribute('aria-label', on ? removeTip : addTip);
+                btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            }
+            btn.addEventListener('click', function() {
+                var list = read();
+                var i = findIdx(list, slug);
+                if (i >= 0) list.splice(i, 1);
+                else list.push({slug: slug, name: name});
+                write(list);
+                syncBtn();
+                updateBadge();
+            });
+            syncBtn();
+        }
+
+        // Favorites page
+        var ul = document.getElementById('fav-list');
+        if (ul) {
+            // Shareable hash: /favorites.html#slug1,slug2 merges into the saved list.
+            var hash = decodeURIComponent((window.location.hash || '').slice(1));
+            if (hash) {
+                var slugs = hash.split(',').filter(Boolean);
+                var existing = read();
+                slugs.forEach(function(s) {
+                    if (findIdx(existing, s) < 0) {
+                        var displayName = s.replace(/^./, function(c) { return c.toUpperCase(); })
+                                           .replace(/-(.)/g, function(_, c) { return ' ' + c.toUpperCase(); });
+                        existing.push({slug: s, name: displayName});
+                    }
+                });
+                write(existing);
+                history.replaceState(null, '', window.location.pathname);
+            }
+            var emptyEl = document.getElementById('fav-empty');
+            var actionsEl = document.getElementById('fav-actions');
+            var shareBtn = document.getElementById('fav-share');
+            var shareDone = document.getElementById('fav-share-done');
+            function render() {
+                var list = read();
+                clearChildren(ul);
+                if (!list.length) {
+                    emptyEl.style.display = '';
+                    ul.style.display = 'none';
+                    actionsEl.style.display = 'none';
+                    return;
+                }
+                emptyEl.style.display = 'none';
+                ul.style.display = '';
+                actionsEl.style.display = '';
+                list.forEach(function(item) {
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    a.href = PREFIX + '/name/' + item.slug + '.html';
+                    a.textContent = item.name;
+                    var rm = document.createElement('button');
+                    rm.className = 'fav-remove-btn';
+                    rm.setAttribute('aria-label', 'Remove');
+                    rm.setAttribute('data-slug', item.slug);
+                    rm.textContent = '\u00d7';
+                    li.appendChild(a); li.appendChild(rm);
+                    ul.appendChild(li);
+                });
+            }
+            ul.addEventListener('click', function(e) {
+                var t = e.target;
+                if (t && t.classList.contains('fav-remove-btn')) {
+                    var s = t.getAttribute('data-slug');
+                    var list = read();
+                    var i = findIdx(list, s);
+                    if (i >= 0) { list.splice(i, 1); write(list); render(); updateBadge(); }
+                }
+            });
+            shareBtn.addEventListener('click', function() {
+                var list = read();
+                if (!list.length) return;
+                var url = window.location.origin + window.location.pathname
+                          + '#' + list.map(function(x) { return x.slug; }).join(',');
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(url).then(function() {
+                        shareDone.style.display = '';
+                        setTimeout(function() { shareDone.style.display = 'none'; }, 2500);
+                    });
+                } else {
+                    window.prompt('Copy this link:', url);
+                }
+            });
+            render();
+        }
+
+        updateBadge();
     })();
     </script>
 </body>

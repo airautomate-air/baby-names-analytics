@@ -489,6 +489,17 @@ STRINGS_EN: dict[str, str] = {
     "nav_trends": "Trends",
     "nav_decades": "Decades",
     "nav_rankings": "{year} Rankings",
+    "nav_favorites": "Favorites",
+    "fav_add_tip": "Save to your favorites",
+    "fav_remove_tip": "Remove from favorites",
+    "fav_h1": "Your saved names",
+    "fav_title": "Your saved names — NameCharted",
+    "fav_desc": "Your personal shortlist of saved names.",
+    "fav_intro": "Names you've saved. Stored only in your browser — clearing your site data removes them.",
+    "fav_empty": "No saved names yet. Tap the heart on any name page to add it here.",
+    "fav_share_btn": "Copy shareable link",
+    "fav_share_done": "Link copied!",
+    "fav_remove": "Remove",
     "footer_data": "Data: {source} ({range})",
 
     "crumb_home": "Home",
@@ -677,6 +688,17 @@ STRINGS_FR: dict[str, str] = {
     "nav_trends": "Tendances",
     "nav_decades": "Décennies",
     "nav_rankings": "Classement {year}",
+    "nav_favorites": "Favoris",
+    "fav_add_tip": "Ajouter aux favoris",
+    "fav_remove_tip": "Retirer des favoris",
+    "fav_h1": "Vos prénoms enregistrés",
+    "fav_title": "Vos prénoms enregistrés — NameCharted",
+    "fav_desc": "Votre liste personnelle de prénoms favoris.",
+    "fav_intro": "Les prénoms que vous avez enregistrés. Conservés uniquement dans votre navigateur — effacer les données du site les supprime.",
+    "fav_empty": "Aucun prénom enregistré. Touchez le cœur sur une page de prénom pour l'ajouter ici.",
+    "fav_share_btn": "Copier le lien à partager",
+    "fav_share_done": "Lien copié !",
+    "fav_remove": "Retirer",
     "footer_data": "Données : {source} ({range})",
 
     "crumb_home": "Accueil",
@@ -966,6 +988,148 @@ def lang_banner_script() -> str:
     return LANG_BANNER_SCRIPT.replace('__ACTIVE_CC__', ACTIVE_CC)
 
 
+FAVORITES_SCRIPT = """
+    <script>
+    (function() {
+        var CC = '__ACTIVE_CC__';
+        var PREFIX = '__PREFIX__';
+        var KEY = 'nc-favorites-' + CC;
+
+        function read() {
+            try { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
+            catch (e) { return []; }
+        }
+        function write(list) {
+            try { localStorage.setItem(KEY, JSON.stringify(list)); } catch (e) {}
+        }
+        function findIdx(list, slug) {
+            for (var i = 0; i < list.length; i++) if (list[i].slug === slug) return i;
+            return -1;
+        }
+        function updateBadge() {
+            var n = read().length;
+            var els = document.querySelectorAll('.fav-nav-count');
+            for (var i = 0; i < els.length; i++) {
+                els[i].textContent = n ? ' (' + n + ')' : '';
+            }
+        }
+        function clearChildren(el) {
+            while (el.firstChild) el.removeChild(el.firstChild);
+        }
+
+        // Heart button on name page
+        var btn = document.querySelector('.fav-btn[data-slug]');
+        if (btn) {
+            var slug = btn.getAttribute('data-slug');
+            var name = btn.getAttribute('data-name');
+            var addTip = btn.getAttribute('title');
+            var removeTip = '__FAV_REMOVE_TIP__';
+            function syncBtn() {
+                var on = findIdx(read(), slug) >= 0;
+                btn.classList.toggle('is-fav', on);
+                btn.setAttribute('title', on ? removeTip : addTip);
+                btn.setAttribute('aria-label', on ? removeTip : addTip);
+                btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            }
+            btn.addEventListener('click', function() {
+                var list = read();
+                var i = findIdx(list, slug);
+                if (i >= 0) list.splice(i, 1);
+                else list.push({slug: slug, name: name});
+                write(list);
+                syncBtn();
+                updateBadge();
+            });
+            syncBtn();
+        }
+
+        // Favorites page
+        var ul = document.getElementById('fav-list');
+        if (ul) {
+            // Shareable hash: /favorites.html#slug1,slug2 merges into the saved list.
+            var hash = decodeURIComponent((window.location.hash || '').slice(1));
+            if (hash) {
+                var slugs = hash.split(',').filter(Boolean);
+                var existing = read();
+                slugs.forEach(function(s) {
+                    if (findIdx(existing, s) < 0) {
+                        var displayName = s.replace(/^./, function(c) { return c.toUpperCase(); })
+                                           .replace(/-(.)/g, function(_, c) { return ' ' + c.toUpperCase(); });
+                        existing.push({slug: s, name: displayName});
+                    }
+                });
+                write(existing);
+                history.replaceState(null, '', window.location.pathname);
+            }
+            var emptyEl = document.getElementById('fav-empty');
+            var actionsEl = document.getElementById('fav-actions');
+            var shareBtn = document.getElementById('fav-share');
+            var shareDone = document.getElementById('fav-share-done');
+            function render() {
+                var list = read();
+                clearChildren(ul);
+                if (!list.length) {
+                    emptyEl.style.display = '';
+                    ul.style.display = 'none';
+                    actionsEl.style.display = 'none';
+                    return;
+                }
+                emptyEl.style.display = 'none';
+                ul.style.display = '';
+                actionsEl.style.display = '';
+                list.forEach(function(item) {
+                    var li = document.createElement('li');
+                    var a = document.createElement('a');
+                    a.href = PREFIX + '/name/' + item.slug + '.html';
+                    a.textContent = item.name;
+                    var rm = document.createElement('button');
+                    rm.className = 'fav-remove-btn';
+                    rm.setAttribute('aria-label', '__FAV_REMOVE__');
+                    rm.setAttribute('data-slug', item.slug);
+                    rm.textContent = '\\u00d7';
+                    li.appendChild(a); li.appendChild(rm);
+                    ul.appendChild(li);
+                });
+            }
+            ul.addEventListener('click', function(e) {
+                var t = e.target;
+                if (t && t.classList.contains('fav-remove-btn')) {
+                    var s = t.getAttribute('data-slug');
+                    var list = read();
+                    var i = findIdx(list, s);
+                    if (i >= 0) { list.splice(i, 1); write(list); render(); updateBadge(); }
+                }
+            });
+            shareBtn.addEventListener('click', function() {
+                var list = read();
+                if (!list.length) return;
+                var url = window.location.origin + window.location.pathname
+                          + '#' + list.map(function(x) { return x.slug; }).join(',');
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(url).then(function() {
+                        shareDone.style.display = '';
+                        setTimeout(function() { shareDone.style.display = 'none'; }, 2500);
+                    });
+                } else {
+                    window.prompt('Copy this link:', url);
+                }
+            });
+            render();
+        }
+
+        updateBadge();
+    })();
+    </script>"""
+
+
+def favorites_script() -> str:
+    return (FAVORITES_SCRIPT
+            .replace('__ACTIVE_CC__', ACTIVE_CC)
+            .replace('__PREFIX__', PREFIX)
+            .replace('__FAV_REMOVE_TIP__', S("fav_remove_tip"))
+            .replace('__FAV_REMOVE__', S("fav_remove")))
+
+
 # ---------------------------------------------------------------------------
 # Shared markup
 # ---------------------------------------------------------------------------
@@ -1005,6 +1169,25 @@ BASE_CSS = """
         #lang-banner a { color: #fff; font-weight: 700; text-decoration: underline; }
         #lang-banner button { background: none; border: 0; color: #fff; font-size: 1.25rem; cursor: pointer; line-height: 1; padding: 0 0.3rem; opacity: 0.8; }
         #lang-banner button:hover { opacity: 1; }
+        .fav-nav-count { font-size: 0.78rem; color: #c8cfdb; margin-left: 0.2rem; }
+        .fav-btn { background: none; border: 0; cursor: pointer; padding: 0.3rem 0.5rem; vertical-align: middle; display: inline-flex; align-items: center; }
+        .fav-btn svg { width: 24px; height: 24px; display: block; transition: transform 0.12s ease; }
+        .fav-btn:hover svg { transform: scale(1.12); }
+        .fav-btn .heart-empty { stroke: #5B6678; fill: none; stroke-width: 2; }
+        .fav-btn .heart-full { fill: #FF6B5C; stroke: none; }
+        .fav-btn.is-fav .heart-empty { display: none; }
+        .fav-btn:not(.is-fav) .heart-full { display: none; }
+        h1 .fav-btn { margin-left: 0.5rem; vertical-align: -4px; }
+        .fav-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
+        .fav-list li { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between; }
+        .fav-list a { color: #1B2440; text-decoration: none; font-weight: 600; flex: 1; }
+        .fav-list a:hover { color: #149E91; }
+        .fav-remove-btn { background: none; border: 0; cursor: pointer; color: #c0392b; font-size: 1.2rem; line-height: 1; padding: 0 0.25rem; }
+        .fav-remove-btn:hover { color: #7a1f12; }
+        .fav-actions { display: flex; gap: 0.75rem; align-items: center; margin: 1rem 0 2rem; }
+        .fav-share-btn { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.55rem 1rem; font-weight: 600; cursor: pointer; font-size: 0.92rem; }
+        .fav-share-btn:hover { background: #117f74; }
+        .fav-share-done { color: #27ae60; font-size: 0.9rem; }
         .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #149E91; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
@@ -1076,6 +1259,7 @@ def site_nav_html() -> str:
         <a href="{p}/trends.html">{S("nav_trends")}</a>
         <a href="{p}/decades.html">{S("nav_decades")}</a>
         <a href="{p}/year/{LATEST_YEAR}.html">{S("nav_rankings", year=LATEST_YEAR)}</a>
+        <a href="{p}/favorites.html">{S("nav_favorites")}<span class="fav-nav-count"></span></a>
         {country_switcher_html()}
     </div></div>"""
 
@@ -1127,7 +1311,7 @@ def page(title, body, description="", canonical="", extra_head=""):
     <div class="container">
 {body}
 {footer_html()}
-    </div>{lang_banner_script()}
+    </div>{lang_banner_script()}{favorites_script()}
 </body>
 </html>"""
 
@@ -1397,8 +1581,16 @@ def generate_name_page(name):
                          f'margin:-0.25rem 0 1rem;">{S("name_variants_label")} '
                          f'{parts}{more}</p>')
 
+    heart_svg = ('<svg viewBox="0 0 24 24" aria-hidden="true">'
+                 '<path class="heart-empty" d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/>'
+                 '<path class="heart-full" d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/>'
+                 '</svg>')
+    safe_name = name.replace('"', '&quot;')
+    fav_btn = (f'<button class="fav-btn" data-slug="{slugify(name)}" data-name="{safe_name}" '
+               f'aria-label="{S("fav_add_tip")}" title="{S("fav_add_tip")}">{heart_svg}</button>')
+
     body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/names.html">{S("crumb_names")}</a> &rsaquo; {name}</div>
-        <h1>{name}</h1>
+        <h1>{name}{fav_btn}</h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">{S("name_primarily", singular=loc_singular(dom), of_singular=singular_of)} &middot; {gender_text}</p>{variants_line}
 
         <div class="insight">{insight}</div>
@@ -1956,6 +2148,28 @@ def generate_name_index_json():
 # ---------------------------------------------------------------------------
 # Single 404 (country-neutral), single sitemap + robots (root)
 # ---------------------------------------------------------------------------
+def generate_favorites_page():
+    """Empty shell — JS fills in the list from localStorage on load.
+    noindex so search engines don't try to crawl an empty page."""
+    p = PREFIX
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_favorites")}</div>
+        <h1>{S("fav_h1")}</h1>
+        <p>{S("fav_intro")}</p>
+        <div class="fav-actions" id="fav-actions" style="display:none;">
+            <button class="fav-share-btn" id="fav-share">{S("fav_share_btn")}</button>
+            <span class="fav-share-done" id="fav-share-done" style="display:none;">{S("fav_share_done")}</span>
+        </div>
+        <p id="fav-empty">{S("fav_empty")}</p>
+        <ul class="fav-list" id="fav-list" style="display:none;"></ul>"""
+    extra_head = '\n    <meta name="robots" content="noindex">'
+    (OUT_DIR / 'favorites.html').write_text(
+        page(S("fav_title"), body,
+             description=S("fav_desc"),
+             canonical=f"{BASE_URL}{p}/favorites.html",
+             extra_head=extra_head),
+        encoding='utf-8')
+
+
 def generate_404_page():
     # Render under whichever country is currently active; we call this last
     # after set_active("US") so the nav looks correct.
@@ -2078,6 +2292,7 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
                 compare_files_out.append(f'{slugify(top5[i])}-vs-{slugify(top5[j])}.html')
 
     generate_rare_names_page()
+    generate_favorites_page()
     generate_name_index_json()
 
 
