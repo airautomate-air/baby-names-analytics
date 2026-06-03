@@ -8,6 +8,7 @@ must drop the files in via a browser. See README in those folders for URLs.
 import csv
 import io
 import json
+import re
 import time
 import urllib.request
 from pathlib import Path
@@ -105,6 +106,43 @@ def manual_state_rows(state: str):
             with path.open(encoding='utf-8-sig') as f:
                 reader = csv.DictReader(f)
                 cols = {c.lower(): c for c in (reader.fieldnames or [])}
+
+                # QLD annual format: "Girl Names, Count of Girl Names, Boy Names,
+                # Count of Boy Names". Year lives in the filename, not the rows.
+                if 'girl names' in cols and 'boy names' in cols:
+                    m = re.search(r'(19|20)\d{2}', path.name)
+                    if not m:
+                        print(f"  [AU/{state}] skip {path.name}: no year in filename")
+                        continue
+                    year = int(m.group(0))
+                    c_gname = cols['girl names']
+                    c_gcount = cols.get('count of girl names')
+                    c_bname = cols['boy names']
+                    c_bcount = cols.get('count of boy names')
+                    n = 0
+                    for row in reader:
+                        for sex, c_name, c_count in (
+                            ('F', c_gname, c_gcount),
+                            ('M', c_bname, c_bcount),
+                        ):
+                            if not c_name or not c_count:
+                                continue
+                            name = (row.get(c_name) or '').strip()
+                            count_s = (row.get(c_count) or '').strip()
+                            if not name or not count_s:
+                                continue
+                            try:
+                                count = int(count_s)
+                            except ValueError:
+                                continue
+                            if count > 0:
+                                yield (year, sex, name, count)
+                                n += 1
+                    found += n
+                    print(f"  [AU/{state}] {path.name}: {n:,} rows (annual side-by-side)")
+                    continue
+
+                # Standard tabular format (Name/Sex/Year/Count columns).
                 col = lambda *names: next((cols[n] for n in names if n in cols), None)
                 c_year = col('year', 'birth year')
                 c_name = col('name', 'first name', 'firstname', 'given name')
