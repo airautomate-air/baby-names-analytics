@@ -737,6 +737,10 @@ STRINGS_EN: dict[str, str] = {
                 "on rhythm, sound clashes and shared initials so you can shortlist "
                 "good-sounding combinations fast."),
     "ww_show_more": "Show more",
+    "ww_how_h": "What makes a good match",
+    "ww_how_1": "<strong>Different starting letter</strong> to your surname — no <em>Sam Smith</em>.",
+    "ww_how_2": "<strong>Different syllable count</strong> to your surname — no <em>Jack Black</em>.",
+    "ww_how_3": "<strong>No rhyming endings</strong> at the join — no <em>Aiden Hayden</em>.",
 
     # Picker (swipe / filter / random)
     "nav_picker": "Name picker",
@@ -1029,6 +1033,10 @@ STRINGS_FR: dict[str, str] = {
                 "famille. Score basé sur le rythme, les sons heurtés et les "
                 "initiales communes pour bâtir vite une short-list."),
     "ww_show_more": "Voir plus",
+    "ww_how_h": "Ce qui fait une bonne association",
+    "ww_how_1": "<strong>Initiale différente</strong> de votre nom — pas de <em>Sam Smith</em>.",
+    "ww_how_2": "<strong>Nombre de syllabes différent</strong> — pas de <em>Jack Black</em>.",
+    "ww_how_3": "<strong>Pas de rime à la jonction</strong> — pas de <em>Aiden Hayden</em>.",
 
     # Picker (sélecteur de prénoms)
     "nav_picker": "Sélecteur",
@@ -2528,6 +2536,11 @@ BASE_CSS = """
         .ww-card .ww-name { font-weight: 600; color: #1B2440; font-size: 1rem; }
         .ww-card .ww-meta { font-size: 0.8rem; color: #5B6678; }
         #ww-loading { color: #5B6678; font-size: 0.9rem; padding: 0.5rem 0; }
+        .how-box { background: #fff; border: 1px solid #d6dde2; border-left: 4px solid #149E91; border-radius: 6px; padding: 0.9rem 1.25rem; margin: 1rem 0 1.5rem; }
+        .how-box h2 { margin: 0 0 0.5rem; font-size: 0.95rem; font-family: 'Inter', sans-serif; font-weight: 600; color: #1B2440; }
+        .how-box ul { margin: 0; padding-left: 1.1rem; color: #1B2440; font-size: 0.92rem; }
+        .how-box li { margin: 0.25rem 0; }
+        .how-box em { color: #5B6678; font-style: normal; }
         .ww-more-wrap { text-align: center; margin-top: 1.5rem; }
         #ww-more { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.6rem 1.4rem; border-radius: 24px; cursor: pointer; font-weight: 500; font-size: 0.92rem; }
         #ww-more:hover { border-color: #149E91; color: #149E91; }
@@ -3602,6 +3615,14 @@ def generate_works_with_page():
     body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_works_with")}</div>
         <h1>{S("ww_h1")}</h1>
         <p>{S("ww_intro")}</p>
+        <div class="how-box">
+            <h2>{S("ww_how_h")}</h2>
+            <ul>
+                <li>{S("ww_how_1")}</li>
+                <li>{S("ww_how_2")}</li>
+                <li>{S("ww_how_3")}</li>
+            </ul>
+        </div>
         <form id="ww-form" autocomplete="off">
             <div class="ww-form">
                 <input type="text" id="ww-input" placeholder="{S("ww_input")}" aria-label="{S("ww_input")}">
