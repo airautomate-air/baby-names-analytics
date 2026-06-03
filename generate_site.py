@@ -24,6 +24,12 @@ COUNTRIES = ["US", "FR", "GB", "AU"]
 COUNTRY_SLUG = {"US": "", "FR": "fr", "GB": "uk", "AU": "au"}
 COUNTRY_LABEL = {"US": "US", "FR": "FR", "GB": "UK", "AU": "AU"}
 COUNTRY_NAME = {"US": "United States", "FR": "France", "GB": "United Kingdom", "AU": "Australia"}
+FLAG = {"US": "🇺🇸", "FR": "🇫🇷", "GB": "🇬🇧", "AU": "🇦🇺"}
+# Country names rendered in each UI language (for the homepage cross-country callout).
+COUNTRY_NAMES_EN = {"US": "United States", "FR": "France", "GB": "UK", "AU": "Australia"}
+COUNTRY_NAMES_FR = {"US": "États-Unis", "FR": "France", "GB": "Royaume-Uni", "AU": "Australie"}
+COUNTRY_NAMES_IN_UI = {"US": COUNTRY_NAMES_EN, "FR": COUNTRY_NAMES_FR,
+                       "GB": COUNTRY_NAMES_EN, "AU": COUNTRY_NAMES_EN}
 DATA_SOURCE_FULL = {
     "US": "U.S. Social Security Administration",
     "FR": "INSEE (France)",
@@ -464,6 +470,7 @@ STRINGS_EN: dict[str, str] = {
     "home_try": "Try names like {samples} &middot; or",
     "home_browse_link": "browse all {n} names A–Z",
     "home_top_h2": "Top Names of All Time (by total usage)",
+    "home_cc_callout": "Also available for:",
     "home_total_babies": "{n} total babies",
     "home_mostly": "mostly {label}",
     "home_title": "NameCharted — {country} Name Popularity & Trends",
@@ -648,6 +655,7 @@ STRINGS_FR: dict[str, str] = {
     "home_try": "Essayez par exemple {samples} &middot; ou",
     "home_browse_link": "parcourez les {n} prénoms A–Z",
     "home_top_h2": "Prénoms les plus donnés de tous les temps",
+    "home_cc_callout": "Aussi disponible pour :",
     "home_total_babies": "{n} naissances au total",
     "home_mostly": "majoritairement {label}",
     "home_title": "NameCharted — Prénoms en France : popularité et tendances",
@@ -860,6 +868,60 @@ def slug_label(sex: str) -> str:
     return 'girls' if sex == 'F' else 'boys'
 
 
+def homepage_cc_callout() -> str:
+    """Cross-country card shown only on each homepage."""
+    names = COUNTRY_NAMES_IN_UI[ACTIVE_CC]
+    others = [c for c in COUNTRIES if c != ACTIVE_CC]
+    links = " <span style=\"color:#8a93a3;\">·</span> ".join(
+        f'<a href="{home_path(c)}"><span class="flag" aria-hidden="true">{FLAG[c]}</span>{names[c]}</a>'
+        for c in others
+    )
+    return f'        <p class="cc-callout">{S("home_cc_callout")} {links}</p>\n'
+
+
+LANG_BANNER_SCRIPT = """
+    <script>
+    (function() {
+        try {
+            if (localStorage.getItem('nc-region-prompt') === 'dismissed') return;
+        } catch (e) { /* private mode: just proceed */ }
+        var active = '__ACTIVE_CC__';
+        var lang = ((navigator.language || navigator.userLanguage) || '').toLowerCase();
+        var dest = null, text = '', go = '';
+        if (lang.indexOf('fr') === 0 && active !== 'FR') {
+            dest = '/fr/'; text = 'Voir ce site en français \\u003F'; go = 'Aller à NameCharted France →';
+        } else if (lang.indexOf('en-gb') === 0 && active !== 'GB') {
+            dest = '/uk/'; text = 'View the UK version of this site?'; go = 'Go to UK rankings →';
+        } else if (lang.indexOf('en-au') === 0 && active !== 'AU') {
+            dest = '/au/'; text = 'View the Australian version of this site?'; go = 'Go to Australia rankings →';
+        } else if (lang.indexOf('en') === 0 && active === 'FR') {
+            dest = '/'; text = 'View this site in English?'; go = 'Go to US version →';
+        }
+        if (!dest) return;
+        var bar = document.createElement('div');
+        bar.id = 'lang-banner';
+        var span = document.createElement('span'); span.textContent = text; bar.appendChild(span);
+        var a = document.createElement('a'); a.href = dest; a.textContent = go; bar.appendChild(a);
+        var btn = document.createElement('button');
+        btn.setAttribute('aria-label', 'Dismiss'); btn.textContent = '×';
+        btn.addEventListener('click', function() {
+            try { localStorage.setItem('nc-region-prompt', 'dismissed'); } catch (e) {}
+            bar.parentNode && bar.parentNode.removeChild(bar);
+        });
+        bar.appendChild(btn);
+        if (document.body.firstChild) {
+            document.body.insertBefore(bar, document.body.firstChild);
+        } else {
+            document.body.appendChild(bar);
+        }
+    })();
+    </script>"""
+
+
+def lang_banner_script() -> str:
+    return LANG_BANNER_SCRIPT.replace('__ACTIVE_CC__', ACTIVE_CC)
+
+
 # ---------------------------------------------------------------------------
 # Shared markup
 # ---------------------------------------------------------------------------
@@ -885,10 +947,20 @@ BASE_CSS = """
         .sitenav .brand { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 700; color: #fff; margin-right: auto; display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.05rem; }
         .sitenav .brand svg { display: block; }
         .sitenav .brand .wm-teal { color: #149E91; }
-        .ccswitch { margin-left: auto; font-size: 0.85rem; color: #8a93a3; display: inline-flex; gap: 0.4rem; align-items: center; }
-        .ccswitch a { color: #c8cfdb; }
-        .ccswitch strong { color: #fff; font-weight: 600; }
+        .ccswitch { margin-left: auto; font-size: 0.95rem; color: #8a93a3; display: inline-flex; gap: 0.45rem; align-items: center; }
+        .ccswitch a { color: #c8cfdb; text-decoration: none; }
+        .ccswitch a:hover { color: #fff; }
+        .ccswitch strong { color: #fff; font-weight: 700; }
+        .ccswitch .flag { font-size: 1.05rem; line-height: 1; margin-right: 0.18rem; }
         .ccswitch .sep { color: #4a5269; }
+        .cc-callout { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.9rem 1.25rem; margin: 1.5rem 0 2rem; font-size: 0.95rem; color: #1B2440; }
+        .cc-callout a { color: #149E91; text-decoration: none; font-weight: 600; margin: 0 0.15rem; white-space: nowrap; }
+        .cc-callout a:hover { text-decoration: underline; }
+        .cc-callout .flag { margin-right: 0.2rem; }
+        #lang-banner { background: #149E91; color: #fff; padding: 0.55rem 1rem; text-align: center; font-size: 0.92rem; display: flex; justify-content: center; align-items: center; gap: 0.85rem; flex-wrap: wrap; }
+        #lang-banner a { color: #fff; font-weight: 700; text-decoration: underline; }
+        #lang-banner button { background: none; border: 0; color: #fff; font-size: 1.25rem; cursor: pointer; line-height: 1; padding: 0 0.3rem; opacity: 0.8; }
+        #lang-banner button:hover { opacity: 1; }
         .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #149E91; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
@@ -940,11 +1012,13 @@ def country_switcher_html() -> str:
     parts = []
     for c in COUNTRIES:
         href = home_path(c)
+        flag = f'<span class="flag" aria-hidden="true">{FLAG[c]}</span>'
+        label = f'{flag}{COUNTRY_LABEL[c]}'
         if c == ACTIVE_CC:
-            parts.append(f'<strong>{COUNTRY_LABEL[c]}</strong>')
+            parts.append(f'<strong>{label}</strong>')
         else:
-            parts.append(f'<a href="{href}">{COUNTRY_LABEL[c]}</a>')
-    sep = ' <span class="sep">·</span> '
+            parts.append(f'<a href="{href}">{label}</a>')
+    sep = '<span class="sep">·</span>'
     return '<span class="ccswitch">' + sep.join(parts) + '</span>'
 
 
@@ -1004,7 +1078,7 @@ def page(title, body, description="", canonical="", extra_head=""):
     <div class="container">
 {body}
 {footer_html()}
-    </div>
+    </div>{lang_banner_script()}
 </body>
 </html>"""
 
@@ -1042,7 +1116,7 @@ def generate_homepage():
     body = f"""        <h1>NameCharted — {COUNTRY_NAME[ACTIVE_CC]}</h1>
         <p style="color:#5B6678; font-size:1.05rem; margin-top:-0.25rem;">{S("home_tagline")}</p>
         <p>{S("home_intro", range=DATA_RANGE)}</p>
-
+{homepage_cc_callout()}
         <div class="search-box" style="margin:2rem 0; text-align:center;">
             <input type="text" id="searchInput" placeholder="{S("home_search_placeholder")}"
                    style="padding:0.75rem; width:70%; max-width:400px; border:1px solid #ddd; border-radius:4px; font-size:1rem;">

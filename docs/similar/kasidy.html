@@ -42,10 +42,20 @@
         .sitenav .brand { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 700; color: #fff; margin-right: auto; display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.05rem; }
         .sitenav .brand svg { display: block; }
         .sitenav .brand .wm-teal { color: #149E91; }
-        .ccswitch { margin-left: auto; font-size: 0.85rem; color: #8a93a3; display: inline-flex; gap: 0.4rem; align-items: center; }
-        .ccswitch a { color: #c8cfdb; }
-        .ccswitch strong { color: #fff; font-weight: 600; }
+        .ccswitch { margin-left: auto; font-size: 0.95rem; color: #8a93a3; display: inline-flex; gap: 0.45rem; align-items: center; }
+        .ccswitch a { color: #c8cfdb; text-decoration: none; }
+        .ccswitch a:hover { color: #fff; }
+        .ccswitch strong { color: #fff; font-weight: 700; }
+        .ccswitch .flag { font-size: 1.05rem; line-height: 1; margin-right: 0.18rem; }
         .ccswitch .sep { color: #4a5269; }
+        .cc-callout { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.9rem 1.25rem; margin: 1.5rem 0 2rem; font-size: 0.95rem; color: #1B2440; }
+        .cc-callout a { color: #149E91; text-decoration: none; font-weight: 600; margin: 0 0.15rem; white-space: nowrap; }
+        .cc-callout a:hover { text-decoration: underline; }
+        .cc-callout .flag { margin-right: 0.2rem; }
+        #lang-banner { background: #149E91; color: #fff; padding: 0.55rem 1rem; text-align: center; font-size: 0.92rem; display: flex; justify-content: center; align-items: center; gap: 0.85rem; flex-wrap: wrap; }
+        #lang-banner a { color: #fff; font-weight: 700; text-decoration: underline; }
+        #lang-banner button { background: none; border: 0; color: #fff; font-size: 1.25rem; cursor: pointer; line-height: 1; padding: 0 0.3rem; opacity: 0.8; }
+        #lang-banner button:hover { opacity: 1; }
         .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #149E91; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
@@ -103,7 +113,7 @@
         <a href="/trends.html">Trends</a>
         <a href="/decades.html">Decades</a>
         <a href="/year/2024.html">2024 Rankings</a>
-        <span class="ccswitch"><strong>US</strong> <span class="sep">·</span> <a href="/fr/">FR</a> <span class="sep">·</span> <a href="/uk/">UK</a> <span class="sep">·</span> <a href="/au/">AU</a></span>
+        <span class="ccswitch"><strong><span class="flag" aria-hidden="true">🇺🇸</span>US</strong><span class="sep">·</span><a href="/fr/"><span class="flag" aria-hidden="true">🇫🇷</span>FR</a><span class="sep">·</span><a href="/uk/"><span class="flag" aria-hidden="true">🇬🇧</span>UK</a><span class="sep">·</span><a href="/au/"><span class="flag" aria-hidden="true">🇦🇺</span>AU</a></span>
     </div></div>
     <div class="container">
         <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/name/kasidy.html">Kasidy</a> &rsaquo; Similar names</div>
@@ -141,5 +151,41 @@
             <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.25rem;">Data: U.S. Social Security Administration (1880–2024)</p>
         </div>
     </div>
+    <script>
+    (function() {
+        try {
+            if (localStorage.getItem('nc-region-prompt') === 'dismissed') return;
+        } catch (e) { /* private mode: just proceed */ }
+        var active = 'US';
+        var lang = ((navigator.language || navigator.userLanguage) || '').toLowerCase();
+        var dest = null, text = '', go = '';
+        if (lang.indexOf('fr') === 0 && active !== 'FR') {
+            dest = '/fr/'; text = 'Voir ce site en français \u003F'; go = 'Aller à NameCharted France →';
+        } else if (lang.indexOf('en-gb') === 0 && active !== 'GB') {
+            dest = '/uk/'; text = 'View the UK version of this site?'; go = 'Go to UK rankings →';
+        } else if (lang.indexOf('en-au') === 0 && active !== 'AU') {
+            dest = '/au/'; text = 'View the Australian version of this site?'; go = 'Go to Australia rankings →';
+        } else if (lang.indexOf('en') === 0 && active === 'FR') {
+            dest = '/'; text = 'View this site in English?'; go = 'Go to US version →';
+        }
+        if (!dest) return;
+        var bar = document.createElement('div');
+        bar.id = 'lang-banner';
+        var span = document.createElement('span'); span.textContent = text; bar.appendChild(span);
+        var a = document.createElement('a'); a.href = dest; a.textContent = go; bar.appendChild(a);
+        var btn = document.createElement('button');
+        btn.setAttribute('aria-label', 'Dismiss'); btn.textContent = '×';
+        btn.addEventListener('click', function() {
+            try { localStorage.setItem('nc-region-prompt', 'dismissed'); } catch (e) {}
+            bar.parentNode && bar.parentNode.removeChild(bar);
+        });
+        bar.appendChild(btn);
+        if (document.body.firstChild) {
+            document.body.insertBefore(bar, document.body.firstChild);
+        } else {
+            document.body.appendChild(bar);
+        }
+    })();
+    </script>
 </body>
 </html>
