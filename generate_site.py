@@ -238,6 +238,101 @@ top_names: list = []
 
 ALL_SITEMAP_URLS: list[str] = []
 
+# Presence indices populated once after all build_country calls. Used by
+# hreflang helpers to decide which countries to cross-link from a page.
+SLUGS_WITH_PAGE_BY_CC: dict[str, set[str]] = {}
+YEARS_SET_BY_CC: dict[str, set[int]] = {}
+DECADES_SET_BY_CC: dict[str, set[int]] = {}
+LETTERS_BY_CC: dict[str, set[tuple[str, str]]] = {}  # (sex_code, uppercase_letter)
+
+HREFLANG = {"US": "en-US", "FR": "fr-FR", "GB": "en-GB", "AU": "en-AU"}
+
+
+def build_presence_indices() -> None:
+    for cc in COUNTRIES:
+        SLUGS_WITH_PAGE_BY_CC[cc] = {slugify(n) for n in pages_to_generate_by_country[cc]}
+        YEARS_SET_BY_CC[cc] = set(years_by_country[cc])
+        DECADES_SET_BY_CC[cc] = set(decades_by_country[cc])
+        letters: set[tuple[str, str]] = set()
+        for sex in ('F', 'M'):
+            for letter in letter_names_by_country[cc][sex].keys():
+                letters.add((sex, letter))
+        LETTERS_BY_CC[cc] = letters
+
+
+def _country_prefix(cc: str) -> str:
+    slug = COUNTRY_SLUG[cc]
+    return "" if not slug else f"/{slug}"
+
+
+def hreflang_block(path_per_cc: dict[str, str]) -> str:
+    """Render <link rel="alternate"> tags for every country in path_per_cc,
+    plus an x-default pointing at US (or the first available country)."""
+    if not path_per_cc:
+        return ""
+    parts = []
+    for cc in COUNTRIES:
+        if cc in path_per_cc:
+            parts.append(
+                f'\n    <link rel="alternate" hreflang="{HREFLANG[cc]}" '
+                f'href="{BASE_URL}{path_per_cc[cc]}">'
+            )
+    default_cc = "US" if "US" in path_per_cc else next(iter(path_per_cc))
+    parts.append(
+        f'\n    <link rel="alternate" hreflang="x-default" '
+        f'href="{BASE_URL}{path_per_cc[default_cc]}">'
+    )
+    return "".join(parts)
+
+
+def hreflang_for_hub(rel: str) -> str:
+    """Pages that exist on every country (homepage if rel='', else <prefix>/<rel>)."""
+    paths = {}
+    for cc in COUNTRIES:
+        p = _country_prefix(cc)
+        paths[cc] = f"{p}/" if not rel else f"{p}/{rel}"
+    return hreflang_block(paths)
+
+
+def hreflang_for_name(slug: str) -> str:
+    paths = {}
+    for cc in COUNTRIES:
+        if slug in SLUGS_WITH_PAGE_BY_CC[cc]:
+            paths[cc] = f"{_country_prefix(cc)}/name/{slug}.html"
+    return hreflang_block(paths)
+
+
+def hreflang_for_similar(slug: str) -> str:
+    paths = {}
+    for cc in COUNTRIES:
+        if slug in SLUGS_WITH_PAGE_BY_CC[cc]:
+            paths[cc] = f"{_country_prefix(cc)}/similar/{slug}.html"
+    return hreflang_block(paths)
+
+
+def hreflang_for_year(year: int) -> str:
+    paths = {}
+    for cc in COUNTRIES:
+        if year in YEARS_SET_BY_CC[cc]:
+            paths[cc] = f"{_country_prefix(cc)}/year/{year}.html"
+    return hreflang_block(paths)
+
+
+def hreflang_for_decade(d: int) -> str:
+    paths = {}
+    for cc in COUNTRIES:
+        if d in DECADES_SET_BY_CC[cc]:
+            paths[cc] = f"{_country_prefix(cc)}/decade/{d}s.html"
+    return hreflang_block(paths)
+
+
+def hreflang_for_letter(sex: str, letter: str) -> str:
+    paths = {}
+    for cc in COUNTRIES:
+        if (sex, letter) in LETTERS_BY_CC[cc]:
+            paths[cc] = f"{_country_prefix(cc)}/letter/{sex_label(sex)}-{letter.lower()}.html"
+    return hreflang_block(paths)
+
 
 def set_active(cc: str) -> None:
     g = globals()
@@ -558,7 +653,8 @@ def generate_homepage():
             f"rankings, gender split, and interactive trend charts.")
     title = f"NameCharted — {COUNTRY_NAME[ACTIVE_CC]} Name Popularity & Trends"
     (OUT_DIR / 'index.html').write_text(
-        page(title, body, description=desc, canonical=home_url()),
+        page(title, body, description=desc, canonical=home_url(),
+             extra_head=hreflang_for_hub("")),
         encoding='utf-8')
 
 
@@ -729,7 +825,7 @@ def generate_name_page(name):
         ("Home", home_url()),
         ("Names", f"{BASE_URL}{p}/names.html"),
         (name, canonical),
-    ]) + chart_js
+    ]) + chart_js + hreflang_for_name(slugify(name))
 
     body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; <a href="{p}/names.html">Names</a> &rsaquo; {name}</div>
         <h1>{name}</h1>
@@ -814,7 +910,8 @@ def generate_browse_index():
             f"popularity trends, rankings and yearly counts from {DATA_RANGE}.")
     (OUT_DIR / 'names.html').write_text(
         page("Browse All Names A–Z", body,
-             description=desc, canonical=f"{BASE_URL}{p}/names.html"),
+             description=desc, canonical=f"{BASE_URL}{p}/names.html",
+             extra_head=hreflang_for_hub("names.html")),
         encoding='utf-8')
 
 
@@ -866,7 +963,7 @@ def generate_year_page(year):
     extra_head = breadcrumb_jsonld([
         ("Home", home_url()),
         (str(year), canonical),
-    ])
+    ]) + hreflang_for_year(year)
     (OUT_DIR / 'year' / f'{year}.html').write_text(
         page(f"Top Names of {year} — Rankings & Counts", body,
              description=desc, canonical=canonical, extra_head=extra_head),
@@ -948,7 +1045,7 @@ def generate_similar_page(name):
         ("Home", home_url()),
         (name, f"{BASE_URL}{p}/name/{slugify(name)}.html"),
         ("Similar names", canonical),
-    ])
+    ]) + hreflang_for_similar(slugify(name))
     (OUT_DIR / 'similar' / f'{slugify(name)}.html').write_text(
         page(f"Names Similar to {name} — {label.capitalize()}' Name Ideas", body,
              description=desc, canonical=canonical, extra_head=extra_head),
@@ -1006,7 +1103,7 @@ def generate_decade_page(decade):
         ("Home", home_url()),
         ("Decades", f"{BASE_URL}{p}/decades.html"),
         (label, canonical),
-    ])
+    ]) + hreflang_for_decade(decade)
     (OUT_DIR / 'decade' / f'{decade}s.html').write_text(
         page(f"Most Popular Names of the {label}", body,
              description=desc, canonical=canonical, extra_head=extra_head),
@@ -1036,7 +1133,8 @@ def generate_decades_hub():
             f"and boys' names of every decade from {data_source_label()} data.")
     (OUT_DIR / 'decades.html').write_text(
         page("Names by Decade — Top Names of Every Era", body,
-             description=desc, canonical=f"{BASE_URL}{p}/decades.html"),
+             description=desc, canonical=f"{BASE_URL}{p}/decades.html",
+             extra_head=hreflang_for_hub("decades.html")),
         encoding='utf-8')
 
 
@@ -1105,7 +1203,8 @@ def generate_trends_pages():
              canonical=f"{BASE_URL}{p}/trends/rising.html",
              extra_head=breadcrumb_jsonld([("Home", home_url()),
                                            ("Trends", f"{BASE_URL}{p}/trends.html"),
-                                           ("Rising", f"{BASE_URL}{p}/trends/rising.html")])),
+                                           ("Rising", f"{BASE_URL}{p}/trends/rising.html")])
+                        + hreflang_for_hub("trends/rising.html")),
         encoding='utf-8')
 
     body = f"""        <div class="breadcrumb"><a href="{home_path()}">Home</a> &rsaquo; <a href="{p}/trends.html">Trends</a> &rsaquo; Falling</div>
@@ -1120,7 +1219,8 @@ def generate_trends_pages():
              canonical=f"{BASE_URL}{p}/trends/falling.html",
              extra_head=breadcrumb_jsonld([("Home", home_url()),
                                            ("Trends", f"{BASE_URL}{p}/trends.html"),
-                                           ("Falling", f"{BASE_URL}{p}/trends/falling.html")])),
+                                           ("Falling", f"{BASE_URL}{p}/trends/falling.html")])
+                        + hreflang_for_hub("trends/falling.html")),
         encoding='utf-8')
 
 
@@ -1145,7 +1245,8 @@ def generate_trends_hub():
         page("Name Trends — Rising & Falling Names", body,
              description=f"See which names are rising and falling in popularity heading into "
                          f"{LATEST_YEAR}, plus top names by decade, from {data_source_label()} data.",
-             canonical=f"{BASE_URL}{p}/trends.html"),
+             canonical=f"{BASE_URL}{p}/trends.html",
+             extra_head=hreflang_for_hub("trends.html")),
         encoding='utf-8')
 
 
@@ -1185,7 +1286,7 @@ def generate_letter_page(sex, letter):
         ("Home", home_url()),
         ("Names", f"{BASE_URL}{p}/names.html"),
         (f"{label.capitalize()} {letter}", canonical),
-    ])
+    ]) + hreflang_for_letter(sex, letter)
     (OUT_DIR / 'letter' / f'{label}-{letter.lower()}.html').write_text(
         page(f"{label.capitalize()} Names Starting With {letter} — Popularity Ranked", body,
              description=desc, canonical=canonical, extra_head=extra_head),
@@ -1254,7 +1355,8 @@ def generate_rare_names_page():
             f"with fewer than {PAGE_MIN_TOTAL} lifetime births, listed A–Z.")
     (OUT_DIR / 'rare-names.html').write_text(
         page("Rare Names — Full A–Z Index", body,
-             description=desc, canonical=f"{BASE_URL}{p}/rare-names.html"),
+             description=desc, canonical=f"{BASE_URL}{p}/rare-names.html",
+             extra_head=hreflang_for_hub("rare-names.html")),
         encoding='utf-8')
 
 
@@ -1397,6 +1499,7 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
 def main():
     for cc in COUNTRIES:
         build_country(cc)
+    build_presence_indices()
 
     compare_files: list[str] = []
     urls_by_cc: dict[str, list[str]] = {}
