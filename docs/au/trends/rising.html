@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fastest-Rising Names of 2025</title>
+    <meta name="description" content="The fastest-rising names heading into 2025, for girls and boys, based on official NSW & VIC BDM birth data.">
+    <link rel="canonical" href="https://namecharted.com/au/trends/rising.html">
+    <meta property="og:title" content="Fastest-Rising Names of 2025">
+    <meta property="og:description" content="The fastest-rising names heading into 2025, for girls and boys, based on official NSW & VIC BDM birth data.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NameCharted">
+    <meta property="og:image" content="https://namecharted.com/og-default.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fastest-Rising Names of 2025">
+    <meta name="twitter:description" content="The fastest-rising names heading into 2025, for girls and boys, based on official NSW & VIC BDM birth data.">
+    <meta name="twitter:image" content="https://namecharted.com/og-default.png">
+    <meta property="og:url" content="https://namecharted.com/au/trends/rising.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="theme-color" content="#149E91">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F7F8FA;
+            color: #333;
+            font-feature-settings: 'tnum' 1;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        h1, h2, h3, h4 { font-family: 'Poppins', 'Inter', sans-serif; color: #1B2440; }
+        h1 { color: #1B2440; }
+        .sitenav {
+            background: #1B2440; padding: 0.9rem 2rem;
+        }
+        .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .sitenav a { color: #EEF2F4; text-decoration: none; font-weight: 500; }
+        .sitenav a:hover { color: #fff; text-decoration: underline; }
+        .sitenav .brand { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 700; color: #fff; margin-right: auto; display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.05rem; }
+        .sitenav .brand svg { display: block; }
+        .sitenav .brand .wm-teal { color: #149E91; }
+        .ccswitch { margin-left: auto; font-size: 0.85rem; color: #8a93a3; display: inline-flex; gap: 0.4rem; align-items: center; }
+        .ccswitch a { color: #c8cfdb; }
+        .ccswitch strong { color: #fff; font-weight: 600; }
+        .ccswitch .sep { color: #4a5269; }
+        .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .nav a { color: #149E91; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
+        .breadcrumb { font-size: 0.85rem; color: #5B6678; margin-bottom: 1rem; }
+        .breadcrumb a { color: #149E91; text-decoration: none; }
+        .insight {
+            background: #fff; border-left: 4px solid #149E91; padding: 1rem 1.25rem;
+            border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat {
+            background: #fff; padding: 1.5rem; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
+        }
+        .stat-value { font-family: 'Poppins', 'Inter', sans-serif; font-size: 2rem; font-weight: 700; color: #1B2440; }
+        .stat-label { color: #5B6678; margin-top: 0.5rem; font-size: 0.9rem; }
+        .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
+        table {
+            width: 100%; border-collapse: collapse; margin-bottom: 2rem;
+            background: #fff; border-radius: 8px; overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #EEF2F4; font-weight: 600; color: #1B2440; }
+        tr:hover { background-color: #f8f9fa; }
+        .year-column { width: 12%; font-family: monospace; }
+        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
+        .related a {
+            background:#fff; border:1px solid #d6dde2; border-radius:20px;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#1B2440; font-size:0.9rem;
+        }
+        .related a:hover { background:#149E91; color:#fff; border-color:#149E91; }
+        .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#1B2440; font-weight:600; }
+        .azindex a:hover { background:#149E91; color:#fff; }
+        .footer { text-align: center; margin-top: 3rem; color: #5B6678; font-size: 0.9rem; }
+        a { color: #149E91; }
+</style>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://namecharted.com/au/"}, {"@type": "ListItem", "position": 2, "name": "Trends", "item": "https://namecharted.com/au/trends.html"}, {"@type": "ListItem", "position": 3, "name": "Rising", "item": "https://namecharted.com/au/trends/rising.html"}]}</script>
+</head>
+<body>
+    <div class="sitenav"><div class="sitenav-inner">
+        <a class="brand" href="/au/"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span></a>
+        <a href="/au/">Home</a>
+        <a href="/au/names.html">Browse A–Z</a>
+        <a href="/au/trends.html">Trends</a>
+        <a href="/au/decades.html">Decades</a>
+        <a href="/au/year/2025.html">2025 Rankings</a>
+        <span class="ccswitch"><a href="/">US</a> <span class="sep">·</span> <a href="/fr/">FR</a> <span class="sep">·</span> <a href="/uk/">UK</a> <span class="sep">·</span> <strong>AU</strong></span>
+    </div></div>
+    <div class="container">
+        <div class="breadcrumb"><a href="/au/">Home</a> &rsaquo; <a href="/au/trends.html">Trends</a> &rsaquo; Rising</div>
+        <h1>Fastest-Rising Names (2025)</h1>
+        <p>The girls' and boys' names growing fastest in popularity — comparing average births around
+        five years ago with the most recent years. Only names with
+        meaningful current usage are included.</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2rem;">
+            <div><h2 style="color:#149E91;">Girls</h2><table><thead><tr><th>Name</th><th class="count-column">~5 yrs ago</th><th class="count-column">2025</th><th class="count-column">Change</th></tr></thead><tbody>
+                <tr><td><a href="/au/name/delilah.html">Delilah</a></td><td class="count-column">26</td><td class="count-column">195</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;641%</td></tr>
+                <tr><td><a href="/au/name/eliana.html">Eliana</a></td><td class="count-column">31</td><td class="count-column">202</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;544%</td></tr>
+                <tr><td><a href="/au/name/pippa.html">Pippa</a></td><td class="count-column">44</td><td class="count-column">173</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;295%</td></tr>
+                <tr><td><a href="/au/name/maeve.html">Maeve</a></td><td class="count-column">78</td><td class="count-column">306</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;292%</td></tr>
+                <tr><td><a href="/au/name/remi.html">Remi</a></td><td class="count-column">85</td><td class="count-column">268</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;216%</td></tr>
+                <tr><td><a href="/au/name/adeline.html">Adeline</a></td><td class="count-column">51</td><td class="count-column">151</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;197%</td></tr>
+                <tr><td><a href="/au/name/rosie.html">Rosie</a></td><td class="count-column">58</td><td class="count-column">171</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;195%</td></tr>
+                <tr><td><a href="/au/name/millie.html">Millie</a></td><td class="count-column">115</td><td class="count-column">291</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;153%</td></tr>
+                <tr><td><a href="/au/name/daisy.html">Daisy</a></td><td class="count-column">195</td><td class="count-column">363</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;86%</td></tr>
+                <tr><td><a href="/au/name/hazel.html">Hazel</a></td><td class="count-column">312</td><td class="count-column">564</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;81%</td></tr>
+                <tr><td><a href="/au/name/sadie.html">Sadie</a></td><td class="count-column">145</td><td class="count-column">257</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;77%</td></tr>
+                <tr><td><a href="/au/name/eloise.html">Eloise</a></td><td class="count-column">154</td><td class="count-column">257</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;66%</td></tr>
+                <tr><td><a href="/au/name/billie.html">Billie</a></td><td class="count-column">194</td><td class="count-column">318</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;64%</td></tr>
+                <tr><td><a href="/au/name/elsie.html">Elsie</a></td><td class="count-column">200</td><td class="count-column">322</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;61%</td></tr>
+                <tr><td><a href="/au/name/sofia.html">Sofia</a></td><td class="count-column">257</td><td class="count-column">400</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;56%</td></tr>
+                <tr><td><a href="/au/name/aaliyah.html">Aaliyah</a></td><td class="count-column">97</td><td class="count-column">151</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;55%</td></tr>
+                <tr><td><a href="/au/name/eden.html">Eden</a></td><td class="count-column">132</td><td class="count-column">202</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;53%</td></tr>
+                <tr><td><a href="/au/name/bonnie.html">Bonnie</a></td><td class="count-column">150</td><td class="count-column">229</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;52%</td></tr>
+                <tr><td><a href="/au/name/violet.html">Violet</a></td><td class="count-column">239</td><td class="count-column">363</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;52%</td></tr>
+                <tr><td><a href="/au/name/florence.html">Florence</a></td><td class="count-column">234</td><td class="count-column">339</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;45%</td></tr>
+                <tr><td><a href="/au/name/aurora.html">Aurora</a></td><td class="count-column">191</td><td class="count-column">271</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;42%</td></tr>
+                <tr><td><a href="/au/name/ayla.html">Ayla</a></td><td class="count-column">200</td><td class="count-column">279</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;40%</td></tr>
+                <tr><td><a href="/au/name/poppy.html">Poppy</a></td><td class="count-column">208</td><td class="count-column">287</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;38%</td></tr>
+                <tr><td><a href="/au/name/summer.html">Summer</a></td><td class="count-column">138</td><td class="count-column">189</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;37%</td></tr>
+                <tr><td><a href="/au/name/lily.html">Lily</a></td><td class="count-column">375</td><td class="count-column">512</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;37%</td></tr>
+                <tr><td><a href="/au/name/penelope.html">Penelope</a></td><td class="count-column">217</td><td class="count-column">286</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;32%</td></tr>
+                <tr><td><a href="/au/name/freya.html">Freya</a></td><td class="count-column">196</td><td class="count-column">255</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;30%</td></tr>
+                <tr><td><a href="/au/name/lola.html">Lola</a></td><td class="count-column">152</td><td class="count-column">197</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;30%</td></tr>
+                <tr><td><a href="/au/name/eleanor.html">Eleanor</a></td><td class="count-column">230</td><td class="count-column">293</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;28%</td></tr>
+                <tr><td><a href="/au/name/maya.html">Maya</a></td><td class="count-column">217</td><td class="count-column">272</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;25%</td></tr>
+            </tbody></table></div>
+            <div><h2 style="color:#FF6B5C;">Boys</h2><table><thead><tr><th>Name</th><th class="count-column">~5 yrs ago</th><th class="count-column">2025</th><th class="count-column">Change</th></tr></thead><tbody>
+                <tr><td><a href="/au/name/miles.html">Miles</a></td><td class="count-column">58</td><td class="count-column">222</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;280%</td></tr>
+                <tr><td><a href="/au/name/theo.html">Theo</a></td><td class="count-column">66</td><td class="count-column">248</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;275%</td></tr>
+                <tr><td><a href="/au/name/luka.html">Luka</a></td><td class="count-column">72</td><td class="count-column">208</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;189%</td></tr>
+                <tr><td><a href="/au/name/elias.html">Elias</a></td><td class="count-column">67</td><td class="count-column">188</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;181%</td></tr>
+                <tr><td><a href="/au/name/billy.html">Billy</a></td><td class="count-column">82</td><td class="count-column">224</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;174%</td></tr>
+                <tr><td><a href="/au/name/isaiah.html">Isaiah</a></td><td class="count-column">69</td><td class="count-column">163</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;136%</td></tr>
+                <tr><td><a href="/au/name/ezra.html">Ezra</a></td><td class="count-column">93</td><td class="count-column">198</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;113%</td></tr>
+                <tr><td><a href="/au/name/luca.html">Luca</a></td><td class="count-column">409</td><td class="count-column">617</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;51%</td></tr>
+                <tr><td><a href="/au/name/beau.html">Beau</a></td><td class="count-column">230</td><td class="count-column">298</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;29%</td></tr>
+                <tr><td><a href="/au/name/theodore.html">Theodore</a></td><td class="count-column">510</td><td class="count-column">660</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;29%</td></tr>
+                <tr><td><a href="/au/name/bodhi.html">Bodhi</a></td><td class="count-column">133</td><td class="count-column">170</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;28%</td></tr>
+                <tr><td><a href="/au/name/felix.html">Felix</a></td><td class="count-column">171</td><td class="count-column">217</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;27%</td></tr>
+                <tr><td><a href="/au/name/arthur.html">Arthur</a></td><td class="count-column">284</td><td class="count-column">359</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;26%</td></tr>
+                <tr><td><a href="/au/name/darcy.html">Darcy</a></td><td class="count-column">150</td><td class="count-column">185</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;23%</td></tr>
+                <tr><td><a href="/au/name/kai.html">Kai</a></td><td class="count-column">286</td><td class="count-column">345</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;21%</td></tr>
+                <tr><td><a href="/au/name/sonny.html">Sonny</a></td><td class="count-column">207</td><td class="count-column">247</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;19%</td></tr>
+                <tr><td><a href="/au/name/muhammad.html">Muhammad</a></td><td class="count-column">335</td><td class="count-column">357</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;6%</td></tr>
+                <tr><td><a href="/au/name/leon.html">Leon</a></td><td class="count-column">212</td><td class="count-column">223</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;5%</td></tr>
+                <tr><td><a href="/au/name/gabriel.html">Gabriel</a></td><td class="count-column">233</td><td class="count-column">244</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;5%</td></tr>
+                <tr><td><a href="/au/name/jude.html">Jude</a></td><td class="count-column">212</td><td class="count-column">222</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;5%</td></tr>
+                <tr><td><a href="/au/name/hudson.html">Hudson</a></td><td class="count-column">520</td><td class="count-column">527</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;1%</td></tr>
+            </tbody></table></div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2026 NameCharted</p>
+            <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.25rem;">Data: NSW BDM + VIC BDM (Australia) (1952–2025)</p>
+        </div>
+    </div>
+</body>
+</html>

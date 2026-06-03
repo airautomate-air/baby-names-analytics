@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fastest-Rising Names of 2024</title>
+    <meta name="description" content="The fastest-rising names heading into 2024, for girls and boys, based on official ONS birth data.">
+    <link rel="canonical" href="https://namecharted.com/uk/trends/rising.html">
+    <meta property="og:title" content="Fastest-Rising Names of 2024">
+    <meta property="og:description" content="The fastest-rising names heading into 2024, for girls and boys, based on official ONS birth data.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="NameCharted">
+    <meta property="og:image" content="https://namecharted.com/og-default.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Fastest-Rising Names of 2024">
+    <meta name="twitter:description" content="The fastest-rising names heading into 2024, for girls and boys, based on official ONS birth data.">
+    <meta name="twitter:image" content="https://namecharted.com/og-default.png">
+    <meta property="og:url" content="https://namecharted.com/uk/trends/rising.html">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="theme-color" content="#149E91">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap');
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F7F8FA;
+            color: #333;
+            font-feature-settings: 'tnum' 1;
+        }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        h1, h2, h3, h4 { font-family: 'Poppins', 'Inter', sans-serif; color: #1B2440; }
+        h1 { color: #1B2440; }
+        .sitenav {
+            background: #1B2440; padding: 0.9rem 2rem;
+        }
+        .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .sitenav a { color: #EEF2F4; text-decoration: none; font-weight: 500; }
+        .sitenav a:hover { color: #fff; text-decoration: underline; }
+        .sitenav .brand { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 700; color: #fff; margin-right: auto; display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.05rem; }
+        .sitenav .brand svg { display: block; }
+        .sitenav .brand .wm-teal { color: #149E91; }
+        .ccswitch { margin-left: auto; font-size: 0.85rem; color: #8a93a3; display: inline-flex; gap: 0.4rem; align-items: center; }
+        .ccswitch a { color: #c8cfdb; }
+        .ccswitch strong { color: #fff; font-weight: 600; }
+        .ccswitch .sep { color: #4a5269; }
+        .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .nav a { color: #149E91; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
+        .breadcrumb { font-size: 0.85rem; color: #5B6678; margin-bottom: 1rem; }
+        .breadcrumb a { color: #149E91; text-decoration: none; }
+        .insight {
+            background: #fff; border-left: 4px solid #149E91; padding: 1rem 1.25rem;
+            border-radius: 6px; margin: 1.5rem 0; box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .stat {
+            background: #fff; padding: 1.5rem; border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;
+        }
+        .stat-value { font-family: 'Poppins', 'Inter', sans-serif; font-size: 2rem; font-weight: 700; color: #1B2440; }
+        .stat-label { color: #5B6678; margin-top: 0.5rem; font-size: 0.9rem; }
+        .chart-wrap { background:#fff; padding:1.25rem; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1); margin-bottom:2rem; }
+        table {
+            width: 100%; border-collapse: collapse; margin-bottom: 2rem;
+            background: #fff; border-radius: 8px; overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td { padding: 0.85rem 1rem; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #EEF2F4; font-weight: 600; color: #1B2440; }
+        tr:hover { background-color: #f8f9fa; }
+        .year-column { width: 12%; font-family: monospace; }
+        .count-column { width: 18%; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .rank-column { width: 15%; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .related { display:flex; flex-wrap:wrap; gap:0.5rem; margin:0.5rem 0 1.75rem; }
+        .related a {
+            background:#fff; border:1px solid #d6dde2; border-radius:20px;
+            padding:0.35rem 0.85rem; text-decoration:none; color:#1B2440; font-size:0.9rem;
+        }
+        .related a:hover { background:#149E91; color:#fff; border-color:#149E91; }
+        .azindex { display:flex; flex-wrap:wrap; gap:0.4rem; margin:1rem 0 2rem; }
+        .azindex a { background:#fff; border:1px solid #d6dde2; border-radius:6px; padding:0.4rem 0.7rem; text-decoration:none; color:#1B2440; font-weight:600; }
+        .azindex a:hover { background:#149E91; color:#fff; }
+        .footer { text-align: center; margin-top: 3rem; color: #5B6678; font-size: 0.9rem; }
+        a { color: #149E91; }
+</style>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://namecharted.com/uk/"}, {"@type": "ListItem", "position": 2, "name": "Trends", "item": "https://namecharted.com/uk/trends.html"}, {"@type": "ListItem", "position": 3, "name": "Rising", "item": "https://namecharted.com/uk/trends/rising.html"}]}</script>
+</head>
+<body>
+    <div class="sitenav"><div class="sitenav-inner">
+        <a class="brand" href="/uk/"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span></a>
+        <a href="/uk/">Home</a>
+        <a href="/uk/names.html">Browse A–Z</a>
+        <a href="/uk/trends.html">Trends</a>
+        <a href="/uk/decades.html">Decades</a>
+        <a href="/uk/year/2024.html">2024 Rankings</a>
+        <span class="ccswitch"><a href="/">US</a> <span class="sep">·</span> <a href="/fr/">FR</a> <span class="sep">·</span> <strong>UK</strong> <span class="sep">·</span> <a href="/au/">AU</a></span>
+    </div></div>
+    <div class="container">
+        <div class="breadcrumb"><a href="/uk/">Home</a> &rsaquo; <a href="/uk/trends.html">Trends</a> &rsaquo; Rising</div>
+        <h1>Fastest-Rising Names (2024)</h1>
+        <p>The girls' and boys' names growing fastest in popularity — comparing average births around
+        five years ago with the most recent years. Only names with
+        meaningful current usage are included.</p>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:2rem;">
+            <div><h2 style="color:#149E91;">Girls</h2><table><thead><tr><th>Name</th><th class="count-column">~5 yrs ago</th><th class="count-column">2024</th><th class="count-column">Change</th></tr></thead><tbody>
+                <tr><td><a href="/uk/name/mabel.html">Mabel</a></td><td class="count-column">177</td><td class="count-column">1,043</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;489%</td></tr>
+                <tr><td><a href="/uk/name/lara.html">Lara</a></td><td class="count-column">180</td><td class="count-column">519</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;189%</td></tr>
+                <tr><td><a href="/uk/name/margot.html">Margot</a></td><td class="count-column">370</td><td class="count-column">1,026</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;178%</td></tr>
+                <tr><td><a href="/uk/name/delilah.html">Delilah</a></td><td class="count-column">432</td><td class="count-column">1,143</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;165%</td></tr>
+                <tr><td><a href="/uk/name/ayla.html">Ayla</a></td><td class="count-column">396</td><td class="count-column">887</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;124%</td></tr>
+                <tr><td><a href="/uk/name/bonnie.html">Bonnie</a></td><td class="count-column">695</td><td class="count-column">1,359</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;95%</td></tr>
+                <tr><td><a href="/uk/name/ada.html">Ada</a></td><td class="count-column">613</td><td class="count-column">1,092</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;78%</td></tr>
+                <tr><td><a href="/uk/name/hallie.html">Hallie</a></td><td class="count-column">715</td><td class="count-column">1,191</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;67%</td></tr>
+                <tr><td><a href="/uk/name/arabella.html">Arabella</a></td><td class="count-column">678</td><td class="count-column">1,090</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;61%</td></tr>
+                <tr><td><a href="/uk/name/aurora.html">Aurora</a></td><td class="count-column">731</td><td class="count-column">979</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;34%</td></tr>
+                <tr><td><a href="/uk/name/lottie.html">Lottie</a></td><td class="count-column">823</td><td class="count-column">1,002</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;22%</td></tr>
+                <tr><td><a href="/uk/name/orla.html">Orla</a></td><td class="count-column">639</td><td class="count-column">767</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;20%</td></tr>
+                <tr><td><a href="/uk/name/lyla.html">Lyla</a></td><td class="count-column">544</td><td class="count-column">621</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;14%</td></tr>
+                <tr><td><a href="/uk/name/iris.html">Iris</a></td><td class="count-column">649</td><td class="count-column">737</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;14%</td></tr>
+                <tr><td><a href="/uk/name/millie.html">Millie</a></td><td class="count-column">1,259</td><td class="count-column">1,425</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;13%</td></tr>
+                <tr><td><a href="/uk/name/mila.html">Mila</a></td><td class="count-column">947</td><td class="count-column">1,041</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;10%</td></tr>
+                <tr><td><a href="/uk/name/maya.html">Maya</a></td><td class="count-column">1,297</td><td class="count-column">1,418</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;9%</td></tr>
+                <tr><td><a href="/uk/name/violet.html">Violet</a></td><td class="count-column">957</td><td class="count-column">1,034</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;8%</td></tr>
+                <tr><td><a href="/uk/name/penelope.html">Penelope</a></td><td class="count-column">1,082</td><td class="count-column">1,165</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;8%</td></tr>
+                <tr><td><a href="/uk/name/aria.html">Aria</a></td><td class="count-column">1,143</td><td class="count-column">1,194</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;4%</td></tr>
+                <tr><td><a href="/uk/name/maryam.html">Maryam</a></td><td class="count-column">650</td><td class="count-column">668</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;3%</td></tr>
+                <tr><td><a href="/uk/name/ivy.html">Ivy</a></td><td class="count-column">2,027</td><td class="count-column">2,049</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;1%</td></tr>
+            </tbody></table></div>
+            <div><h2 style="color:#FF6B5C;">Boys</h2><table><thead><tr><th>Name</th><th class="count-column">~5 yrs ago</th><th class="count-column">2024</th><th class="count-column">Change</th></tr></thead><tbody>
+                <tr><td><a href="/uk/name/oakley.html">Oakley</a></td><td class="count-column">213</td><td class="count-column">1,274</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;498%</td></tr>
+                <tr><td><a href="/uk/name/hudson.html">Hudson</a></td><td class="count-column">224</td><td class="count-column">1,258</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;463%</td></tr>
+                <tr><td><a href="/uk/name/sonny.html">Sonny</a></td><td class="count-column">213</td><td class="count-column">934</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;338%</td></tr>
+                <tr><td><a href="/uk/name/alfred.html">Alfred</a></td><td class="count-column">215</td><td class="count-column">680</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;216%</td></tr>
+                <tr><td><a href="/uk/name/rowan.html">Rowan</a></td><td class="count-column">481</td><td class="count-column">1,108</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;131%</td></tr>
+                <tr><td><a href="/uk/name/luca.html">Luca</a></td><td class="count-column">1,256</td><td class="count-column">2,878</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;129%</td></tr>
+                <tr><td><a href="/uk/name/chester.html">Chester</a></td><td class="count-column">227</td><td class="count-column">398</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;76%</td></tr>
+                <tr><td><a href="/uk/name/jude.html">Jude</a></td><td class="count-column">1,211</td><td class="count-column">2,106</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;74%</td></tr>
+                <tr><td><a href="/uk/name/kai.html">Kai</a></td><td class="count-column">442</td><td class="count-column">742</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;68%</td></tr>
+                <tr><td><a href="/uk/name/roman.html">Roman</a></td><td class="count-column">1,001</td><td class="count-column">1,525</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;52%</td></tr>
+                <tr><td><a href="/uk/name/jasper.html">Jasper</a></td><td class="count-column">476</td><td class="count-column">718</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;51%</td></tr>
+                <tr><td><a href="/uk/name/ibrahim.html">Ibrahim</a></td><td class="count-column">446</td><td class="count-column">622</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;39%</td></tr>
+                <tr><td><a href="/uk/name/albie.html">Albie</a></td><td class="count-column">1,266</td><td class="count-column">1,739</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;37%</td></tr>
+                <tr><td><a href="/uk/name/arlo.html">Arlo</a></td><td class="count-column">1,621</td><td class="count-column">2,216</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;37%</td></tr>
+                <tr><td><a href="/uk/name/muhammad.html">Muhammad</a></td><td class="count-column">3,601</td><td class="count-column">4,853</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;35%</td></tr>
+                <tr><td><a href="/uk/name/grayson.html">Grayson</a></td><td class="count-column">521</td><td class="count-column">689</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;32%</td></tr>
+                <tr><td><a href="/uk/name/theodore.html">Theodore</a></td><td class="count-column">2,119</td><td class="count-column">2,754</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;30%</td></tr>
+                <tr><td><a href="/uk/name/ezra.html">Ezra</a></td><td class="count-column">1,017</td><td class="count-column">1,300</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;28%</td></tr>
+                <tr><td><a href="/uk/name/rory.html">Rory</a></td><td class="count-column">1,289</td><td class="count-column">1,497</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;16%</td></tr>
+                <tr><td><a href="/uk/name/louis.html">Louis</a></td><td class="count-column">1,011</td><td class="count-column">1,171</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;16%</td></tr>
+                <tr><td><a href="/uk/name/ronnie.html">Ronnie</a></td><td class="count-column">986</td><td class="count-column">1,129</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;14%</td></tr>
+                <tr><td><a href="/uk/name/tommy.html">Tommy</a></td><td class="count-column">1,404</td><td class="count-column">1,592</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;13%</td></tr>
+                <tr><td><a href="/uk/name/jesse.html">Jesse</a></td><td class="count-column">823</td><td class="count-column">925</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;12%</td></tr>
+                <tr><td><a href="/uk/name/felix.html">Felix</a></td><td class="count-column">681</td><td class="count-column">749</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;10%</td></tr>
+                <tr><td><a href="/uk/name/mohammad.html">Mohammad</a></td><td class="count-column">841</td><td class="count-column">888</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;6%</td></tr>
+                <tr><td><a href="/uk/name/louie.html">Louie</a></td><td class="count-column">1,377</td><td class="count-column">1,444</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;5%</td></tr>
+                <tr><td><a href="/uk/name/teddy.html">Teddy</a></td><td class="count-column">1,664</td><td class="count-column">1,741</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;5%</td></tr>
+                <tr><td><a href="/uk/name/noah.html">Noah</a></td><td class="count-column">4,215</td><td class="count-column">4,369</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;4%</td></tr>
+                <tr><td><a href="/uk/name/elijah.html">Elijah</a></td><td class="count-column">1,550</td><td class="count-column">1,564</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;1%</td></tr>
+                <tr><td><a href="/uk/name/reuben.html">Reuben</a></td><td class="count-column">1,412</td><td class="count-column">1,424</td><td class="count-column" style="color:#27ae60; white-space:nowrap;">▲&nbsp;1%</td></tr>
+            </tbody></table></div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2026 NameCharted</p>
+            <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.25rem;">Data: UK Office for National Statistics (1996–2024)</p>
+        </div>
+    </div>
+</body>
+</html>
