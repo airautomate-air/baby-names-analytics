@@ -3298,6 +3298,11 @@ BASE_CSS = """
         .origin-card:hover { border-color: #149E91; transform: translateY(-1px); }
         .origin-card-label { font-weight: 600; color: #1B2440; font-size: 1rem; }
         .origin-card-count { color: #5B6678; font-size: 0.82rem; }
+        .search-ac-wrap { position: relative; display: inline-block; width: 70%; max-width: 400px; text-align: left; }
+        .search-ac-wrap input { width: 100%; box-sizing: border-box; padding: 0.75rem; border: 1px solid #d6dde2; border-radius: 4px; font-size: 1rem; background: #fff; }
+        #searchAc { position: absolute; left: 0; right: 0; top: 100%; background: #fff; border: 1px solid #d6dde2; border-top: 0; border-radius: 0 0 6px 6px; max-height: 280px; overflow-y: auto; z-index: 10; box-shadow: 0 4px 12px rgba(27,36,64,0.08); }
+        #searchAc div { padding: 0.55rem 0.9rem; cursor: pointer; color: #1B2440; }
+        #searchAc div:hover, #searchAc div.sel { background: #EEF2F4; }
         .meaning-box { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.85rem 1.1rem 0.6rem; margin: 1rem 0 1.5rem; }
         .meaning-box h2 { margin: 0 0 0.4rem; font-size: 1rem; font-family: 'Inter', sans-serif; font-weight: 600; color: #1B2440; }
         .meaning-box p { margin: 0; color: #1B2440; font-size: 0.95rem; line-height: 1.5; }
@@ -3534,8 +3539,10 @@ def generate_homepage():
         <p>{S("home_intro", range=DATA_RANGE)}</p>
 {saints_callout}{homepage_cc_callout()}
         <div class="search-box" style="margin:2rem 0; text-align:center;">
-            <input type="text" id="searchInput" placeholder="{S("home_search_placeholder")}"
-                   style="padding:0.75rem; width:70%; max-width:400px; border:1px solid #ddd; border-radius:4px; font-size:1rem;">
+            <div class="search-ac-wrap">
+                <input type="text" id="searchInput" autocomplete="off" placeholder="{S("home_search_placeholder")}">
+                <div id="searchAc"></div>
+            </div>
             <p>{S("home_try", samples=samples)}
             <a href="{p}/names.html">{S("home_browse_link", n=fmt(n_pages))}</a></p>
         </div>
@@ -3547,27 +3554,82 @@ def generate_homepage():
         </div>
 
         <script>
-        var PAGE_SLUGS = null;
-        var SSA_SLUGS = null;
-        function loadIndex() {{
-            if (PAGE_SLUGS) return Promise.resolve();
-            return fetch('{p}/name-index.json').then(function(r) {{ return r.json(); }})
-                .then(function(d) {{ PAGE_SLUGS = new Set(d.pages); SSA_SLUGS = new Set(d.ssa); }});
-        }}
-        function route(slug) {{
-            if (!slug) return;
-            if (PAGE_SLUGS.has(slug)) {{ window.location.href = '{p}/name/' + slug + '.html'; return; }}
-            if (SSA_SLUGS.has(slug)) {{ window.location.href = '{p}/rare-names.html?q=' + encodeURIComponent(slug); return; }}
-            window.location.href = '/404.html';
-        }}
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {{
-            if (e.key === 'Enter') {{
-                var slug = this.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-                if (!slug) return;
-                loadIndex().then(function() {{ route(slug); }});
+        (function() {{
+            var PAGES = null;       // ordered array (most popular first) for autocomplete ranking
+            var PAGE_SET = null;
+            var SSA_SET = null;
+            function loadIndex() {{
+                if (PAGES) return Promise.resolve();
+                return fetch('{p}/name-index.json').then(function(r) {{ return r.json(); }})
+                    .then(function(d) {{
+                        PAGES = d.pages || [];
+                        PAGE_SET = new Set(PAGES);
+                        SSA_SET = new Set(d.ssa || []);
+                    }});
             }}
-        }});
-        loadIndex();
+            function slugify(s) {{
+                return (s || '').toLowerCase()
+                    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
+                    .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            }}
+            function display(slug) {{
+                return slug.replace(/-/g, ' ').replace(/\\b\\w/g, function(c) {{ return c.toUpperCase(); }});
+            }}
+            function route(slug) {{
+                if (!slug) return;
+                if (PAGE_SET.has(slug)) {{ window.location.href = '{p}/name/' + slug + '.html'; return; }}
+                if (SSA_SET.has(slug)) {{ window.location.href = '{p}/rare-names.html?q=' + encodeURIComponent(slug); return; }}
+                window.location.href = '/404.html';
+            }}
+
+            var input = document.getElementById('searchInput');
+            var ac = document.getElementById('searchAc');
+            var sel = -1, items = [];
+
+            function clear(el) {{ while (el.firstChild) el.removeChild(el.firstChild); }}
+            function render(matches) {{
+                clear(ac); items = matches;
+                if (!matches.length) {{ ac.style.display = 'none'; return; }}
+                ac.style.display = '';
+                matches.forEach(function(slug, i) {{
+                    var d = document.createElement('div');
+                    d.textContent = display(slug);
+                    if (i === sel) d.className = 'sel';
+                    d.addEventListener('mousedown', function(e) {{ e.preventDefault(); route(slug); }});
+                    ac.appendChild(d);
+                }});
+            }}
+            function search() {{
+                var q = slugify(input.value);
+                if (!q || !PAGES) {{ ac.style.display = 'none'; return; }}
+                var starts = [], contains = [];
+                for (var i = 0; i < PAGES.length && starts.length + contains.length < 8; i++) {{
+                    var s = PAGES[i];
+                    if (s.indexOf(q) === 0) starts.push(s);
+                    else if (s.indexOf(q) > 0) contains.push(s);
+                }}
+                sel = -1;
+                render(starts.concat(contains).slice(0, 8));
+            }}
+            input.addEventListener('input', function() {{ loadIndex().then(search); }});
+            input.addEventListener('focus', function() {{ loadIndex().then(search); }});
+            input.addEventListener('blur', function() {{ setTimeout(function() {{ ac.style.display = 'none'; }}, 150); }});
+            input.addEventListener('keydown', function(e) {{
+                if (e.key === 'Enter') {{
+                    e.preventDefault();
+                    if (sel >= 0 && items[sel]) {{ route(items[sel]); return; }}
+                    var slug = slugify(input.value);
+                    if (!slug) return;
+                    loadIndex().then(function() {{ route(slug); }});
+                    return;
+                }}
+                if (ac.style.display === 'none') return;
+                if (e.key === 'ArrowDown') {{ sel = (sel + 1) % items.length; render(items); e.preventDefault(); }}
+                else if (e.key === 'ArrowUp') {{ sel = (sel - 1 + items.length) % items.length; render(items); e.preventDefault(); }}
+                else if (e.key === 'Escape') {{ ac.style.display = 'none'; }}
+            }});
+            loadIndex();
+        }})();
         </script>"""
     desc = S("home_desc", country=COUNTRY_NAME[ACTIVE_CC], range=DATA_RANGE, n=fmt(n_pages))
     title = S("home_title", country=COUNTRY_NAME[ACTIVE_CC])
@@ -4465,8 +4527,12 @@ def generate_compare_page():
 
 
 def generate_name_index_json():
-    pages = sorted({slugify(n) for n in pages_to_generate})
-    ssa = sorted({slugify(n) for n in name_total if n not in HAS_PAGE})
+    # Sort by lifetime popularity so autocomplete surfaces well-known names
+    # first ("ol" → Olivia, not Olalla). All tools that read this file iterate
+    # in order and break after 8 matches.
+    pages = [slugify(n) for n in sorted(pages_to_generate, key=lambda n: (-name_total[n], n))]
+    ssa = [slugify(n) for n in sorted((n for n in name_total if n not in HAS_PAGE),
+                                       key=lambda n: (-name_total[n], n))]
     (OUT_DIR / 'name-index.json').write_text(
         json.dumps({"pages": pages, "ssa": ssa}, separators=(',', ':')),
         encoding='utf-8')
