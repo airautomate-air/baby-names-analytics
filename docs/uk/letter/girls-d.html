@@ -156,8 +156,6 @@
         .ww-card:hover { border-color: #149E91; transform: translateY(-1px); }
         .ww-card .ww-name { font-weight: 600; color: #1B2440; font-size: 1rem; }
         .ww-card .ww-meta { font-size: 0.8rem; color: #5B6678; }
-        .ww-card .ww-bar { display: block; height: 4px; background: #EEF2F4; border-radius: 2px; overflow: hidden; margin-top: 0.3rem; }
-        .ww-card .ww-bar-fill { display: block; height: 100%; background: linear-gradient(90deg, #149E91 0%, #FF6B5C 100%); }
         #ww-loading { color: #5B6678; font-size: 0.9rem; padding: 0.5rem 0; }
         .ww-more-wrap { text-align: center; margin-top: 1.5rem; }
         #ww-more { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.6rem 1.4rem; border-radius: 24px; cursor: pointer; font-weight: 500; font-size: 0.92rem; }
@@ -686,7 +684,6 @@
         var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_RANK = 5;
         var PAGE_SIZE = 12;
         var currentResults = [];
-        var scoreRange = [0, 1];
         var shown = 0;
 
         function fold(s) {
@@ -788,13 +785,6 @@
                 });
                 currentResults = rows.slice(0, 60);
                 shown = 0;
-                // Normalise the meter to the displayed score range so the bars
-                // actually show variance instead of all sitting at the same pct.
-                if (currentResults.length) {
-                    var lo = currentResults[currentResults.length - 1][0];
-                    var hi = currentResults[0][0];
-                    scoreRange = [lo, Math.max(hi, lo + 1)];
-                }
 
                 headerEl.textContent = L_RESULT_FOR.replace('{surname}',
                     raw.replace(/\b\w/g, function(c) { return c.toUpperCase(); }));
