@@ -1309,20 +1309,40 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
     return urls
 
 
-def write_sitemap_and_robots(all_urls: list[str]) -> None:
-    seen: set[str] = set()
-    deduped: list[str] = []
-    for u in all_urls:
-        if u not in seen:
-            seen.add(u)
-            deduped.append(u)
-    body = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    body += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-    for u in deduped:
-        body += f'  <url><loc>{u}</loc></url>\n'
-    body += '</urlset>\n'
-    all_urls = deduped
-    (OUTPUT_DIR / 'sitemap.xml').write_text(body, encoding='utf-8')
+def write_sitemaps_and_robots(urls_by_cc: dict[str, list[str]]) -> None:
+    """Write one child <urlset> per country + a <sitemapindex> at /sitemap.xml.
+    Google's per-file limit is 50K URLs; splitting per country keeps each
+    child comfortably under it and makes country-level coverage easy to audit
+    in Search Console."""
+    total = 0
+    child_files: list[str] = []
+    for cc in COUNTRIES:
+        urls = urls_by_cc.get(cc, [])
+        seen: set[str] = set()
+        deduped: list[str] = []
+        for u in urls:
+            if u not in seen:
+                seen.add(u)
+                deduped.append(u)
+        child_slug = cc.lower() if cc != 'GB' else 'uk'
+        child_name = f'sitemap-{child_slug}.xml'
+        body = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        body += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        for u in deduped:
+            body += f'  <url><loc>{u}</loc></url>\n'
+        body += '</urlset>\n'
+        (OUTPUT_DIR / child_name).write_text(body, encoding='utf-8')
+        child_files.append(child_name)
+        total += len(deduped)
+        print(f"  {child_name}: {len(deduped):,} URLs")
+
+    idx = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    idx += '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    for child in child_files:
+        idx += f'  <sitemap><loc>{BASE_URL}/{child}</loc></sitemap>\n'
+    idx += '</sitemapindex>\n'
+    (OUTPUT_DIR / 'sitemap.xml').write_text(idx, encoding='utf-8')
+    print(f"sitemap.xml (index): {len(child_files)} children, {total:,} URLs total")
 
     robots = (
         "User-agent: *\n"
@@ -1330,7 +1350,6 @@ def write_sitemap_and_robots(all_urls: list[str]) -> None:
         f"Sitemap: {BASE_URL}/sitemap.xml\n"
     )
     (OUTPUT_DIR / 'robots.txt').write_text(robots, encoding='utf-8')
-    print(f"sitemap.xml: {len(deduped):,} URLs")
 
 
 # ---------------------------------------------------------------------------
@@ -1380,16 +1399,16 @@ def main():
         build_country(cc)
 
     compare_files: list[str] = []
-    all_urls: list[str] = []
+    urls_by_cc: dict[str, list[str]] = {}
     for cc in COUNTRIES:
         set_active(cc)
         run_generators_for_active(compare_files)
-        all_urls.extend(collect_country_urls(cc, compare_files))
+        urls_by_cc[cc] = collect_country_urls(cc, compare_files)
 
     # 404 + sitemap + robots — emit once at root. Render 404 under US nav.
     set_active("US")
     generate_404_page()
-    write_sitemap_and_robots(all_urls)
+    write_sitemaps_and_robots(urls_by_cc)
     print("Done!")
 
 
