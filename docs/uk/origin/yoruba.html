@@ -700,8 +700,36 @@
                 .then(function(d) { META = d; loadingEl.style.display = 'none'; return META; });
         }
 
-        // Order matches the python emit: [first, last2, syll, dom, peak_dec, rank]
-        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_RANK = 5;
+        // Order matches the python emit: [first, last2, syll, dom, peak_dec, rank, origin]
+        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_RANK = 5, IDX_ORIGIN = 6;
+
+        // Light-touch surname-origin detector. Heuristic on prefix/suffix only —
+        // when nothing matches we return '' and skip the origin bonus.
+        function detectSurnameOrigin(raw) {
+            var f = fold(raw);
+            if (!f) return '';
+            // Apostrophe-prefixed Irish (O'Brien, O'Connor) — check before folding.
+            if (/^o['’]/i.test(raw.trim())) return 'irish';
+            // Mc / Mac prefixes
+            if (/^mc/.test(f)) return 'irish';
+            if (/^mac/.test(f) && f.length > 4) return 'scottish';
+            // Continental prefixes — only when they appear as a separate token
+            if (/^von /i.test(raw.trim())) return 'german';
+            if (/^van /i.test(raw.trim())) return 'dutch';
+            // Suffix-based — order matters: check longest first
+            if (/(opoulos|akis|idis|adis)$/.test(f)) return 'greek';
+            if (/(escu|eanu)$/.test(f)) return 'romanian';
+            if (/(enko|chenko|chuk)$/.test(f)) return 'ukrainian';
+            if (/(sdottir|sson|ssen)$/.test(f)) return 'scandinavian';
+            if (/(ski|sky|cki|wicz|czyk)$/.test(f)) return 'polish';
+            if (/(ovich|evich|ovsky|evsky)$/.test(f)) return 'russian';
+            if (/(ucci|ello|etti|otti|elli|oni|ini)$/.test(f) && f.length > 4) return 'italian';
+            if (/(ault|eaux|eau|oux|aud)$/.test(f)) return 'french';
+            if (/(stein|berg|mann|bach|burg|feld|haus|thal)$/.test(f)) return 'german';
+            if (/(ez)$/.test(f) && f.length > 3) return 'spanish';
+            if (/(ov|ev|in)$/.test(f) && f.length > 5) return 'russian';
+            return '';
+        }
         var PAGE_SIZE = 12;
         var currentResults = [];
         var shown = 0;
@@ -725,8 +753,8 @@
         }
         var VOWELS = {a:1, e:1, i:1, o:1, u:1, y:1};
 
-        function score(name, m, lastFold, lastFirst, lastLast2, lastSyll) {
-            // m = [first, last2, syll, dom, peak_dec]
+        function score(name, m, lastFold, lastFirst, lastLast2, lastSyll, surnameOrigin) {
+            // m = [first, last2, syll, dom, peak_dec, rank, origin]
             var nameFirst = m[IDX_FIRST];
             var nameLast2 = m[IDX_LAST2];
             var nameLast = nameLast2.slice(-1);
@@ -770,6 +798,11 @@
                 else if (rank <= 3000) s += 1;
             }
 
+            // Same-origin nudge: when we could infer the surname's etymology
+            // (O'Brien → Irish, Schmidt → German, …), gently boost first names
+            // with the same origin. Capped at +6 so it never beats phonetics.
+            if (surnameOrigin && m[IDX_ORIGIN] === surnameOrigin) s += 6;
+
             return s;
         }
 
@@ -787,13 +820,14 @@
                 var lastFirst = lastFold[0];
                 var lastLast2 = lastFold.slice(-2);
                 var lastSyll = countSyllables(raw);
+                var surnameOrigin = detectSurnameOrigin(raw);
 
                 var rows = [];
                 for (var slug in meta) {
                     var m = meta[slug];
                     if (activeSex !== 'all' && m[IDX_DOM] !== activeSex) continue;
                     if (slug === lastFold) continue;
-                    rows.push([score(slug, m, lastFold, lastFirst, lastLast2, lastSyll), slug, m]);
+                    rows.push([score(slug, m, lastFold, lastFirst, lastLast2, lastSyll, surnameOrigin), slug, m]);
                 }
                 rows.sort(function(a, b) {
                     if (b[0] !== a[0]) return b[0] - a[0];
@@ -878,7 +912,7 @@
         var L_RANDOM_EMPTY = "Nothing matched \u2014 try a different combination.";
         var L_SHARE_DONE = "Link copied!";
 
-        var IDX_FIRST = 0, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5;
+        var IDX_FIRST = 0, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5, IDX_ORIGIN = 6;
 
         function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
 
@@ -1085,6 +1119,8 @@
             var era = root.querySelector('#pk-f-era').value;
             var letter = root.querySelector('#pk-f-letter').value;
             var rank = root.querySelector('#pk-f-rank').value;
+            var originSel = root.querySelector('#pk-f-origin');
+            var origin = originSel ? originSel.value : 'all';
 
             var matches = [];
             for (var i = 0; i < SLUGS.length; i++) {
@@ -1100,6 +1136,7 @@
                 if (rank === 'top100' && (!r || r > 100)) continue;
                 if (rank === 'top1000' && (!r || r > 1000)) continue;
                 if (rank === 'rare' && r) continue;
+                if (origin !== 'all' && m[IDX_ORIGIN] !== origin) continue;
                 matches.push([s, m]);
             }
             matches.sort(function(a, b) {
@@ -1229,7 +1266,8 @@
         var L_SHOW_MORE = "Show more";
         var PAGE_SIZE = 12;
 
-        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5;
+        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5, IDX_ORIGIN = 6;
+        var ORIGIN_LABELS = {"english": "English", "irish": "Irish", "scottish": "Scottish", "welsh": "Welsh", "french": "French", "german": "German", "italian": "Italian", "spanish": "Spanish", "portuguese": "Portuguese", "dutch": "Dutch", "swedish": "Swedish", "norwegian": "Norwegian", "danish": "Danish", "finnish": "Finnish", "scandinavian": "Scandinavian", "latin": "Latin", "greek": "Greek", "hebrew": "Hebrew", "arabic": "Arabic", "aramaic": "Aramaic", "persian": "Persian", "sanskrit": "Sanskrit", "russian": "Russian", "polish": "Polish", "czech": "Czech", "hungarian": "Hungarian", "romanian": "Romanian", "ukrainian": "Ukrainian", "bulgarian": "Bulgarian", "serbo-croatian": "Serbo-Croatian", "japanese": "Japanese", "chinese": "Chinese", "korean": "Korean", "vietnamese": "Vietnamese", "turkish": "Turkish", "armenian": "Armenian", "tamil": "Tamil", "hindi": "Hindi", "urdu": "Urdu", "thai": "Thai", "indonesian": "Indonesian", "swahili": "Swahili", "yoruba": "Yoruba", "igbo": "Igbo"};
 
         var input = document.getElementById('sib-input');
         var ac = document.getElementById('sib-ac');
@@ -1321,7 +1359,7 @@
         })();
 
         function score(cand, m, ref) {
-            // ref: {first, last2, syll, peak}, m = candidate meta array
+            // ref: {first, last2, syll, peak, origin}, m = candidate meta array
             var s = 0;
             var reasons = [];
 
@@ -1342,6 +1380,9 @@
 
             // Penalty: rhyming endings
             if (m[IDX_LAST2] === ref.last2) s -= 14;
+
+            // Same-origin bonus (cultural consistency across siblings)
+            if (ref.origin && m[IDX_ORIGIN] === ref.origin) { s += 8; reasons.push('origin'); }
 
             // Penalty: candidate is sibling itself
             // handled by caller (skips slug === refSlug)
@@ -1368,12 +1409,12 @@
                 var ref;
                 if (META[slug]) {
                     var rm = META[slug];
-                    ref = { first: rm[IDX_FIRST], last2: rm[IDX_LAST2], syll: rm[IDX_SYLL], peak: rm[IDX_PEAK] };
+                    ref = { first: rm[IDX_FIRST], last2: rm[IDX_LAST2], syll: rm[IDX_SYLL], peak: rm[IDX_PEAK], origin: rm[IDX_ORIGIN] || '' };
                     noteEl.style.display = 'none';
                 } else {
                     // Fallback: derive what we can from raw text. No era match possible.
                     var folded = rawName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
-                    ref = { first: folded[0] || 'a', last2: folded.slice(-2) || '', syll: countSyllables(rawName), peak: null };
+                    ref = { first: folded[0] || 'a', last2: folded.slice(-2) || '', syll: countSyllables(rawName), peak: null, origin: '' };
                     noteEl.style.display = '';
                 }
 
@@ -1426,7 +1467,10 @@
                 card.appendChild(nm);
                 var meta = document.createElement('span');
                 meta.className = 'sib-meta';
-                meta.textContent = (m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS) + ' · ' + L_PEAK.replace('{d}', m[IDX_PEAK]);
+                var parts = [(m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS), L_PEAK.replace('{d}', m[IDX_PEAK])];
+                var olbl = ORIGIN_LABELS[m[IDX_ORIGIN]];
+                if (olbl) parts.push(olbl);
+                meta.textContent = parts.join(' · ');
                 card.appendChild(meta);
                 listEl.appendChild(card);
             });

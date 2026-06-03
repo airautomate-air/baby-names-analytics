@@ -837,6 +837,7 @@ STRINGS_EN: dict[str, str] = {
     "picker_filter_era": "Peak era",
     "picker_filter_letter": "Starts with",
     "picker_filter_rank": "Current popularity",
+    "picker_filter_origin": "Origin",
     "picker_filter_any": "Any",
     "picker_filter_rank_top100": "Top 100 right now",
     "picker_filter_rank_top1000": "Top 1,000 right now",
@@ -1205,6 +1206,7 @@ STRINGS_FR: dict[str, str] = {
     "picker_filter_era": "Décennie record",
     "picker_filter_letter": "Commence par",
     "picker_filter_rank": "Popularité actuelle",
+    "picker_filter_origin": "Origine",
     "picker_filter_any": "Indifférent",
     "picker_filter_rank_top100": "Top 100 actuel",
     "picker_filter_rank_top1000": "Top 1 000 actuel",
@@ -2048,8 +2050,36 @@ WORKS_WITH_SCRIPT = """
                 .then(function(d) { META = d; loadingEl.style.display = 'none'; return META; });
         }
 
-        // Order matches the python emit: [first, last2, syll, dom, peak_dec, rank]
-        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_RANK = 5;
+        // Order matches the python emit: [first, last2, syll, dom, peak_dec, rank, origin]
+        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_RANK = 5, IDX_ORIGIN = 6;
+
+        // Light-touch surname-origin detector. Heuristic on prefix/suffix only —
+        // when nothing matches we return '' and skip the origin bonus.
+        function detectSurnameOrigin(raw) {
+            var f = fold(raw);
+            if (!f) return '';
+            // Apostrophe-prefixed Irish (O'Brien, O'Connor) — check before folding.
+            if (/^o['’]/i.test(raw.trim())) return 'irish';
+            // Mc / Mac prefixes
+            if (/^mc/.test(f)) return 'irish';
+            if (/^mac/.test(f) && f.length > 4) return 'scottish';
+            // Continental prefixes — only when they appear as a separate token
+            if (/^von /i.test(raw.trim())) return 'german';
+            if (/^van /i.test(raw.trim())) return 'dutch';
+            // Suffix-based — order matters: check longest first
+            if (/(opoulos|akis|idis|adis)$/.test(f)) return 'greek';
+            if (/(escu|eanu)$/.test(f)) return 'romanian';
+            if (/(enko|chenko|chuk)$/.test(f)) return 'ukrainian';
+            if (/(sdottir|sson|ssen)$/.test(f)) return 'scandinavian';
+            if (/(ski|sky|cki|wicz|czyk)$/.test(f)) return 'polish';
+            if (/(ovich|evich|ovsky|evsky)$/.test(f)) return 'russian';
+            if (/(ucci|ello|etti|otti|elli|oni|ini)$/.test(f) && f.length > 4) return 'italian';
+            if (/(ault|eaux|eau|oux|aud)$/.test(f)) return 'french';
+            if (/(stein|berg|mann|bach|burg|feld|haus|thal)$/.test(f)) return 'german';
+            if (/(ez)$/.test(f) && f.length > 3) return 'spanish';
+            if (/(ov|ev|in)$/.test(f) && f.length > 5) return 'russian';
+            return '';
+        }
         var PAGE_SIZE = 12;
         var currentResults = [];
         var shown = 0;
@@ -2073,8 +2103,8 @@ WORKS_WITH_SCRIPT = """
         }
         var VOWELS = {a:1, e:1, i:1, o:1, u:1, y:1};
 
-        function score(name, m, lastFold, lastFirst, lastLast2, lastSyll) {
-            // m = [first, last2, syll, dom, peak_dec]
+        function score(name, m, lastFold, lastFirst, lastLast2, lastSyll, surnameOrigin) {
+            // m = [first, last2, syll, dom, peak_dec, rank, origin]
             var nameFirst = m[IDX_FIRST];
             var nameLast2 = m[IDX_LAST2];
             var nameLast = nameLast2.slice(-1);
@@ -2118,6 +2148,11 @@ WORKS_WITH_SCRIPT = """
                 else if (rank <= 3000) s += 1;
             }
 
+            // Same-origin nudge: when we could infer the surname's etymology
+            // (O'Brien → Irish, Schmidt → German, …), gently boost first names
+            // with the same origin. Capped at +6 so it never beats phonetics.
+            if (surnameOrigin && m[IDX_ORIGIN] === surnameOrigin) s += 6;
+
             return s;
         }
 
@@ -2135,13 +2170,14 @@ WORKS_WITH_SCRIPT = """
                 var lastFirst = lastFold[0];
                 var lastLast2 = lastFold.slice(-2);
                 var lastSyll = countSyllables(raw);
+                var surnameOrigin = detectSurnameOrigin(raw);
 
                 var rows = [];
                 for (var slug in meta) {
                     var m = meta[slug];
                     if (activeSex !== 'all' && m[IDX_DOM] !== activeSex) continue;
                     if (slug === lastFold) continue;
-                    rows.push([score(slug, m, lastFold, lastFirst, lastLast2, lastSyll), slug, m]);
+                    rows.push([score(slug, m, lastFold, lastFirst, lastLast2, lastSyll, surnameOrigin), slug, m]);
                 }
                 rows.sort(function(a, b) {
                     if (b[0] !== a[0]) return b[0] - a[0];
@@ -2239,7 +2275,7 @@ PICKER_SCRIPT = """
         var L_RANDOM_EMPTY = __L_RANDOM_EMPTY__;
         var L_SHARE_DONE = __L_SHARE_DONE__;
 
-        var IDX_FIRST = 0, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5;
+        var IDX_FIRST = 0, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5, IDX_ORIGIN = 6;
 
         function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
 
@@ -2446,6 +2482,8 @@ PICKER_SCRIPT = """
             var era = root.querySelector('#pk-f-era').value;
             var letter = root.querySelector('#pk-f-letter').value;
             var rank = root.querySelector('#pk-f-rank').value;
+            var originSel = root.querySelector('#pk-f-origin');
+            var origin = originSel ? originSel.value : 'all';
 
             var matches = [];
             for (var i = 0; i < SLUGS.length; i++) {
@@ -2461,6 +2499,7 @@ PICKER_SCRIPT = """
                 if (rank === 'top100' && (!r || r > 100)) continue;
                 if (rank === 'top1000' && (!r || r > 1000)) continue;
                 if (rank === 'rare' && r) continue;
+                if (origin !== 'all' && m[IDX_ORIGIN] !== origin) continue;
                 matches.push([s, m]);
             }
             matches.sort(function(a, b) {
@@ -2613,7 +2652,8 @@ SIBLING_SCRIPT = """
         var L_SHOW_MORE = __L_SHOW_MORE__;
         var PAGE_SIZE = 12;
 
-        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5;
+        var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5, IDX_ORIGIN = 6;
+        var ORIGIN_LABELS = __ORIGIN_LABELS__;
 
         var input = document.getElementById('sib-input');
         var ac = document.getElementById('sib-ac');
@@ -2705,7 +2745,7 @@ SIBLING_SCRIPT = """
         })();
 
         function score(cand, m, ref) {
-            // ref: {first, last2, syll, peak}, m = candidate meta array
+            // ref: {first, last2, syll, peak, origin}, m = candidate meta array
             var s = 0;
             var reasons = [];
 
@@ -2726,6 +2766,9 @@ SIBLING_SCRIPT = """
 
             // Penalty: rhyming endings
             if (m[IDX_LAST2] === ref.last2) s -= 14;
+
+            // Same-origin bonus (cultural consistency across siblings)
+            if (ref.origin && m[IDX_ORIGIN] === ref.origin) { s += 8; reasons.push('origin'); }
 
             // Penalty: candidate is sibling itself
             // handled by caller (skips slug === refSlug)
@@ -2752,12 +2795,12 @@ SIBLING_SCRIPT = """
                 var ref;
                 if (META[slug]) {
                     var rm = META[slug];
-                    ref = { first: rm[IDX_FIRST], last2: rm[IDX_LAST2], syll: rm[IDX_SYLL], peak: rm[IDX_PEAK] };
+                    ref = { first: rm[IDX_FIRST], last2: rm[IDX_LAST2], syll: rm[IDX_SYLL], peak: rm[IDX_PEAK], origin: rm[IDX_ORIGIN] || '' };
                     noteEl.style.display = 'none';
                 } else {
                     // Fallback: derive what we can from raw text. No era match possible.
                     var folded = rawName.toLowerCase().normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').replace(/[^a-z]/g, '');
-                    ref = { first: folded[0] || 'a', last2: folded.slice(-2) || '', syll: countSyllables(rawName), peak: null };
+                    ref = { first: folded[0] || 'a', last2: folded.slice(-2) || '', syll: countSyllables(rawName), peak: null, origin: '' };
                     noteEl.style.display = '';
                 }
 
@@ -2810,7 +2853,10 @@ SIBLING_SCRIPT = """
                 card.appendChild(nm);
                 var meta = document.createElement('span');
                 meta.className = 'sib-meta';
-                meta.textContent = (m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS) + ' · ' + L_PEAK.replace('{d}', m[IDX_PEAK]);
+                var parts = [(m[IDX_DOM] === 'F' ? L_GIRLS : L_BOYS), L_PEAK.replace('{d}', m[IDX_PEAK])];
+                var olbl = ORIGIN_LABELS[m[IDX_ORIGIN]];
+                if (olbl) parts.push(olbl);
+                meta.textContent = parts.join(' · ');
                 card.appendChild(meta);
                 listEl.appendChild(card);
             });
@@ -3082,6 +3128,7 @@ def saints_script() -> str:
 def sibling_script() -> str:
     def js(v: str) -> str:
         return json.dumps(v)
+    origin_labels = {o: origin_label_cap(o) for o in ORIGIN_LABELS[ACTIVE_CC]}
     return (SIBLING_SCRIPT
             .replace('__PREFIX__', js(PREFIX))
             .replace('__L_GIRLS__', js(loc_label_cap('F')))
@@ -3089,7 +3136,8 @@ def sibling_script() -> str:
             .replace('__L_RESULT_FOR__', js(S("sibling_result_for", name='{name}')))
             .replace('__L_UNKNOWN__', js(S("sibling_unknown")))
             .replace('__L_PEAK__', js(S("picker_peak_decade", d='{d}')))
-            .replace('__L_SHOW_MORE__', js(S("sibling_show_more"))))
+            .replace('__L_SHOW_MORE__', js(S("sibling_show_more")))
+            .replace('__ORIGIN_LABELS__', json.dumps(origin_labels, ensure_ascii=False)))
 
 
 # ---------------------------------------------------------------------------
@@ -4403,14 +4451,19 @@ def generate_name_index_json():
 
 
 def generate_name_meta_json():
-    """Compact per-name metadata feeding works-with-surname (6c) and future
+    """Compact per-name metadata feeding works-with-surname (6c) and the
     picker/sibling tools (6e/6f). Array form keeps the file small enough to
-    fetch lazily on the client (~150–250 KB per country, gzip ~50 KB)."""
+    fetch lazily on the client (~150–250 KB per country, gzip ~50 KB).
+    Index 6 is the origin slug from ENRICHMENT (empty string when unknown)."""
     out: dict[str, list] = {}
     for n in pages_to_generate:
         m = name_meta[n]
+        rec = ENRICHMENT.get(slugify(n)) or {}
+        origin = rec.get('origin') or ''
+        if origin and origin not in ORIGIN_LABELS_EN:
+            origin = ''
         out[slugify(n)] = [m['first'], m['last2'], m['syll'], m['dom'], m['peak_dec'],
-                            m['latest_rank'] or 0]
+                            m['latest_rank'] or 0, origin]
     (OUT_DIR / 'name-meta.json').write_text(
         json.dumps(out, separators=(',', ':')), encoding='utf-8')
 
@@ -4475,6 +4528,11 @@ def generate_picker_page():
     )
     az_options = ''.join(f'<option value="{c}">{c.upper()}</option>'
                          for c in 'abcdefghijklmnopqrstuvwxyz')
+    by_origin = collect_origin_names_for_active()
+    origin_options = ''.join(
+        f'<option value="{o}">{origin_label_cap(o)}</option>'
+        for o in sorted(by_origin, key=lambda o: (-len(by_origin[o]), o))
+    )
 
     body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_picker")}</div>
         <h1>{S("picker_h1")}</h1>
@@ -4538,6 +4596,11 @@ def generate_picker_page():
                             <option value="rare">{S("picker_filter_rank_rare")}</option>
                         </select>
                     </label>
+                    {f'''<label>{S("picker_filter_origin")}:
+                        <select id="pk-f-origin" class="pk-filter-input">
+                            <option value="all">{S("picker_filter_any")}</option>{origin_options}
+                        </select>
+                    </label>''' if origin_options else ''}
                 </div>
                 <p id="pk-filter-count"></p>
                 <div id="pk-filter-results"></div>
