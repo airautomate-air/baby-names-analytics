@@ -490,6 +490,21 @@ STRINGS_EN: dict[str, str] = {
     "nav_decades": "Decades",
     "nav_rankings": "{year} Rankings",
     "nav_favorites": "Favorites",
+    "nav_compare": "Compare",
+    "compare_title": "Compare Two Names — NameCharted",
+    "compare_h1": "Compare any two names",
+    "compare_intro": "See two names' popularity side by side. Pick any two and we'll chart them together with stats and ranks.",
+    "compare_desc": "Compare any two baby names side-by-side: yearly births, peak year, current rank, and a combined trend chart.",
+    "compare_input_a": "First name",
+    "compare_input_b": "Second name",
+    "compare_go": "Compare",
+    "compare_loading": "Loading…",
+    "compare_not_found": "Couldn't find one of those names. Try the search again.",
+    "compare_chart_h2": "Popularity over time",
+    "compare_stat_total": "Total births",
+    "compare_stat_peak": "Peak year",
+    "compare_stat_latest_rank": "{year} rank",
+    "compare_with_link": "Compare {name} with another name →",
     "fav_add_tip": "Save to your favorites",
     "fav_remove_tip": "Remove from favorites",
     "fav_h1": "Your saved names",
@@ -689,6 +704,21 @@ STRINGS_FR: dict[str, str] = {
     "nav_decades": "Décennies",
     "nav_rankings": "Classement {year}",
     "nav_favorites": "Favoris",
+    "nav_compare": "Comparer",
+    "compare_title": "Comparer deux prénoms — NameCharted",
+    "compare_h1": "Comparez deux prénoms",
+    "compare_intro": "Voyez deux prénoms côte à côte. Choisissez-en deux et nous les comparerons : effectifs, année record, rang actuel et graphique combiné.",
+    "compare_desc": "Comparez deux prénoms côte à côte : effectifs annuels, année record, rang actuel et graphique combiné.",
+    "compare_input_a": "Premier prénom",
+    "compare_input_b": "Deuxième prénom",
+    "compare_go": "Comparer",
+    "compare_loading": "Chargement…",
+    "compare_not_found": "L'un des prénoms est introuvable. Réessayez la recherche.",
+    "compare_chart_h2": "Popularité au fil du temps",
+    "compare_stat_total": "Naissances totales",
+    "compare_stat_peak": "Année record",
+    "compare_stat_latest_rank": "Rang {year}",
+    "compare_with_link": "Comparer {name} avec un autre prénom →",
     "fav_add_tip": "Ajouter aux favoris",
     "fav_remove_tip": "Retirer des favoris",
     "fav_h1": "Vos prénoms enregistrés",
@@ -1130,6 +1160,213 @@ def favorites_script() -> str:
             .replace('__FAV_REMOVE__', S("fav_remove")))
 
 
+COMPARE_SCRIPT = """
+    <script>
+    (function() {
+        var form = document.getElementById('cmp-form');
+        if (!form) return;
+        var PREFIX = '__PREFIX__';
+        var L_LATEST = __LATEST_YEAR__;
+        var L_TOTAL = '__L_TOTAL__';
+        var L_PEAK = '__L_PEAK__';
+        var L_RANK = '__L_RANK__';
+        var L_GIRLS = '__L_GIRLS__';
+        var L_BOYS = '__L_BOYS__';
+        var L_CHART = '__L_CHART__';
+
+        var aIn = document.getElementById('cmp-a');
+        var bIn = document.getElementById('cmp-b');
+        var acA = document.getElementById('cmp-ac-a');
+        var acB = document.getElementById('cmp-ac-b');
+        var loadingEl = document.getElementById('cmp-loading');
+        var errorEl = document.getElementById('cmp-error');
+        var resultEl = document.getElementById('cmp-result');
+
+        var INDEX = null;
+        function loadIndex() {
+            if (INDEX) return Promise.resolve(INDEX);
+            return fetch(PREFIX + '/name-index.json')
+                .then(function(r) { return r.json(); })
+                .then(function(d) { INDEX = d.pages || []; return INDEX; });
+        }
+
+        function fmt(n) { return Number(n).toLocaleString(); }
+
+        function attachAutocomplete(input, ac) {
+            var sel = -1;
+            var items = [];
+            function render(matches) {
+                while (ac.firstChild) ac.removeChild(ac.firstChild);
+                items = matches;
+                if (!matches.length) { ac.style.display = 'none'; return; }
+                ac.style.display = '';
+                matches.forEach(function(slug, i) {
+                    var d = document.createElement('div');
+                    d.textContent = slug.replace(/-/g, ' ').replace(/\\b\\w/g, function(c) { return c.toUpperCase(); });
+                    d.setAttribute('data-slug', slug);
+                    if (i === sel) d.className = 'sel';
+                    d.addEventListener('mousedown', function(e) {
+                        e.preventDefault();
+                        input.value = slug;
+                        ac.style.display = 'none';
+                    });
+                    ac.appendChild(d);
+                });
+            }
+            function search() {
+                var q = input.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                if (!q || !INDEX) { ac.style.display = 'none'; return; }
+                var starts = [], contains = [];
+                for (var i = 0; i < INDEX.length && starts.length + contains.length < 8; i++) {
+                    var s = INDEX[i];
+                    if (s.indexOf(q) === 0) starts.push(s);
+                    else if (s.indexOf(q) > 0) contains.push(s);
+                }
+                sel = -1;
+                render(starts.concat(contains).slice(0, 8));
+            }
+            input.addEventListener('input', function() { loadIndex().then(search); });
+            input.addEventListener('focus', function() { loadIndex().then(search); });
+            input.addEventListener('blur', function() { setTimeout(function() { ac.style.display = 'none'; }, 150); });
+            input.addEventListener('keydown', function(e) {
+                if (ac.style.display === 'none') return;
+                if (e.key === 'ArrowDown') { sel = (sel + 1) % items.length; render(items); e.preventDefault(); }
+                else if (e.key === 'ArrowUp') { sel = (sel - 1 + items.length) % items.length; render(items); e.preventDefault(); }
+                else if (e.key === 'Enter' && sel >= 0) { input.value = items[sel]; ac.style.display = 'none'; e.preventDefault(); }
+                else if (e.key === 'Escape') { ac.style.display = 'none'; }
+            });
+        }
+        attachAutocomplete(aIn, acA);
+        attachAutocomplete(bIn, acB);
+
+        function slug(s) {
+            return (s || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        }
+
+        function fetchName(s) {
+            return fetch(PREFIX + '/name-data/' + s + '.json')
+                .then(function(r) { if (!r.ok) throw new Error('404'); return r.json(); });
+        }
+
+        var chart = null;
+        function render(a, b) {
+            var COLORS = ['#149E91', '#FF6B5C'];
+            function fillCard(card, data, color) {
+                while (card.firstChild) card.removeChild(card.firstChild);
+                var h = document.createElement('h2');
+                var dot = document.createElement('span');
+                dot.className = 'cmp-dot';
+                dot.style.background = color;
+                h.appendChild(dot);
+                var link = document.createElement('a');
+                link.href = PREFIX + '/name/' + slug(data.n) + '.html';
+                link.textContent = data.n;
+                link.style.color = '#1B2440';
+                link.style.textDecoration = 'none';
+                h.appendChild(link);
+                card.appendChild(h);
+                var sub = document.createElement('p');
+                sub.style.color = '#7f8c8d';
+                sub.style.margin = '0 0 0.5rem';
+                sub.textContent = data.d === 'F' ? L_GIRLS : L_BOYS;
+                card.appendChild(sub);
+                var stats = document.createElement('div');
+                stats.className = 'cmp-stats';
+                function row(lbl, val) {
+                    var r = document.createElement('div');
+                    var l = document.createElement('span'); l.className = 'lbl'; l.textContent = lbl;
+                    var v = document.createElement('span'); v.className = 'val'; v.textContent = val;
+                    r.appendChild(l); r.appendChild(v); stats.appendChild(r);
+                }
+                row(L_TOTAL, fmt(data.ft + data.mt));
+                row(L_PEAK, data.py + ' (' + fmt(data.p) + ')');
+                row(L_RANK.replace('{year}', L_LATEST), data.lr ? '#' + fmt(data.lr) : '—');
+                card.appendChild(stats);
+            }
+            fillCard(document.getElementById('cmp-card-a'), a, COLORS[0]);
+            fillCard(document.getElementById('cmp-card-b'), b, COLORS[1]);
+
+            var allYears = {};
+            a.y.forEach(function(y) { allYears[y] = true; });
+            b.y.forEach(function(y) { allYears[y] = true; });
+            var years = Object.keys(allYears).map(Number).sort(function(x, y) { return x - y; });
+            function aligned(data) {
+                var map = {};
+                for (var i = 0; i < data.y.length; i++) map[data.y[i]] = data.c[i];
+                return years.map(function(y) { return map[y] != null ? map[y] : null; });
+            }
+            if (chart) chart.destroy();
+            var ctx = document.getElementById('cmpChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [
+                        {label: a.n, data: aligned(a), borderColor: COLORS[0], backgroundColor: 'rgba(20,158,145,0.10)', fill: false, tension: 0.2, pointRadius: 0, borderWidth: 2, spanGaps: true},
+                        {label: b.n, data: aligned(b), borderColor: COLORS[1], backgroundColor: 'rgba(255,107,92,0.10)', fill: false, tension: 0.2, pointRadius: 0, borderWidth: 2, spanGaps: true}
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } },
+                    scales: { y: { beginAtZero: true, title: { display: true, text: L_CHART } } }
+                }
+            });
+            resultEl.style.display = '';
+            errorEl.style.display = 'none';
+            loadingEl.style.display = 'none';
+        }
+
+        function go(sa, sb) {
+            loadingEl.style.display = '';
+            resultEl.style.display = 'none';
+            errorEl.style.display = 'none';
+            Promise.all([fetchName(sa), fetchName(sb)])
+                .then(function(both) { render(both[0], both[1]); })
+                .catch(function() {
+                    loadingEl.style.display = 'none';
+                    errorEl.style.display = '';
+                });
+        }
+
+        // Tell search engines not to index query-param variants.
+        function setNoindex() {
+            var m = document.createElement('meta');
+            m.name = 'robots'; m.content = 'noindex';
+            document.head.appendChild(m);
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var sa = slug(aIn.value), sb = slug(bIn.value);
+            if (!sa || !sb) return;
+            var url = window.location.pathname + '?a=' + sa + '&b=' + sb;
+            history.replaceState(null, '', url);
+            setNoindex();
+            go(sa, sb);
+        });
+
+        var qs = new URLSearchParams(window.location.search);
+        var qa = qs.get('a'), qb = qs.get('b');
+        if (qa) aIn.value = qa;
+        if (qb) bIn.value = qb;
+        if (qa && qb) { setNoindex(); go(slug(qa), slug(qb)); }
+    })();
+    </script>"""
+
+
+def compare_script() -> str:
+    return (COMPARE_SCRIPT
+            .replace('__PREFIX__', PREFIX)
+            .replace('__LATEST_YEAR__', str(LATEST_YEAR))
+            .replace('__L_TOTAL__', S("compare_stat_total"))
+            .replace('__L_PEAK__', S("compare_stat_peak"))
+            .replace('__L_RANK__', S("compare_stat_latest_rank", year='{year}'))
+            .replace('__L_GIRLS__', loc_label_cap('F'))
+            .replace('__L_BOYS__', loc_label_cap('M'))
+            .replace('__L_CHART__', S("chart_y_axis")))
+
+
 # ---------------------------------------------------------------------------
 # Shared markup
 # ---------------------------------------------------------------------------
@@ -1188,6 +1425,25 @@ BASE_CSS = """
         .fav-share-btn { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.55rem 1rem; font-weight: 600; cursor: pointer; font-size: 0.92rem; }
         .fav-share-btn:hover { background: #117f74; }
         .fav-share-done { color: #27ae60; font-size: 0.9rem; }
+        .cmp-form { display: flex; gap: 0.75rem; margin: 1.5rem 0; flex-wrap: wrap; align-items: stretch; }
+        .cmp-form input { flex: 1; min-width: 160px; padding: 0.7rem 0.9rem; font-size: 1rem; border: 1px solid #d6dde2; border-radius: 6px; background: #fff; }
+        .cmp-form button { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 600; cursor: pointer; font-size: 1rem; }
+        .cmp-form button:hover { background: #117f74; }
+        .cmp-form .ac-wrap { position: relative; flex: 1; min-width: 160px; }
+        .cmp-form .ac-wrap input { width: 100%; box-sizing: border-box; }
+        .cmp-ac { position: absolute; left: 0; right: 0; top: 100%; background: #fff; border: 1px solid #d6dde2; border-top: 0; border-radius: 0 0 6px 6px; max-height: 260px; overflow-y: auto; z-index: 10; }
+        .cmp-ac div { padding: 0.5rem 0.9rem; cursor: pointer; }
+        .cmp-ac div:hover, .cmp-ac div.sel { background: #EEF2F4; }
+        .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+        .cmp-card { background: #fff; border-radius: 8px; padding: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+        .cmp-card h2 { margin: 0 0 0.5rem; }
+        .cmp-card .cmp-stats { display: grid; grid-template-columns: 1fr; gap: 0.5rem; font-size: 0.95rem; margin-top: 0.75rem; }
+        .cmp-card .cmp-stats div { display: flex; justify-content: space-between; border-bottom: 1px dashed #EEF2F4; padding: 0.25rem 0; }
+        .cmp-card .cmp-stats .lbl { color: #5B6678; }
+        .cmp-card .cmp-stats .val { font-weight: 600; font-variant-numeric: tabular-nums; }
+        .cmp-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 0.5rem; vertical-align: 1px; }
+        .cmp-error { background: #fdecea; border-left: 4px solid #c0392b; padding: 0.85rem 1rem; border-radius: 6px; margin: 1rem 0; color: #7a1f12; }
+        @media (max-width: 600px) { .cmp-grid { grid-template-columns: 1fr; } }
         .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #149E91; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
@@ -1259,6 +1515,7 @@ def site_nav_html() -> str:
         <a href="{p}/trends.html">{S("nav_trends")}</a>
         <a href="{p}/decades.html">{S("nav_decades")}</a>
         <a href="{p}/year/{LATEST_YEAR}.html">{S("nav_rankings", year=LATEST_YEAR)}</a>
+        <a href="{p}/compare.html">{S("nav_compare")}</a>
         <a href="{p}/favorites.html">{S("nav_favorites")}<span class="fav-nav-count"></span></a>
         {country_switcher_html()}
     </div></div>"""
@@ -1311,7 +1568,7 @@ def page(title, body, description="", canonical="", extra_head=""):
     <div class="container">
 {body}
 {footer_html()}
-    </div>{lang_banner_script()}{favorites_script()}
+    </div>{lang_banner_script()}{favorites_script()}{compare_script()}
 </body>
 </html>"""
 
@@ -1522,6 +1779,7 @@ def generate_name_page(name):
     rel = (
         f'        <p style="margin:0.75rem 0 1.5rem;">'
         f'<a href="{p}/similar/{slugify(name)}.html"><strong>{S("rel_see_similar", name=name)}</strong></a>'
+        f' &nbsp;&middot;&nbsp; <a href="{p}/compare.html?a={slugify(name)}">{S("compare_with_link", name=name)}</a>'
         f' &nbsp;&middot;&nbsp; <a href="{p}/decade/{peak_dec}s.html">{S("rel_pop_decade", d=peak_dec)}</a>'
         f' &nbsp;&middot;&nbsp; <a href="{p}/letter/{slug_label(dom)}-{name[0].lower()}.html">'
         f'{S("rel_letter_link", label=label, label_cap=loc_label_cap(dom), letter=letter)}</a></p>\n'
@@ -2137,6 +2395,80 @@ def generate_rare_names_page():
         encoding='utf-8')
 
 
+def generate_name_data_json(name):
+    """Tiny per-name JSON consumed by /compare.html. Keys are short to keep
+    files small (~2–3 KB each). One file per page-eligible name."""
+    dom = dominant_sex(name)
+    series = counts[name][dom]
+    years = sorted(series.keys())
+    cnts = [series[y] for y in years]
+    ranks = []
+    for y in years:
+        r = rank_by_year_sex.get((y, dom), {}).get(name)
+        ranks.append(r if r else None)
+    ft = name_sex_total[(name, 'F')]
+    mt = name_sex_total[(name, 'M')]
+    peak = max(cnts) if cnts else 0
+    peak_year = years[cnts.index(peak)] if cnts else None
+    latest_rank = name_meta[name]['latest_rank']
+    payload = {
+        "n": name,
+        "d": dom,
+        "ft": ft,
+        "mt": mt,
+        "p": peak,
+        "py": peak_year,
+        "lr": latest_rank,
+        "y": years,
+        "c": cnts,
+        "r": ranks,
+    }
+    (OUT_DIR / 'name-data' / f'{slugify(name)}.json').write_text(
+        json.dumps(payload, separators=(',', ':')),
+        encoding='utf-8')
+
+
+def generate_compare_page():
+    """Empty shell — JS reads ?a= and ?b= and fetches name-data JSON."""
+    p = PREFIX
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_compare")}</div>
+        <h1>{S("compare_h1")}</h1>
+        <p>{S("compare_intro")}</p>
+        <form id="cmp-form" class="cmp-form" autocomplete="off">
+            <span class="ac-wrap">
+                <input type="text" id="cmp-a" placeholder="{S("compare_input_a")}" aria-label="{S("compare_input_a")}">
+                <div class="cmp-ac" id="cmp-ac-a" style="display:none;"></div>
+            </span>
+            <span class="ac-wrap">
+                <input type="text" id="cmp-b" placeholder="{S("compare_input_b")}" aria-label="{S("compare_input_b")}">
+                <div class="cmp-ac" id="cmp-ac-b" style="display:none;"></div>
+            </span>
+            <button type="submit">{S("compare_go")}</button>
+        </form>
+        <div id="cmp-loading" style="display:none;">{S("compare_loading")}</div>
+        <div id="cmp-error" class="cmp-error" style="display:none;">{S("compare_not_found")}</div>
+        <div id="cmp-result" style="display:none;">
+            <div class="cmp-grid">
+                <div class="cmp-card" id="cmp-card-a"></div>
+                <div class="cmp-card" id="cmp-card-b"></div>
+            </div>
+            <h2>{S("compare_chart_h2")}</h2>
+            <div class="chart-wrap"><canvas id="cmpChart" height="120"></canvas></div>
+        </div>"""
+    # noindex when query params are present is enforced by JS, but the bare
+    # /compare.html landing page is indexable so we don't add noindex here.
+    extra_head = (
+        '\n    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>'
+        + hreflang_for_hub("compare.html")
+    )
+    (OUT_DIR / 'compare.html').write_text(
+        page(S("compare_title"), body,
+             description=S("compare_desc"),
+             canonical=f"{BASE_URL}{p}/compare.html",
+             extra_head=extra_head),
+        encoding='utf-8')
+
+
 def generate_name_index_json():
     pages = sorted({slugify(n) for n in pages_to_generate})
     ssa = sorted({slugify(n) for n in name_total if n not in HAS_PAGE})
@@ -2198,7 +2530,7 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
     urls = [f"{BASE_URL}{p}/", f"{BASE_URL}{p}/names.html",
             f"{BASE_URL}{p}/trends.html", f"{BASE_URL}{p}/decades.html",
             f"{BASE_URL}{p}/trends/rising.html", f"{BASE_URL}{p}/trends/falling.html",
-            f"{BASE_URL}{p}/rare-names.html"]
+            f"{BASE_URL}{p}/rare-names.html", f"{BASE_URL}{p}/compare.html"]
     urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/year/{y}.html" for y in years_by_country[cc]]
@@ -2267,6 +2599,9 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
     print(f"  {len(pages_to_generate)} similar pages…")
     for name in pages_to_generate:
         generate_similar_page(name)
+    (OUT_DIR / 'name-data').mkdir(parents=True, exist_ok=True)
+    for name in pages_to_generate:
+        generate_name_data_json(name)
     print(f"  {len(DECADES)} decade pages + hub…")
     for decade in DECADES:
         generate_decade_page(decade)
@@ -2293,6 +2628,7 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
 
     generate_rare_names_page()
     generate_favorites_page()
+    generate_compare_page()
     generate_name_index_json()
 
 

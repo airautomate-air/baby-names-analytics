@@ -76,6 +76,25 @@
         .fav-share-btn { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.55rem 1rem; font-weight: 600; cursor: pointer; font-size: 0.92rem; }
         .fav-share-btn:hover { background: #117f74; }
         .fav-share-done { color: #27ae60; font-size: 0.9rem; }
+        .cmp-form { display: flex; gap: 0.75rem; margin: 1.5rem 0; flex-wrap: wrap; align-items: stretch; }
+        .cmp-form input { flex: 1; min-width: 160px; padding: 0.7rem 0.9rem; font-size: 1rem; border: 1px solid #d6dde2; border-radius: 6px; background: #fff; }
+        .cmp-form button { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 600; cursor: pointer; font-size: 1rem; }
+        .cmp-form button:hover { background: #117f74; }
+        .cmp-form .ac-wrap { position: relative; flex: 1; min-width: 160px; }
+        .cmp-form .ac-wrap input { width: 100%; box-sizing: border-box; }
+        .cmp-ac { position: absolute; left: 0; right: 0; top: 100%; background: #fff; border: 1px solid #d6dde2; border-top: 0; border-radius: 0 0 6px 6px; max-height: 260px; overflow-y: auto; z-index: 10; }
+        .cmp-ac div { padding: 0.5rem 0.9rem; cursor: pointer; }
+        .cmp-ac div:hover, .cmp-ac div.sel { background: #EEF2F4; }
+        .cmp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+        .cmp-card { background: #fff; border-radius: 8px; padding: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.06); }
+        .cmp-card h2 { margin: 0 0 0.5rem; }
+        .cmp-card .cmp-stats { display: grid; grid-template-columns: 1fr; gap: 0.5rem; font-size: 0.95rem; margin-top: 0.75rem; }
+        .cmp-card .cmp-stats div { display: flex; justify-content: space-between; border-bottom: 1px dashed #EEF2F4; padding: 0.25rem 0; }
+        .cmp-card .cmp-stats .lbl { color: #5B6678; }
+        .cmp-card .cmp-stats .val { font-weight: 600; font-variant-numeric: tabular-nums; }
+        .cmp-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 0.5rem; vertical-align: 1px; }
+        .cmp-error { background: #fdecea; border-left: 4px solid #c0392b; padding: 0.85rem 1rem; border-radius: 6px; margin: 1rem 0; color: #7a1f12; }
+        @media (max-width: 600px) { .cmp-grid { grid-template-columns: 1fr; } }
         .nav { margin-bottom: 1.5rem; font-size: 0.9rem; }
         .nav a { color: #149E91; text-decoration: none; }
         .nav a:hover { text-decoration: underline; }
@@ -157,6 +176,7 @@
         <a href="/trends.html">Trends</a>
         <a href="/decades.html">Decades</a>
         <a href="/year/2024.html">2024 Rankings</a>
+        <a href="/compare.html">Compare</a>
         <a href="/favorites.html">Favorites<span class="fav-nav-count"></span></a>
         <span class="ccswitch"><strong><span class="flag" aria-hidden="true">🇺🇸</span>US</strong><span class="sep">·</span><a href="/fr/"><span class="flag" aria-hidden="true">🇫🇷</span>FR</a><span class="sep">·</span><a href="/uk/"><span class="flag" aria-hidden="true">🇬🇧</span>UK</a><span class="sep">·</span><a href="/au/"><span class="flag" aria-hidden="true">🇦🇺</span>AU</a></span>
     </div></div>
@@ -176,7 +196,7 @@
         <h2>Popularity Over Time — Boys</h2>
         <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
 
-        <p style="margin:0.75rem 0 1.5rem;"><a href="/similar/kross.html"><strong>&rarr; See names similar to Kross</strong></a> &nbsp;&middot;&nbsp; <a href="/decade/2020s.html">Popular names of the 2020s</a> &nbsp;&middot;&nbsp; <a href="/letter/boys-k.html">Boys names starting with K</a></p>
+        <p style="margin:0.75rem 0 1.5rem;"><a href="/similar/kross.html"><strong>&rarr; See names similar to Kross</strong></a> &nbsp;&middot;&nbsp; <a href="/compare.html?a=kross">Compare Kross with another name →</a> &nbsp;&middot;&nbsp; <a href="/decade/2020s.html">Popular names of the 2020s</a> &nbsp;&middot;&nbsp; <a href="/letter/boys-k.html">Boys names starting with K</a></p>
         <h3 style="margin-bottom:0.25rem;">More popular boys' names</h3>
         <div class="related"><a href="/name/luisangel.html">Luisangel</a><a href="/name/derreck.html">Derreck</a><a href="/name/ferman.html">Ferman</a><a href="/name/kelson.html">Kelson</a><a href="/name/dusten.html">Dusten</a><a href="/name/gio.html">Gio</a></div>
         <h3 style="margin-bottom:0.25rem;">Names ranked near Kross in 2024</h3>
@@ -394,6 +414,198 @@
         }
 
         updateBadge();
+    })();
+    </script>
+    <script>
+    (function() {
+        var form = document.getElementById('cmp-form');
+        if (!form) return;
+        var PREFIX = '';
+        var L_LATEST = 2024;
+        var L_TOTAL = 'Total births';
+        var L_PEAK = 'Peak year';
+        var L_RANK = '{year} rank';
+        var L_GIRLS = 'Girls';
+        var L_BOYS = 'Boys';
+        var L_CHART = 'Babies per year';
+
+        var aIn = document.getElementById('cmp-a');
+        var bIn = document.getElementById('cmp-b');
+        var acA = document.getElementById('cmp-ac-a');
+        var acB = document.getElementById('cmp-ac-b');
+        var loadingEl = document.getElementById('cmp-loading');
+        var errorEl = document.getElementById('cmp-error');
+        var resultEl = document.getElementById('cmp-result');
+
+        var INDEX = null;
+        function loadIndex() {
+            if (INDEX) return Promise.resolve(INDEX);
+            return fetch(PREFIX + '/name-index.json')
+                .then(function(r) { return r.json(); })
+                .then(function(d) { INDEX = d.pages || []; return INDEX; });
+        }
+
+        function fmt(n) { return Number(n).toLocaleString(); }
+
+        function attachAutocomplete(input, ac) {
+            var sel = -1;
+            var items = [];
+            function render(matches) {
+                while (ac.firstChild) ac.removeChild(ac.firstChild);
+                items = matches;
+                if (!matches.length) { ac.style.display = 'none'; return; }
+                ac.style.display = '';
+                matches.forEach(function(slug, i) {
+                    var d = document.createElement('div');
+                    d.textContent = slug.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+                    d.setAttribute('data-slug', slug);
+                    if (i === sel) d.className = 'sel';
+                    d.addEventListener('mousedown', function(e) {
+                        e.preventDefault();
+                        input.value = slug;
+                        ac.style.display = 'none';
+                    });
+                    ac.appendChild(d);
+                });
+            }
+            function search() {
+                var q = input.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                if (!q || !INDEX) { ac.style.display = 'none'; return; }
+                var starts = [], contains = [];
+                for (var i = 0; i < INDEX.length && starts.length + contains.length < 8; i++) {
+                    var s = INDEX[i];
+                    if (s.indexOf(q) === 0) starts.push(s);
+                    else if (s.indexOf(q) > 0) contains.push(s);
+                }
+                sel = -1;
+                render(starts.concat(contains).slice(0, 8));
+            }
+            input.addEventListener('input', function() { loadIndex().then(search); });
+            input.addEventListener('focus', function() { loadIndex().then(search); });
+            input.addEventListener('blur', function() { setTimeout(function() { ac.style.display = 'none'; }, 150); });
+            input.addEventListener('keydown', function(e) {
+                if (ac.style.display === 'none') return;
+                if (e.key === 'ArrowDown') { sel = (sel + 1) % items.length; render(items); e.preventDefault(); }
+                else if (e.key === 'ArrowUp') { sel = (sel - 1 + items.length) % items.length; render(items); e.preventDefault(); }
+                else if (e.key === 'Enter' && sel >= 0) { input.value = items[sel]; ac.style.display = 'none'; e.preventDefault(); }
+                else if (e.key === 'Escape') { ac.style.display = 'none'; }
+            });
+        }
+        attachAutocomplete(aIn, acA);
+        attachAutocomplete(bIn, acB);
+
+        function slug(s) {
+            return (s || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        }
+
+        function fetchName(s) {
+            return fetch(PREFIX + '/name-data/' + s + '.json')
+                .then(function(r) { if (!r.ok) throw new Error('404'); return r.json(); });
+        }
+
+        var chart = null;
+        function render(a, b) {
+            var COLORS = ['#149E91', '#FF6B5C'];
+            function fillCard(card, data, color) {
+                while (card.firstChild) card.removeChild(card.firstChild);
+                var h = document.createElement('h2');
+                var dot = document.createElement('span');
+                dot.className = 'cmp-dot';
+                dot.style.background = color;
+                h.appendChild(dot);
+                var link = document.createElement('a');
+                link.href = PREFIX + '/name/' + slug(data.n) + '.html';
+                link.textContent = data.n;
+                link.style.color = '#1B2440';
+                link.style.textDecoration = 'none';
+                h.appendChild(link);
+                card.appendChild(h);
+                var sub = document.createElement('p');
+                sub.style.color = '#7f8c8d';
+                sub.style.margin = '0 0 0.5rem';
+                sub.textContent = data.d === 'F' ? L_GIRLS : L_BOYS;
+                card.appendChild(sub);
+                var stats = document.createElement('div');
+                stats.className = 'cmp-stats';
+                function row(lbl, val) {
+                    var r = document.createElement('div');
+                    var l = document.createElement('span'); l.className = 'lbl'; l.textContent = lbl;
+                    var v = document.createElement('span'); v.className = 'val'; v.textContent = val;
+                    r.appendChild(l); r.appendChild(v); stats.appendChild(r);
+                }
+                row(L_TOTAL, fmt(data.ft + data.mt));
+                row(L_PEAK, data.py + ' (' + fmt(data.p) + ')');
+                row(L_RANK.replace('{year}', L_LATEST), data.lr ? '#' + fmt(data.lr) : '—');
+                card.appendChild(stats);
+            }
+            fillCard(document.getElementById('cmp-card-a'), a, COLORS[0]);
+            fillCard(document.getElementById('cmp-card-b'), b, COLORS[1]);
+
+            var allYears = {};
+            a.y.forEach(function(y) { allYears[y] = true; });
+            b.y.forEach(function(y) { allYears[y] = true; });
+            var years = Object.keys(allYears).map(Number).sort(function(x, y) { return x - y; });
+            function aligned(data) {
+                var map = {};
+                for (var i = 0; i < data.y.length; i++) map[data.y[i]] = data.c[i];
+                return years.map(function(y) { return map[y] != null ? map[y] : null; });
+            }
+            if (chart) chart.destroy();
+            var ctx = document.getElementById('cmpChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [
+                        {label: a.n, data: aligned(a), borderColor: COLORS[0], backgroundColor: 'rgba(20,158,145,0.10)', fill: false, tension: 0.2, pointRadius: 0, borderWidth: 2, spanGaps: true},
+                        {label: b.n, data: aligned(b), borderColor: COLORS[1], backgroundColor: 'rgba(255,107,92,0.10)', fill: false, tension: 0.2, pointRadius: 0, borderWidth: 2, spanGaps: true}
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: true }, tooltip: { mode: 'index', intersect: false } },
+                    scales: { y: { beginAtZero: true, title: { display: true, text: L_CHART } } }
+                }
+            });
+            resultEl.style.display = '';
+            errorEl.style.display = 'none';
+            loadingEl.style.display = 'none';
+        }
+
+        function go(sa, sb) {
+            loadingEl.style.display = '';
+            resultEl.style.display = 'none';
+            errorEl.style.display = 'none';
+            Promise.all([fetchName(sa), fetchName(sb)])
+                .then(function(both) { render(both[0], both[1]); })
+                .catch(function() {
+                    loadingEl.style.display = 'none';
+                    errorEl.style.display = '';
+                });
+        }
+
+        // Tell search engines not to index query-param variants.
+        function setNoindex() {
+            var m = document.createElement('meta');
+            m.name = 'robots'; m.content = 'noindex';
+            document.head.appendChild(m);
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var sa = slug(aIn.value), sb = slug(bIn.value);
+            if (!sa || !sb) return;
+            var url = window.location.pathname + '?a=' + sa + '&b=' + sb;
+            history.replaceState(null, '', url);
+            setNoindex();
+            go(sa, sb);
+        });
+
+        var qs = new URLSearchParams(window.location.search);
+        var qa = qs.get('a'), qb = qs.get('b');
+        if (qa) aIn.value = qa;
+        if (qb) bIn.value = qb;
+        if (qa && qb) { setNoindex(); go(slug(qa), slug(qb)); }
     })();
     </script>
 </body>
