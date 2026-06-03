@@ -1093,16 +1093,21 @@ def page(title, body, description="", canonical="", extra_head=""):
     canon_tag = f'\n    <link rel="canonical" href="{canonical}">' if canonical else ""
     og = ""
     if description:
+        # Country flag in social-card title — cheapest way to make /fr/ vs /
+        # vs /uk/ vs /au/ visually distinct in Twitter/Facebook previews,
+        # without needing four separate OG images.
+        og_title = f"{FLAG[ACTIVE_CC]} {title}"
         og = (
-            f'\n    <meta property="og:title" content="{title}">'
+            f'\n    <meta property="og:title" content="{og_title}">'
             f'\n    <meta property="og:description" content="{description}">'
             f'\n    <meta property="og:type" content="website">'
             f'\n    <meta property="og:site_name" content="NameCharted">'
+            f'\n    <meta property="og:locale" content="{"fr_FR" if ACTIVE_CC == "FR" else ("en_GB" if ACTIVE_CC == "GB" else ("en_AU" if ACTIVE_CC == "AU" else "en_US"))}">'
             f'\n    <meta property="og:image" content="{BASE_URL}/og-default.png">'
             f'\n    <meta property="og:image:width" content="1200">'
             f'\n    <meta property="og:image:height" content="630">'
             f'\n    <meta name="twitter:card" content="summary_large_image">'
-            f'\n    <meta name="twitter:title" content="{title}">'
+            f'\n    <meta name="twitter:title" content="{og_title}">'
             f'\n    <meta name="twitter:description" content="{description}">'
             f'\n    <meta name="twitter:image" content="{BASE_URL}/og-default.png">'
         )
