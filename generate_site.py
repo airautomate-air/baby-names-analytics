@@ -2095,6 +2095,7 @@ BASE_CSS = """
         .sitenav .brand-cc { color: #c8cfdb; font-weight: 500; font-size: 0.95rem; margin-left: 0.15rem; display: inline-flex; align-items: center; gap: 0.3rem; }
         .sitenav .brand-cc-dash { color: #4a5269; }
         .sitenav .brand-cc .flag { font-size: 1.05rem; line-height: 1; }
+        .h1-flag { margin-left: 0.4rem; font-size: 0.8em; vertical-align: 0.1em; }
         @media (max-width: 560px) { .sitenav .brand-cc { display: none; } }
         .ccswitch { margin-left: auto; font-size: 0.95rem; color: #8a93a3; display: inline-flex; gap: 0.45rem; align-items: center; }
         .ccswitch a { color: #c8cfdb; text-decoration: none; }
@@ -2363,7 +2364,7 @@ def generate_homepage():
         )
     samples = ", ".join(n for n, _ in top_names[:5])
     n_pages = len(pages_to_generate)
-    body = f"""        <h1>NameCharted — {COUNTRY_NAME[ACTIVE_CC]}</h1>
+    body = f"""        <h1>NameCharted — {COUNTRY_NAME[ACTIVE_CC]} <span class="h1-flag" aria-hidden="true">{FLAG[ACTIVE_CC]}</span></h1>
         <p style="color:#5B6678; font-size:1.05rem; margin-top:-0.25rem;">{S("home_tagline")}</p>
         <p>{S("home_intro", range=DATA_RANGE)}</p>
 {homepage_cc_callout()}
