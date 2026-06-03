@@ -81,6 +81,8 @@ letter_names_by_country: dict[str, dict] = {}
 name_meta_by_country: dict[str, dict] = {}
 decades_by_country: dict[str, list[int]] = {}
 decade_sex_counts_by_country: dict[str, dict] = {}
+variants_of_by_country: dict[str, dict] = {}   # canonical_name -> [(variant, total), ...]
+canonical_of_by_country: dict[str, dict] = {}  # variant_name -> canonical_name
 
 
 def build_country(cc: str) -> None:
@@ -135,6 +137,38 @@ def build_country(cc: str) -> None:
         if total >= PAGE_MIN_TOTAL:
             pages.add(n)
     pages_to_generate = sorted(pages, key=lambda n: (-name_total[n], n))
+
+    # Slug-collision handling. Multiple names (e.g. Emile vs Émile) can slugify
+    # to the same URL after diacritic stripping. The most popular variant wins
+    # the canonical page; the rest are recorded as variants for surfacing on
+    # the canonical page and in the rare-names index.
+    all_by_slug: dict[str, list[str]] = defaultdict(list)
+    for n in name_total:
+        all_by_slug[slugify(n)].append(n)
+    for sl in all_by_slug:
+        all_by_slug[sl].sort(key=lambda x: -name_total[x])
+
+    variants_of: dict[str, list[tuple[str, int]]] = {}
+    canonical_of: dict[str, str] = {}
+    for sl, names_in_slug in all_by_slug.items():
+        if len(names_in_slug) > 1:
+            canon = names_in_slug[0]
+            variants_of[canon] = [(n, name_total[n]) for n in names_in_slug[1:]]
+            for n in names_in_slug[1:]:
+                canonical_of[n] = canon
+
+    # Dedup pages_to_generate by slug — the first occurrence (highest total)
+    # wins. This also flips the previous bug where iteration order let the
+    # less-popular variant overwrite the canonical's page.
+    seen_slugs: set[str] = set()
+    deduped: list[str] = []
+    for n in pages_to_generate:
+        sl = slugify(n)
+        if sl in seen_slugs:
+            continue
+        seen_slugs.add(sl)
+        deduped.append(n)
+    pages_to_generate = deduped
     has_page = set(pages_to_generate)
 
     print(f"  [{cc}] Unique names: {len(name_total):,}  Pages: {len(pages_to_generate):,}  Years: {years[0]}–{latest_year}")
@@ -210,6 +244,8 @@ def build_country(cc: str) -> None:
     name_meta_by_country[cc] = name_meta
     decades_by_country[cc] = decades
     decade_sex_counts_by_country[cc] = decade_sex_counts
+    variants_of_by_country[cc] = variants_of
+    canonical_of_by_country[cc] = canonical_of
 
 
 # ---------------------------------------------------------------------------
@@ -241,6 +277,8 @@ letter_names: dict = {}
 name_meta: dict = {}
 decade_sex_counts: dict = {}
 top_names: list = []
+VARIANTS_OF: dict = {}
+CANONICAL_OF: dict = {}
 
 ALL_SITEMAP_URLS: list[str] = []
 
@@ -366,6 +404,8 @@ def set_active(cc: str) -> None:
     g['letter_names'] = letter_names_by_country[cc]
     g['name_meta'] = name_meta_by_country[cc]
     g['decade_sex_counts'] = decade_sex_counts_by_country[cc]
+    g['VARIANTS_OF'] = variants_of_by_country[cc]
+    g['CANONICAL_OF'] = canonical_of_by_country[cc]
     g['top_names'] = sorted(
         g['name_total'].items(), key=lambda x: (-x[1], x[0]))[:TOP_N_NAMES]
 
@@ -480,6 +520,8 @@ STRINGS_EN: dict[str, str] = {
 
     # Name page
     "name_primarily": "Primarily a {singular}'s name",
+    "name_variants_label": "Also spelled:",
+    "rare_variant_of": "→ see {canonical}",
     "name_unisex": "Unisex — {f}% girls / {m}% boys",
     "name_pct_one": "{pct}% {label}",
     "insight_first": ("<strong>{name}</strong> first appears in the data in "
@@ -664,6 +706,8 @@ STRINGS_FR: dict[str, str] = {
                   "annuels, classements, répartition par sexe et graphiques interactifs."),
 
     "name_primarily": "Principalement un prénom {of_singular}",
+    "name_variants_label": "Variantes :",
+    "rare_variant_of": "→ voir {canonical}",
     "name_unisex": "Mixte — {f} % filles / {m} % garçons",
     "name_pct_one": "{pct} % {label}",
     "insight_first": ("<strong>{name}</strong> apparaît pour la première fois "
@@ -1336,9 +1380,21 @@ def generate_name_page(name):
         (name, canonical),
     ]) + chart_js + hreflang_for_name(slugify(name))
 
+    variants = VARIANTS_OF.get(name, [])
+    variants_line = ""
+    if variants:
+        shown = variants[:10]
+        parts = " &middot; ".join(f"{n} ({fmt(t)})" for n, t in shown)
+        more = ""
+        if len(variants) > 10:
+            more = f" + {len(variants) - 10}"
+        variants_line = (f'\n        <p style="color:#7f8c8d; font-size:0.9rem; '
+                         f'margin:-0.25rem 0 1rem;">{S("name_variants_label")} '
+                         f'{parts}{more}</p>')
+
     body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/names.html">{S("crumb_names")}</a> &rsaquo; {name}</div>
         <h1>{name}</h1>
-        <p style="color:#7f8c8d; margin-top:-0.5rem;">{S("name_primarily", singular=loc_singular(dom), of_singular=singular_of)} &middot; {gender_text}</p>
+        <p style="color:#7f8c8d; margin-top:-0.5rem;">{S("name_primarily", singular=loc_singular(dom), of_singular=singular_of)} &middot; {gender_text}</p>{variants_line}
 
         <div class="insight">{insight}</div>
 
@@ -1831,10 +1887,18 @@ def generate_rare_names_page():
         items = []
         for n in by_letter[l]:
             dom = dominant_sex(n)
+            canon = CANONICAL_OF.get(n)
+            if canon:
+                variant_hint = (f' <a href="{p}/name/{slugify(canon)}.html" '
+                                f'style="color:#149E91; font-size:0.85em;">'
+                                f'{S("rare_variant_of", canonical=canon)}</a>')
+            else:
+                variant_hint = ""
             items.append(
                 f'<li id="n-{slugify(n)}" style="break-inside:avoid;">{n} '
                 f'<span style="color:#5B6678; font-size:0.85em;">'
-                f'{S("rare_mostly", total=fmt(name_total[n]), label=loc_label(dom))}</span></li>')
+                f'{S("rare_mostly", total=fmt(name_total[n]), label=loc_label(dom))}</span>'
+                f'{variant_hint}</li>')
         sections.append(
             f'<details id="letter-{l}" style="margin:1rem 0; background:#fff; '
             f'border:1px solid #EEF2F4; border-radius:8px; padding:1rem 1.25rem;">'
