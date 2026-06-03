@@ -104,6 +104,26 @@ decade_sex_counts_by_country: dict[str, dict] = {}
 variants_of_by_country: dict[str, dict] = {}   # canonical_name -> [(variant, total), ...]
 canonical_of_by_country: dict[str, dict] = {}  # variant_name -> canonical_name
 
+# Global enrichment data shared across all countries. Origin + famous bearers
+# keyed by name slug. Loaded once from data/normalized/name_enrichment.json if
+# present — generator gracefully no-ops when file is missing or has no entry.
+ENRICHMENT: dict[str, dict] = {}
+# slug -> {origin: 'irish', famous: [...]}
+ORIGIN_TO_NAMES_BY_CC: dict[str, dict[str, list[str]]] = {}
+# Per-country: origin_slug -> sorted list of full names with that origin
+# (so we can render /origin/<slug>.html with country-appropriate name lists)
+
+
+def load_enrichment() -> None:
+    global ENRICHMENT
+    p = Path('data/normalized/name_enrichment.json')
+    if not p.exists():
+        print('  (no enrichment data yet — origins/famous sections will be empty)')
+        return
+    with p.open() as f:
+        ENRICHMENT = json.load(f)
+    print(f'  enrichment: {len(ENRICHMENT):,} names have origin or famous data')
+
 
 def build_country(cc: str) -> None:
     """Load data/normalized/<cc>.csv and populate every *_by_country dict for cc."""
@@ -388,6 +408,14 @@ def hreflang_for_decade(d: int) -> str:
     for cc in COUNTRIES:
         if d in DECADES_SET_BY_CC[cc]:
             paths[cc] = f"{_country_prefix(cc)}/decade/{d}s.html"
+    return hreflang_block(paths)
+
+
+def hreflang_for_origin(origin: str) -> str:
+    paths = {}
+    for cc in COUNTRIES:
+        if origin in ORIGIN_TO_NAMES_BY_CC.get(cc, {}):
+            paths[cc] = f"{_country_prefix(cc)}/origin/{origin}.html"
     return hreflang_block(paths)
 
 
@@ -803,6 +831,33 @@ STRINGS_EN: dict[str, str] = {
     "sibling_desc": ("Find sibling names that pair well with a child you've "
                      "already named. We match on peak era, syllable rhythm and "
                      "complementary starting letters."),
+
+    # Origins
+    "nav_origins": "Origins",
+    "origins_hub_title": "Baby name origins by language and culture",
+    "origins_hub_h1": "Name origins",
+    "origins_hub_intro": ("Explore baby names by their language of origin. "
+                          "Each page lists popular girls' and boys' names "
+                          "rooted in that culture, with birth counts and "
+                          "trend pages."),
+    "origins_hub_desc": ("Browse baby names grouped by language of origin — "
+                         "Irish, Hebrew, Greek, Latin, Japanese, Arabic and "
+                         "more. Popular names, meanings and trend data."),
+    "origins_hub_count": "{n} names",
+    "origin_page_title": "{label} baby names — popularity & trends",
+    "origin_page_h1": "{label} baby names",
+    "origin_page_intro": ("Popular {label} baby names. These names trace their "
+                          "roots to {label} language and culture, listed by "
+                          "lifetime popularity in {country}."),
+    "origin_page_desc": ("{label} baby names: girls' and boys' name rankings, "
+                         "yearly trends and meanings."),
+    "origin_page_girls_h2": "{label} girls' names",
+    "origin_page_boys_h2": "{label} boys' names",
+    "origin_back_to_hub": "← All origins",
+    "name_origin_badge": "Origin: {label}",
+    "name_famous_h2": "Famous people named {name}",
+    "name_famous_occ_sep": " · ",
+    "name_famous_born": "b. {year}",
 }
 
 STRINGS_FR: dict[str, str] = {
@@ -1100,6 +1155,32 @@ STRINGS_FR: dict[str, str] = {
     "sibling_desc": ("Trouvez des prénoms pour la fratrie qui s'accordent avec "
                      "le prénom d'un enfant déjà choisi. Score basé sur "
                      "l'époque, le nombre de syllabes et l'initiale."),
+
+    # Origines
+    "nav_origins": "Origines",
+    "origins_hub_title": "Origines des prénoms par langue et culture",
+    "origins_hub_h1": "Origines des prénoms",
+    "origins_hub_intro": ("Explorez les prénoms selon leur langue d'origine. "
+                          "Chaque page liste les prénoms filles et garçons "
+                          "issus de cette culture, avec leur popularité."),
+    "origins_hub_desc": ("Parcourez les prénoms par origine linguistique — "
+                         "hébraïque, grec, latin, arabe, japonais, irlandais "
+                         "et plus."),
+    "origins_hub_count": "{n} prénoms",
+    "origin_page_title": "Prénoms {label} — popularité et tendances",
+    "origin_page_h1": "Prénoms d'origine {label}",
+    "origin_page_intro": ("Prénoms populaires d'origine {label}. Ces prénoms "
+                          "puisent leurs racines dans la langue et la culture "
+                          "{label}, classés ici par popularité totale en {country}."),
+    "origin_page_desc": ("Prénoms d'origine {label} : classements filles et "
+                         "garçons, tendances annuelles et significations."),
+    "origin_page_girls_h2": "Prénoms filles d'origine {label}",
+    "origin_page_boys_h2": "Prénoms garçons d'origine {label}",
+    "origin_back_to_hub": "← Toutes les origines",
+    "name_origin_badge": "Origine : {label}",
+    "name_famous_h2": "Personnalités prénommées {name}",
+    "name_famous_occ_sep": " · ",
+    "name_famous_born": "né en {year}",
 }
 
 STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN, "AU": STRINGS_EN}
@@ -1119,6 +1200,114 @@ GENDERED_FR = {
     "of_singular_F": "de fille", "of_singular_M": "de garçon",
 }
 GENDERED = {"US": GENDERED_EN, "FR": GENDERED_FR, "GB": GENDERED_EN, "AU": GENDERED_EN}
+
+# Origin-slug → display label per UI language. Slugs come from
+# data/normalized/name_enrichment.json (built by fetchers/enrich_wikidata.py).
+# Keep this in sync with that file; unknown slugs fall back to title-cased slug.
+ORIGIN_LABELS_EN: dict[str, str] = {
+    'english': 'English',
+    'irish': 'Irish',
+    'scottish': 'Scottish',
+    'welsh': 'Welsh',
+    'french': 'French',
+    'german': 'German',
+    'italian': 'Italian',
+    'spanish': 'Spanish',
+    'portuguese': 'Portuguese',
+    'dutch': 'Dutch',
+    'swedish': 'Swedish',
+    'norwegian': 'Norwegian',
+    'danish': 'Danish',
+    'finnish': 'Finnish',
+    'scandinavian': 'Scandinavian',
+    'latin': 'Latin',
+    'greek': 'Greek',
+    'hebrew': 'Hebrew',
+    'arabic': 'Arabic',
+    'aramaic': 'Aramaic',
+    'persian': 'Persian',
+    'sanskrit': 'Sanskrit',
+    'russian': 'Russian',
+    'polish': 'Polish',
+    'czech': 'Czech',
+    'hungarian': 'Hungarian',
+    'romanian': 'Romanian',
+    'ukrainian': 'Ukrainian',
+    'bulgarian': 'Bulgarian',
+    'serbo-croatian': 'Serbo-Croatian',
+    'japanese': 'Japanese',
+    'chinese': 'Chinese',
+    'korean': 'Korean',
+    'vietnamese': 'Vietnamese',
+    'turkish': 'Turkish',
+    'armenian': 'Armenian',
+    'tamil': 'Tamil',
+    'hindi': 'Hindi',
+    'urdu': 'Urdu',
+    'thai': 'Thai',
+    'indonesian': 'Indonesian',
+    'swahili': 'Swahili',
+    'yoruba': 'Yoruba',
+    'igbo': 'Igbo',
+}
+ORIGIN_LABELS_FR: dict[str, str] = {
+    'english': 'anglais',
+    'irish': 'irlandais',
+    'scottish': 'écossais',
+    'welsh': 'gallois',
+    'french': 'français',
+    'german': 'allemand',
+    'italian': 'italien',
+    'spanish': 'espagnol',
+    'portuguese': 'portugais',
+    'dutch': 'néerlandais',
+    'swedish': 'suédois',
+    'norwegian': 'norvégien',
+    'danish': 'danois',
+    'finnish': 'finnois',
+    'scandinavian': 'scandinave',
+    'latin': 'latin',
+    'greek': 'grec',
+    'hebrew': 'hébreu',
+    'arabic': 'arabe',
+    'aramaic': 'araméen',
+    'persian': 'persan',
+    'sanskrit': 'sanskrit',
+    'russian': 'russe',
+    'polish': 'polonais',
+    'czech': 'tchèque',
+    'hungarian': 'hongrois',
+    'romanian': 'roumain',
+    'ukrainian': 'ukrainien',
+    'bulgarian': 'bulgare',
+    'serbo-croatian': 'serbo-croate',
+    'japanese': 'japonais',
+    'chinese': 'chinois',
+    'korean': 'coréen',
+    'vietnamese': 'vietnamien',
+    'turkish': 'turc',
+    'armenian': 'arménien',
+    'tamil': 'tamoul',
+    'hindi': 'hindi',
+    'urdu': 'ourdou',
+    'thai': 'thaï',
+    'indonesian': 'indonésien',
+    'swahili': 'swahili',
+    'yoruba': 'yoruba',
+    'igbo': 'igbo',
+}
+ORIGIN_LABELS = {"US": ORIGIN_LABELS_EN, "FR": ORIGIN_LABELS_FR,
+                 "GB": ORIGIN_LABELS_EN, "AU": ORIGIN_LABELS_EN}
+
+
+def origin_label(slug: str) -> str:
+    return ORIGIN_LABELS[ACTIVE_CC].get(slug, slug.replace('-', ' ').title())
+
+
+def origin_label_cap(slug: str) -> str:
+    # EN/AU/GB capitalise origin labels in headlines ("Irish baby names")
+    # FR uses lowercase adjective form ("prénoms irlandais").
+    return origin_label(slug)[0].upper() + origin_label(slug)[1:] if ACTIVE_CC != 'FR' else origin_label(slug)
 
 
 def S(key: str, **kwargs) -> str:
@@ -2544,6 +2733,19 @@ BASE_CSS = """
         .ww-more-wrap { text-align: center; margin-top: 1.5rem; }
         #ww-more { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.6rem 1.4rem; border-radius: 24px; cursor: pointer; font-weight: 500; font-size: 0.92rem; }
         #ww-more:hover { border-color: #149E91; color: #149E91; }
+        .origin-badge { display: inline-block; background: #EEF2F4; color: #1B2440; border: 1px solid #d6dde2; border-radius: 16px; padding: 0.25rem 0.85rem; font-size: 0.85rem; font-weight: 500; text-decoration: none; margin: 0.5rem 0 0.25rem; }
+        .origin-badge:hover { background: #149E91; color: #fff; border-color: #149E91; }
+        .origin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.6rem; margin: 1.5rem 0; }
+        .origin-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.85rem 1rem; text-decoration: none; display: flex; flex-direction: column; gap: 0.2rem; transition: border-color 0.15s, transform 0.1s; }
+        .origin-card:hover { border-color: #149E91; transform: translateY(-1px); }
+        .origin-card-label { font-weight: 600; color: #1B2440; font-size: 1rem; }
+        .origin-card-count { color: #5B6678; font-size: 0.82rem; }
+        .famous-list { list-style: none; padding: 0; margin: 1rem 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+        @media (max-width: 600px) { .famous-list { grid-template-columns: 1fr; } }
+        .famous-item { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.65rem 0.9rem; display: flex; flex-direction: column; gap: 0.2rem; }
+        .famous-name a { color: #1B2440; text-decoration: none; font-weight: 600; }
+        .famous-name a:hover { color: #149E91; text-decoration: underline; }
+        .famous-sub { color: #5B6678; font-size: 0.82rem; }
         .pk-tabs { display: flex; gap: 0.4rem; margin: 1.5rem 0 1.25rem; flex-wrap: wrap; }
         .pk-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.5rem 1.1rem; border-radius: 22px; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
         .pk-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
@@ -2634,6 +2836,7 @@ def site_nav_html() -> str:
         <a href="{p}/works-with.html">{S("nav_works_with")}</a>
         <a href="{p}/picker.html">{S("nav_picker")}</a>
         <a href="{p}/sibling.html">{S("nav_sibling")}</a>
+        <a href="{p}/origins.html">{S("nav_origins")}</a>
         <a href="{p}/favorites.html">{S("nav_favorites")}<span class="fav-nav-count"></span></a>
         {country_switcher_html()}
     </div></div>"""
@@ -2965,9 +3168,46 @@ def generate_name_page(name):
     fav_btn = (f'<button class="fav-btn" data-slug="{slugify(name)}" data-name="{safe_name}" '
                f'aria-label="{S("fav_add_tip")}" title="{S("fav_add_tip")}">{heart_svg}</button>')
 
+    # Origin badge + famous people from the global ENRICHMENT map.
+    enrich = ENRICHMENT.get(slugify(name), {})
+    origin_badge_html = ''
+    origin = enrich.get('origin')
+    if origin and origin in ORIGIN_LABELS_EN:
+        origin_lbl = origin_label_cap(origin)
+        origin_badge_html = (
+            f'<a class="origin-badge" href="{p}/origin/{origin}.html">'
+            f'{S("name_origin_badge", label=origin_lbl)}</a>'
+        )
+    famous = enrich.get('famous', [])
+    famous_section_html = ''
+    if famous:
+        items = []
+        for person in famous[:5]:
+            occ = person.get('occupation') or ''
+            born = person.get('born')
+            bits = []
+            if occ:
+                bits.append(occ)
+            if born:
+                bits.append(S("name_famous_born", year=born))
+            sub = S("name_famous_occ_sep").join(bits)
+            url = person.get('url') or ''
+            link = (f'<a href="{url}" target="_blank" rel="noopener nofollow">{person["name"]}</a>'
+                    if url else person["name"])
+            items.append(
+                f'<li class="famous-item"><span class="famous-name">{link}</span>'
+                + (f'<span class="famous-sub">{sub}</span>' if sub else '')
+                + '</li>'
+            )
+        famous_section_html = (
+            f'<h2>{S("name_famous_h2", name=name)}</h2>'
+            f'<ul class="famous-list">{"".join(items)}</ul>'
+        )
+
     body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/names.html">{S("crumb_names")}</a> &rsaquo; {name}</div>
         <h1>{name}{fav_btn}</h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">{S("name_primarily", singular=loc_singular(dom), of_singular=singular_of)} &middot; {gender_text}</p>{variants_line}
+        {origin_badge_html}
 
         <div class="insight">{insight}</div>
 
@@ -2979,6 +3219,8 @@ def generate_name_page(name):
 
         <h2>{S("name_popularity_h2", label_cap=loc_label_cap(dom))}</h2>
         <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
+
+        {famous_section_html}
 
 {rel}
         <h2>{S("name_yby_h2")}</h2>
@@ -3815,6 +4057,98 @@ def generate_sibling_page():
 
 
 # ---------------------------------------------------------------------------
+# Origins (Phase 6d) — hub + per-origin pages reading data/normalized/
+# name_enrichment.json. Skipped silently when no enrichment data exists yet.
+# ---------------------------------------------------------------------------
+def collect_origin_names_for_active() -> dict[str, list[str]]:
+    """For the currently active country: build origin_slug → [names...] using
+    the global ENRICHMENT plus pages_to_generate (so we only show names that
+    have their own page in this country)."""
+    by_origin: dict[str, list[str]] = defaultdict(list)
+    if not ENRICHMENT:
+        return {}
+    for name in pages_to_generate:
+        rec = ENRICHMENT.get(slugify(name))
+        if not rec:
+            continue
+        origin = rec.get('origin')
+        if origin and origin in ORIGIN_LABELS_EN:
+            by_origin[origin].append(name)
+    # Sort each list by all-time popularity
+    for origin in by_origin:
+        by_origin[origin].sort(key=lambda n: (-name_total[n], n))
+    return dict(by_origin)
+
+
+def generate_origins_hub_page(by_origin: dict[str, list[str]]) -> None:
+    if not by_origin:
+        return
+    p = PREFIX
+    items = []
+    for origin in sorted(by_origin, key=lambda o: -len(by_origin[o])):
+        label = origin_label_cap(origin)
+        n = len(by_origin[origin])
+        items.append(
+            f'<a class="origin-card" href="{p}/origin/{origin}.html">'
+            f'<span class="origin-card-label">{label}</span>'
+            f'<span class="origin-card-count">{S("origins_hub_count", n=fmt(n))}</span>'
+            f'</a>'
+        )
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_origins")}</div>
+        <h1>{S("origins_hub_h1")}</h1>
+        <p>{S("origins_hub_intro")}</p>
+        <div class="origin-grid">
+{''.join(items)}
+        </div>"""
+    (OUT_DIR / 'origins.html').write_text(
+        page(S("origins_hub_title"), body,
+             description=S("origins_hub_desc"),
+             canonical=f"{BASE_URL}{p}/origins.html",
+             extra_head=hreflang_for_hub("origins.html")),
+        encoding='utf-8')
+
+
+def generate_origin_page(origin: str, names: list[str]) -> None:
+    p = PREFIX
+    label = origin_label(origin)
+    label_cap = origin_label_cap(origin)
+    country = COUNTRY_NAMES_IN_UI[ACTIVE_CC][ACTIVE_CC]
+
+    girls = [n for n in names if dominant_sex(n) == 'F'][:80]
+    boys = [n for n in names if dominant_sex(n) == 'M'][:80]
+
+    def list_section(heading: str, ns: list[str]) -> str:
+        if not ns:
+            return ''
+        items = []
+        for i, n in enumerate(ns, 1):
+            total = name_total[n]
+            items.append(
+                f'<tr><td class="rank-column">{i}</td>'
+                f'<td><a href="{p}/name/{slugify(n)}.html">{n}</a></td>'
+                f'<td class="count-column">{fmt(total)}</td></tr>'
+            )
+        return (f'<h2>{heading}</h2>'
+                f'<table><thead><tr>'
+                f'<th>{S("table_num")}</th><th>{S("table_name")}</th>'
+                f'<th class="count-column">{S("table_total")}</th>'
+                f'</tr></thead><tbody>{"".join(items)}</tbody></table>')
+
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/origins.html">{S("nav_origins")}</a> &rsaquo; {label_cap}</div>
+        <h1>{S("origin_page_h1", label=label_cap)}</h1>
+        <p>{S("origin_page_intro", label=label, country=country)}</p>
+        {list_section(S("origin_page_girls_h2", label=label_cap), girls)}
+        {list_section(S("origin_page_boys_h2", label=label_cap), boys)}
+        <p style="margin-top:2rem;"><a href="{p}/origins.html">{S("origin_back_to_hub")}</a></p>"""
+    (OUT_DIR / 'origin' / f'{origin}.html').write_text(
+        page(S("origin_page_title", label=label_cap), body,
+             description=S("origin_page_desc", label=label),
+             canonical=f"{BASE_URL}{p}/origin/{origin}.html",
+             extra_head=hreflang_for_origin(origin)),
+        encoding='utf-8')
+
+
+# ---------------------------------------------------------------------------
 # Single 404 (country-neutral), single sitemap + robots (root)
 # ---------------------------------------------------------------------------
 def generate_favorites_page():
@@ -3871,6 +4205,10 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
             f"{BASE_URL}{p}/works-with.html",
             f"{BASE_URL}{p}/picker.html",
             f"{BASE_URL}{p}/sibling.html"]
+    if cc in ORIGIN_TO_NAMES_BY_CC and ORIGIN_TO_NAMES_BY_CC[cc]:
+        urls.append(f"{BASE_URL}{p}/origins.html")
+        urls += [f"{BASE_URL}{p}/origin/{o}.html"
+                 for o in ORIGIN_TO_NAMES_BY_CC[cc]]
     urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/year/{y}.html" for y in years_by_country[cc]]
@@ -3972,11 +4310,21 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
     generate_works_with_page()
     generate_picker_page()
     generate_sibling_page()
+    # Origins (Phase 6d) — no-op when enrichment data is missing
+    by_origin = collect_origin_names_for_active()
+    if by_origin:
+        (OUT_DIR / 'origin').mkdir(parents=True, exist_ok=True)
+        generate_origins_hub_page(by_origin)
+        for origin, names in by_origin.items():
+            generate_origin_page(origin, names)
+        ORIGIN_TO_NAMES_BY_CC[ACTIVE_CC] = by_origin
+        print(f"  origins: {len(by_origin)} pages")
     generate_name_index_json()
     generate_name_meta_json()
 
 
 def main():
+    load_enrichment()
     for cc in COUNTRIES:
         build_country(cc)
     build_presence_indices()

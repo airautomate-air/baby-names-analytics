@@ -165,6 +165,19 @@
         .ww-more-wrap { text-align: center; margin-top: 1.5rem; }
         #ww-more { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.6rem 1.4rem; border-radius: 24px; cursor: pointer; font-weight: 500; font-size: 0.92rem; }
         #ww-more:hover { border-color: #149E91; color: #149E91; }
+        .origin-badge { display: inline-block; background: #EEF2F4; color: #1B2440; border: 1px solid #d6dde2; border-radius: 16px; padding: 0.25rem 0.85rem; font-size: 0.85rem; font-weight: 500; text-decoration: none; margin: 0.5rem 0 0.25rem; }
+        .origin-badge:hover { background: #149E91; color: #fff; border-color: #149E91; }
+        .origin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.6rem; margin: 1.5rem 0; }
+        .origin-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.85rem 1rem; text-decoration: none; display: flex; flex-direction: column; gap: 0.2rem; transition: border-color 0.15s, transform 0.1s; }
+        .origin-card:hover { border-color: #149E91; transform: translateY(-1px); }
+        .origin-card-label { font-weight: 600; color: #1B2440; font-size: 1rem; }
+        .origin-card-count { color: #5B6678; font-size: 0.82rem; }
+        .famous-list { list-style: none; padding: 0; margin: 1rem 0 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+        @media (max-width: 600px) { .famous-list { grid-template-columns: 1fr; } }
+        .famous-item { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.65rem 0.9rem; display: flex; flex-direction: column; gap: 0.2rem; }
+        .famous-name a { color: #1B2440; text-decoration: none; font-weight: 600; }
+        .famous-name a:hover { color: #149E91; text-decoration: underline; }
+        .famous-sub { color: #5B6678; font-size: 0.82rem; }
         .pk-tabs { display: flex; gap: 0.4rem; margin: 1.5rem 0 1.25rem; flex-wrap: wrap; }
         .pk-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.5rem 1.1rem; border-radius: 22px; cursor: pointer; font-size: 0.95rem; font-weight: 500; }
         .pk-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
@@ -268,6 +281,7 @@
         <a href="/fr/works-with.html">Avec votre nom</a>
         <a href="/fr/picker.html">Sélecteur</a>
         <a href="/fr/sibling.html">Idées fratrie</a>
+        <a href="/fr/origins.html">Origines</a>
         <a href="/fr/favorites.html">Favoris<span class="fav-nav-count"></span></a>
         <span class="ccswitch"><a href="/"><span class="flag" aria-hidden="true">🇺🇸</span>US</a><span class="sep">·</span><strong><span class="flag" aria-hidden="true">🇫🇷</span>FR</strong><span class="sep">·</span><a href="/uk/"><span class="flag" aria-hidden="true">🇬🇧</span>UK</a><span class="sep">·</span><a href="/au/"><span class="flag" aria-hidden="true">🇦🇺</span>AU</a></span>
     </div></div>
@@ -275,6 +289,7 @@
         <div class="breadcrumb"><a href="/fr/">Accueil</a> &rsaquo; <a href="/fr/names.html">Prénoms</a> &rsaquo; Abdullah</div>
         <h1>Abdullah<button class="fav-btn" data-slug="abdullah" data-name="Abdullah" aria-label="Ajouter aux favoris" title="Ajouter aux favoris"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="heart-empty" d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/><path class="heart-full" d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></button></h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">Principalement un prénom de garçon &middot; 100 % garçons</p>
+        <a class="origin-badge" href="/fr/origin/arabic.html">Origine : arabe</a>
 
         <div class="insight"><strong>Abdullah</strong> apparaît pour la première fois dans les données en <strong>1975</strong> et a été enregistré sur 49 années différentes comme prénom de garçon. Son année record est <strong>2015</strong> avec <strong>80</strong> naissances (rang n°607 cette année-là). En 2024, il a été donné à 55 garçons (rang <strong>n°731</strong>). Le prénom est en <strong>baisse</strong> depuis cinq ans.</div>
 
@@ -286,6 +301,8 @@
 
         <h2>Popularité au fil du temps — Garçons</h2>
         <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
+
+        <h2>Personnalités prénommées Abdullah</h2><ul class="famous-list"><li class="famous-item"><span class="famous-name"><a href="https://en.wikipedia.org/wiki/Abu_Bakr" target="_blank" rel="noopener nofollow">Abu Bakr</a></span><span class="famous-sub">merchant · né en 573</span></li><li class="famous-item"><span class="famous-name"><a href="https://en.wikipedia.org/wiki/Abdullah_G%C3%BCl" target="_blank" rel="noopener nofollow">Abdullah Gül</a></span><span class="famous-sub">diplomat · né en 1950</span></li><li class="famous-item"><span class="famous-name"><a href="https://en.wikipedia.org/wiki/Abdullah_II_of_Jordan" target="_blank" rel="noopener nofollow">Abdullah II of Jordan</a></span><span class="famous-sub">monarch · né en 1962</span></li><li class="famous-item"><span class="famous-name"><a href="https://en.wikipedia.org/wiki/Abdullah_of_Saudi_Arabia" target="_blank" rel="noopener nofollow">Abdullah of Saudi Arabia</a></span><span class="famous-sub">politician · né en 1924</span></li><li class="famous-item"><span class="famous-name"><a href="https://en.wikipedia.org/wiki/Abdullah_I_of_Jordan" target="_blank" rel="noopener nofollow">Abdullah I of Jordan</a></span><span class="famous-sub">monarch · né en 1882</span></li></ul>
 
         <p style="margin:0.75rem 0 1.5rem;"><a href="/fr/similar/abdullah.html"><strong>&rarr; Voir des prénoms similaires à Abdullah</strong></a> &nbsp;&middot;&nbsp; <a href="/fr/compare.html?a=abdullah">Comparer Abdullah avec un autre prénom →</a> &nbsp;&middot;&nbsp; <a href="/fr/decade/2010s.html">Prénoms populaires des années 2010</a> &nbsp;&middot;&nbsp; <a href="/fr/letter/boys-a.html">Prénoms garçons commençant par A</a></p>
         <h3 style="margin-bottom:0.25rem;">Prénoms garçons plus populaires</h3>
