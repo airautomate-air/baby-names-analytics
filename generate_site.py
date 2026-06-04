@@ -78,6 +78,74 @@ def count_syllables(name: str) -> int:
     return max(1, n)
 
 
+def phonetic_key(name: str) -> str:
+    """Metaphone-flavoured phonetic skeleton tuned for given names.
+
+    Folds accents, applies the substitutions that catch the variants we
+    actually see (ph→f, ck→k, qu→k, ch/sh/th → consonant codes), reduces
+    c→k/s and g→j by the next-letter rule, then keeps the leading letter
+    and strips the rest of the vowels. The result is a short consonant
+    spine that's nearly identical for sound-alike names while still
+    differing for genuinely distinct ones:
+
+        Catherine/Katherine/Kathryn → ktrn
+        Aiden/Aidan/Ayden            → adn
+        Sophia/Sofia                 → sf
+        Steven/Stephen               → stvn / stfn (different — by design,
+                                                   they're a Wikipedia
+                                                   merge but not phonetic
+                                                   twins)
+    """
+    s = unicodedata.normalize('NFD', name.lower())
+    s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
+    s = re.sub(r'[^a-z]', '', s)
+    if not s:
+        return ''
+    # Silent / awkward starting clusters
+    for pref in ('kn', 'gn', 'pn', 'ps', 'wr', 'mn'):
+        if s.startswith(pref):
+            s = s[1:]
+            break
+    if s.startswith('x'):
+        s = 's' + s[1:]
+    # Multi-char substitutions, longest first
+    for a, b in (('sch', 'X'), ('tch', 'X'), ('dge', 'j'), ('dg', 'j'),
+                  ('ph', 'f'), ('gh', ''), ('ck', 'k'), ('qu', 'k'),
+                  ('ch', 'X'), ('sh', 'X'), ('th', 't'), ('wh', 'w')):
+        s = s.replace(a, b)
+    # Single-char rules (left-to-right with single-char lookahead)
+    out = []
+    for i, c in enumerate(s):
+        nxt = s[i + 1] if i + 1 < len(s) else ''
+        if c == 'c':
+            c = 's' if nxt in 'eiy' else 'k'
+        elif c == 'g' and nxt in 'eiy':
+            c = 'j'
+        elif c == 'q':
+            c = 'k'
+        elif c == 'z':
+            c = 's'
+        elif c == 'y':
+            c = 'i'
+        elif c == 'x':
+            out.append('k')
+            c = 's'
+        out.append(c)
+    s = ''.join(out).replace('X', 'k')
+    # Collapse runs of the same letter
+    if s:
+        collapsed = [s[0]]
+        for c in s[1:]:
+            if c != collapsed[-1]:
+                collapsed.append(c)
+        s = ''.join(collapsed)
+    # Keep the leading letter then drop the rest of the vowels (the
+    # consonant skeleton is what makes Catherine/Kathryn collapse).
+    if s:
+        s = s[0] + re.sub(r'[aeiou]', '', s[1:])
+    return s[:6]
+
+
 def slugify(name: str) -> str:
     """Consistent URL slug used for every internal link and file name.
     Strips diacritics so 'Léa' → 'lea' (not 'l-a') — keeps URLs ASCII-clean
@@ -105,6 +173,7 @@ latest_year_index_by_country: dict[str, dict] = {}
 by_initial_by_country: dict[str, dict] = {}
 letter_names_by_country: dict[str, dict] = {}
 name_meta_by_country: dict[str, dict] = {}
+phonetic_by_sex_by_country: dict[str, dict] = {}
 decades_by_country: dict[str, list[int]] = {}
 decade_sex_counts_by_country: dict[str, dict] = {}
 variants_of_by_country: dict[str, dict] = {}   # canonical_name -> [(variant, total), ...]
@@ -304,11 +373,13 @@ def build_country(cc: str) -> None:
             letter_names[sex][letter].sort(key=lambda n: (-name_sex_total[(n, sex)], n))
 
     name_meta = {}
+    phonetic_by_sex: dict[str, dict[str, list[str]]] = {'F': {}, 'M': {}}
     for n in pages_to_generate:
         dom = _dom(n)
         series = counts[n][dom]
         peak_year = max(series, key=series.get)
         low = n.lower()
+        pkey = phonetic_key(n)
         name_meta[n] = {
             'dom': dom,
             'first': low[0],
@@ -318,7 +389,9 @@ def build_country(cc: str) -> None:
             'syll': count_syllables(n),
             'peak_dec': (peak_year // 10) * 10,
             'latest_rank': rank_by_year_sex.get((latest_year, dom), {}).get(n),
+            'pkey': pkey,
         }
+        phonetic_by_sex[dom].setdefault(pkey, []).append(n)
 
     years_by_country[cc] = years
     counts_by_country[cc] = counts
@@ -334,6 +407,7 @@ def build_country(cc: str) -> None:
     by_initial_by_country[cc] = by_initial
     letter_names_by_country[cc] = letter_names
     name_meta_by_country[cc] = name_meta
+    phonetic_by_sex_by_country[cc] = phonetic_by_sex
     decades_by_country[cc] = decades
     decade_sex_counts_by_country[cc] = decade_sex_counts
     variants_of_by_country[cc] = variants_of
@@ -367,6 +441,7 @@ latest_year_index: dict = {}
 by_initial: dict = {}
 letter_names: dict = {}
 name_meta: dict = {}
+phonetic_by_sex: dict = {}
 decade_sex_counts: dict = {}
 top_names: list = []
 VARIANTS_OF: dict = {}
@@ -503,6 +578,7 @@ def set_active(cc: str) -> None:
     g['by_initial'] = by_initial_by_country[cc]
     g['letter_names'] = letter_names_by_country[cc]
     g['name_meta'] = name_meta_by_country[cc]
+    g['phonetic_by_sex'] = phonetic_by_sex_by_country[cc]
     g['decade_sex_counts'] = decade_sex_counts_by_country[cc]
     g['VARIANTS_OF'] = variants_of_by_country[cc]
     g['CANONICAL_OF'] = canonical_of_by_country[cc]
@@ -524,27 +600,61 @@ def dominant_sex(name: str) -> str:
 
 
 def similar_names(name, k=24):
+    """Phonetic-first 'names that sound like X'.
+
+    Primary signal: shared phonetic key prefix (Catherine/Katherine/Kathryn
+    all collapse to 'ktrn'). Secondary signals — length, era, last 2 — are
+    smaller nudges that order candidates within a phonetic cluster.
+    """
     m = name_meta[name]
     dom = m['dom']
+    target = m['pkey']
+    # Build a candidate pool that's likely to share phonetics: all names
+    # whose pkey shares a prefix of >= 2 chars with this one. Iterating
+    # phonetic_by_sex buckets is cheaper than scanning every name.
+    candidates: set[str] = set()
+    for pk, ns in phonetic_by_sex.get(dom, {}).items():
+        common = 0
+        for a, b in zip(target, pk):
+            if a == b:
+                common += 1
+            else:
+                break
+        if common >= 2:
+            candidates.update(ns)
+    candidates.discard(name)
+
     scored = []
-    for other in same_sex_ranked[dom]:
-        if other == name:
-            continue
+    for other in candidates:
         o = name_meta[other]
-        s = 0
+        other_key = o['pkey']
+        # Shared phonetic-key prefix: the dominant signal.
+        common = 0
+        for a, b in zip(target, other_key):
+            if a == b:
+                common += 1
+            else:
+                break
+        s = common * 5  # 10-30 for typical 2-6-char overlap
+        # Exact phonetic match — clear cluster: bonus
+        if target == other_key and target:
+            s += 6
+        # Same starting letter — softens cross-cluster jumps
         if o['first'] == m['first']:
-            s += 3
+            s += 2
+        # Same last 2 letters — rhyming endings (Aiden/Hayden)
         if o['last2'] == m['last2']:
-            s += 3
-        elif o['last'] == m['last']:
-            s += 1
-        if abs(o['len'] - m['len']) <= 1:
             s += 2
+        # Length proximity
+        ldiff = abs(o['len'] - m['len'])
+        if ldiff <= 1:
+            s += 2
+        elif ldiff <= 2:
+            s += 1
+        # Era proximity (soft)
         if abs(o['peak_dec'] - m['peak_dec']) <= 10:
-            s += 2
-        if m['latest_rank'] and o['latest_rank'] and abs(o['latest_rank'] - m['latest_rank']) <= 75:
             s += 1
-        if s >= 4:
+        if s >= 8:
             popdiff = abs(name_total[other] - name_total[name])
             scored.append((-s, popdiff, other))
     scored.sort()
