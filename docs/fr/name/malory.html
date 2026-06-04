@@ -85,16 +85,36 @@
         .pin-btn:hover { color: #E60023; }
         .pin-btn:hover svg { transform: scale(1.12); }
         h1 .pin-btn { margin-left: 0.1rem; vertical-align: -4px; }
-        .fav-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
-        .fav-list li { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between; }
-        .fav-list a { color: #1B2440; text-decoration: none; font-weight: 600; flex: 1; }
+        .fav-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
+        .fav-list li { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.75rem 1rem; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; column-gap: 0.5rem; align-items: center; }
+        .fav-list a { color: #1B2440; text-decoration: none; font-weight: 600; grid-column: 1; }
         .fav-list a:hover { color: #149E91; }
-        .fav-remove-btn { background: none; border: 0; cursor: pointer; color: #c0392b; font-size: 1.2rem; line-height: 1; padding: 0 0.25rem; }
+        .fav-meta { grid-column: 1 / -1; font-size: 0.82rem; color: #5B6678; margin-top: 0.15rem; }
+        .fav-remove-btn { background: none; border: 0; cursor: pointer; color: #c0392b; font-size: 1.2rem; line-height: 1; padding: 0 0.25rem; grid-column: 2; grid-row: 1; }
         .fav-remove-btn:hover { color: #7a1f12; }
-        .fav-actions { display: flex; gap: 0.75rem; align-items: center; margin: 1rem 0 2rem; }
-        .fav-share-btn { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.55rem 1rem; font-weight: 600; cursor: pointer; font-size: 0.92rem; }
-        .fav-share-btn:hover { background: #117f74; }
+        .fav-actions { display: flex; gap: 0.75rem; align-items: center; margin: 1rem 0 2rem; flex-wrap: wrap; }
+        .fav-share-btn, .fav-print-btn { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.55rem 1rem; font-weight: 600; cursor: pointer; font-size: 0.92rem; }
+        .fav-share-btn:hover, .fav-print-btn:hover { background: #117f74; }
+        .fav-print-btn { background: #1B2440; }
+        .fav-print-btn:hover { background: #0f1730; }
         .fav-share-done { color: #27ae60; font-size: 0.9rem; }
+        .fav-print-header, .fav-print-foot { display: none; }
+        @media print {
+            body { background: #fff; color: #1B2440; }
+            .sitenav, #lang-banner, .footer, .breadcrumb, .fav-actions, .fav-remove-btn,
+            .fav-screen-h1, .fav-screen-only { display: none !important; }
+            .container { max-width: 100%; padding: 0; }
+            .fav-print-header { display: block; border-bottom: 2px solid #149E91; padding-bottom: 0.5rem; margin-bottom: 1.25rem; }
+            .fav-print-brand { font-size: 1.4rem; font-weight: 700; color: #149E91; }
+            .fav-print-title { font-size: 1.6rem; font-weight: 700; color: #1B2440; margin-top: 0.25rem; }
+            .fav-list { display: block !important; margin: 0; }
+            .fav-list li { border: 0; border-bottom: 1px solid #d6dde2; border-radius: 0; padding: 0.6rem 0; background: transparent; page-break-inside: avoid; display: block; }
+            .fav-list a { display: block; color: #1B2440 !important; font-size: 1.1rem; text-decoration: none; }
+            .fav-list a::after { content: ""; }
+            .fav-meta { display: block; font-size: 0.85rem; color: #5B6678; margin-top: 0.15rem; }
+            .fav-print-foot { display: block; margin-top: 1.5rem; padding-top: 0.5rem; border-top: 1px solid #d6dde2; font-size: 0.8rem; color: #5B6678; text-align: center; }
+            @page { margin: 0.75in; }
+        }
         .cmp-form { display: flex; gap: 0.75rem; margin: 1.5rem 0; flex-wrap: wrap; align-items: stretch; }
         .cmp-form input { flex: 1; min-width: 160px; padding: 0.7rem 0.9rem; font-size: 1rem; border: 1px solid #d6dde2; border-radius: 6px; background: #fff; }
         .cmp-form button { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 600; cursor: pointer; font-size: 1rem; }
@@ -593,6 +613,54 @@
         // Favorites page
         var ul = document.getElementById('fav-list');
         if (ul) {
+            // Meta data for the per-row sub-line (origin, peak decade, latest rank).
+            // Shape: meta[slug] = [first, last2, syll, dom, peak_dec, rank, origin]
+            var FAV_META = null;
+            var FAV_ORIGIN_LABELS = {"english": "anglais", "irish": "irlandais", "scottish": "écossais", "welsh": "gallois", "french": "français", "german": "allemand", "italian": "italien", "spanish": "espagnol", "portuguese": "portugais", "dutch": "néerlandais", "swedish": "suédois", "norwegian": "norvégien", "danish": "danois", "finnish": "finnois", "scandinavian": "scandinave", "latin": "latin", "greek": "grec", "hebrew": "hébreu", "arabic": "arabe", "aramaic": "araméen", "persian": "persan", "sanskrit": "sanskrit", "russian": "russe", "polish": "polonais", "czech": "tchèque", "hungarian": "hongrois", "romanian": "roumain", "ukrainian": "ukrainien", "bulgarian": "bulgare", "serbo-croatian": "serbo-croate", "japanese": "japonais", "chinese": "chinois", "korean": "coréen", "vietnamese": "vietnamien", "turkish": "turc", "armenian": "arménien", "tamil": "tamoul", "hindi": "hindi", "urdu": "ourdou", "thai": "thaï", "indonesian": "indonésien", "swahili": "swahili", "yoruba": "yoruba", "igbo": "igbo"};
+            var FAV_PEAK_FMT = "Pic {d}s";        // "Peak {d}s"
+            var FAV_UNRANKED = "non classé";        // "unranked"
+            var FAV_GIRL = "Fille";                // "Girl" / "Fille"
+            var FAV_BOY = "Garçon";                  // "Boy" / "Garçon"
+            function loadFavMeta() {
+                if (FAV_META) return Promise.resolve(FAV_META);
+                return fetch(PREFIX + '/name-meta.json')
+                    .then(function(r) { return r.json(); })
+                    .then(function(d) { FAV_META = d; return d; })
+                    .catch(function() { FAV_META = {}; return {}; });
+            }
+            function metaLineFor(slug) {
+                if (!FAV_META) return '';
+                var m = FAV_META[slug];
+                if (!m) return '';
+                var parts = [];
+                if (m[3] === 'F') parts.push(FAV_GIRL);
+                else if (m[3] === 'M') parts.push(FAV_BOY);
+                var orig = m[6];
+                if (orig && FAV_ORIGIN_LABELS[orig]) parts.push(FAV_ORIGIN_LABELS[orig]);
+                if (m[5]) parts.push('#' + m[5]);
+                else parts.push(FAV_UNRANKED);
+                if (m[4]) parts.push(FAV_PEAK_FMT.replace('{d}', m[4]));
+                return parts.join(' · ');
+            }
+            function enrichMeta() {
+                Array.prototype.forEach.call(ul.querySelectorAll('li[data-slug]'), function(li) {
+                    var slug = li.getAttribute('data-slug');
+                    var line = metaLineFor(slug);
+                    var meta = li.querySelector('.fav-meta');
+                    if (line) {
+                        if (!meta) {
+                            meta = document.createElement('span');
+                            meta.className = 'fav-meta';
+                            li.appendChild(meta);
+                        }
+                        meta.textContent = line;
+                    } else if (meta) {
+                        meta.remove();
+                    }
+                });
+            }
+            // Kick off the meta fetch in parallel with the first render.
+            loadFavMeta().then(enrichMeta);
             // Shareable hash: /favorites.html#slug1,slug2 merges into the saved list.
             var hash = decodeURIComponent((window.location.hash || '').slice(1));
             if (hash) {
@@ -626,6 +694,7 @@
                 actionsEl.style.display = '';
                 list.forEach(function(item) {
                     var li = document.createElement('li');
+                    li.setAttribute('data-slug', item.slug);
                     var a = document.createElement('a');
                     a.href = PREFIX + '/name/' + item.slug + '.html';
                     a.textContent = item.name;
@@ -637,6 +706,7 @@
                     li.appendChild(a); li.appendChild(rm);
                     ul.appendChild(li);
                 });
+                if (FAV_META) enrichMeta();
             }
             ul.addEventListener('click', function(e) {
                 var t = e.target;
@@ -647,6 +717,15 @@
                     if (i >= 0) { list.splice(i, 1); write(list); render(); updateBadge(); }
                 }
             });
+            var printBtn = document.getElementById('fav-print');
+            if (printBtn) {
+                printBtn.addEventListener('click', function() {
+                    loadFavMeta().then(function() {
+                        enrichMeta();
+                        setTimeout(function() { window.print(); }, 0);
+                    });
+                });
+            }
             shareBtn.addEventListener('click', function() {
                 var list = read();
                 if (!list.length) return;
