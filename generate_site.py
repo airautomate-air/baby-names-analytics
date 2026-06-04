@@ -3574,6 +3574,49 @@ def page(title, body, description="", canonical="", extra_head=""):
 </html>"""
 
 
+def person_jsonld_block(famous: list, given_name: str) -> str:
+    """Emit one Person entity per bearer in the famous-list. Each carries the
+    Wikipedia URL as `sameAs` so search engines can fuse with the existing
+    knowledge graph entry — and `givenName` to make the link to the name page
+    explicit."""
+    out = []
+    for p in famous[:5]:
+        person = {
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": p.get('name'),
+            "givenName": given_name,
+        }
+        if p.get('url'):
+            person["sameAs"] = p['url']
+        if p.get('occupation'):
+            person["jobTitle"] = p['occupation']
+        if p.get('born'):
+            person["birthDate"] = str(p['born'])
+        out.append('\n    <script type="application/ld+json">' + json.dumps(person, ensure_ascii=False) + '</script>')
+    return ''.join(out)
+
+
+def itemlist_jsonld(name_url_pairs: list, list_name: str) -> str:
+    """ItemList of name → URL pairs. Used on year + decade pages so search
+    engines can surface 'top names of 2024' carousels."""
+    elements = []
+    for i, (nm, url) in enumerate(name_url_pairs, 1):
+        elements.append({
+            "@type": "ListItem",
+            "position": i,
+            "name": nm,
+            "url": url,
+        })
+    data = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": list_name,
+        "itemListElement": elements,
+    }
+    return '\n    <script type="application/ld+json">' + json.dumps(data, ensure_ascii=False) + '</script>'
+
+
 def breadcrumb_jsonld(items):
     elements = []
     for i, (nm, url) in enumerate(items):
@@ -3880,11 +3923,12 @@ def generate_name_page(name):
         "\n    });"
         "\n    </script>"
     )
+    famous_for_jsonld = (ENRICHMENT.get(slugify(name), {}) or {}).get('famous', [])
     extra_head = breadcrumb_jsonld([
         (S("crumb_home"), home_url()),
         (S("crumb_names"), f"{BASE_URL}{p}/names.html"),
         (name, canonical),
-    ]) + chart_js + hreflang_for_name(slugify(name))
+    ]) + person_jsonld_block(famous_for_jsonld, name) + chart_js + hreflang_for_name(slugify(name))
 
     variants = VARIANTS_OF.get(name, [])
     variants_line = ""
@@ -4104,10 +4148,16 @@ def generate_year_page(year):
         </div>"""
     desc = S("year_desc", year=year, g=top_girl, b=top_boy, source=data_source_label())
     canonical = f"{BASE_URL}{p}/year/{year}.html"
+    top_items: list[tuple[str, str]] = []
+    for sex in ('F', 'M'):
+        ranked = sorted(rank_by_year_sex[(year, sex)].items(), key=lambda x: x[1])[:25]
+        for n, _ in ranked:
+            if n in HAS_PAGE:
+                top_items.append((n, f"{BASE_URL}{p}/name/{slugify(n)}.html"))
     extra_head = breadcrumb_jsonld([
         (S("crumb_home"), home_url()),
         (str(year), canonical),
-    ]) + hreflang_for_year(year)
+    ]) + itemlist_jsonld(top_items, f"Top baby names in {year}") + hreflang_for_year(year)
     (OUT_DIR / 'year' / f'{year}.html').write_text(
         page(S("year_title", year=year), body,
              description=desc, canonical=canonical, extra_head=extra_head),
@@ -4259,11 +4309,18 @@ def generate_decade_page(decade):
     desc = S("decade_desc", label=label, span=span, source=data_source_label(),
              g=gtop, b=btop)
     canonical = f"{BASE_URL}{p}/decade/{decade}s.html"
+    top_items: list[tuple[str, str]] = []
+    for sex in ('F', 'M'):
+        ranked = sorted(decade_sex_counts[(decade, sex)].items(),
+                        key=lambda x: (-x[1], x[0]))[:25]
+        for n, _ in ranked:
+            if n in HAS_PAGE:
+                top_items.append((n, f"{BASE_URL}{p}/name/{slugify(n)}.html"))
     extra_head = breadcrumb_jsonld([
         (S("crumb_home"), home_url()),
         (S("crumb_decades"), f"{BASE_URL}{p}/decades.html"),
         (label, canonical),
-    ]) + hreflang_for_decade(decade)
+    ]) + itemlist_jsonld(top_items, f"Top baby names of the {label}") + hreflang_for_decade(decade)
     (OUT_DIR / 'decade' / f'{decade}s.html').write_text(
         page(S("decade_title", label=label), body,
              description=desc, canonical=canonical, extra_head=extra_head),
