@@ -718,6 +718,35 @@ STRINGS_EN: dict[str, str] = {
     "year_desc": ("Top 50 most popular names of {year} for girls and boys, "
                   "with birth counts from {source} data. #1: {g} and {b}."),
 
+    # Year-in-review (annual editorial recap)
+    "yir_title": "{year} Baby Names: The Year in Review",
+    "yir_h1": "{year} Baby Names — The Year in Review",
+    "yir_intro": ("What changed in {year}? The biggest risers, the biggest "
+                   "drops, brand-new names making their first-ever appearance, "
+                   "and the names that broke into or out of the top 100."),
+    "yir_desc": ("{year} baby names recap: top movers, biggest drops, debut "
+                  "names and shake-ups in the top 100. The year's #1: {g} and {b}."),
+    "yir_link": "See the {year} year in review →",
+    "yir_no_data": "Not enough comparable history for a full recap of {year}.",
+    "yir_top_h2": "The year's #1 names",
+    "yir_top_lead": "<strong>{g}</strong> topped the girls' list and <strong>{b}</strong> led the boys for {year}.",
+    "yir_risers_h2": "Biggest risers",
+    "yir_risers_lead": "Names whose rank improved the most year-over-year.",
+    "yir_fallers_h2": "Biggest fallers",
+    "yir_fallers_lead": "Names whose rank dropped the most year-over-year.",
+    "yir_debut_h2": "Debut names",
+    "yir_debut_lead": "Names that show up in the data for the very first time.",
+    "yir_newcomers_h2": "New in the top 100",
+    "yir_newcomers_lead": "Names that broke into the top 100 this year for the first time since {prev}.",
+    "yir_exits_h2": "Left the top 100",
+    "yir_exits_lead": "Names that fell out of the top 100 this year after being in it in {prev}.",
+    "yir_rank_change": "{prev_rank} → {rank} (▲{delta})",
+    "yir_rank_drop": "{prev_rank} → {rank} (▼{delta})",
+    "yir_rank_new": "New entry — rank #{rank}",
+    "yir_rank_exit": "Was #{prev_rank} — now off the chart",
+    "yir_count_year": "{n} this year",
+    "crumb_yir": "{year} in review",
+
     # Decade
     "decade_h1": "Most Popular Names of the {label}",
     "decade_intro": ("The top names across the {label} ({span}), totaled over "
@@ -1088,6 +1117,34 @@ STRINGS_FR: dict[str, str] = {
     "year_girls_h2": "Filles",
     "year_boys_h2": "Garçons",
     "year_title": "Prénoms les plus donnés en {year} — classements et effectifs",
+    "yir_title": "Prénoms {year} : l'année en revue",
+    "yir_h1": "Prénoms {year} — l'année en revue",
+    "yir_intro": ("Que retenir de {year} ? Les plus grandes progressions, les "
+                   "plus fortes chutes, les prénoms qui apparaissent pour la "
+                   "première fois, et ceux qui entrent ou sortent du top 100."),
+    "yir_desc": ("Rétrospective des prénoms {year} : plus grandes progressions, "
+                  "chutes et nouveautés du top 100. N°1 de l'année : {g} et {b}."),
+    "yir_link": "Voir la rétrospective {year} →",
+    "yir_no_data": "Pas assez d'historique comparable pour faire la rétro de {year}.",
+    "yir_top_h2": "Les n°1 de l'année",
+    "yir_top_lead": "<strong>{g}</strong> a dominé le palmarès des filles et <strong>{b}</strong> celui des garçons en {year}.",
+    "yir_risers_h2": "Plus grandes progressions",
+    "yir_risers_lead": "Prénoms dont le classement a le plus progressé d'une année sur l'autre.",
+    "yir_fallers_h2": "Plus fortes chutes",
+    "yir_fallers_lead": "Prénoms dont le classement a le plus reculé d'une année sur l'autre.",
+    "yir_debut_h2": "Premières apparitions",
+    "yir_debut_lead": "Prénoms qui apparaissent dans les données pour la toute première fois.",
+    "yir_newcomers_h2": "Nouveaux dans le top 100",
+    "yir_newcomers_lead": "Prénoms qui entrent dans le top 100 pour la première fois depuis {prev}.",
+    "yir_exits_h2": "Sortis du top 100",
+    "yir_exits_lead": "Prénoms qui quittent le top 100 après y avoir figuré en {prev}.",
+    "yir_rank_change": "{prev_rank} → {rank} (▲{delta})",
+    "yir_rank_drop": "{prev_rank} → {rank} (▼{delta})",
+    "yir_rank_new": "Nouvelle entrée — rang n°{rank}",
+    "yir_rank_exit": "Était n°{prev_rank} — hors classement",
+    "yir_count_year": "{n} naissances cette année",
+    "crumb_yir": "Rétro {year}",
+
     "year_desc": ("Top 50 des prénoms les plus donnés en {year}, filles et garçons, "
                   "avec les effectifs (données {source}). N°1 : {g} et {b}."),
 
@@ -3340,6 +3397,15 @@ BASE_CSS = """
         .origin-card:hover { border-color: #149E91; transform: translateY(-1px); }
         .origin-card-label { font-weight: 600; color: #1B2440; font-size: 1rem; }
         .origin-card-count { color: #5B6678; font-size: 0.82rem; }
+        .yir-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 0.75rem 0 2rem; }
+        .yir-grid > div h3 { margin: 0 0 0.6rem; font-size: 1rem; font-family: 'Inter', sans-serif; color: #5B6678; font-weight: 600; }
+        .yir-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.45rem; }
+        .yir-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.65rem 0.9rem; display: flex; flex-direction: column; gap: 0.2rem; }
+        .yir-card-name a { color: #1B2440; text-decoration: none; font-weight: 600; }
+        .yir-card-name a:hover { color: #149E91; }
+        .yir-card-meta { color: #149E91; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+        .yir-card-count { color: #5B6678; font-size: 0.78rem; }
+        @media (max-width: 600px) { .yir-grid { grid-template-columns: 1fr; } }
         .search-ac-wrap { position: relative; display: inline-block; width: 70%; max-width: 400px; text-align: left; }
         .search-ac-wrap input { width: 100%; box-sizing: border-box; padding: 0.75rem; border: 1px solid #d6dde2; border-radius: 4px; font-size: 1rem; background: #fff; }
         #searchAc { position: absolute; left: 0; right: 0; top: 100%; background: #fff; border: 1px solid #d6dde2; border-top: 0; border-radius: 0 0 6px 6px; max-height: 280px; overflow-y: auto; z-index: 10; box-shadow: 0 4px 12px rgba(27,36,64,0.08); }
@@ -4128,10 +4194,14 @@ def generate_year_page(year):
     next_link = f'<a href="{p}/year/{year+1}.html">{year+1} →</a>' if (year + 1) in YEARS_SET else ''
     top_girl = sorted(rank_by_year_sex[(year, 'F')].items(), key=lambda x: x[1])[0][0]
     top_boy = sorted(rank_by_year_sex[(year, 'M')].items(), key=lambda x: x[1])[0][0]
+    yir_callout = ''
+    if year == LATEST_YEAR and (year - 1) in YEARS_SET:
+        yir_callout = (f'\n        <p style="margin:0.25rem 0 1.25rem;"><a href="{p}/year-in-review-{year}.html" '
+                       f'style="color:#149E91; font-weight:600;">{S("yir_link", year=year)}</a></p>')
     body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {year}</div>
         <nav class="nav">{prev_link} &nbsp; {next_link}</nav>
         <h1>{S("year_h1", year=year)}</h1>
-        <p>{S("year_intro", year=year, g=top_girl, b=top_boy, source=data_source_label())}</p>
+        <p>{S("year_intro", year=year, g=top_girl, b=top_boy, source=data_source_label())}</p>{yir_callout}
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
             <div>
                 <h2 style="color:#149E91;">{S("year_girls_h2")}</h2>
@@ -4160,6 +4230,179 @@ def generate_year_page(year):
     ]) + itemlist_jsonld(top_items, f"Top baby names in {year}") + hreflang_for_year(year)
     (OUT_DIR / 'year' / f'{year}.html').write_text(
         page(S("year_title", year=year), body,
+             description=desc, canonical=canonical, extra_head=extra_head),
+        encoding='utf-8')
+
+
+# ---------------------------------------------------------------------------
+# Year-in-review (editorial recap of LATEST_YEAR per country)
+# ---------------------------------------------------------------------------
+def _first_year_for(name: str, sex: str) -> int | None:
+    series = counts.get(name, {}).get(sex, {})
+    return min(series) if series else None
+
+
+def generate_year_in_review_page(year: int) -> None:
+    """Annual recap page — risers, fallers, debuts, top-100 turnover.
+    Skipped if year-1 data isn't available for this country."""
+    prev = year - 1
+    if prev not in YEARS_SET:
+        return
+    p = PREFIX
+
+    def link(n: str) -> str:
+        if n in HAS_PAGE:
+            return f'<a href="{p}/name/{slugify(n)}.html">{n}</a>'
+        return n
+
+    # ----- compute sections -----
+    risers_by_sex: dict[str, list] = {'F': [], 'M': []}
+    fallers_by_sex: dict[str, list] = {'F': [], 'M': []}
+    debut_by_sex: dict[str, list] = {'F': [], 'M': []}
+    newcomers_by_sex: dict[str, list] = {'F': [], 'M': []}
+    exits_by_sex: dict[str, list] = {'F': [], 'M': []}
+
+    for sex in ('F', 'M'):
+        ranks_now = rank_by_year_sex.get((year, sex), {})
+        ranks_prev = rank_by_year_sex.get((prev, sex), {})
+
+        movers: list[tuple[int, str, int, int, int]] = []
+        for n, r in ranks_now.items():
+            pr = ranks_prev.get(n)
+            if pr is None:
+                continue
+            delta = pr - r  # positive = rank improved
+            cnow = counts[n][sex].get(year, 0)
+            movers.append((delta, n, r, pr, cnow))
+        movers.sort(key=lambda t: (-t[0], t[2]))
+        # Only consider names with a current-year count of at least 25 to
+        # avoid headline movers driven by 5→4 noise.
+        risers_by_sex[sex] = [m for m in movers if m[0] > 0 and m[4] >= 25][:10]
+        fallers_by_sex[sex] = sorted([m for m in movers if m[0] < 0 and m[4] >= 25],
+                                      key=lambda t: (t[0], t[2]))[:10]
+
+        # Debut: first-ever appearance for this name+sex IS this year
+        for n in ranks_now:
+            if _first_year_for(n, sex) == year and year != min(YEARS):
+                cnow = counts[n][sex].get(year, 0)
+                debut_by_sex[sex].append((cnow, n, ranks_now[n]))
+        debut_by_sex[sex].sort(key=lambda t: (-t[0], t[1]))
+        debut_by_sex[sex] = debut_by_sex[sex][:8]
+
+        # Newcomer to top 100: rank ≤ 100 now, was > 100 (or unranked) last year
+        for n, r in ranks_now.items():
+            if r > 100:
+                continue
+            pr = ranks_prev.get(n)
+            if pr is None or pr > 100:
+                newcomers_by_sex[sex].append((r, n, pr, counts[n][sex].get(year, 0)))
+        newcomers_by_sex[sex].sort(key=lambda t: t[0])
+        newcomers_by_sex[sex] = newcomers_by_sex[sex][:10]
+
+        # Exits from top 100: was in top 100 prev year, not now
+        for n, pr in ranks_prev.items():
+            if pr > 100:
+                continue
+            r = ranks_now.get(n)
+            if r is None or r > 100:
+                exits_by_sex[sex].append((pr, n, r, counts[n][sex].get(prev, 0)))
+        exits_by_sex[sex].sort(key=lambda t: t[0])
+        exits_by_sex[sex] = exits_by_sex[sex][:10]
+
+    top_girl = sorted(rank_by_year_sex[(year, 'F')].items(), key=lambda x: x[1])[0][0]
+    top_boy = sorted(rank_by_year_sex[(year, 'M')].items(), key=lambda x: x[1])[0][0]
+
+    # ----- render -----
+    def card(rank_meta: str, name: str, count: int | None) -> str:
+        cnt = f'<span class="yir-card-count">{S("yir_count_year", n=fmt(count))}</span>' if count else ''
+        return ('<li class="yir-card">'
+                f'<span class="yir-card-name">{link(name)}</span>'
+                f'<span class="yir-card-meta">{rank_meta}</span>{cnt}</li>')
+
+    def section_movers(label_F: str, label_M: str, rows_F: list, rows_M: list, drop: bool = False) -> str:
+        def col(label: str, rows: list) -> str:
+            if not rows:
+                return ''
+            items = []
+            for delta, n, r, pr, cnow in rows:
+                if drop:
+                    meta = S("yir_rank_drop", prev_rank=pr, rank=r, delta=abs(delta))
+                else:
+                    meta = S("yir_rank_change", prev_rank=pr, rank=r, delta=delta)
+                items.append(card(meta, n, cnow))
+            return f'<div><h3>{label}</h3><ul class="yir-list">{"".join(items)}</ul></div>'
+        return f'<div class="yir-grid">{col(label_F, rows_F)}{col(label_M, rows_M)}</div>'
+
+    def section_debut(rows_F: list, rows_M: list) -> str:
+        def col(label: str, rows: list) -> str:
+            if not rows:
+                return ''
+            items = []
+            for cnow, n, r in rows:
+                meta = S("yir_rank_new", rank=r)
+                items.append(card(meta, n, cnow))
+            return f'<div><h3>{label}</h3><ul class="yir-list">{"".join(items)}</ul></div>'
+        return f'<div class="yir-grid">{col(loc_label_cap("F"), rows_F)}{col(loc_label_cap("M"), rows_M)}</div>'
+
+    def section_newcomers(rows_F: list, rows_M: list) -> str:
+        def col(label: str, rows: list) -> str:
+            if not rows:
+                return ''
+            items = []
+            for r, n, pr, cnow in rows:
+                meta = (S("yir_rank_change", prev_rank=pr, rank=r, delta=pr - r)
+                        if pr else S("yir_rank_new", rank=r))
+                items.append(card(meta, n, cnow))
+            return f'<div><h3>{label}</h3><ul class="yir-list">{"".join(items)}</ul></div>'
+        return f'<div class="yir-grid">{col(loc_label_cap("F"), rows_F)}{col(loc_label_cap("M"), rows_M)}</div>'
+
+    def section_exits(rows_F: list, rows_M: list) -> str:
+        def col(label: str, rows: list) -> str:
+            if not rows:
+                return ''
+            items = []
+            for pr, n, r, cprev in rows:
+                meta = (S("yir_rank_drop", prev_rank=pr, rank=r, delta=r - pr)
+                        if r else S("yir_rank_exit", prev_rank=pr))
+                items.append(card(meta, n, cprev))
+            return f'<div><h3>{label}</h3><ul class="yir-list">{"".join(items)}</ul></div>'
+        return f'<div class="yir-grid">{col(loc_label_cap("F"), rows_F)}{col(loc_label_cap("M"), rows_M)}</div>'
+
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("crumb_yir", year=year)}</div>
+        <h1>{S("yir_h1", year=year)}</h1>
+        <p>{S("yir_intro", year=year)}</p>
+
+        <div class="insight"><h2 style="margin-top:0;">{S("yir_top_h2")}</h2>
+        <p style="margin:0;">{S("yir_top_lead", g=link(top_girl), b=link(top_boy), year=year)}</p></div>
+
+        <h2>{S("yir_risers_h2")}</h2>
+        <p>{S("yir_risers_lead")}</p>
+        {section_movers(loc_label_cap('F'), loc_label_cap('M'), risers_by_sex['F'], risers_by_sex['M'])}
+
+        <h2>{S("yir_fallers_h2")}</h2>
+        <p>{S("yir_fallers_lead")}</p>
+        {section_movers(loc_label_cap('F'), loc_label_cap('M'), fallers_by_sex['F'], fallers_by_sex['M'], drop=True)}
+
+        <h2>{S("yir_debut_h2")}</h2>
+        <p>{S("yir_debut_lead")}</p>
+        {section_debut(debut_by_sex['F'], debut_by_sex['M'])}
+
+        <h2>{S("yir_newcomers_h2")}</h2>
+        <p>{S("yir_newcomers_lead", prev=prev)}</p>
+        {section_newcomers(newcomers_by_sex['F'], newcomers_by_sex['M'])}
+
+        <h2>{S("yir_exits_h2")}</h2>
+        <p>{S("yir_exits_lead", prev=prev)}</p>
+        {section_exits(exits_by_sex['F'], exits_by_sex['M'])}"""
+
+    canonical = f"{BASE_URL}{p}/year-in-review-{year}.html"
+    desc = S("yir_desc", year=year, g=top_girl, b=top_boy)
+    extra_head = breadcrumb_jsonld([
+        (S("crumb_home"), home_url()),
+        (S("crumb_yir", year=year), canonical),
+    ])
+    (OUT_DIR / f'year-in-review-{year}.html').write_text(
+        page(S("yir_title", year=year), body,
              description=desc, canonical=canonical, extra_head=extra_head),
         encoding='utf-8')
 
@@ -5253,6 +5496,10 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
     urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/year/{y}.html" for y in years_by_country[cc]]
+    latest = years_by_country[cc][-1] if years_by_country[cc] else None
+    prev_latest = latest - 1 if latest else None
+    if latest and prev_latest in YEARS_SET_BY_CC[cc]:
+        urls.append(f"{BASE_URL}{p}/year-in-review-{latest}.html")
     urls += [f"{BASE_URL}{p}/decade/{d}s.html" for d in decades_by_country[cc]]
     urls += [f"{BASE_URL}{p}/letter/{sex_label(sex)}-{letter.lower()}.html"
              for sex in ('F', 'M') for letter in sorted(letter_names_by_country[cc][sex].keys())]
@@ -5336,6 +5583,7 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
     print(f"  {len(YEARS)} year pages…")
     for year in YEARS:
         generate_year_page(year)
+    generate_year_in_review_page(LATEST_YEAR)
 
     if cc == 'US':
         print("  compare pages (top 5 names)…")

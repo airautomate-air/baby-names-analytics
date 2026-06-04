@@ -181,6 +181,15 @@
         .origin-card:hover { border-color: #149E91; transform: translateY(-1px); }
         .origin-card-label { font-weight: 600; color: #1B2440; font-size: 1rem; }
         .origin-card-count { color: #5B6678; font-size: 0.82rem; }
+        .yir-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 0.75rem 0 2rem; }
+        .yir-grid > div h3 { margin: 0 0 0.6rem; font-size: 1rem; font-family: 'Inter', sans-serif; color: #5B6678; font-weight: 600; }
+        .yir-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.45rem; }
+        .yir-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.65rem 0.9rem; display: flex; flex-direction: column; gap: 0.2rem; }
+        .yir-card-name a { color: #1B2440; text-decoration: none; font-weight: 600; }
+        .yir-card-name a:hover { color: #149E91; }
+        .yir-card-meta { color: #149E91; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+        .yir-card-count { color: #5B6678; font-size: 0.78rem; }
+        @media (max-width: 600px) { .yir-grid { grid-template-columns: 1fr; } }
         .search-ac-wrap { position: relative; display: inline-block; width: 70%; max-width: 400px; text-align: left; }
         .search-ac-wrap input { width: 100%; box-sizing: border-box; padding: 0.75rem; border: 1px solid #d6dde2; border-radius: 4px; font-size: 1rem; background: #fff; }
         #searchAc { position: absolute; left: 0; right: 0; top: 100%; background: #fff; border: 1px solid #d6dde2; border-top: 0; border-radius: 0 0 6px 6px; max-height: 280px; overflow-y: auto; z-index: 10; box-shadow: 0 4px 12px rgba(27,36,64,0.08); }
@@ -329,6 +338,7 @@
         <nav class="nav"><a href="/au/year/2024.html">← 2024</a> &nbsp; </nav>
         <h1>Top Names of 2025</h1>
         <p>The most popular names recorded in 2025 were <strong>Charlotte</strong> for girls and <strong>Noah</strong> for boys. Full top-50 lists below, from official NSW & VIC BDM data.</p>
+        <p style="margin:0.25rem 0 1.25rem;"><a href="/au/year-in-review-2025.html" style="color:#149E91; font-weight:600;">See the 2025 year in review →</a></p>
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem;">
             <div>
                 <h2 style="color:#149E91;">Girls</h2>
