@@ -80,11 +80,10 @@
         .fav-btn.is-fav .heart-empty { display: none; }
         .fav-btn:not(.is-fav) .heart-full { display: none; }
         h1 .fav-btn { margin-left: 0.5rem; vertical-align: -4px; }
-        .pin-btn { background: none; border: 0; cursor: pointer; padding: 0.3rem 0.5rem; vertical-align: middle; display: inline-flex; align-items: center; color: #5B6678; text-decoration: none; }
-        .pin-btn svg { width: 24px; height: 24px; display: block; transition: transform 0.12s ease; }
-        .pin-btn:hover { color: #E60023; }
-        .pin-btn:hover svg { transform: scale(1.12); }
-        h1 .pin-btn { margin-left: 0.1rem; vertical-align: -4px; }
+        .pin-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: #E60023; color: #fff; border: 0; border-radius: 999px; padding: 0.45rem 1rem 0.45rem 0.85rem; font-weight: 600; font-size: 0.92rem; text-decoration: none; cursor: pointer; transition: background 0.12s ease, transform 0.12s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+        .pin-btn svg { width: 18px; height: 18px; display: block; }
+        .pin-btn:hover { background: #ad081b; transform: translateY(-1px); }
+        .name-share-row { margin: -0.25rem 0 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .fav-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
         .fav-list li { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.75rem 1rem; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; column-gap: 0.5rem; align-items: center; }
         .fav-list a { color: #1B2440; text-decoration: none; font-weight: 600; grid-column: 1; }
@@ -395,6 +394,7 @@
     <div class="container">
         <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/names.html">Names</a> &rsaquo; Nolia</div>
         <h1>Nolia<button class="fav-btn" data-slug="nolia" data-name="Nolia" aria-label="Save to your favorites" title="Save to your favorites"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="heart-empty" d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/><path class="heart-full" d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg></button></h1>
+        
         <p style="color:#7f8c8d; margin-top:-0.5rem;">Primarily a girl's name &middot; 100% girls</p>
         
 

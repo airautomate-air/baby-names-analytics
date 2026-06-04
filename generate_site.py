@@ -799,6 +799,7 @@ STRINGS_EN: dict[str, str] = {
     "fav_add_tip": "Save to your favorites",
     "fav_remove_tip": "Remove from favorites",
     "pin_share_tip": "Save to Pinterest",
+    "pin_share_label": "Save to Pinterest",
     "fav_h1": "Your saved names",
     "fav_title": "Your saved names — NameCharted",
     "fav_desc": "Your personal shortlist of saved names.",
@@ -1223,6 +1224,7 @@ STRINGS_FR: dict[str, str] = {
     "fav_add_tip": "Ajouter aux favoris",
     "fav_remove_tip": "Retirer des favoris",
     "pin_share_tip": "Épingler sur Pinterest",
+    "pin_share_label": "Épingler",
     "fav_h1": "Vos prénoms enregistrés",
     "fav_title": "Vos prénoms enregistrés — NameCharted",
     "fav_desc": "Votre liste personnelle de prénoms favoris.",
@@ -3627,11 +3629,10 @@ BASE_CSS = """
         .fav-btn.is-fav .heart-empty { display: none; }
         .fav-btn:not(.is-fav) .heart-full { display: none; }
         h1 .fav-btn { margin-left: 0.5rem; vertical-align: -4px; }
-        .pin-btn { background: none; border: 0; cursor: pointer; padding: 0.3rem 0.5rem; vertical-align: middle; display: inline-flex; align-items: center; color: #5B6678; text-decoration: none; }
-        .pin-btn svg { width: 24px; height: 24px; display: block; transition: transform 0.12s ease; }
-        .pin-btn:hover { color: #E60023; }
-        .pin-btn:hover svg { transform: scale(1.12); }
-        h1 .pin-btn { margin-left: 0.1rem; vertical-align: -4px; }
+        .pin-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: #E60023; color: #fff; border: 0; border-radius: 999px; padding: 0.45rem 1rem 0.45rem 0.85rem; font-weight: 600; font-size: 0.92rem; text-decoration: none; cursor: pointer; transition: background 0.12s ease, transform 0.12s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+        .pin-btn svg { width: 18px; height: 18px; display: block; }
+        .pin-btn:hover { background: #ad081b; transform: translateY(-1px); }
+        .name-share-row { margin: -0.25rem 0 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
         .fav-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
         .fav-list li { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.75rem 1rem; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; column-gap: 0.5rem; align-items: center; }
         .fav-list a { color: #1B2440; text-decoration: none; font-weight: 600; grid-column: 1; }
@@ -4240,6 +4241,67 @@ def related_block(label, names):
 # ---------------------------------------------------------------------------
 # Pinterest pin card — top 1000 names per country get a 1000x1500 PNG
 # ---------------------------------------------------------------------------
+# Short-meaning extractor — pulls a one-liner from Wikipedia's full paragraph
+# so the pin can show "Derived from Latin oliva, olive" instead of the whole
+# article opener. Falls back to "" when nothing meaningful can be salvaged.
+_PIN_MEANING_KEYWORDS = (
+    'derived from', 'derivative of', 'meaning', 'means',
+    'short form of', 'diminutive of', 'variant of',
+    'feminine form of', 'masculine form of', 'female form of', 'male form of',
+    'feminine version of', 'masculine version of',
+    'anglicised version', 'anglicized version', 'anglicised form', 'anglicized form',
+    'from latin', 'from greek', 'from hebrew', 'from arabic', 'from germanic',
+    'from old english', 'from old norse', 'from sanskrit', 'from irish', 'from welsh',
+    'from persian', 'from gaelic', 'from french', 'from italian', 'from spanish',
+    'from german', 'from aramaic', 'from egyptian', 'from the latin', 'from the greek',
+    'from the hebrew', 'from the arabic', 'from the germanic', 'from the old',
+    'cognate of',
+    'germanic origin', 'latin origin', 'greek origin', 'hebrew origin', 'arabic origin',
+    'irish origin', 'welsh origin', 'gaelic origin', 'persian origin', 'sanskrit origin',
+    'norse origin', 'french origin', 'english origin',
+)
+_PIN_OPENER = re.compile(
+    r'^[A-Z][\w\-,\s]{0,60}?\s+(?:is|was|are)\s+[\w\s]{0,40}?given name'
+    r'(?:\s+(?:in|of)\s+[\w\s]{1,40}?)?[\s,.]+',
+    re.I,
+)
+_PIN_LEAD = re.compile(
+    r'^(It|This name|This)\s+(?:is|can be|was|may be|comes|originated|has been)\s+',
+    re.I,
+)
+_PIN_TAIL_FRAG = re.compile(
+    r'^(also|that|which|and|but|originally|historically|sometimes)\s+',
+    re.I,
+)
+
+
+def _extract_pin_meaning(text: str) -> str:
+    if not text:
+        return ''
+    text = text.replace('\n', ' ').strip()
+    sentences = re.split(r'(?<=[a-z0-9\)\"\'\.])\.\s+', text)
+    cands = []
+    for i, s in enumerate(sentences[:6]):
+        sl = s.lower()
+        score = sum(2 for k in _PIN_MEANING_KEYWORDS if k in sl)
+        if score > 0:
+            cands.append((score, i, s.strip()))
+    if not cands:
+        return ''
+    cands.sort(key=lambda x: (-x[0], x[1]))
+    best = cands[0][2]
+    best = _PIN_OPENER.sub('', best)
+    best = _PIN_LEAD.sub('', best)
+    best = _PIN_TAIL_FRAG.sub('', best)
+    best = best.lstrip(' ,;.')
+    if not best or len(best) < 15:
+        return ''
+    best = best[0].upper() + best[1:]
+    if len(best) > 100:
+        best = best[:100].rsplit(' ', 1)[0] + '…'
+    return best.rstrip(' .')
+
+
 def _render_pin_for(name: str, out_path: Path) -> None:
     """Build the per-name pin from active-country data. Idempotent — callers
     skip when out_path already exists."""
@@ -4299,6 +4361,28 @@ def _render_pin_for(name: str, out_path: Path) -> None:
     else:
         sound = ""
 
+    # Meaning blurb (extracted from Wikipedia) + numerology cards.
+    meaning_text = enrich.get('meaning_fr' if ACTIVE_CC == 'FR' else 'meaning_en') \
+        or enrich.get('meaning_en') or ''
+    meaning = _extract_pin_meaning(meaning_text)
+
+    destiny, soul, pers = numerology_numbers(name)
+    traits = NUMEROLOGY_TRAITS[ACTIVE_CC]
+
+    def _trait(n: int) -> str:
+        t = traits.get(n) or traits.get(_reduce_numerology(n))
+        return t[0] if t else ''
+
+    if ACTIVE_CC == 'FR':
+        num_labels = ('DESTINÉE', 'CŒUR', 'PERSONNALITÉ')
+    else:
+        num_labels = ('DESTINY', 'SOUL', 'PERSONALITY')
+    numerology = [
+        (destiny, num_labels[0], _trait(destiny)),
+        (soul,    num_labels[1], _trait(soul)),
+        (pers,    num_labels[2], _trait(pers)),
+    ] if destiny else []
+
     render_pin(
         out_path,
         name=name,
@@ -4307,6 +4391,8 @@ def _render_pin_for(name: str, out_path: Path) -> None:
         popularity=popularity,
         peak_era=peak_era,
         sound=sound,
+        meaning=meaning,
+        numerology=numerology,
         url=f"namecharted.com{PREFIX}/name/{slugify(name)}",
         country_label=COUNTRY_NAME[ACTIVE_CC],
     )
@@ -4482,7 +4568,7 @@ def generate_name_page(name):
                    '<path d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.636 7.855 6.356 9.312-.087-.79-.166-2.005.035-2.868.181-.78 1.172-4.971 1.172-4.971s-.299-.6-.299-1.486c0-1.392.806-2.432 1.81-2.432.853 0 1.265.641 1.265 1.41 0 .859-.548 2.143-.83 3.334-.236.997.5 1.811 1.483 1.811 1.78 0 3.149-1.879 3.149-4.59 0-2.4-1.725-4.078-4.19-4.078-2.853 0-4.527 2.14-4.527 4.353 0 .863.332 1.788.748 2.291.082.099.094.186.069.287-.075.314-.243.997-.276 1.137-.043.183-.144.222-.333.134-1.244-.578-2.022-2.397-2.022-3.857 0-3.141 2.283-6.026 6.582-6.026 3.456 0 6.142 2.463 6.142 5.758 0 3.435-2.165 6.198-5.171 6.198-1.009 0-1.959-.524-2.284-1.143l-.621 2.366c-.225.866-.832 1.952-1.238 2.614C9.685 21.875 10.825 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/>'
                    '</svg>')
         pin_btn = (f'<a class="pin-btn" href="{pin_share}" target="_blank" rel="noopener" '
-                   f'aria-label="{S("pin_share_tip")}" title="{S("pin_share_tip")}">{pin_svg}</a>')
+                   f'title="{S("pin_share_tip")}">{pin_svg}<span>{S("pin_share_label")}</span></a>')
 
     # Origin badge + famous people from the global ENRICHMENT map.
     enrich = ENRICHMENT.get(slugify(name), {})
@@ -4577,7 +4663,8 @@ def generate_name_page(name):
         )
 
     body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/names.html">{S("crumb_names")}</a> &rsaquo; {name}</div>
-        <h1>{name}{fav_btn}{pin_btn}</h1>
+        <h1>{name}{fav_btn}</h1>
+        {('<div class="name-share-row">' + pin_btn + '</div>') if pin_btn else ''}
         <p style="color:#7f8c8d; margin-top:-0.5rem;">{S("name_primarily", singular=loc_singular(dom), of_singular=singular_of)} &middot; {gender_text}</p>{variants_line}
         {origin_badge_html}
 
