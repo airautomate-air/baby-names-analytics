@@ -53,10 +53,14 @@ def _wrap(d: ImageDraw.ImageDraw, text: str, font: ImageFont.FreeTypeFont,
                 break
     if cur and len(lines) < max_lines:
         lines.append(cur)
-    if len(lines) == max_lines and d.textlength(' '.join(words), font=font) > sum(
-            d.textlength(l, font=font) for l in lines):
-        # truncate last line + ellipsis
+    # Did we consume every word into the line set? Compare what we placed
+    # against the original word list (more reliable than comparing pixel widths).
+    placed_words = sum(len(l.split()) for l in lines)
+    if len(lines) == max_lines and placed_words < len(words):
         last = lines[-1]
+        # Don't double up "…" if the input already ended in one.
+        if last.endswith('…'):
+            return lines
         while last and d.textlength(last + '…', font=font) > max_w:
             last = last.rsplit(' ', 1)[0] if ' ' in last else last[:-1]
         lines[-1] = (last + '…') if last else '…'
@@ -73,11 +77,17 @@ def render_pin(
     peak_era: str,
     sound: str,
     meaning: str,            # short meaning blurb (≤ ~80 chars) or ""
-    numerology: list,        # list of (num:int, label:str, trait:str) — up to 3
+    numerology: list,        # list of (num:int, label:str, trait_name:str, trait_desc:str)
     url: str,
     country_label: str,
 ) -> None:
-    """Write the pin PNG for one name. Caller must ensure the directory exists."""
+    """Write the pin PNG for one name. Caller must ensure the directory exists.
+
+    The 3-stat row (popularity/peak/sound) is dropped from the canvas because
+    the same information already shows in the hero panel (origin) and the
+    numerology block needs the room for trait descriptions. The popularity
+    string is folded into the subtitle under the name instead.
+    """
     img = Image.new('RGB', (W, H), CANVAS)
     d = ImageDraw.Draw(img)
 
@@ -91,8 +101,8 @@ def render_pin(
     cw = d.textlength(country_label, font=chip)
     d.text((W - cw - 48, 26), country_label, font=chip, fill=WHITE)
 
-    # ─── Hero panel (110 → 600) ─────────────────────────────────────────
-    panel_top, panel_bot = 110, 600
+    # ─── Hero panel (110 → 620) ─────────────────────────────────────────
+    panel_top, panel_bot = 110, 620
     d.rounded_rectangle([(60, panel_top), (W - 60, panel_bot)],
                         radius=40, fill=SOFT)
     d.ellipse([(W - 170, panel_top + 50), (W - 100, panel_top + 120)], fill=CORAL)
@@ -105,50 +115,54 @@ def render_pin(
         name_size -= 10
         name_font = _font(POPPINS, name_size)
         nw = d.textlength(name, font=name_font)
-    name_y = panel_top + (panel_bot - panel_top - name_size) // 2 - 30
+    name_y = panel_top + (panel_bot - panel_top - name_size) // 2 - 50
     d.text(((W - nw) // 2, name_y), name, font=name_font, fill=INK)
 
-    sub_font = _font(INTER, 34)
+    # Subtitle row 1: gender · origin
+    sub_font = _font(INTER, 32)
     sub = gender_label
     if origin_label:
         sub = f"{gender_label}  ·  {origin_label}"
     sw = d.textlength(sub, font=sub_font)
-    d.text(((W - sw) // 2, panel_bot - 80), sub, font=sub_font, fill=MUTED)
+    d.text(((W - sw) // 2, panel_bot - 120), sub, font=sub_font, fill=MUTED)
 
-    # ─── Meaning block (620 → 760) ─────────────────────────────────────
-    y = 630
+    # Subtitle row 2: popularity + peak (folded together)
+    pop_bits = [v for v in (popularity, peak_era, sound) if v]
+    if pop_bits:
+        pop_text = "  ·  ".join(pop_bits[:2])  # keep it tight, drop the third
+        pop_font = _font(POPPINS, 28)
+        pw = d.textlength(pop_text, font=pop_font)
+        # shrink if too wide
+        sz = 28
+        while pw > W - 200 and sz > 18:
+            sz -= 1
+            pop_font = _font(POPPINS, sz)
+            pw = d.textlength(pop_text, font=pop_font)
+        d.text(((W - pw) // 2, panel_bot - 75), pop_text, font=pop_font, fill=INK)
+
+    # ─── Meaning block (650 → 830) ─────────────────────────────────────
+    y = 650
     if meaning:
         d.text((80, y), "MEANING", font=_font(INTER, 22), fill=TEAL)
-        mean_font = _font(POPPINS, 38)
-        lines = _wrap(d, meaning, mean_font, W - 160, max_lines=2)
+        mean_font = _font(POPPINS, 36)
+        lines = _wrap(d, meaning, mean_font, W - 160, max_lines=3)
         for i, line in enumerate(lines):
-            d.text((80, y + 32 + i * 48), line, font=mean_font, fill=INK)
+            d.text((80, y + 34 + i * 46), line, font=mean_font, fill=INK)
 
-    # ─── Stat rows (790 → 1060) ─────────────────────────────────────────
-    rows = [("POPULARITY", popularity), ("PEAK ERA", peak_era), ("SOUND", sound)]
-    rows = [(l, v) for l, v in rows if v]
-    label_font = _font(INTER, 22)
-    val_font   = _font(POPPINS, 32)
-    y = 790
-    for lbl, val in rows:
-        d.rectangle([(80, y + 12), (90, y + 56)], fill=TEAL)
-        d.text((114, y), lbl, font=label_font, fill=MUTED)
-        d.text((114, y + 28), val, font=val_font, fill=INK)
-        y += 90
-
-    # ─── Numerology card row (1080 → 1370) ─────────────────────────────
+    # ─── Numerology card row (870 → 1380) ──────────────────────────────
     if numerology:
-        nblock_top = 1080
-        d.rounded_rectangle([(60, nblock_top), (W - 60, nblock_top + 290)],
+        nblock_top = 870
+        nblock_bot = 1380
+        d.rounded_rectangle([(60, nblock_top), (W - 60, nblock_bot)],
                             radius=32, fill=NUM_BG)
         d.text((90, nblock_top + 24), "NUMEROLOGY",
                font=_font(INTER, 22), fill=CORAL)
         cards = numerology[:3]
         card_w = (W - 60 - 60 - 40) // 3       # 60px margins, 20px gap
-        card_h = 200
         card_y = nblock_top + 70
         x = 80
-        for num, lbl, trait in cards:
+        for entry in cards:
+            num, lbl, trait_name, trait_desc = entry
             # number circle
             cx = x + card_w // 2
             cy = card_y + 56
@@ -162,16 +176,24 @@ def render_pin(
             lbl_font = _font(INTER, 18)
             lw = d.textlength(lbl, font=lbl_font)
             d.text((cx - lw / 2, card_y + 118), lbl, font=lbl_font, fill=MUTED)
-            # trait
-            t_font = _font(POPPINS, 24)
-            tw = d.textlength(trait, font=t_font)
-            # shrink if too wide
+            # trait name — auto-shrink to fit
             sz = 24
+            t_font = _font(POPPINS, sz)
+            tw = d.textlength(trait_name, font=t_font)
             while tw > card_w - 12 and sz > 16:
                 sz -= 1
                 t_font = _font(POPPINS, sz)
-                tw = d.textlength(trait, font=t_font)
-            d.text((cx - tw / 2, card_y + 146), trait, font=t_font, fill=INK)
+                tw = d.textlength(trait_name, font=t_font)
+            d.text((cx - tw / 2, card_y + 146), trait_name, font=t_font, fill=INK)
+            # trait description — wrap up to 3 lines
+            if trait_desc:
+                desc_font = _font(INTER, 16)
+                desc_lines = _wrap(d, trait_desc, desc_font, card_w - 10, max_lines=4)
+                dy = card_y + 184
+                for line in desc_lines:
+                    lw2 = d.textlength(line, font=desc_font)
+                    d.text((cx - lw2 / 2, dy), line, font=desc_font, fill=MUTED)
+                    dy += 22
             x += card_w + 20
 
     # ─── Footer (1390 → 1500) ──────────────────────────────────────────

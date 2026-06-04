@@ -4368,6 +4368,28 @@ _PIN_TAIL_FRAG = re.compile(
 )
 
 
+def _pin_strip_unrenderable(s: str) -> str:
+    """Drop characters our PIL fonts can't render (Hebrew, Arabic, Greek,
+    Cyrillic, CJK, etc.) — they'd show as tofu boxes on the pin. Keep
+    ASCII + Latin-Extended + general punctuation."""
+    out = []
+    for c in s:
+        cp = ord(c)
+        if 0x20 <= cp <= 0x7E:           # ASCII printable
+            out.append(c)
+        elif 0xA0 <= cp <= 0x024F:       # Latin-1 + Latin Extended A/B
+            out.append(c)
+        elif 0x2010 <= cp <= 0x205F:     # General punctuation (em dash, smart quotes)
+            out.append(c)
+    cleaned = ''.join(out)
+    cleaned = re.sub(r'\s+', ' ', cleaned)
+    cleaned = re.sub(r'\s+([,;:.])', r'\1', cleaned)
+    # Collapse leftover ", ," / "  ," runs and trim leading punctuation.
+    cleaned = re.sub(r'[,;:]\s*(?=[,;:])', '', cleaned)
+    cleaned = re.sub(r'^[\s,;:.\-—]+', '', cleaned)
+    return cleaned.strip()
+
+
 def _extract_pin_meaning(text: str) -> str:
     if not text:
         return ''
@@ -4386,12 +4408,16 @@ def _extract_pin_meaning(text: str) -> str:
     best = _PIN_OPENER.sub('', best)
     best = _PIN_LEAD.sub('', best)
     best = _PIN_TAIL_FRAG.sub('', best)
+    best = _pin_strip_unrenderable(best)
     best = best.lstrip(' ,;.')
     if not best or len(best) < 15:
         return ''
     best = best[0].upper() + best[1:]
     if len(best) > 100:
-        best = best[:100].rsplit(' ', 1)[0] + '…'
+        truncated = best[:100].rsplit(' ', 1)[0]
+        # Strip trailing punctuation that would read as ",…" or ";…"
+        truncated = re.sub(r'[\s,;:\-—.]+$', '', truncated)
+        best = truncated + '…'
     return best.rstrip(' .')
 
 
@@ -4462,19 +4488,21 @@ def _render_pin_for(name: str, out_path: Path) -> None:
     destiny, soul, pers = numerology_numbers(name)
     traits = NUMEROLOGY_TRAITS[ACTIVE_CC]
 
-    def _trait(n: int) -> str:
+    def _trait(n: int) -> tuple[str, str]:
         t = traits.get(n) or traits.get(_reduce_numerology(n))
-        return t[0] if t else ''
+        return (t[0], t[1]) if t else ('', '')
 
     if ACTIVE_CC == 'FR':
         num_labels = ('DESTINÉE', 'CŒUR', 'PERSONNALITÉ')
     else:
         num_labels = ('DESTINY', 'SOUL', 'PERSONALITY')
-    numerology = [
-        (destiny, num_labels[0], _trait(destiny)),
-        (soul,    num_labels[1], _trait(soul)),
-        (pers,    num_labels[2], _trait(pers)),
-    ] if destiny else []
+    numerology = []
+    if destiny:
+        for n, lbl in ((destiny, num_labels[0]),
+                       (soul, num_labels[1]),
+                       (pers, num_labels[2])):
+            tn, td = _trait(n)
+            numerology.append((n, lbl, tn, td))
 
     render_pin(
         out_path,
