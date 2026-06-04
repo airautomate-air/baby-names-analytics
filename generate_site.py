@@ -108,6 +108,30 @@ def numerology_numbers(name: str) -> tuple[int, int, int]:
     return (destiny, soul, pers)
 
 
+def filter_famous_for(famous: list, given_name: str) -> list:
+    """Keep only bearers whose display label actually leads with this given
+    name. The raw Wikidata P735 list includes anyone for whom this is *any*
+    of their given names — so 'Mary' was pulling Agatha (Mary) Christie,
+    Meryl (Mary Louise) Streep, Amelia (Mary) Earhart. They use a different
+    public name; we don't want them in the 'Famous people named Mary' list.
+    """
+    target = unicodedata.normalize('NFD', given_name.lower())
+    target = ''.join(c for c in target if unicodedata.category(c) != 'Mn')
+    target = re.sub(r'[^a-z]', '', target)
+    if not target:
+        return famous
+    out = []
+    for p in famous:
+        label = p.get('name', '')
+        folded = unicodedata.normalize('NFD', label.lower())
+        folded = ''.join(c for c in folded if unicodedata.category(c) != 'Mn')
+        # Treat hyphens/apostrophes as word boundaries (Jean-Pierre, O'Connor)
+        tokens = re.split(r"[^a-z]+", folded)
+        if tokens and tokens[0] == target:
+            out.append(p)
+    return out
+
+
 def phonetic_key(name: str) -> str:
     """Metaphone-flavoured phonetic skeleton tuned for given names.
 
@@ -3270,7 +3294,7 @@ INITIALS_SCRIPT = """
                 clear(resultEl);
                 var seen = {};
                 var tries = 0;
-                while (Object.keys(seen).length < 20 && tries < 120) {
+                while (Object.keys(seen).length < 21 && tries < 130) {
                     tries++;
                     var parts = [];
                     var firstSlug = pickFirstNameForLetter(letters[0], firstSex);
@@ -4199,7 +4223,8 @@ def generate_name_page(name):
         "\n    });"
         "\n    </script>"
     )
-    famous_for_jsonld = (ENRICHMENT.get(slugify(name), {}) or {}).get('famous', [])
+    famous_for_jsonld = filter_famous_for(
+        (ENRICHMENT.get(slugify(name), {}) or {}).get('famous', []), name)
     extra_head = breadcrumb_jsonld([
         (S("crumb_home"), home_url()),
         (S("crumb_names"), f"{BASE_URL}{p}/names.html"),
@@ -4236,7 +4261,7 @@ def generate_name_page(name):
             f'<a class="origin-badge" href="{p}/origin/{origin}.html">'
             f'{S("name_origin_badge", label=origin_lbl)}</a>'
         )
-    famous = enrich.get('famous', [])
+    famous = filter_famous_for(enrich.get('famous', []), name)
     # Numerology — playful per-name section, three Pythagorean numbers.
     destiny, soul, pers = numerology_numbers(name)
     traits = NUMEROLOGY_TRAITS[ACTIVE_CC]

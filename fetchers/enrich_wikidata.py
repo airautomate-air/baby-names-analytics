@@ -276,7 +276,7 @@ def fetch_famous(name_qids: list[str], cache_path: Path) -> dict:
                     continue
                 seen.add(key)
                 uniq.append(p)
-                if len(uniq) >= 5:
+                if len(uniq) >= 15:
                     break
             cache[nq] = uniq
         if (i // BATCH) % 5 == 4:
