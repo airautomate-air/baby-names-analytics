@@ -318,14 +318,22 @@
         #pk-r-share, #pk-r-again { background: #fff; border: 1px solid #d6dde2; color: #1B2440; border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer; font-weight: 500; }
         #pk-r-share:hover, #pk-r-again:hover { border-color: #149E91; color: #149E91; }
         #pk-r-share-done { color: #149E91; font-size: 0.9rem; }
-        .sib-form { display: flex; gap: 0.6rem; margin: 1.5rem 0 1rem; flex-wrap: wrap; }
-        .sib-form .ac-wrap { position: relative; flex: 1; min-width: 220px; }
-        .sib-form input { width: 100%; box-sizing: border-box; padding: 0.7rem 0.9rem; font-size: 1rem; border: 1px solid #d6dde2; border-radius: 6px; background: #fff; }
-        .sib-form button { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 600; cursor: pointer; font-size: 1rem; }
-        .sib-form button:hover { background: #117f74; }
-        #sib-ac { position: absolute; left: 0; right: 0; top: 100%; background: #fff; border: 1px solid #d6dde2; border-top: 0; border-radius: 0 0 6px 6px; max-height: 260px; overflow-y: auto; z-index: 10; }
-        #sib-ac div { padding: 0.5rem 0.9rem; cursor: pointer; }
-        #sib-ac div:hover, #sib-ac div.sel { background: #EEF2F4; }
+        .sib-form { display: flex; gap: 0.6rem; margin: 1.5rem 0 1rem; flex-wrap: wrap; align-items: flex-start; }
+        .sib-inputs { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; min-width: 220px; }
+        .sib-row { display: flex; gap: 0.4rem; align-items: stretch; }
+        .sib-row .ac-wrap { position: relative; flex: 1; min-width: 0; }
+        .sib-row input { width: 100%; box-sizing: border-box; padding: 0.7rem 0.9rem; font-size: 1rem; border: 1px solid #d6dde2; border-radius: 6px; background: #fff; }
+        .sib-remove { background: none; border: 1px solid #d6dde2; color: #5B6678; border-radius: 6px; padding: 0 0.7rem; cursor: pointer; font-size: 1.3rem; line-height: 1; }
+        .sib-remove:hover { color: #c0392b; border-color: #c0392b; }
+        .sib-add { background: transparent; border: 1px dashed #149E91; color: #149E91; border-radius: 6px; padding: 0.55rem 0.9rem; cursor: pointer; font-size: 0.92rem; font-weight: 500; }
+        .sib-add:hover { background: #EFF8F6; }
+        .sib-add:disabled { opacity: 0.4; cursor: not-allowed; }
+        .sib-submit { background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.7rem 1.3rem; font-weight: 600; cursor: pointer; font-size: 1rem; align-self: flex-start; }
+        .sib-submit:hover { background: #117f74; }
+        .sib-form-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: flex-start; }
+        .sib-ac { position: absolute; left: 0; right: 0; top: 100%; background: #fff; border: 1px solid #d6dde2; border-top: 0; border-radius: 0 0 6px 6px; max-height: 260px; overflow-y: auto; z-index: 10; }
+        .sib-ac div { padding: 0.5rem 0.9rem; cursor: pointer; }
+        .sib-ac div:hover, .sib-ac div.sel { background: #EEF2F4; }
         .sib-sex-tabs { display: flex; gap: 0.4rem; margin: 0 0 1rem; }
         .sib-sex-tab { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.4rem 0.95rem; border-radius: 20px; cursor: pointer; font-size: 0.9rem; font-weight: 500; }
         .sib-sex-tab.is-active { background: #1B2440; color: #fff; border-color: #1B2440; }
@@ -1495,16 +1503,18 @@
         var L_GIRLS = "Girls";
         var L_BOYS = "Boys";
         var L_RESULT_FOR = "Names that pair well with {name}";
-        var L_UNKNOWN = "We don't have data for that name, so we'll just match on rhythm. For best results pick a name with its own popularity page.";
+        var L_RESULT_FOR_SET = "Names that pair well with {names}";
+        var L_UNKNOWN = "We don't have data for one of those names, so we'll just match on rhythm. For best results pick names with their own popularity page.";
         var L_PEAK = "Peaked in the {d}s";
         var L_SHOW_MORE = "Show more";
         var PAGE_SIZE = 12;
+        var MAX_SLOTS = 3;
 
         var IDX_FIRST = 0, IDX_LAST2 = 1, IDX_SYLL = 2, IDX_DOM = 3, IDX_PEAK = 4, IDX_RANK = 5, IDX_ORIGIN = 6;
         var ORIGIN_LABELS = {"english": "English", "irish": "Irish", "scottish": "Scottish", "welsh": "Welsh", "french": "French", "german": "German", "italian": "Italian", "spanish": "Spanish", "portuguese": "Portuguese", "dutch": "Dutch", "swedish": "Swedish", "norwegian": "Norwegian", "danish": "Danish", "finnish": "Finnish", "scandinavian": "Scandinavian", "latin": "Latin", "greek": "Greek", "hebrew": "Hebrew", "arabic": "Arabic", "aramaic": "Aramaic", "persian": "Persian", "sanskrit": "Sanskrit", "russian": "Russian", "polish": "Polish", "czech": "Czech", "hungarian": "Hungarian", "romanian": "Romanian", "ukrainian": "Ukrainian", "bulgarian": "Bulgarian", "serbo-croatian": "Serbo-Croatian", "japanese": "Japanese", "chinese": "Chinese", "korean": "Korean", "vietnamese": "Vietnamese", "turkish": "Turkish", "armenian": "Armenian", "tamil": "Tamil", "hindi": "Hindi", "urdu": "Urdu", "thai": "Thai", "indonesian": "Indonesian", "swahili": "Swahili", "yoruba": "Yoruba", "igbo": "Igbo"};
 
-        var input = document.getElementById('sib-input');
-        var ac = document.getElementById('sib-ac');
+        var rows = Array.prototype.slice.call(document.querySelectorAll('.sib-row'));
+        var addBtn = document.getElementById('sib-add');
         var resultEl = document.getElementById('sib-result');
         var headerEl = document.getElementById('sib-header');
         var listEl = document.getElementById('sib-list');
@@ -1548,10 +1558,13 @@
             return Math.max(1, n);
         }
 
-        // Autocomplete (mirrors compare/works-with pattern)
-        (function() {
+        // ─── Per-row autocomplete + control wiring ──────────────────────
+        function setupRow(row) {
+            var input = row.querySelector('.sib-input');
+            var ac = row.querySelector('.sib-ac');
+            var removeBtn = row.querySelector('.sib-remove');
             var sel = -1, items = [];
-            function render(matches) {
+            function renderAc(matches) {
                 clear(ac); items = matches;
                 if (!matches.length) { ac.style.display = 'none'; return; }
                 ac.style.display = '';
@@ -1568,7 +1581,7 @@
                     ac.appendChild(d);
                 });
             }
-            function search() {
+            function searchAc() {
                 var q = slugify(input.value);
                 if (!q || !INDEX) { ac.style.display = 'none'; return; }
                 var starts = [], contains = [];
@@ -1578,110 +1591,170 @@
                     else if (s.indexOf(q) > 0) contains.push(s);
                 }
                 sel = -1;
-                render(starts.concat(contains).slice(0, 8));
+                renderAc(starts.concat(contains).slice(0, 8));
             }
-            input.addEventListener('input', function() { loadData().then(search); });
-            input.addEventListener('focus', function() { loadData().then(search); });
+            input.addEventListener('input', function() { loadData().then(searchAc); });
+            input.addEventListener('focus', function() { loadData().then(searchAc); });
             input.addEventListener('blur', function() { setTimeout(function() { ac.style.display = 'none'; }, 150); });
             input.addEventListener('keydown', function(e) {
                 if (ac.style.display === 'none') return;
-                if (e.key === 'ArrowDown') { sel = (sel + 1) % items.length; render(items); e.preventDefault(); }
-                else if (e.key === 'ArrowUp') { sel = (sel - 1 + items.length) % items.length; render(items); e.preventDefault(); }
+                if (e.key === 'ArrowDown') { sel = (sel + 1) % items.length; renderAc(items); e.preventDefault(); }
+                else if (e.key === 'ArrowUp') { sel = (sel - 1 + items.length) % items.length; renderAc(items); e.preventDefault(); }
                 else if (e.key === 'Enter' && sel >= 0) { input.value = display(items[sel]); ac.style.display = 'none'; e.preventDefault(); run(); }
                 else if (e.key === 'Escape') { ac.style.display = 'none'; }
             });
-        })();
+            if (removeBtn) {
+                removeBtn.addEventListener('click', function() {
+                    input.value = '';
+                    row.style.display = 'none';
+                    updateAddBtn();
+                    if (anyVisibleHasValue()) run();
+                });
+            }
+        }
+        rows.forEach(setupRow);
 
-        function score(cand, m, ref) {
-            // ref: {first, last2, syll, peak, origin}, m = candidate meta array
+        function nextHiddenRow() {
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].style.display === 'none') return rows[i];
+            }
+            return null;
+        }
+        function visibleRows() {
+            return rows.filter(function(r) { return r.style.display !== 'none'; });
+        }
+        function anyVisibleHasValue() {
+            return visibleRows().some(function(r) {
+                return r.querySelector('.sib-input').value.trim();
+            });
+        }
+        function updateAddBtn() {
+            addBtn.disabled = !nextHiddenRow();
+        }
+        addBtn.addEventListener('click', function() {
+            var nxt = nextHiddenRow();
+            if (!nxt) return;
+            nxt.style.display = '';
+            updateAddBtn();
+            nxt.querySelector('.sib-input').focus();
+        });
+        updateAddBtn();
+
+        // ─── Scoring against an aggregate of refs ───────────────────────
+        function scoreCand(slug, m, refs) {
             var s = 0;
-            var reasons = [];
+            var reasons = {};
+            var n = refs.length;
 
-            // Era match
-            var peakDiff = Math.abs(m[IDX_PEAK] - ref.peak);
-            if (peakDiff === 0) { s += 22; reasons.push('era'); }
-            else if (peakDiff <= 10) { s += 14; reasons.push('era'); }
-            else if (peakDiff <= 20) s += 6;
-
-            // Syllable similarity
-            var syllDiff = Math.abs(m[IDX_SYLL] - ref.syll);
-            if (syllDiff === 0) { s += 8; reasons.push('rhythm'); }
-            else if (syllDiff === 1) { s += 5; reasons.push('rhythm'); }
-
-            // Penalty: same starting letter (less variety) — unless both vowels match
-            if (m[IDX_FIRST] === ref.first) s -= 10;
-            else { s += 3; reasons.push('contrast'); }
-
-            // Penalty: rhyming endings
-            if (m[IDX_LAST2] === ref.last2) s -= 14;
-
-            // Same-origin bonus (cultural consistency across siblings)
-            if (ref.origin && m[IDX_ORIGIN] === ref.origin) { s += 8; reasons.push('origin'); }
-
-            // Penalty: candidate is sibling itself
-            // handled by caller (skips slug === refSlug)
-
-            // Familiarity bonus — break ties toward currently-popular names.
-            // Use rank-band rather than raw rank so we don't overweight the very top.
-            var r = m[IDX_RANK];
-            if (r) {
-                if (r <= 50) s += 5;
-                else if (r <= 200) s += 4;
-                else if (r <= 1000) s += 2;
-                else s += 1;
+            // Era: penalize distance from the closest ref's peak (within a set,
+            // a candidate fits if it's near AT LEAST ONE sibling's era).
+            var anyPeak = refs.some(function(r) { return r.peak !== null; });
+            if (anyPeak) {
+                var bestDiff = Infinity;
+                refs.forEach(function(r) {
+                    if (r.peak !== null) {
+                        bestDiff = Math.min(bestDiff, Math.abs(m[IDX_PEAK] - r.peak));
+                    }
+                });
+                if (bestDiff === 0) { s += 22; reasons.era = 1; }
+                else if (bestDiff <= 10) { s += 14; reasons.era = 1; }
+                else if (bestDiff <= 20) s += 6;
             }
 
-            return [s, reasons];
+            // Syllable rhythm: compare to AVERAGE syllable count of the set.
+            var avgSyll = refs.reduce(function(a, r) { return a + r.syll; }, 0) / n;
+            var syllDiff = Math.abs(m[IDX_SYLL] - avgSyll);
+            if (syllDiff < 0.5) { s += 8; reasons.rhythm = 1; }
+            else if (syllDiff < 1.5) { s += 5; reasons.rhythm = 1; }
+
+            // Initials: penalize matching ANY existing sibling's first letter.
+            var matchedFirst = refs.some(function(r) { return r.first === m[IDX_FIRST]; });
+            if (matchedFirst) s -= 10;
+            else { s += 3; reasons.contrast = 1; }
+
+            // Rhyme penalty against any sibling.
+            var matchedLast = refs.some(function(r) { return r.last2 && r.last2 === m[IDX_LAST2]; });
+            if (matchedLast) s -= 14;
+
+            // Origin: if all refs share an origin, big bonus when cand matches.
+            // Otherwise (mixed origins) we still reward matching one of them.
+            var origins = refs.map(function(r) { return r.origin; }).filter(function(o) { return o; });
+            if (origins.length === n) {
+                var first = origins[0];
+                var allSame = origins.every(function(o) { return o === first; });
+                if (allSame && m[IDX_ORIGIN] === first) { s += 10; reasons.origin = 1; }
+                else if (!allSame && origins.indexOf(m[IDX_ORIGIN]) >= 0) { s += 5; reasons.origin = 1; }
+            } else if (n === 1 && refs[0].origin && m[IDX_ORIGIN] === refs[0].origin) {
+                s += 8; reasons.origin = 1;
+            }
+
+            // Familiarity bonus.
+            var rk = m[IDX_RANK];
+            if (rk) {
+                if (rk <= 50) s += 5;
+                else if (rk <= 200) s += 4;
+                else if (rk <= 1000) s += 2;
+                else s += 1;
+            }
+            return s;
+        }
+
+        function refFor(rawName) {
+            var slug = slugify(rawName);
+            if (META[slug]) {
+                var rm = META[slug];
+                return { slug: slug, known: true,
+                         first: rm[IDX_FIRST], last2: rm[IDX_LAST2],
+                         syll: rm[IDX_SYLL], peak: rm[IDX_PEAK],
+                         origin: rm[IDX_ORIGIN] || '' };
+            }
+            var folded = rawName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
+            return { slug: slug, known: false,
+                     first: folded[0] || 'a', last2: folded.slice(-2) || '',
+                     syll: countSyllables(rawName), peak: null, origin: '' };
         }
 
         function run() {
-            var rawName = input.value.trim();
-            if (!rawName) { emptyEl.style.display = ''; resultEl.style.display = 'none'; noteEl.style.display = 'none'; return; }
+            var raws = visibleRows().map(function(r) {
+                return r.querySelector('.sib-input').value.trim();
+            }).filter(function(v) { return v; });
+            if (!raws.length) {
+                emptyEl.style.display = ''; resultEl.style.display = 'none';
+                noteEl.style.display = 'none';
+                return;
+            }
             emptyEl.style.display = 'none';
             loadData().then(function() {
-                var slug = slugify(rawName);
-                var ref;
-                if (META[slug]) {
-                    var rm = META[slug];
-                    ref = { first: rm[IDX_FIRST], last2: rm[IDX_LAST2], syll: rm[IDX_SYLL], peak: rm[IDX_PEAK], origin: rm[IDX_ORIGIN] || '' };
-                    noteEl.style.display = 'none';
-                } else {
-                    // Fallback: derive what we can from raw text. No era match possible.
-                    var folded = rawName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z]/g, '');
-                    ref = { first: folded[0] || 'a', last2: folded.slice(-2) || '', syll: countSyllables(rawName), peak: null, origin: '' };
-                    noteEl.style.display = '';
-                }
+                var refs = raws.map(refFor);
+                var refSlugs = {};
+                refs.forEach(function(r) { refSlugs[r.slug] = 1; });
+                var anyUnknown = refs.some(function(r) { return !r.known; });
+                noteEl.style.display = anyUnknown ? '' : 'none';
 
-                var rows = [];
+                var rowsOut = [];
                 for (var s in META) {
-                    if (s === slug) continue;
+                    if (refSlugs[s]) continue;
                     var m = META[s];
                     if (targetSex !== 'all' && m[IDX_DOM] !== targetSex) continue;
-                    var sc;
-                    if (ref.peak === null) {
-                        // Without era data, just score syllables + initial
-                        var local = 0;
-                        var sd = Math.abs(m[IDX_SYLL] - ref.syll);
-                        if (sd === 0) local += 8;
-                        else if (sd === 1) local += 5;
-                        if (m[IDX_FIRST] !== ref.first) local += 3; else local -= 10;
-                        if (m[IDX_LAST2] === ref.last2) local -= 14;
-                        sc = [local, []];
-                    } else {
-                        sc = score(s, m, ref);
-                    }
-                    rows.push([sc[0], s, m, sc[1]]);
+                    var sc = scoreCand(s, m, refs);
+                    rowsOut.push([sc, s, m]);
                 }
-                rows.sort(function(a, b) {
+                rowsOut.sort(function(a, b) {
                     if (b[0] !== a[0]) return b[0] - a[0];
                     var ra = a[2][IDX_RANK] || 99999, rb = b[2][IDX_RANK] || 99999;
                     if (ra !== rb) return ra - rb;
                     return a[1] < b[1] ? -1 : 1;
                 });
-                currentResults = rows.slice(0, 60);
+                currentResults = rowsOut.slice(0, 60);
                 shown = 0;
 
-                headerEl.textContent = L_RESULT_FOR.replace('{name}', display(slug));
+                if (refs.length === 1) {
+                    headerEl.textContent = L_RESULT_FOR.replace('{name}', display(refs[0].slug));
+                } else {
+                    var names = refs.map(function(r) { return display(r.slug); });
+                    var joined = names.slice(0, -1).join(', ') + ' + ' + names[names.length - 1];
+                    headerEl.textContent = L_RESULT_FOR_SET.replace('{names}', joined);
+                }
                 clear(listEl);
                 renderMore();
                 resultEl.style.display = '';
@@ -1720,15 +1793,24 @@
                 sexTabs.forEach(function(x) { x.classList.remove('is-active'); });
                 t.classList.add('is-active');
                 targetSex = t.getAttribute('data-sex');
-                if (input.value.trim()) run();
+                if (anyVisibleHasValue()) run();
             });
         });
-        form.addEventListener('submit', function(e) { e.preventDefault(); ac.style.display = 'none'; run(); });
+        form.addEventListener('submit', function(e) { e.preventDefault(); run(); });
 
-        // Pre-fill from ?name=
+        // Pre-fill from ?names=a,b,c (comma-separated) or legacy ?name=
         var qs = new URLSearchParams(window.location.search);
-        var qn = qs.get('name');
-        if (qn) { input.value = qn; loadData().then(run); }
+        var qNames = qs.get('names') || qs.get('name') || '';
+        if (qNames) {
+            var parts = qNames.split(',').map(function(x) { return x.trim(); }).filter(Boolean).slice(0, MAX_SLOTS);
+            parts.forEach(function(n, i) {
+                if (i >= rows.length) return;
+                rows[i].style.display = '';
+                rows[i].querySelector('.sib-input').value = n;
+            });
+            updateAddBtn();
+            loadData().then(run);
+        }
     })();
     </script>
     <script>
