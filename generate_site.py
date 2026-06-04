@@ -255,6 +255,26 @@ def load_enrichment() -> None:
         ENRICHMENT = json.load(f)
     print(f'  enrichment: {len(ENRICHMENT):,} names have origin or famous data')
 
+    # Curated overrides — patches gaps in Wikidata P735 (Roman names where
+    # the structured given name is a praenomen but the figure is known by
+    # their nomen/cognomen, e.g. Julius Caesar's P735 is 'Gaius').
+    op = Path('data/famous_overrides.json')
+    if op.exists():
+        with op.open() as f:
+            overrides = json.load(f)
+        n_patched = 0
+        for slug, extras in overrides.items():
+            if not isinstance(extras, list):  # skip _comment etc.
+                continue
+            entry = ENRICHMENT.setdefault(slug, {})
+            existing = entry.get('famous', []) or []
+            seen_urls = {p.get('url') for p in existing if p.get('url')}
+            prepend = [p for p in extras if p.get('url') not in seen_urls]
+            if prepend:
+                entry['famous'] = prepend + existing
+                n_patched += 1
+        print(f'  famous overrides: patched {n_patched} names')
+
 
 # Fiction data (Phase 6h). Shared across countries — each country's
 # /fiction/<slug>.html links to its own /name/<slug>.html when the name exists.
@@ -3906,7 +3926,7 @@ def person_jsonld_block(famous: list, given_name: str) -> str:
             person["sameAs"] = p['url']
         if p.get('occupation'):
             person["jobTitle"] = p['occupation']
-        if p.get('born'):
+        if p.get('born') and p['born'] > 0:
             person["birthDate"] = str(p['born'])
         out.append('\n    <script type="application/ld+json">' + json.dumps(person, ensure_ascii=False) + '</script>')
     return ''.join(out)
@@ -4440,7 +4460,8 @@ def generate_name_page(name):
             if occ:
                 bits.append(occ)
             if born:
-                bits.append(S("name_famous_born", year=born))
+                year_disp = (f"{-born} av. J.-C." if ACTIVE_CC == 'FR' else f"{-born} BC") if born < 0 else born
+                bits.append(S("name_famous_born", year=year_disp))
             sub = S("name_famous_occ_sep").join(bits)
             url = person.get('url') or ''
             link = (f'<a href="{url}" target="_blank" rel="noopener nofollow">{person["name"]}</a>'

@@ -1,0 +1,43 @@
+{
+  "_comment": "Manual override list for famous bearers Wikidata misses. Common reason: Roman names where the structured P735 'given name' is the praenomen (Gaius, Publius, Quintus...) but the figure is universally known by their nomen or cognomen. Entries are prepended to ENRICHMENT[name].famous and pass through filter_famous_for, so the first token of 'name' must match the page name. Key = slugified name.",
+  "julius": [
+    {
+      "name": "Julius Caesar",
+      "occupation": "Roman general and dictator",
+      "born": -100,
+      "url": "https://en.wikipedia.org/wiki/Julius_Caesar"
+    }
+  ],
+  "augustus": [
+    {
+      "name": "Augustus",
+      "occupation": "first Roman emperor",
+      "born": -63,
+      "url": "https://en.wikipedia.org/wiki/Augustus"
+    }
+  ],
+  "virgil": [
+    {
+      "name": "Virgil",
+      "occupation": "Roman poet (Aeneid)",
+      "born": -70,
+      "url": "https://en.wikipedia.org/wiki/Virgil"
+    }
+  ],
+  "ovid": [
+    {
+      "name": "Ovid",
+      "occupation": "Roman poet (Metamorphoses)",
+      "born": -43,
+      "url": "https://en.wikipedia.org/wiki/Ovid"
+    }
+  ],
+  "horace": [
+    {
+      "name": "Horace",
+      "occupation": "Roman lyric poet",
+      "born": -65,
+      "url": "https://en.wikipedia.org/wiki/Horace"
+    }
+  ]
+}
