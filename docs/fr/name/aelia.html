@@ -80,6 +80,11 @@
         .fav-btn.is-fav .heart-empty { display: none; }
         .fav-btn:not(.is-fav) .heart-full { display: none; }
         h1 .fav-btn { margin-left: 0.5rem; vertical-align: -4px; }
+        .pin-btn { background: none; border: 0; cursor: pointer; padding: 0.3rem 0.5rem; vertical-align: middle; display: inline-flex; align-items: center; color: #5B6678; text-decoration: none; }
+        .pin-btn svg { width: 24px; height: 24px; display: block; transition: transform 0.12s ease; }
+        .pin-btn:hover { color: #E60023; }
+        .pin-btn:hover svg { transform: scale(1.12); }
+        h1 .pin-btn { margin-left: 0.1rem; vertical-align: -4px; }
         .fav-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
         .fav-list li { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between; }
         .fav-list a { color: #1B2440; text-decoration: none; font-weight: 600; flex: 1; }

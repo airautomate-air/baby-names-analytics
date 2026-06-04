@@ -16,6 +16,8 @@ import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
+from pin_renderer import render_pin
+
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
@@ -498,6 +500,7 @@ name_meta: dict = {}
 phonetic_by_sex: dict = {}
 decade_sex_counts: dict = {}
 top_names: list = []
+top_pin_set: set = set()
 VARIANTS_OF: dict = {}
 CANONICAL_OF: dict = {}
 
@@ -638,9 +641,12 @@ def set_active(cc: str) -> None:
     g['CANONICAL_OF'] = canonical_of_by_country[cc]
     g['top_names'] = sorted(
         g['name_total'].items(), key=lambda x: (-x[1], x[0]))[:TOP_N_NAMES]
+    # Membership set for the Pinterest-pin generator: top names get a custom
+    # 1000x1500 PNG card, everyone else falls back to og-default.png.
+    g['top_pin_set'] = {n for n, _ in g['top_names']}
 
     out = g['OUT_DIR']
-    for sub in ('name', 'year', 'similar', 'decade', 'letter', 'trends'):
+    for sub in ('name', 'year', 'similar', 'decade', 'letter', 'trends', 'pin'):
         (out / sub).mkdir(parents=True, exist_ok=True)
     if cc == 'US':
         (out / 'compare').mkdir(exist_ok=True)
@@ -772,6 +778,7 @@ STRINGS_EN: dict[str, str] = {
     "compare_with_link": "Compare {name} with another name →",
     "fav_add_tip": "Save to your favorites",
     "fav_remove_tip": "Remove from favorites",
+    "pin_share_tip": "Save to Pinterest",
     "fav_h1": "Your saved names",
     "fav_title": "Your saved names — NameCharted",
     "fav_desc": "Your personal shortlist of saved names.",
@@ -1190,6 +1197,7 @@ STRINGS_FR: dict[str, str] = {
     "compare_with_link": "Comparer {name} avec un autre prénom →",
     "fav_add_tip": "Ajouter aux favoris",
     "fav_remove_tip": "Retirer des favoris",
+    "pin_share_tip": "Épingler sur Pinterest",
     "fav_h1": "Vos prénoms enregistrés",
     "fav_title": "Vos prénoms enregistrés — NameCharted",
     "fav_desc": "Votre liste personnelle de prénoms favoris.",
@@ -3519,6 +3527,11 @@ BASE_CSS = """
         .fav-btn.is-fav .heart-empty { display: none; }
         .fav-btn:not(.is-fav) .heart-full { display: none; }
         h1 .fav-btn { margin-left: 0.5rem; vertical-align: -4px; }
+        .pin-btn { background: none; border: 0; cursor: pointer; padding: 0.3rem 0.5rem; vertical-align: middle; display: inline-flex; align-items: center; color: #5B6678; text-decoration: none; }
+        .pin-btn svg { width: 24px; height: 24px; display: block; transition: transform 0.12s ease; }
+        .pin-btn:hover { color: #E60023; }
+        .pin-btn:hover svg { transform: scale(1.12); }
+        h1 .pin-btn { margin-left: 0.1rem; vertical-align: -4px; }
         .fav-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
         .fav-list li { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.75rem 1rem; display: flex; align-items: center; justify-content: space-between; }
         .fav-list a { color: #1B2440; text-decoration: none; font-weight: 600; flex: 1; }
@@ -3830,7 +3843,8 @@ def footer_html() -> str:
         </div>"""
 
 
-def page(title, body, description="", canonical="", extra_head=""):
+def page(title, body, description="", canonical="", extra_head="",
+         og_image_url="", og_image_w=1200, og_image_h=630):
     desc_tag = f'\n    <meta name="description" content="{description}">' if description else ""
     canon_tag = f'\n    <link rel="canonical" href="{canonical}">' if canonical else ""
     og = ""
@@ -3839,19 +3853,20 @@ def page(title, body, description="", canonical="", extra_head=""):
         # vs /uk/ vs /au/ visually distinct in Twitter/Facebook previews,
         # without needing four separate OG images.
         og_title = f"{FLAG[ACTIVE_CC]} {title}"
+        img_url = og_image_url or f"{BASE_URL}/og-default.png"
         og = (
             f'\n    <meta property="og:title" content="{og_title}">'
             f'\n    <meta property="og:description" content="{description}">'
             f'\n    <meta property="og:type" content="website">'
             f'\n    <meta property="og:site_name" content="NameCharted">'
             f'\n    <meta property="og:locale" content="{"fr_FR" if ACTIVE_CC == "FR" else ("en_GB" if ACTIVE_CC == "GB" else ("en_AU" if ACTIVE_CC == "AU" else "en_US"))}">'
-            f'\n    <meta property="og:image" content="{BASE_URL}/og-default.png">'
-            f'\n    <meta property="og:image:width" content="1200">'
-            f'\n    <meta property="og:image:height" content="630">'
+            f'\n    <meta property="og:image" content="{img_url}">'
+            f'\n    <meta property="og:image:width" content="{og_image_w}">'
+            f'\n    <meta property="og:image:height" content="{og_image_h}">'
             f'\n    <meta name="twitter:card" content="summary_large_image">'
             f'\n    <meta name="twitter:title" content="{og_title}">'
             f'\n    <meta name="twitter:description" content="{description}">'
-            f'\n    <meta name="twitter:image" content="{BASE_URL}/og-default.png">'
+            f'\n    <meta name="twitter:image" content="{img_url}">'
         )
         if canonical:
             og += f'\n    <meta property="og:url" content="{canonical}">'
@@ -4103,6 +4118,81 @@ def related_block(label, names):
 
 
 # ---------------------------------------------------------------------------
+# Pinterest pin card — top 1000 names per country get a 1000x1500 PNG
+# ---------------------------------------------------------------------------
+def _render_pin_for(name: str, out_path: Path) -> None:
+    """Build the per-name pin from active-country data. Idempotent — callers
+    skip when out_path already exists."""
+    dom = dominant_sex(name)
+    meta = name_meta[name]
+
+    # Gender label
+    if ACTIVE_CC == 'FR':
+        gender_label = "Prénom féminin" if dom == 'F' else "Prénom masculin"
+    else:
+        gender_label = f"{loc_singular(dom).capitalize()} name"
+
+    # Origin chip text (localized) — empty if unknown
+    enrich = ENRICHMENT.get(slugify(name), {})
+    origin = enrich.get('origin')
+    origin_label = ''
+    if origin and origin in ORIGIN_LABELS_EN:
+        origin_label = origin_label_cap(origin)
+
+    # Popularity headline: prefer the more flattering of (latest rank) vs
+    # (peak rank). A historical name like Ludovic ranks #2600 today but #10
+    # at its 1970s peak — the latter is the better Pinterest hook.
+    latest_rank = rank_by_year_sex.get((LATEST_YEAR, dom), {}).get(name)
+    series = counts[name][dom]
+    peak_year = max(series, key=series.get) if series else None
+    peak_rank = rank_by_year_sex.get((peak_year, dom), {}).get(name) if peak_year else None
+    cc_short = COUNTRY_LABEL[ACTIVE_CC]
+    use_latest = latest_rank and (not peak_rank or latest_rank <= peak_rank or latest_rank <= 200)
+    if use_latest:
+        if ACTIVE_CC == 'FR':
+            popularity = f"#{latest_rank} en {cc_short}, {LATEST_YEAR}"
+        else:
+            popularity = f"#{latest_rank} in the {cc_short}, {LATEST_YEAR}"
+    elif peak_rank:
+        if ACTIVE_CC == 'FR':
+            popularity = f"#{peak_rank} en {peak_year} (apogée)"
+        else:
+            popularity = f"#{peak_rank} in {peak_year} (peak)"
+    else:
+        popularity = ""
+
+    # Peak era — skip if popularity already names the peak year (would just
+    # repeat "1977 (peak)" + "Peaked in the 1970s").
+    if not use_latest:
+        peak_era = ""
+    else:
+        peak_dec = meta.get('peak_dec')
+        peak_era = S("picker_peak_decade", d=peak_dec) if peak_dec else ""
+
+    # Sound (syllables)
+    syll = meta.get('syll') or 0
+    if syll:
+        if ACTIVE_CC == 'FR':
+            sound = f"{syll} syllabe" + ("s" if syll != 1 else "")
+        else:
+            sound = f"{syll} syllable" + ("s" if syll != 1 else "")
+    else:
+        sound = ""
+
+    render_pin(
+        out_path,
+        name=name,
+        gender_label=gender_label,
+        origin_label=origin_label,
+        popularity=popularity,
+        peak_era=peak_era,
+        sound=sound,
+        url=f"namecharted.com{PREFIX}/name/{slugify(name)}",
+        country_label=COUNTRY_NAME[ACTIVE_CC],
+    )
+
+
+# ---------------------------------------------------------------------------
 # Name page
 # ---------------------------------------------------------------------------
 def generate_name_page(name):
@@ -4251,6 +4341,29 @@ def generate_name_page(name):
     fav_btn = (f'<button class="fav-btn" data-slug="{slugify(name)}" data-name="{safe_name}" '
                f'aria-label="{S("fav_add_tip")}" title="{S("fav_add_tip")}">{heart_svg}</button>')
 
+    # Pinterest pin (Phase 14). Top-1000-per-country names get a custom
+    # 1000x1500 PNG share card; others fall back to og-default.png.
+    pin_slug = slugify(name)
+    pin_url = ""
+    pin_btn = ""
+    if name in top_pin_set:
+        pin_rel = f"{PREFIX}/pin/{pin_slug}.png"
+        pin_path = OUT_DIR / 'pin' / f'{pin_slug}.png'
+        pin_url = f"{BASE_URL}{pin_rel}"
+        if not pin_path.exists():
+            _render_pin_for(name, pin_path)
+        pin_share = (
+            f"https://www.pinterest.com/pin/create/button/"
+            f"?url={BASE_URL}{p}/name/{pin_slug}.html"
+            f"&media={pin_url}"
+            f"&description={name}%20%E2%80%94%20{COUNTRY_NAME[ACTIVE_CC].replace(' ', '%20')}%20baby%20name%20popularity%20%26%20trends"
+        )
+        pin_svg = ('<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+                   '<path d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.636 7.855 6.356 9.312-.087-.79-.166-2.005.035-2.868.181-.78 1.172-4.971 1.172-4.971s-.299-.6-.299-1.486c0-1.392.806-2.432 1.81-2.432.853 0 1.265.641 1.265 1.41 0 .859-.548 2.143-.83 3.334-.236.997.5 1.811 1.483 1.811 1.78 0 3.149-1.879 3.149-4.59 0-2.4-1.725-4.078-4.19-4.078-2.853 0-4.527 2.14-4.527 4.353 0 .863.332 1.788.748 2.291.082.099.094.186.069.287-.075.314-.243.997-.276 1.137-.043.183-.144.222-.333.134-1.244-.578-2.022-2.397-2.022-3.857 0-3.141 2.283-6.026 6.582-6.026 3.456 0 6.142 2.463 6.142 5.758 0 3.435-2.165 6.198-5.171 6.198-1.009 0-1.959-.524-2.284-1.143l-.621 2.366c-.225.866-.832 1.952-1.238 2.614C9.685 21.875 10.825 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"/>'
+                   '</svg>')
+        pin_btn = (f'<a class="pin-btn" href="{pin_share}" target="_blank" rel="noopener" '
+                   f'aria-label="{S("pin_share_tip")}" title="{S("pin_share_tip")}">{pin_svg}</a>')
+
     # Origin badge + famous people from the global ENRICHMENT map.
     enrich = ENRICHMENT.get(slugify(name), {})
     origin_badge_html = ''
@@ -4343,7 +4456,7 @@ def generate_name_page(name):
         )
 
     body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/names.html">{S("crumb_names")}</a> &rsaquo; {name}</div>
-        <h1>{name}{fav_btn}</h1>
+        <h1>{name}{fav_btn}{pin_btn}</h1>
         <p style="color:#7f8c8d; margin-top:-0.5rem;">{S("name_primarily", singular=loc_singular(dom), of_singular=singular_of)} &middot; {gender_text}</p>{variants_line}
         {origin_badge_html}
 
@@ -4380,9 +4493,11 @@ def generate_name_page(name):
 
     desc = S("name_desc", name=name, total=fmt(total), range=DATA_RANGE,
              year=peak_year, peak=fmt(peak))
+    page_kwargs = dict(description=desc, canonical=canonical, extra_head=extra_head)
+    if pin_url:
+        page_kwargs.update(og_image_url=pin_url, og_image_w=1000, og_image_h=1500)
     (OUT_DIR / 'name' / f'{slugify(name)}.html').write_text(
-        page(S("name_title", name=name), body,
-             description=desc, canonical=canonical, extra_head=extra_head),
+        page(S("name_title", name=name), body, **page_kwargs),
         encoding='utf-8')
 
 
