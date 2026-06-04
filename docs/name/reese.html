@@ -48,6 +48,15 @@
         .sitenav .brand-cc .flag { font-size: 1.05rem; line-height: 1; }
         .h1-flag { margin: 0 0.15rem; font-size: 0.8em; vertical-align: 0.1em; }
         @media (max-width: 560px) { .sitenav .brand-cc { display: none; } }
+        .nav-tools { position: relative; display: inline-block; }
+        .nav-tools-btn { background: none; border: 0; color: #EEF2F4; font-family: inherit; font-weight: 500; font-size: 1rem; cursor: pointer; padding: 0; display: inline-flex; align-items: center; gap: 0.25rem; }
+        .nav-tools-btn:hover { color: #fff; }
+        .nav-tools-caret { font-size: 0.75rem; transition: transform 0.15s ease; }
+        .nav-tools.is-open .nav-tools-caret { transform: rotate(180deg); }
+        .nav-tools-menu { display: none; position: absolute; top: 100%; left: -0.6rem; margin-top: 0.55rem; background: #1B2440; border: 1px solid #2a3656; border-radius: 8px; min-width: 200px; padding: 0.4rem 0; box-shadow: 0 8px 24px rgba(0,0,0,0.25); z-index: 50; }
+        .nav-tools.is-open .nav-tools-menu { display: block; }
+        .nav-tools-menu a { display: block; padding: 0.55rem 1rem; color: #EEF2F4; text-decoration: none; font-weight: 500; font-size: 0.95rem; white-space: nowrap; }
+        .nav-tools-menu a:hover { background: #2a3656; color: #fff; text-decoration: none; }
         .ccswitch { margin-left: auto; font-size: 0.95rem; color: #8a93a3; display: inline-flex; gap: 0.45rem; align-items: center; }
         .ccswitch a { color: #c8cfdb; text-decoration: none; }
         .ccswitch a:hover { color: #fff; }
@@ -323,14 +332,19 @@
         <a href="/trends.html">Trends</a>
         <a href="/decades.html">Decades</a>
         <a href="/year/2024.html">2024 Rankings</a>
-        <a href="/compare.html">Compare</a>
-        <a href="/works-with.html">Works with surname</a>
-        <a href="/picker.html">Name picker</a>
-        <a href="/sibling.html">Sibling ideas</a>
-        <a href="/initials.html">Initials maker</a>
-        <a href="/origins.html">Origins</a>
-        <a href="/fiction.html">Fictional names</a>
-        
+        <div class="nav-tools">
+            <button type="button" class="nav-tools-btn" aria-haspopup="true" aria-expanded="false">Tools <span class="nav-tools-caret" aria-hidden="true">▾</span></button>
+            <div class="nav-tools-menu" role="menu">
+                <a href="/compare.html" role="menuitem">Compare</a>
+                <a href="/works-with.html" role="menuitem">Works with surname</a>
+                <a href="/picker.html" role="menuitem">Name picker</a>
+                <a href="/sibling.html" role="menuitem">Sibling ideas</a>
+                <a href="/initials.html" role="menuitem">Initials maker</a>
+                <a href="/origins.html" role="menuitem">Origins</a>
+                <a href="/fiction.html" role="menuitem">Fictional names</a>
+                
+            </div>
+        </div>
         <a href="/favorites.html">Favorites<span class="fav-nav-count"></span></a>
         <span class="ccswitch"><strong><span class="flag" aria-hidden="true">🇺🇸</span>US</strong><span class="sep">·</span><a href="/fr/"><span class="flag" aria-hidden="true">🇫🇷</span>FR</a><span class="sep">·</span><a href="/uk/"><span class="flag" aria-hidden="true">🇬🇧</span>UK</a><span class="sep">·</span><a href="/au/"><span class="flag" aria-hidden="true">🇦🇺</span>AU</a></span>
     </div></div>
@@ -416,6 +430,26 @@
             <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.25rem;">Data: U.S. Social Security Administration (1880–2024)</p>
         </div>
     </div>
+    <script>
+    (function() {
+        var wrap = document.querySelector('.nav-tools');
+        if (!wrap) return;
+        var btn = wrap.querySelector('.nav-tools-btn');
+        function close() { wrap.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }
+        function toggle(e) {
+            e.stopPropagation();
+            var open = wrap.classList.toggle('is-open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+        btn.addEventListener('click', toggle);
+        document.addEventListener('click', function(e) {
+            if (!wrap.contains(e.target)) close();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') close();
+        });
+    })();
+    </script>
     <script>
     (function() {
         try {

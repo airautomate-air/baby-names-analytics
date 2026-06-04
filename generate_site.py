@@ -584,6 +584,7 @@ STRINGS_EN: dict[str, str] = {
     "nav_decades": "Decades",
     "nav_rankings": "{year} Rankings",
     "nav_favorites": "Favorites",
+    "nav_tools": "Tools",
     "nav_compare": "Compare",
     "compare_title": "Compare Two Names — NameCharted",
     "compare_h1": "Compare any two names",
@@ -960,6 +961,7 @@ STRINGS_FR: dict[str, str] = {
     "nav_decades": "Décennies",
     "nav_rankings": "Classement {year}",
     "nav_favorites": "Favoris",
+    "nav_tools": "Outils",
     "nav_compare": "Comparer",
     "compare_title": "Comparer deux prénoms — NameCharted",
     "compare_h1": "Comparez deux prénoms",
@@ -3174,6 +3176,15 @@ BASE_CSS = """
         .sitenav .brand-cc .flag { font-size: 1.05rem; line-height: 1; }
         .h1-flag { margin: 0 0.15rem; font-size: 0.8em; vertical-align: 0.1em; }
         @media (max-width: 560px) { .sitenav .brand-cc { display: none; } }
+        .nav-tools { position: relative; display: inline-block; }
+        .nav-tools-btn { background: none; border: 0; color: #EEF2F4; font-family: inherit; font-weight: 500; font-size: 1rem; cursor: pointer; padding: 0; display: inline-flex; align-items: center; gap: 0.25rem; }
+        .nav-tools-btn:hover { color: #fff; }
+        .nav-tools-caret { font-size: 0.75rem; transition: transform 0.15s ease; }
+        .nav-tools.is-open .nav-tools-caret { transform: rotate(180deg); }
+        .nav-tools-menu { display: none; position: absolute; top: 100%; left: -0.6rem; margin-top: 0.55rem; background: #1B2440; border: 1px solid #2a3656; border-radius: 8px; min-width: 200px; padding: 0.4rem 0; box-shadow: 0 8px 24px rgba(0,0,0,0.25); z-index: 50; }
+        .nav-tools.is-open .nav-tools-menu { display: block; }
+        .nav-tools-menu a { display: block; padding: 0.55rem 1rem; color: #EEF2F4; text-decoration: none; font-weight: 500; font-size: 0.95rem; white-space: nowrap; }
+        .nav-tools-menu a:hover { background: #2a3656; color: #fff; text-decoration: none; }
         .ccswitch { margin-left: auto; font-size: 0.95rem; color: #8a93a3; display: inline-flex; gap: 0.45rem; align-items: center; }
         .ccswitch a { color: #c8cfdb; text-decoration: none; }
         .ccswitch a:hover { color: #fff; }
@@ -3428,6 +3439,30 @@ def country_switcher_html() -> str:
     return '<span class="ccswitch">' + sep.join(parts) + '</span>'
 
 
+def nav_tools_script() -> str:
+    return """
+    <script>
+    (function() {
+        var wrap = document.querySelector('.nav-tools');
+        if (!wrap) return;
+        var btn = wrap.querySelector('.nav-tools-btn');
+        function close() { wrap.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }
+        function toggle(e) {
+            e.stopPropagation();
+            var open = wrap.classList.toggle('is-open');
+            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+        btn.addEventListener('click', toggle);
+        document.addEventListener('click', function(e) {
+            if (!wrap.contains(e.target)) close();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') close();
+        });
+    })();
+    </script>"""
+
+
 def site_nav_html() -> str:
     p = PREFIX
     return f"""
@@ -3438,14 +3473,19 @@ def site_nav_html() -> str:
         <a href="{p}/trends.html">{S("nav_trends")}</a>
         <a href="{p}/decades.html">{S("nav_decades")}</a>
         <a href="{p}/year/{LATEST_YEAR}.html">{S("nav_rankings", year=LATEST_YEAR)}</a>
-        <a href="{p}/compare.html">{S("nav_compare")}</a>
-        <a href="{p}/works-with.html">{S("nav_works_with")}</a>
-        <a href="{p}/picker.html">{S("nav_picker")}</a>
-        <a href="{p}/sibling.html">{S("nav_sibling")}</a>
-        <a href="{p}/initials.html">{S("nav_initials")}</a>
-        <a href="{p}/origins.html">{S("nav_origins")}</a>
-        <a href="{p}/fiction.html">{S("nav_fiction")}</a>
-        {f'<a href="{p}/jour-de-fete.html">{S("nav_saints")}</a>' if ACTIVE_CC == 'FR' else ''}
+        <div class="nav-tools">
+            <button type="button" class="nav-tools-btn" aria-haspopup="true" aria-expanded="false">{S("nav_tools")} <span class="nav-tools-caret" aria-hidden="true">▾</span></button>
+            <div class="nav-tools-menu" role="menu">
+                <a href="{p}/compare.html" role="menuitem">{S("nav_compare")}</a>
+                <a href="{p}/works-with.html" role="menuitem">{S("nav_works_with")}</a>
+                <a href="{p}/picker.html" role="menuitem">{S("nav_picker")}</a>
+                <a href="{p}/sibling.html" role="menuitem">{S("nav_sibling")}</a>
+                <a href="{p}/initials.html" role="menuitem">{S("nav_initials")}</a>
+                <a href="{p}/origins.html" role="menuitem">{S("nav_origins")}</a>
+                <a href="{p}/fiction.html" role="menuitem">{S("nav_fiction")}</a>
+                {f'<a href="{p}/jour-de-fete.html" role="menuitem">{S("nav_saints")}</a>' if ACTIVE_CC == 'FR' else ''}
+            </div>
+        </div>
         <a href="{p}/favorites.html">{S("nav_favorites")}<span class="fav-nav-count"></span></a>
         {country_switcher_html()}
     </div></div>"""
@@ -3498,7 +3538,7 @@ def page(title, body, description="", canonical="", extra_head=""):
     <div class="container">
 {body}
 {footer_html()}
-    </div>{lang_banner_script()}{favorites_script()}{compare_script()}{works_with_script()}{picker_script()}{sibling_script()}{saints_script()}{initials_script()}
+    </div>{nav_tools_script()}{lang_banner_script()}{favorites_script()}{compare_script()}{works_with_script()}{picker_script()}{sibling_script()}{saints_script()}{initials_script()}
 </body>
 </html>"""
 
