@@ -300,6 +300,150 @@ def load_fiction() -> None:
           f'{sum(len(f.get("names", [])) for f in FICTION.get("franchises", []))} characters')
 
 
+# Blog posts (Phase 19). Loaded from data/blog/*.md, served per-country
+# under /blog/. Each post has YAML-style frontmatter and a Markdown body.
+BLOG_POSTS_BY_CC: dict[str, list[dict]] = {cc: [] for cc in COUNTRIES}
+
+
+def _parse_blog_frontmatter(text: str) -> tuple[dict, str]:
+    """Split a post into (frontmatter dict, body markdown). Frontmatter is
+    a minimal YAML subset: key: value lines between leading `---` markers."""
+    if not text.startswith('---'):
+        return {}, text
+    end = text.find('\n---', 4)
+    if end < 0:
+        return {}, text
+    front = text[3:end].strip()
+    body = text[end + 4:].lstrip('\n')
+    meta: dict = {}
+    for line in front.splitlines():
+        if ':' not in line:
+            continue
+        k, v = line.split(':', 1)
+        meta[k.strip()] = v.strip().strip('"\'')
+    if 'tags' in meta:
+        meta['tags'] = [t.strip() for t in meta['tags'].strip('[]').split(',') if t.strip()]
+    return meta, body
+
+
+_MD_LINK = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+_MD_BOLD = re.compile(r'\*\*([^*]+)\*\*')
+_MD_ITAL = re.compile(r'(?<!\*)\*([^*]+)\*(?!\*)')
+_MD_CODE = re.compile(r'`([^`]+)`')
+
+
+def _md_inline(s: str) -> str:
+    """Escape HTML then apply inline markdown (links, bold, italic, code)."""
+    s = (s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'))
+    s = _MD_LINK.sub(r'<a href="\2">\1</a>', s)
+    s = _MD_BOLD.sub(r'<strong>\1</strong>', s)
+    s = _MD_ITAL.sub(r'<em>\1</em>', s)
+    s = _MD_CODE.sub(r'<code>\1</code>', s)
+    return s
+
+
+def md_to_html(body: str) -> str:
+    """Tiny Markdown → HTML renderer. Supports headings (## / ###), bullet
+    and numbered lists, blockquotes (>), horizontal rules (---), and
+    paragraphs. Inline: [link](href), **bold**, *italic*, `code`."""
+    out: list[str] = []
+    lines = body.splitlines()
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        stripped = line.strip()
+        if not stripped:
+            i += 1
+            continue
+        if stripped.startswith('### '):
+            out.append(f'<h3>{_md_inline(stripped[4:])}</h3>')
+            i += 1
+        elif stripped.startswith('## '):
+            out.append(f'<h2>{_md_inline(stripped[3:])}</h2>')
+            i += 1
+        elif stripped.startswith('# '):
+            out.append(f'<h1>{_md_inline(stripped[2:])}</h1>')
+            i += 1
+        elif stripped in ('---', '***'):
+            out.append('<hr>')
+            i += 1
+        elif stripped.startswith('> '):
+            block = []
+            while i < len(lines) and lines[i].strip().startswith('> '):
+                block.append(_md_inline(lines[i].strip()[2:]))
+                i += 1
+            out.append(f'<blockquote><p>{" ".join(block)}</p></blockquote>')
+        elif stripped.startswith(('- ', '* ')):
+            items = []
+            while i < len(lines) and lines[i].strip().startswith(('- ', '* ')):
+                items.append(f'<li>{_md_inline(lines[i].strip()[2:])}</li>')
+                i += 1
+            out.append('<ul>' + ''.join(items) + '</ul>')
+        elif (stripped.startswith('|') and stripped.endswith('|')
+              and i + 1 < len(lines)
+              and re.match(r'^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?\s*$', lines[i + 1])):
+            # Markdown table: header row, separator, then body rows.
+            def cells(row):
+                return [c.strip() for c in row.strip().strip('|').split('|')]
+            header = cells(lines[i])
+            i += 2  # skip header + separator
+            body_rows = []
+            while i < len(lines) and lines[i].strip().startswith('|'):
+                body_rows.append(cells(lines[i]))
+                i += 1
+            head_html = '<tr>' + ''.join(f'<th>{_md_inline(c)}</th>' for c in header) + '</tr>'
+            body_html = ''.join(
+                '<tr>' + ''.join(f'<td>{_md_inline(c)}</td>' for c in row) + '</tr>'
+                for row in body_rows
+            )
+            out.append(f'<table class="blog-table"><thead>{head_html}</thead><tbody>{body_html}</tbody></table>')
+        elif re.match(r'^\d+\.\s', stripped):
+            items = []
+            while i < len(lines) and re.match(r'^\s*\d+\.\s', lines[i]):
+                content = re.sub(r'^\s*\d+\.\s', '', lines[i])
+                items.append(f'<li>{_md_inline(content)}</li>')
+                i += 1
+            out.append('<ol>' + ''.join(items) + '</ol>')
+        else:
+            para = [stripped]
+            i += 1
+            while i < len(lines) and lines[i].strip() and not lines[i].strip().startswith(
+                    ('#', '>', '- ', '* ', '---', '***')) and not re.match(
+                        r'^\s*\d+\.\s', lines[i]):
+                para.append(lines[i].strip())
+                i += 1
+            out.append(f'<p>{_md_inline(" ".join(para))}</p>')
+    return '\n'.join(out)
+
+
+def load_blog() -> None:
+    """Read data/blog/*.md, parse frontmatter + body, sort by date desc per
+    country. Each post needs: title, slug, date (YYYY-MM-DD), description,
+    country (US|FR|GB|AU|CA). Optional: tags."""
+    d = Path('data/blog')
+    if not d.is_dir():
+        return
+    n_total = 0
+    for f in sorted(d.glob('*.md')):
+        meta, body = _parse_blog_frontmatter(f.read_text(encoding='utf-8'))
+        cc = meta.get('country')
+        if cc not in BLOG_POSTS_BY_CC:
+            print(f'  blog: skip {f.name} (country={cc!r} unknown)')
+            continue
+        for required in ('title', 'slug', 'date', 'description'):
+            if not meta.get(required):
+                print(f'  blog: skip {f.name} (missing {required})')
+                break
+        else:
+            meta['body'] = body
+            meta['html'] = md_to_html(body)
+            BLOG_POSTS_BY_CC[cc].append(meta)
+            n_total += 1
+    for cc in COUNTRIES:
+        BLOG_POSTS_BY_CC[cc].sort(key=lambda p: p['date'], reverse=True)
+    print(f'  blog: {n_total} posts across {sum(1 for cc in COUNTRIES if BLOG_POSTS_BY_CC[cc])} countries')
+
+
 # Saint-of-the-day calendar (Phase 6i, FR-only).
 SAINTS_FR: dict[str, str] = {}        # 'MM-DD' -> 'Marie'
 SAINT_TO_DATES: dict[str, list[str]] = {}  # 'marie' -> ['01-01', '08-15', ...]
@@ -800,6 +944,13 @@ STRINGS_EN: dict[str, str] = {
     "fav_remove_tip": "Remove from favorites",
     "pin_share_tip": "Save to Pinterest",
     "pin_share_label": "Save to Pinterest",
+    "blog_h1": "Stories & lists",
+    "blog_title": "Baby name stories & lists — NameCharted",
+    "blog_intro": "Trends, vintage comebacks, and curated lists from the NameCharted data.",
+    "blog_desc": "Editorial posts on baby name trends — rising names, vintage comebacks, decade lookbacks — built from official rankings.",
+    "blog_read_more": "Read",
+    "blog_back": "Back to all posts",
+    "nav_blog": "Blog",
     "fav_h1": "Your saved names",
     "fav_title": "Your saved names — NameCharted",
     "fav_desc": "Your personal shortlist of saved names.",
@@ -1230,6 +1381,13 @@ STRINGS_FR: dict[str, str] = {
     "fav_remove_tip": "Retirer des favoris",
     "pin_share_tip": "Épingler sur Pinterest",
     "pin_share_label": "Épingler",
+    "blog_h1": "Histoires et palmarès",
+    "blog_title": "Histoires et palmarès de prénoms — NameCharted",
+    "blog_intro": "Tendances, retours en vogue et listes thématiques tirées des données NameCharted.",
+    "blog_desc": "Articles éditoriaux sur les prénoms : tendances, retours en vogue, palmarès par décennie — basés sur les classements officiels.",
+    "blog_read_more": "Lire",
+    "blog_back": "Retour à tous les articles",
+    "nav_blog": "Blog",
     "fav_h1": "Vos prénoms enregistrés",
     "fav_title": "Vos prénoms enregistrés — NameCharted",
     "fav_desc": "Votre liste personnelle de prénoms favoris.",
@@ -3714,6 +3872,32 @@ BASE_CSS = """
         .fav-btn.is-fav .heart-empty { display: none; }
         .fav-btn:not(.is-fav) .heart-full { display: none; }
         h1 .fav-btn { margin-left: 0.5rem; vertical-align: -4px; }
+        .blog-list { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1.5rem 0; }
+        @media (min-width: 720px) { .blog-list { grid-template-columns: 1fr 1fr; } }
+        .blog-card { background: #fff; border: 1px solid #d6dde2; border-radius: 10px; padding: 1.1rem 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; }
+        .blog-card h3 { margin: 0; color: #1B2440; font-size: 1.2rem; line-height: 1.3; }
+        .blog-card a { text-decoration: none; }
+        .blog-card a:hover h3 { color: #149E91; }
+        .blog-card p { margin: 0; color: #5B6678; font-size: 0.95rem; }
+        .blog-meta { font-size: 0.78rem; color: #8A93A3; letter-spacing: 0.04em; text-transform: uppercase; }
+        .blog-readmore { color: #149E91; font-weight: 600; margin-top: 0.25rem; font-size: 0.9rem; }
+        .blog-post { max-width: 720px; }
+        .blog-post h1 { font-size: 2.1rem; line-height: 1.2; margin-bottom: 0.25rem; }
+        .blog-post h2 { font-size: 1.45rem; margin-top: 2rem; }
+        .blog-post h3 { font-size: 1.15rem; margin-top: 1.5rem; }
+        .blog-post p, .blog-post li { font-size: 1.02rem; line-height: 1.65; color: #2a3548; }
+        .blog-post ul, .blog-post ol { padding-left: 1.4rem; }
+        .blog-post a { color: #149E91; }
+        .blog-post a:hover { text-decoration: underline; }
+        .blog-post blockquote { border-left: 4px solid #149E91; margin: 1.25rem 0; padding: 0.4rem 1rem; background: #EFF8F6; border-radius: 0 6px 6px 0; color: #2a3548; }
+        .blog-table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.95rem; }
+        .blog-table th, .blog-table td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid #e3e7ec; }
+        .blog-table th { background: #f5f7f9; color: #1B2440; font-weight: 600; }
+        .blog-table tbody tr:hover { background: #fafbfc; }
+        .blog-post hr { border: 0; border-top: 1px solid #d6dde2; margin: 2rem 0; }
+        .blog-back { margin-top: 2rem; }
+        .blog-back a { color: #5B6678; text-decoration: none; }
+        .blog-back a:hover { color: #149E91; }
         .pin-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: #E60023; color: #fff; border: 0; border-radius: 999px; padding: 0.45rem 1rem 0.45rem 0.85rem; font-weight: 600; font-size: 0.92rem; text-decoration: none; cursor: pointer; transition: background 0.12s ease, transform 0.12s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
         .pin-btn svg { width: 18px; height: 18px; display: block; }
         .pin-btn:hover { background: #ad081b; transform: translateY(-1px); }
@@ -4031,6 +4215,7 @@ def site_nav_html() -> str:
         <a href="{p}/trends.html">{S("nav_trends")}</a>
         <a href="{p}/decades.html">{S("nav_decades")}</a>
         <a href="{p}/year/{LATEST_YEAR}.html">{S("nav_rankings", year=LATEST_YEAR)}</a>
+        {f'<a href="{p}/blog/">{S("nav_blog")}</a>' if BLOG_POSTS_BY_CC.get(ACTIVE_CC) else ''}
         <div class="nav-tools">
             <button type="button" class="nav-tools-btn" aria-haspopup="true" aria-expanded="false">{S("nav_tools")} <span class="nav-tools-caret" aria-hidden="true">▾</span></button>
             <div class="nav-tools-menu" role="menu">
@@ -6158,6 +6343,81 @@ def generate_fiction_franchise_page(fr: dict) -> None:
 # ---------------------------------------------------------------------------
 # Single 404 (country-neutral), single sitemap + robots (root)
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Blog (/blog/) — markdown posts from data/blog/*.md, per-country.
+# ---------------------------------------------------------------------------
+def _blog_date_display(iso: str) -> str:
+    """'2026-06-05' → 'June 5, 2026' (English) or '5 juin 2026' (French)."""
+    try:
+        from datetime import date
+        d = date.fromisoformat(iso)
+    except (ValueError, TypeError):
+        return iso
+    if ACTIVE_CC == 'FR':
+        months = ["janvier", "février", "mars", "avril", "mai", "juin",
+                  "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
+        return f"{d.day} {months[d.month - 1]} {d.year}"
+    months = ["January", "February", "March", "April", "May", "June",
+              "July", "August", "September", "October", "November", "December"]
+    return f"{months[d.month - 1]} {d.day}, {d.year}"
+
+
+def generate_blog_index():
+    posts = BLOG_POSTS_BY_CC.get(ACTIVE_CC, [])
+    if not posts:
+        return
+    p = PREFIX
+    items = []
+    for post in posts:
+        items.append(
+            f'<li class="blog-card">'
+            f'<a href="{p}/blog/{post["slug"]}.html"><h3>{post["title"]}</h3></a>'
+            f'<p class="blog-meta">{_blog_date_display(post["date"])}</p>'
+            f'<p>{post["description"]}</p>'
+            f'<a class="blog-readmore" href="{p}/blog/{post["slug"]}.html">{S("blog_read_more")} →</a>'
+            f'</li>'
+        )
+    body = (
+        f'        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("blog_h1")}</div>\n'
+        f'        <h1>{S("blog_h1")}</h1>\n'
+        f'        <p>{S("blog_intro")}</p>\n'
+        f'        <ul class="blog-list">{"".join(items)}</ul>'
+    )
+    (OUT_DIR / 'blog').mkdir(parents=True, exist_ok=True)
+    (OUT_DIR / 'blog' / 'index.html').write_text(
+        page(S("blog_title"), body,
+             description=S("blog_desc"),
+             canonical=f"{BASE_URL}{p}/blog/"),
+        encoding='utf-8')
+
+
+def generate_blog_post(post: dict):
+    p = PREFIX
+    canonical = f"{BASE_URL}{p}/blog/{post['slug']}.html"
+    # Internal links in markdown that start with "/name/..." get prefixed so
+    # they land on the active country's tree (FR posts → /fr/name/...).
+    html = post['html']
+    if p:
+        html = re.sub(r'href="(/(?:name|similar|origin|fiction|year|decade|letter)/[^"]+)"',
+                      lambda m: f'href="{p}{m.group(1)}"', html)
+    body = (
+        f'        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; '
+        f'<a href="{p}/blog/">{S("blog_h1")}</a> &rsaquo; {post["title"]}</div>\n'
+        f'        <article class="blog-post">\n'
+        f'            <h1>{post["title"]}</h1>\n'
+        f'            <p class="blog-meta">{_blog_date_display(post["date"])}</p>\n'
+        f'            {html}\n'
+        f'        </article>\n'
+        f'        <p class="blog-back"><a href="{p}/blog/">← {S("blog_back")}</a></p>'
+    )
+    (OUT_DIR / 'blog').mkdir(parents=True, exist_ok=True)
+    (OUT_DIR / 'blog' / f'{post["slug"]}.html').write_text(
+        page(post['title'] + ' — NameCharted', body,
+             description=post['description'],
+             canonical=canonical),
+        encoding='utf-8')
+
+
 def generate_favorites_page():
     """Empty shell — JS fills in the list from localStorage on load.
     noindex so search engines don't try to crawl an empty page."""
@@ -6230,6 +6490,9 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
     if cc == 'FR' and SAINTS_FR:
         urls.append(f"{BASE_URL}{p}/jour-de-fete.html")
         urls += [f"{BASE_URL}{p}/saint/{s}.html" for s in SAINT_TO_DATES.keys()]
+    if BLOG_POSTS_BY_CC.get(cc):
+        urls.append(f"{BASE_URL}{p}/blog/")
+        urls += [f"{BASE_URL}{p}/blog/{post['slug']}.html" for post in BLOG_POSTS_BY_CC[cc]]
     urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
     urls += [f"{BASE_URL}{p}/year/{y}.html" for y in years_by_country[cc]]
@@ -6332,6 +6595,10 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
 
     generate_rare_names_page()
     generate_favorites_page()
+    if BLOG_POSTS_BY_CC.get(ACTIVE_CC):
+        generate_blog_index()
+        for post in BLOG_POSTS_BY_CC[ACTIVE_CC]:
+            generate_blog_post(post)
     generate_compare_page()
     generate_works_with_page()
     generate_picker_page()
@@ -6368,6 +6635,7 @@ def main():
     load_enrichment()
     load_fiction()
     load_saints_fr()
+    load_blog()
     for cc in COUNTRIES:
         build_country(cc)
     build_presence_indices()

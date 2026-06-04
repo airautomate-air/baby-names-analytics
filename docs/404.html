@@ -78,6 +78,32 @@
         .fav-btn.is-fav .heart-empty { display: none; }
         .fav-btn:not(.is-fav) .heart-full { display: none; }
         h1 .fav-btn { margin-left: 0.5rem; vertical-align: -4px; }
+        .blog-list { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1.5rem 0; }
+        @media (min-width: 720px) { .blog-list { grid-template-columns: 1fr 1fr; } }
+        .blog-card { background: #fff; border: 1px solid #d6dde2; border-radius: 10px; padding: 1.1rem 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; }
+        .blog-card h3 { margin: 0; color: #1B2440; font-size: 1.2rem; line-height: 1.3; }
+        .blog-card a { text-decoration: none; }
+        .blog-card a:hover h3 { color: #149E91; }
+        .blog-card p { margin: 0; color: #5B6678; font-size: 0.95rem; }
+        .blog-meta { font-size: 0.78rem; color: #8A93A3; letter-spacing: 0.04em; text-transform: uppercase; }
+        .blog-readmore { color: #149E91; font-weight: 600; margin-top: 0.25rem; font-size: 0.9rem; }
+        .blog-post { max-width: 720px; }
+        .blog-post h1 { font-size: 2.1rem; line-height: 1.2; margin-bottom: 0.25rem; }
+        .blog-post h2 { font-size: 1.45rem; margin-top: 2rem; }
+        .blog-post h3 { font-size: 1.15rem; margin-top: 1.5rem; }
+        .blog-post p, .blog-post li { font-size: 1.02rem; line-height: 1.65; color: #2a3548; }
+        .blog-post ul, .blog-post ol { padding-left: 1.4rem; }
+        .blog-post a { color: #149E91; }
+        .blog-post a:hover { text-decoration: underline; }
+        .blog-post blockquote { border-left: 4px solid #149E91; margin: 1.25rem 0; padding: 0.4rem 1rem; background: #EFF8F6; border-radius: 0 6px 6px 0; color: #2a3548; }
+        .blog-table { width: 100%; border-collapse: collapse; margin: 1.25rem 0; font-size: 0.95rem; }
+        .blog-table th, .blog-table td { padding: 0.55rem 0.7rem; text-align: left; border-bottom: 1px solid #e3e7ec; }
+        .blog-table th { background: #f5f7f9; color: #1B2440; font-weight: 600; }
+        .blog-table tbody tr:hover { background: #fafbfc; }
+        .blog-post hr { border: 0; border-top: 1px solid #d6dde2; margin: 2rem 0; }
+        .blog-back { margin-top: 2rem; }
+        .blog-back a { color: #5B6678; text-decoration: none; }
+        .blog-back a:hover { color: #149E91; }
         .pin-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: #E60023; color: #fff; border: 0; border-radius: 999px; padding: 0.45rem 1rem 0.45rem 0.85rem; font-weight: 600; font-size: 0.92rem; text-decoration: none; cursor: pointer; transition: background 0.12s ease, transform 0.12s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
         .pin-btn svg { width: 18px; height: 18px; display: block; }
         .pin-btn:hover { background: #ad081b; transform: translateY(-1px); }
@@ -354,6 +380,7 @@
         <a href="/trends.html">Trends</a>
         <a href="/decades.html">Decades</a>
         <a href="/year/2024.html">2024 Rankings</a>
+        <a href="/blog/">Blog</a>
         <div class="nav-tools">
             <button type="button" class="nav-tools-btn" aria-haspopup="true" aria-expanded="false">Tools <span class="nav-tools-caret" aria-hidden="true">▾</span></button>
             <div class="nav-tools-menu" role="menu">
