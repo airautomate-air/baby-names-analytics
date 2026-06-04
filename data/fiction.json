@@ -385,6 +385,61 @@
         {"name": "Matthew", "role": "Matthew — evangelist"},
         {"name": "Luke", "role": "Luke — evangelist, physician"}
       ]
+    },
+    {
+      "slug": "les-miserables",
+      "title": "Les Misérables",
+      "kind": "books",
+      "year": 1862,
+      "blurb": "Victor Hugo's nineteenth-century epic — convict turned mayor, his ward, a relentless inspector, and the June rebellion of 1832.",
+      "names": [
+        {"name": "Jean", "role": "Jean Valjean — paroled convict, the moral centre"},
+        {"name": "Cosette", "role": "Cosette — Valjean's adopted daughter"},
+        {"name": "Marius", "role": "Marius Pontmercy — student revolutionary"},
+        {"name": "Fantine", "role": "Fantine — Cosette's mother"},
+        {"name": "Eponine", "role": "Éponine — Thénardier's daughter, in love with Marius"},
+        {"name": "Javert", "role": "Inspector Javert — relentless pursuer of Valjean"},
+        {"name": "Enjolras", "role": "Enjolras — leader of Les Amis de l'ABC"},
+        {"name": "Gavroche", "role": "Gavroche — street urchin of the barricades"}
+      ]
+    },
+    {
+      "slug": "le-petit-prince",
+      "title": "Le Petit Prince",
+      "kind": "books",
+      "year": 1943,
+      "blurb": "Antoine de Saint-Exupéry's most-translated French book — a pilot crashes in the Sahara and meets a boy from an asteroid.",
+      "names": [
+        {"name": "Antoine", "role": "Antoine de Saint-Exupéry — the author, framed as the pilot-narrator"}
+      ]
+    },
+    {
+      "slug": "don-quijote",
+      "title": "Don Quijote",
+      "kind": "books",
+      "year": 1605,
+      "blurb": "Cervantes' founding novel of Spanish literature — an aging hidalgo loses himself in chivalric romance and sets off to right imagined wrongs.",
+      "names": [
+        {"name": "Alonso", "role": "Alonso Quijano — the gentleman who becomes Don Quijote"},
+        {"name": "Sancho", "role": "Sancho Panza — the loyal squire"},
+        {"name": "Dulcinea", "role": "Dulcinea del Toboso — Quijote's idealised love"},
+        {"name": "Teresa", "role": "Teresa Panza — Sancho's wife"}
+      ]
+    },
+    {
+      "slug": "la-casa-de-papel",
+      "title": "La Casa de Papel (Money Heist)",
+      "kind": "tv",
+      "year": 2017,
+      "blurb": "The Netflix-fueled Spanish heist series. The crew take city names as codenames — the show made Tokyo, Berlin and Helsinki sound like first names.",
+      "names": [
+        {"name": "Sergio", "role": "Sergio Marquina — El Profesor, mastermind of the heist"},
+        {"name": "Raquel", "role": "Raquel Murillo — police inspector turned ally"},
+        {"name": "Andres", "role": "Andrés de Fonollosa — Berlin, the Professor's brother"},
+        {"name": "Silene", "role": "Silene Oliveira — Tokyo, the narrator"},
+        {"name": "Aníbal", "role": "Aníbal Cortés — Rio, the youngest of the crew"},
+        {"name": "Mónica", "role": "Mónica Gaztambide — Stockholm, hostage turned member"}
+      ]
     }
   ]
 }

@@ -21,27 +21,28 @@ from pin_renderer import render_pin
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-COUNTRIES = ["US", "FR", "GB", "AU", "CA"]
+COUNTRIES = ["US", "FR", "GB", "AU", "CA", "ES"]
 # URL slug per country. US is empty (root). GB exposes /uk/ for branding.
-COUNTRY_SLUG = {"US": "", "FR": "fr", "GB": "uk", "AU": "au", "CA": "ca"}
-COUNTRY_LABEL = {"US": "US", "FR": "FR", "GB": "UK", "AU": "AU", "CA": "CA"}
+COUNTRY_SLUG = {"US": "", "FR": "fr", "GB": "uk", "AU": "au", "CA": "ca", "ES": "es"}
+COUNTRY_LABEL = {"US": "US", "FR": "FR", "GB": "UK", "AU": "AU", "CA": "CA", "ES": "ES"}
 COUNTRY_NAME = {"US": "United States", "FR": "France", "GB": "United Kingdom",
-                "AU": "Australia", "CA": "Canada"}
-FLAG = {"US": "🇺🇸", "FR": "🇫🇷", "GB": "🇬🇧", "AU": "🇦🇺", "CA": "🇨🇦"}
+                "AU": "Australia", "CA": "Canada", "ES": "Spain"}
+FLAG = {"US": "🇺🇸", "FR": "🇫🇷", "GB": "🇬🇧", "AU": "🇦🇺", "CA": "🇨🇦", "ES": "🇪🇸"}
 # Country names rendered in each UI language (for the homepage cross-country callout).
 COUNTRY_NAMES_EN = {"US": "United States", "FR": "France", "GB": "UK",
-                    "AU": "Australia", "CA": "Canada"}
+                    "AU": "Australia", "CA": "Canada", "ES": "Spain"}
 COUNTRY_NAMES_FR = {"US": "États-Unis", "FR": "France", "GB": "Royaume-Uni",
-                    "AU": "Australie", "CA": "Canada"}
+                    "AU": "Australie", "CA": "Canada", "ES": "Espagne"}
 COUNTRY_NAMES_IN_UI = {"US": COUNTRY_NAMES_EN, "FR": COUNTRY_NAMES_FR,
                        "GB": COUNTRY_NAMES_EN, "AU": COUNTRY_NAMES_EN,
-                       "CA": COUNTRY_NAMES_EN}
+                       "CA": COUNTRY_NAMES_EN, "ES": COUNTRY_NAMES_EN}
 DATA_SOURCE_FULL = {
     "US": "U.S. Social Security Administration",
     "FR": "INSEE (France)",
     "GB": "UK Office for National Statistics",
     "AU": "NSW BDM + VIC BDM (Australia)",
     "CA": "Statistics Canada (Canadian Vital Statistics)",
+    "ES": "INE Padrón (Spain) — decadal totals",
 }
 DATA_SOURCE_SHORT = {
     "US": "official SSA",
@@ -49,6 +50,7 @@ DATA_SOURCE_SHORT = {
     "GB": "official ONS",
     "AU": "official NSW & VIC BDM",
     "CA": "official StatCan",
+    "ES": "official INE",
 }
 
 DATA_DIR = Path('data/normalized')
@@ -677,7 +679,7 @@ YEARS_SET_BY_CC: dict[str, set[int]] = {}
 DECADES_SET_BY_CC: dict[str, set[int]] = {}
 LETTERS_BY_CC: dict[str, set[tuple[str, str]]] = {}  # (sex_code, uppercase_letter)
 
-HREFLANG = {"US": "en-US", "FR": "fr-FR", "GB": "en-GB", "AU": "en-AU", "CA": "en-CA"}
+HREFLANG = {"US": "en-US", "FR": "fr-FR", "GB": "en-GB", "AU": "en-AU", "CA": "en-CA", "ES": "es-ES"}
 
 
 def build_presence_indices() -> None:
@@ -1810,7 +1812,7 @@ STRINGS_FR: dict[str, str] = {
 }
 
 STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN,
-           "AU": STRINGS_EN, "CA": STRINGS_EN}
+           "AU": STRINGS_EN, "CA": STRINGS_EN, "ES": STRINGS_EN}
 
 # Gendered forms per language. Used for "girls"/"filles", "boy's"/"de garçon", etc.
 # URL slugs always use the English form ('girls'/'boys') for cross-country URL parity.
@@ -1827,7 +1829,7 @@ GENDERED_FR = {
     "of_singular_F": "de fille", "of_singular_M": "de garçon",
 }
 GENDERED = {"US": GENDERED_EN, "FR": GENDERED_FR, "GB": GENDERED_EN,
-            "AU": GENDERED_EN, "CA": GENDERED_EN}
+            "AU": GENDERED_EN, "CA": GENDERED_EN, "ES": GENDERED_EN}
 
 # Origin-slug → display label per UI language. Slugs come from
 # data/normalized/name_enrichment.json (built by fetchers/enrich_wikidata.py).
@@ -1864,7 +1866,7 @@ NUMEROLOGY_TRAITS_FR: dict[int, tuple[str, str]] = {
 }
 NUMEROLOGY_TRAITS = {"US": NUMEROLOGY_TRAITS_EN, "FR": NUMEROLOGY_TRAITS_FR,
                      "GB": NUMEROLOGY_TRAITS_EN, "AU": NUMEROLOGY_TRAITS_EN,
-                     "CA": NUMEROLOGY_TRAITS_EN}
+                     "CA": NUMEROLOGY_TRAITS_EN, "ES": NUMEROLOGY_TRAITS_EN}
 
 
 ORIGIN_LABELS_EN: dict[str, str] = {
@@ -1961,7 +1963,7 @@ ORIGIN_LABELS_FR: dict[str, str] = {
 }
 ORIGIN_LABELS = {"US": ORIGIN_LABELS_EN, "FR": ORIGIN_LABELS_FR,
                  "GB": ORIGIN_LABELS_EN, "AU": ORIGIN_LABELS_EN,
-                 "CA": ORIGIN_LABELS_EN}
+                 "CA": ORIGIN_LABELS_EN, "ES": ORIGIN_LABELS_EN}
 
 
 # Common surnames per country, grouped by first letter — used by the
@@ -2067,6 +2069,29 @@ SURNAMES_BY_CC: dict[str, dict[str, list[str]]] = {
         "T": ["Taylor", "Thomas", "Thompson", "Turner"],
         "W": ["Williams", "Wilson", "Walker", "Wright", "Walsh"],
         "Y": ["Young"],
+    },
+    "ES": {
+        "A": ["Álvarez", "Alonso", "Aguilar"],
+        "B": ["Blanco", "Bravo", "Bello"],
+        "C": ["Castillo", "Cruz", "Castro", "Calvo", "Carmona"],
+        "D": ["Díaz", "Domínguez", "Delgado"],
+        "E": ["Esteban", "Escobar"],
+        "F": ["Fernández", "Flores", "Fuentes"],
+        "G": ["García", "González", "Gómez", "Gutiérrez", "Giménez"],
+        "H": ["Hernández", "Herrera", "Hidalgo"],
+        "I": ["Iglesias", "Ibáñez"],
+        "J": ["Jiménez", "Juárez"],
+        "L": ["López", "León", "Lozano", "Luna"],
+        "M": ["Martín", "Martínez", "Mora", "Moreno", "Molina", "Muñoz"],
+        "N": ["Navarro", "Núñez"],
+        "O": ["Ortega", "Ortiz", "Ojeda"],
+        "P": ["Pérez", "Prieto", "Parra", "Pascual"],
+        "R": ["Rodríguez", "Ramírez", "Ruiz", "Reyes", "Romero"],
+        "S": ["Sánchez", "Suárez", "Serrano", "Salazar"],
+        "T": ["Torres", "Torre"],
+        "V": ["Vázquez", "Vega", "Vidal"],
+        "Y": ["Yáñez"],
+        "Z": ["Zamora", "Zúñiga"],
     },
     "CA": {
         "A": ["Anderson", "Adams", "Allen"],
