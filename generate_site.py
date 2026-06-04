@@ -78,6 +78,36 @@ def count_syllables(name: str) -> int:
     return max(1, n)
 
 
+# Pythagorean numerology — letter-to-number map, A=1 … I=9, repeating.
+_NUMEROLOGY_MAP = {c: (i % 9) + 1 for i, c in enumerate('abcdefghijklmnopqrstuvwxyz')}
+_VOWELS = set('aeiouy')
+
+
+def _reduce_numerology(n: int) -> int:
+    """Reduce a sum to a single digit (1-9), preserving the 'master numbers'
+    11, 22, 33 which numerology treats as standalone meanings."""
+    while n > 9 and n not in (11, 22, 33):
+        n = sum(int(d) for d in str(n))
+    return n
+
+
+def numerology_numbers(name: str) -> tuple[int, int, int]:
+    """Returns (destiny, soul_urge, personality):
+      destiny     — sum of ALL letters (life path / expression number)
+      soul_urge   — sum of VOWELS only
+      personality — sum of CONSONANTS only
+    Diacritics are folded; non-letters are ignored."""
+    s = unicodedata.normalize('NFD', name.lower())
+    s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
+    letters = [c for c in s if 'a' <= c <= 'z']
+    if not letters:
+        return (0, 0, 0)
+    destiny = _reduce_numerology(sum(_NUMEROLOGY_MAP[c] for c in letters))
+    soul = _reduce_numerology(sum(_NUMEROLOGY_MAP[c] for c in letters if c in _VOWELS))
+    pers = _reduce_numerology(sum(_NUMEROLOGY_MAP[c] for c in letters if c not in _VOWELS))
+    return (destiny, soul, pers)
+
+
 def phonetic_key(name: str) -> str:
     """Metaphone-flavoured phonetic skeleton tuned for given names.
 
@@ -1049,6 +1079,18 @@ STRINGS_EN: dict[str, str] = {
     "name_origin_badge": "Origin: {label}",
     "name_meaning_h2": "Meaning",
     "name_meaning_source": "From Wikipedia",
+    "numerology_h2": "Numerology of {name}",
+    "numerology_intro": ("In Pythagorean numerology, every letter has a value "
+                          "from 1 to 9. Adding the letters of <strong>{name}</strong> "
+                          "yields these three numbers — a playful read on the "
+                          "name's character."),
+    "numerology_destiny_lbl": "Destiny number",
+    "numerology_destiny_desc": "Sum of every letter. The overall character a name carries.",
+    "numerology_soul_lbl": "Soul urge",
+    "numerology_soul_desc": "Sum of the vowels — what's said to drive the heart.",
+    "numerology_personality_lbl": "Personality",
+    "numerology_personality_desc": "Sum of the consonants — the outer impression.",
+    "numerology_footer": "Numerology isn't science — it's name-themed fortune-telling. Enjoy it that way.",
     "name_famous_h2": "Famous people named {name}",
     "name_famous_occ_sep": " · ",
     "name_famous_born": "b. {year}",
@@ -1449,6 +1491,18 @@ STRINGS_FR: dict[str, str] = {
     "name_origin_badge": "Origine : {label}",
     "name_meaning_h2": "Signification",
     "name_meaning_source": "D'après Wikipédia",
+    "numerology_h2": "Numérologie de {name}",
+    "numerology_intro": ("En numérologie pythagoricienne, chaque lettre a une "
+                          "valeur de 1 à 9. La somme des lettres de "
+                          "<strong>{name}</strong> donne ces trois nombres — "
+                          "une lecture ludique du caractère du prénom."),
+    "numerology_destiny_lbl": "Nombre de destinée",
+    "numerology_destiny_desc": "Somme de toutes les lettres. Le caractère global du prénom.",
+    "numerology_soul_lbl": "Nombre du cœur",
+    "numerology_soul_desc": "Somme des voyelles — ce qui anime intérieurement.",
+    "numerology_personality_lbl": "Personnalité",
+    "numerology_personality_desc": "Somme des consonnes — l'impression extérieure.",
+    "numerology_footer": "La numérologie n'est pas une science — c'est de la divination thématique. À prendre comme tel.",
     "name_famous_h2": "Personnalités prénommées {name}",
     "name_famous_occ_sep": " · ",
     "name_famous_born": "né en {year}",
@@ -1546,6 +1600,41 @@ GENDERED = {"US": GENDERED_EN, "FR": GENDERED_FR, "GB": GENDERED_EN,
 # Origin-slug → display label per UI language. Slugs come from
 # data/normalized/name_enrichment.json (built by fetchers/enrich_wikidata.py).
 # Keep this in sync with that file; unknown slugs fall back to title-cased slug.
+# Numerology trait names + one-line descriptions per number. Used on every
+# name page — short by design so the section stays compact.
+NUMEROLOGY_TRAITS_EN: dict[int, tuple[str, str]] = {
+    1: ("The leader", "Independent, pioneering, drawn to going first."),
+    2: ("The peacemaker", "Diplomatic, sensitive, partnership-minded."),
+    3: ("The creative", "Expressive, sociable, lifted by playful energy."),
+    4: ("The builder", "Practical, steady, gets results through hard work."),
+    5: ("The free spirit", "Curious, restless, energised by change."),
+    6: ("The carer", "Nurturing, responsible, family at the centre."),
+    7: ("The seeker", "Introspective, analytical, drawn to the unknown."),
+    8: ("The achiever", "Driven, capable, comfortable wielding influence."),
+    9: ("The humanitarian", "Idealistic, compassionate, thinks in big-picture terms."),
+    11: ("The visionary (master)", "Intuitive and inspirational — a heightened 2."),
+    22: ("The master builder", "Turns visions into structures — a heightened 4."),
+    33: ("The master teacher", "Selfless guidance and uplift — a heightened 6."),
+}
+NUMEROLOGY_TRAITS_FR: dict[int, tuple[str, str]] = {
+    1: ("Le leader", "Indépendant, pionnier, fait pour ouvrir la voie."),
+    2: ("Le pacificateur", "Diplomate, sensible, à l'aise en duo."),
+    3: ("Le créatif", "Expressif, sociable, porté par l'énergie joyeuse."),
+    4: ("Le bâtisseur", "Pragmatique, posé, obtient par le travail."),
+    5: ("L'esprit libre", "Curieux, mobile, stimulé par le changement."),
+    6: ("Le protecteur", "Attentionné, responsable, la famille au centre."),
+    7: ("Le chercheur", "Introspectif, analytique, attiré par l'inconnu."),
+    8: ("L'ambitieux", "Déterminé, capable, à l'aise avec l'influence."),
+    9: ("L'humaniste", "Idéaliste, généreux, pense en grand."),
+    11: ("Le visionnaire (maître)", "Intuitif, inspirant — un 2 amplifié."),
+    22: ("Le maître bâtisseur", "Transforme la vision en structure — un 4 amplifié."),
+    33: ("Le maître pédagogue", "Guidance désintéressée — un 6 amplifié."),
+}
+NUMEROLOGY_TRAITS = {"US": NUMEROLOGY_TRAITS_EN, "FR": NUMEROLOGY_TRAITS_FR,
+                     "GB": NUMEROLOGY_TRAITS_EN, "AU": NUMEROLOGY_TRAITS_EN,
+                     "CA": NUMEROLOGY_TRAITS_EN}
+
+
 ORIGIN_LABELS_EN: dict[str, str] = {
     'english': 'English',
     'irish': 'Irish',
@@ -3521,6 +3610,17 @@ BASE_CSS = """
         #searchAc { position: absolute; left: 0; right: 0; top: 100%; background: #fff; border: 1px solid #d6dde2; border-top: 0; border-radius: 0 0 6px 6px; max-height: 280px; overflow-y: auto; z-index: 10; box-shadow: 0 4px 12px rgba(27,36,64,0.08); }
         #searchAc div { padding: 0.55rem 0.9rem; cursor: pointer; color: #1B2440; }
         #searchAc div:hover, #searchAc div.sel { background: #EEF2F4; }
+        .num-box { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+        .num-box h2 { margin: 0 0 0.4rem; font-size: 1.1rem; }
+        .num-box > p { margin: 0 0 1rem; color: #5B6678; font-size: 0.95rem; }
+        .num-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.85rem; }
+        .num-card { background: #F7F8FA; border: 1px solid #EEF2F4; border-radius: 8px; padding: 0.85rem 0.95rem; display: flex; flex-direction: column; gap: 0.25rem; }
+        .num-card-n { font-family: 'Poppins', 'Inter', sans-serif; font-size: 2rem; font-weight: 700; color: #149E91; line-height: 1; }
+        .num-card-label { color: #5B6678; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600; }
+        .num-card-trait { font-weight: 600; color: #1B2440; font-size: 1rem; }
+        .num-card-desc { color: #1B2440; font-size: 0.9rem; line-height: 1.4; }
+        .num-card-axis { color: #8a93a3; font-size: 0.78rem; margin-top: 0.2rem; }
+        .num-box .num-footer { color: #8a93a3; font-size: 0.8rem; margin: 1rem 0 0; font-style: italic; }
         .meaning-box { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.85rem 1.1rem 0.6rem; margin: 1rem 0 1.5rem; }
         .meaning-box h2 { margin: 0 0 0.4rem; font-size: 1rem; font-family: 'Inter', sans-serif; font-weight: 600; color: #1B2440; }
         .meaning-box p { margin: 0; color: #1B2440; font-size: 0.95rem; line-height: 1.5; }
@@ -4137,6 +4237,34 @@ def generate_name_page(name):
             f'{S("name_origin_badge", label=origin_lbl)}</a>'
         )
     famous = enrich.get('famous', [])
+    # Numerology — playful per-name section, three Pythagorean numbers.
+    destiny, soul, pers = numerology_numbers(name)
+    traits = NUMEROLOGY_TRAITS[ACTIVE_CC]
+    def num_card(num: int, label: str, desc: str) -> str:
+        t = traits.get(num) or traits.get(_reduce_numerology(num))
+        if not t:
+            return ''
+        trait_name, trait_desc = t
+        return (
+            '<li class="num-card">'
+            f'<span class="num-card-n">{num}</span>'
+            f'<span class="num-card-label">{label}</span>'
+            f'<span class="num-card-trait">{trait_name}</span>'
+            f'<span class="num-card-desc">{trait_desc}</span>'
+            f'<span class="num-card-axis">{desc}</span>'
+            '</li>'
+        )
+    numerology_section_html = ''
+    if destiny:
+        cards = (num_card(destiny, S("numerology_destiny_lbl"), S("numerology_destiny_desc"))
+                 + num_card(soul, S("numerology_soul_lbl"), S("numerology_soul_desc"))
+                 + num_card(pers, S("numerology_personality_lbl"), S("numerology_personality_desc")))
+        numerology_section_html = (
+            f'<div class="num-box"><h2>{S("numerology_h2", name=name)}</h2>'
+            f'<p>{S("numerology_intro", name=name)}</p>'
+            f'<ul class="num-grid">{cards}</ul>'
+            f'<p class="num-footer">{S("numerology_footer")}</p></div>'
+        )
     meaning_key = 'meaning_fr' if ACTIVE_CC == 'FR' else 'meaning_en'
     meaning_text = enrich.get(meaning_key) or enrich.get('meaning_en') or ''
     meaning_section_html = ''
@@ -4197,6 +4325,8 @@ def generate_name_page(name):
         {meaning_section_html}
 
         <div class="insight">{insight}</div>
+
+        {numerology_section_html}
 
         <div class="stats">
             <div class="stat"><div class="stat-value">{fmt(total)}</div><div class="stat-label">{S("stat_total")}</div></div>
