@@ -2385,6 +2385,13 @@ FAVORITES_SCRIPT = """
         }
 
         updateBadge();
+
+        // Register the service worker for offline browsing + installability.
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js').catch(function() {});
+            });
+        }
     })();
     </script>"""
 
@@ -4276,7 +4283,12 @@ def page(title, body, description="", canonical="", extra_head="",
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>{desc_tag}{canon_tag}{og}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#149E91">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="NameCharted">
+    <meta name="mobile-web-app-capable" content="yes">
     <style>{BASE_CSS}</style>{extra_head}
 </head>
 <body>{site_nav_html()}

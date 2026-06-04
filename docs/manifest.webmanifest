@@ -1,0 +1,23 @@
+{
+  "name": "NameCharted — Names, charted.",
+  "short_name": "NameCharted",
+  "description": "Baby name popularity & trends from official rankings, 1880–2024.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F7F8FA",
+  "theme_color": "#149E91",
+  "orientation": "any",
+  "lang": "en",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "2024 rankings", "short_name": "Rankings", "url": "/year/2024.html" },
+    { "name": "Browse A–Z", "url": "/names.html" },
+    { "name": "Decades", "url": "/decades.html" },
+    { "name": "Picker", "url": "/picker.html" }
+  ]
+}
