@@ -1,0 +1,62 @@
+name: Refresh enrichment data
+
+# Re-runs the Wikidata + Wikipedia enrichment fetcher on the 1st of every
+# month. The fetcher is fully cached, so it only hits the network for
+# Q-IDs / Wikipedia titles that weren't already resolved on the last run.
+# When it picks up new data, regenerate docs/ and push so Vercel redeploys.
+#
+# Trigger manually any time via the "Run workflow" button (workflow_dispatch).
+
+on:
+  schedule:
+    - cron: '0 4 1 * *'   # 04:00 UTC on the 1st
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-enrichment
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run Wikidata + Wikipedia enrichment
+        run: python3 fetchers/enrich_wikidata.py
+
+      - name: Regenerate site if enrichment changed
+        id: rebuild
+        run: |
+          if git diff --quiet -- data/normalized/name_enrichment.json data/cache/; then
+            echo "no_change=true" >> "$GITHUB_OUTPUT"
+            echo "Enrichment unchanged - no rebuild needed."
+            exit 0
+          fi
+          echo "Enrichment changed - regenerating docs/"
+          python3 generate_site.py
+
+      - name: Commit and push if anything changed
+        if: steps.rebuild.outputs.no_change != 'true'
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Nothing to commit after rebuild."
+            exit 0
+          fi
+          git commit -m "chore: monthly enrichment refresh"
+          git push
