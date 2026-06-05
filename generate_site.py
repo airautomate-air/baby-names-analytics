@@ -949,6 +949,11 @@ STRINGS_EN: dict[str, str] = {
     "fav_remove_tip": "Remove from favorites",
     "pin_share_tip": "Save to Pinterest",
     "pin_share_label": "Save to Pinterest",
+    "share_btn_tip": "Share or save to Photos",
+    "share_btn_label": "Share",
+    "share_copied": "Link copied!",
+    "download_btn_tip": "Download the card (PNG)",
+    "download_btn_label": "Download",
     "blog_h1": "Stories & lists",
     "blog_title": "Baby name stories & lists — NameCharted",
     "blog_intro": "Trends, vintage comebacks, and curated lists from the NameCharted data.",
@@ -1386,6 +1391,11 @@ STRINGS_FR: dict[str, str] = {
     "fav_remove_tip": "Retirer des favoris",
     "pin_share_tip": "Épingler sur Pinterest",
     "pin_share_label": "Épingler",
+    "share_btn_tip": "Partager ou enregistrer dans Photos",
+    "share_btn_label": "Partager",
+    "share_copied": "Lien copié !",
+    "download_btn_tip": "Télécharger la carte (PNG)",
+    "download_btn_label": "Télécharger",
     "blog_h1": "Histoires et palmarès",
     "blog_title": "Histoires et palmarès de prénoms — NameCharted",
     "blog_intro": "Tendances, retours en vogue et listes thématiques tirées des données NameCharted.",
@@ -2303,6 +2313,45 @@ FAVORITES_SCRIPT = """
                 updateBadge();
             });
             syncBtn();
+        }
+
+        // Share / Download buttons on the name page (non-Pinterest users).
+        // Web Share API where available — on iOS/Android the share sheet
+        // lets users save the pin image to Photos, send via Messages,
+        // WhatsApp, AirDrop, etc. Desktop falls back to copy-to-clipboard.
+        var sbtn = document.querySelector('.share-btn[data-share-url]');
+        if (sbtn) {
+            sbtn.addEventListener('click', function() {
+                var url = sbtn.getAttribute('data-share-url');
+                var title = sbtn.getAttribute('data-share-title') || '';
+                var text = sbtn.getAttribute('data-share-text') || '';
+                var copied = sbtn.getAttribute('data-copied') || 'Link copied!';
+                if (navigator.share) {
+                    navigator.share({title: title, text: text, url: url})
+                        .catch(function() {});
+                    return;
+                }
+                var done = function() {
+                    var flash = document.createElement('span');
+                    flash.className = 'share-flash';
+                    flash.textContent = copied;
+                    sbtn.parentNode.insertBefore(flash, sbtn.nextSibling);
+                    setTimeout(function() {
+                        if (flash.parentNode) flash.parentNode.removeChild(flash);
+                    }, 1800);
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(done, done);
+                } else {
+                    try {
+                        var ta = document.createElement('textarea');
+                        ta.value = url; document.body.appendChild(ta);
+                        ta.select(); document.execCommand('copy');
+                        document.body.removeChild(ta);
+                        done();
+                    } catch (e) {}
+                }
+            });
         }
 
         // Favorites page
@@ -3962,7 +4011,11 @@ BASE_CSS = """
         .pin-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: #E60023; color: #fff; border: 0; border-radius: 999px; padding: 0.45rem 1rem 0.45rem 0.85rem; font-weight: 600; font-size: 0.92rem; text-decoration: none; cursor: pointer; transition: background 0.12s ease, transform 0.12s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
         .pin-btn svg { width: 18px; height: 18px; display: block; }
         .pin-btn:hover { background: #ad081b; transform: translateY(-1px); }
-        .name-share-row { margin: -0.25rem 0 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .share-btn, .download-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: #fff; color: #2a3540; border: 1px solid #cfd6dc; border-radius: 999px; padding: 0.45rem 1rem 0.45rem 0.85rem; font-weight: 600; font-size: 0.92rem; text-decoration: none; cursor: pointer; transition: background 0.12s ease, transform 0.12s ease, border-color 0.12s ease; }
+        .share-btn svg, .download-btn svg { width: 18px; height: 18px; display: block; }
+        .share-btn:hover, .download-btn:hover { background: #f2f5f8; border-color: #149E91; transform: translateY(-1px); }
+        .share-flash { display: inline-flex; align-items: center; font-size: 0.88rem; color: #149E91; font-weight: 600; padding: 0.45rem 0.4rem; }
+        .name-share-row { margin: -0.25rem 0 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
         .fav-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
         .fav-list li { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.75rem 1rem; display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; column-gap: 0.5rem; align-items: center; }
         .fav-list a { color: #1B2440; text-decoration: none; font-weight: 600; grid-column: 1; }
@@ -4941,6 +4994,27 @@ def generate_name_page(name):
                    '</svg>')
         pin_btn = (f'<a class="pin-btn" href="{pin_share}" target="_blank" rel="noopener" '
                    f'title="{S("pin_share_tip")}">{pin_svg}<span>{S("pin_share_label")}</span></a>')
+        # Non-Pinterest fallbacks: native Web Share API (mobile → save to Photos,
+        # send via Messages/WhatsApp/AirDrop; desktop falls back to copy-link)
+        # and a direct PNG download for "save the card" without any third party.
+        share_svg = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+                     'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+                     '<path d="M12 16V4"/><path d="M7 9l5-5 5 5"/>'
+                     '<path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>')
+        dl_svg = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" '
+                  'stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+                  '<path d="M12 4v12"/><path d="M7 11l5 5 5-5"/>'
+                  '<path d="M5 20h14"/></svg>')
+        page_url = f"{BASE_URL}{p}/name/{pin_slug}.html"
+        pin_btn += (
+            f'<button type="button" class="share-btn" data-share-url="{page_url}" '
+            f'data-share-img="{pin_url}" data-share-title="{safe_name}" '
+            f'data-share-text="{safe_name} — {COUNTRY_NAME[ACTIVE_CC]} baby name popularity &amp; trends" '
+            f'data-copied="{S("share_copied")}" '
+            f'title="{S("share_btn_tip")}">{share_svg}<span>{S("share_btn_label")}</span></button>'
+            f'<a class="download-btn" href="{pin_rel}" download="{pin_slug}.png" '
+            f'title="{S("download_btn_tip")}">{dl_svg}<span>{S("download_btn_label")}</span></a>'
+        )
 
     # Origin badge + famous people from the global ENRICHMENT map.
     enrich = ENRICHMENT.get(slugify(name), {})
