@@ -4791,6 +4791,80 @@ def _pin_strip_unrenderable(s: str) -> str:
     return cleaned.strip()
 
 
+_PIN_SYNTH_PATH_EN = {
+    1: "leadership", 2: "partnership", 3: "expression", 4: "craft",
+    5: "freedom", 6: "care", 7: "discovery", 8: "ambition", 9: "service",
+}
+_PIN_SYNTH_SOUL_EN = {
+    1: "independence", 2: "harmony", 3: "joy", 4: "structure",
+    5: "novelty", 6: "family", 7: "meaning", 8: "achievement", 9: "compassion",
+}
+_PIN_SYNTH_FACE_EN = {
+    1: "confidence", 2: "warmth", 3: "charm", 4: "reliability",
+    5: "spark", 6: "gentleness", 7: "calm", 8: "poise", 9: "openness",
+}
+_PIN_SYNTH_PATH_FR = {
+    1: "leadership", 2: "partenariat", 3: "expression", 4: "métier",
+    5: "liberté", 6: "soin", 7: "découverte", 8: "ambition", 9: "service",
+}
+_PIN_SYNTH_SOUL_FR = {
+    1: "indépendance", 2: "harmonie", 3: "joie", 4: "structure",
+    5: "nouveauté", 6: "famille", 7: "sens", 8: "réussite", 9: "compassion",
+}
+_PIN_SYNTH_FACE_FR = {
+    1: "assurance", 2: "chaleur", 3: "charme", 4: "fiabilité",
+    5: "vivacité", 6: "douceur", 7: "calme", 8: "prestance", 9: "ouverture",
+}
+# Hand-curated overrides for top names — slug -> sentence. EN by default;
+# nested {'fr': ...} keys give the French version.
+_PIN_SYNTH_OVERRIDES: dict[str, dict] = {
+    'olivia': {
+        'en': "A restless explorer with a contemplative core — drawn outward by curiosity, drawn inward by depth.",
+        'fr': "Une exploratrice agitée au cœur contemplatif — tirée vers le dehors par la curiosité, vers le dedans par la profondeur.",
+    },
+    'liam': {'en': "A determined builder with a quiet warmth — steady on the surface, principled at the core."},
+    'noah': {'en': "A peaceful path with a partner's heart — reassuring presence, faithful intent."},
+    'emma': {'en': "A generous spirit with an open face — wide-ranging compassion, easy warmth."},
+    'theodore': {'en': "A practical craftsman with creative fire — patient hands, expressive mind."},
+    'charlotte': {'en': "A graceful builder with refined depth — steady purpose, considered presence."},
+    'amelia': {'en': "A spirited carer with a curious mind — energetic warmth, genuine interest."},
+    'sophia': {'en': "Wisdom worn lightly — depth without weight, calm without distance."},
+    'james': {'en': "A reliable presence with quiet ambition — trustworthy by default, capable when called."},
+    'ava': {'en': "Bright and direct — open warmth without unnecessary edges."},
+    'mia': {'en': "Small in profile, generous in spirit — easy to love, hard to forget."},
+}
+
+
+def _pin_synthesis(destiny: int, soul: int, personality: int, name: str) -> str:
+    """One-or-two-sentence 'Together' synthesis for the pin's bottom band.
+    Hand-curated when an override exists; templated otherwise."""
+    if not destiny:
+        return ""
+    slug = slugify(name)
+    ov = _PIN_SYNTH_OVERRIDES.get(slug)
+    if ov:
+        if ACTIVE_CC == 'FR':
+            return ov.get('fr', ov.get('en', ''))
+        return ov.get('en', '')
+
+    d_red = _reduce_numerology(destiny)
+    s_red = _reduce_numerology(soul) if soul else d_red
+    p_red = _reduce_numerology(personality) if personality else d_red
+    if ACTIVE_CC == 'FR':
+        path = _PIN_SYNTH_PATH_FR.get(d_red, "")
+        soul_w = _PIN_SYNTH_SOUL_FR.get(s_red, "")
+        face_w = _PIN_SYNTH_FACE_FR.get(p_red, "")
+        if not (path and soul_w and face_w):
+            return ""
+        return f"Une voie de {path} — animée intérieurement par {soul_w}, portée extérieurement par {face_w}."
+    path = _PIN_SYNTH_PATH_EN.get(d_red, "")
+    soul_w = _PIN_SYNTH_SOUL_EN.get(s_red, "")
+    face_w = _PIN_SYNTH_FACE_EN.get(p_red, "")
+    if not (path and soul_w and face_w):
+        return ""
+    return f"A path of {path} — drawn inward by {soul_w}, projecting {face_w} outward."
+
+
 def _extract_pin_meaning(text: str) -> str:
     if not text:
         return ''
@@ -4926,6 +5000,13 @@ def _render_pin_for(name: str, out_path: Path) -> None:
             tn, td = _trait(n)
             numerology.append((n, lbl, tn, td))
 
+    synthesis = _pin_synthesis(destiny, soul, pers, name) if destiny else ""
+
+    if ACTIVE_CC == 'FR':
+        together_lbl = 'ENSEMBLE'
+    else:
+        together_lbl = 'TOGETHER'
+
     render_pin(
         out_path,
         name=name,
@@ -4936,6 +5017,8 @@ def _render_pin_for(name: str, out_path: Path) -> None:
         sound=sound,
         meaning=meaning,
         numerology=numerology,
+        synthesis=synthesis,
+        together_label=together_lbl,
         url=f"namecharted.com{PREFIX}/name/{slugify(name)}",
         country_label=COUNTRY_NAME[ACTIVE_CC],
     )

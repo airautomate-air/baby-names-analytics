@@ -78,6 +78,8 @@ def render_pin(
     sound: str,
     meaning: str,            # short meaning blurb (≤ ~80 chars) or ""
     numerology: list,        # list of (num:int, label:str, trait_name:str, trait_desc:str)
+    synthesis: str = "",     # 1-2 sentence "Together" line, or ""
+    together_label: str = "TOGETHER",
     url: str,
     country_label: str,
 ) -> None:
@@ -150,15 +152,14 @@ def render_pin(
             d.text((80, y + 34 + i * 46), line, font=mean_font, fill=INK)
 
     # ─── Numerology card row ───────────────────────────────────────────
-    # When the meaning block is empty (~30% of names — Wikipedia etymology
-    # didn't parse), the 650–830 band would otherwise be blank canvas. In
-    # that case, slide the numerology block up to occupy it, add a short
-    # explainer headline, and let each card's description wrap to more
-    # lines so the card fills its taller height.
+    # Panel runs 820–1340 (50px gap to the footer). When the meaning block
+    # is empty (~30% of names — Wikipedia etymology didn't parse), the
+    # panel slides up to start at 650 to fill the otherwise-blank band and
+    # adds a short explainer headline.
     if numerology:
         full_height = not meaning
-        nblock_top = 650 if full_height else 870
-        nblock_bot = 1380
+        nblock_top = 650 if full_height else 820
+        nblock_bot = 1340
         d.rounded_rectangle([(60, nblock_top), (W - 60, nblock_bot)],
                             radius=32, fill=NUM_BG)
         d.text((90, nblock_top + 24), "NUMEROLOGY",
@@ -200,16 +201,31 @@ def render_pin(
                 t_font = _font(POPPINS, sz)
                 tw = d.textlength(trait_name, font=t_font)
             d.text((cx - tw / 2, card_y + 146), trait_name, font=t_font, fill=INK)
-            # trait description — wrap up to 3 lines
+            # trait description — wrap up to 5 lines
             if trait_desc:
                 desc_font = _font(INTER, 16)
-                desc_lines = _wrap(d, trait_desc, desc_font, card_w - 10, max_lines=4)
+                desc_lines = _wrap(d, trait_desc, desc_font, card_w - 10, max_lines=5)
                 dy = card_y + 184
                 for line in desc_lines:
                     lw2 = d.textlength(line, font=desc_font)
                     d.text((cx - lw2 / 2, dy), line, font=desc_font, fill=MUTED)
                     dy += 22
             x += card_w + 20
+
+        # "Together" synthesis line — only when we have the standard panel
+        # (skip in full_height so we don't crowd the explainer + 5-line cards).
+        if synthesis and not full_height:
+            syn_top = 1240
+            d.line([(110, syn_top - 10), (W - 110, syn_top - 10)],
+                   fill=(220, 200, 198), width=1)
+            d.text((90, syn_top), together_label,
+                   font=_font(INTER, 18), fill=CORAL)
+            syn_font = _font(POPPINS, 22)
+            syn_lines = _wrap(d, synthesis, syn_font, W - 180, max_lines=3)
+            sy = syn_top + 30
+            for line in syn_lines:
+                d.text((90, sy), line, font=syn_font, fill=INK)
+                sy += 32
 
     # ─── Footer (1390 → 1500) ──────────────────────────────────────────
     d.rectangle([(0, H - 110), (W, H)], fill=INK)
