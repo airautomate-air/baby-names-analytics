@@ -117,6 +117,8 @@
         .share-btn, .download-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: #fff; color: #2a3540; border: 1px solid #cfd6dc; border-radius: 999px; padding: 0.45rem 1rem 0.45rem 0.85rem; font-weight: 600; font-size: 0.92rem; text-decoration: none; cursor: pointer; transition: background 0.12s ease, transform 0.12s ease, border-color 0.12s ease; }
         .share-btn svg, .download-btn svg { width: 18px; height: 18px; display: block; }
         .share-btn:hover, .download-btn:hover { background: #f2f5f8; border-color: #149E91; transform: translateY(-1px); }
+        .tg-btn { background: #2AABEE; color: #fff; border-color: #2AABEE; }
+        .tg-btn:hover { background: #1f96d3; border-color: #1f96d3; color: #fff; }
         .share-flash { display: inline-flex; align-items: center; font-size: 0.88rem; color: #149E91; font-weight: 600; padding: 0.45rem 0.4rem; }
         .name-share-row { margin: -0.25rem 0 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
         .fav-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
@@ -382,8 +384,10 @@
         #sib-more { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.6rem 1.4rem; border-radius: 24px; cursor: pointer; font-weight: 500; font-size: 0.92rem; }
         #sib-more:hover { border-color: #149E91; color: #149E91; }
         .sib-share-wrap { margin: 0.4rem 0 0.2rem; display: flex; align-items: center; gap: 0.7rem; }
-        .sib-share-btn { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.35rem 0.95rem; border-radius: 20px; cursor: pointer; font-weight: 500; font-size: 0.85rem; }
+        .sib-share-btn { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.35rem 0.95rem; border-radius: 20px; cursor: pointer; font-weight: 500; font-size: 0.85rem; text-decoration: none; display: inline-block; }
         .sib-share-btn:hover { border-color: #149E91; color: #149E91; }
+        #sib-share-tg { background: #2AABEE; border-color: #2AABEE; color: #fff; }
+        #sib-share-tg:hover { background: #1f96d3; border-color: #1f96d3; color: #fff; }
         .sib-share-done { color: #149E91; font-size: 0.85rem; font-weight: 500; }
 </style>
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://namecharted.com/"}, {"@type": "ListItem", "position": 2, "name": "Cayetano", "item": "https://namecharted.com/name/cayetano.html"}, {"@type": "ListItem", "position": 3, "name": "Similar names", "item": "https://namecharted.com/similar/cayetano.html"}]}</script>
@@ -1782,6 +1786,15 @@
                 var slugsForQs = refs.map(function(r) { return r.slug; }).join(',');
                 if (slugsForQs) {
                     history.replaceState(null, '', window.location.pathname + '?names=' + slugsForQs);
+                }
+
+                // Refresh the Telegram-share href to point at the current URL.
+                var tgLink = document.getElementById('sib-share-tg');
+                if (tgLink) {
+                    var tgText = headerEl.textContent || 'NameCharted sibling ideas';
+                    tgLink.href = 'https://t.me/share/url?url=' +
+                        encodeURIComponent(window.location.href) +
+                        '&text=' + encodeURIComponent(tgText);
                 }
             });
         }

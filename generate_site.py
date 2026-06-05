@@ -974,6 +974,8 @@ STRINGS_EN: dict[str, str] = {
     "share_copied": "Link copied!",
     "download_btn_tip": "Download the card (PNG)",
     "download_btn_label": "Download",
+    "tg_share_tip": "Share on Telegram",
+    "tg_share_label": "Telegram",
     "blog_h1": "Stories & lists",
     "blog_title": "Baby name stories & lists — NameCharted",
     "blog_intro": "Trends, vintage comebacks, and curated lists from the NameCharted data.",
@@ -1418,6 +1420,8 @@ STRINGS_FR: dict[str, str] = {
     "share_copied": "Lien copié !",
     "download_btn_tip": "Télécharger la carte (PNG)",
     "download_btn_label": "Télécharger",
+    "tg_share_tip": "Partager sur Telegram",
+    "tg_share_label": "Telegram",
     "blog_h1": "Histoires et palmarès",
     "blog_title": "Histoires et palmarès de prénoms — NameCharted",
     "blog_intro": "Tendances, retours en vogue et listes thématiques tirées des données NameCharted.",
@@ -3661,6 +3665,15 @@ SIBLING_SCRIPT = """
                 if (slugsForQs) {
                     history.replaceState(null, '', window.location.pathname + '?names=' + slugsForQs);
                 }
+
+                // Refresh the Telegram-share href to point at the current URL.
+                var tgLink = document.getElementById('sib-share-tg');
+                if (tgLink) {
+                    var tgText = headerEl.textContent || 'NameCharted sibling ideas';
+                    tgLink.href = 'https://t.me/share/url?url=' +
+                        encodeURIComponent(window.location.href) +
+                        '&text=' + encodeURIComponent(tgText);
+                }
             });
         }
 
@@ -4080,6 +4093,8 @@ BASE_CSS = """
         .share-btn, .download-btn { display: inline-flex; align-items: center; gap: 0.4rem; background: #fff; color: #2a3540; border: 1px solid #cfd6dc; border-radius: 999px; padding: 0.45rem 1rem 0.45rem 0.85rem; font-weight: 600; font-size: 0.92rem; text-decoration: none; cursor: pointer; transition: background 0.12s ease, transform 0.12s ease, border-color 0.12s ease; }
         .share-btn svg, .download-btn svg { width: 18px; height: 18px; display: block; }
         .share-btn:hover, .download-btn:hover { background: #f2f5f8; border-color: #149E91; transform: translateY(-1px); }
+        .tg-btn { background: #2AABEE; color: #fff; border-color: #2AABEE; }
+        .tg-btn:hover { background: #1f96d3; border-color: #1f96d3; color: #fff; }
         .share-flash { display: inline-flex; align-items: center; font-size: 0.88rem; color: #149E91; font-weight: 600; padding: 0.45rem 0.4rem; }
         .name-share-row { margin: -0.25rem 0 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
         .fav-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
@@ -4345,8 +4360,10 @@ BASE_CSS = """
         #sib-more { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.6rem 1.4rem; border-radius: 24px; cursor: pointer; font-weight: 500; font-size: 0.92rem; }
         #sib-more:hover { border-color: #149E91; color: #149E91; }
         .sib-share-wrap { margin: 0.4rem 0 0.2rem; display: flex; align-items: center; gap: 0.7rem; }
-        .sib-share-btn { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.35rem 0.95rem; border-radius: 20px; cursor: pointer; font-weight: 500; font-size: 0.85rem; }
+        .sib-share-btn { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.35rem 0.95rem; border-radius: 20px; cursor: pointer; font-weight: 500; font-size: 0.85rem; text-decoration: none; display: inline-block; }
         .sib-share-btn:hover { border-color: #149E91; color: #149E91; }
+        #sib-share-tg { background: #2AABEE; border-color: #2AABEE; color: #fff; }
+        #sib-share-tg:hover { background: #1f96d3; border-color: #1f96d3; color: #fff; }
         .sib-share-done { color: #149E91; font-size: 0.85rem; font-weight: 500; }
 """
 
@@ -5115,6 +5132,19 @@ def generate_name_page(name):
             f'title="{S("share_btn_tip")}">{share_svg}<span>{S("share_btn_label")}</span></button>'
             f'<a class="download-btn" href="{pin_rel}" download="{pin_slug}.png" '
             f'title="{S("download_btn_tip")}">{dl_svg}<span>{S("download_btn_label")}</span></a>'
+        )
+        # Telegram one-tap share — works in app on mobile, web client on desktop.
+        tg_text = f"{name} — {COUNTRY_NAME[ACTIVE_CC]} baby name popularity & trends"
+        tg_share_url = (
+            f"https://t.me/share/url?url={page_url}"
+            f"&text={tg_text.replace(' ', '%20').replace('&', '%26')}"
+        )
+        tg_svg = ('<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+                  '<path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/>'
+                  '</svg>')
+        pin_btn += (
+            f'<a class="share-btn tg-btn" href="{tg_share_url}" target="_blank" rel="noopener" '
+            f'title="{S("tg_share_tip")}">{tg_svg}<span>{S("tg_share_label")}</span></a>'
         )
 
     # Origin badge + famous people from the global ENRICHMENT map.
@@ -6298,6 +6328,7 @@ def generate_sibling_page():
             <h2 id="sib-header"></h2>
             <div class="sib-share-wrap">
                 <button type="button" id="sib-share" class="sib-share-btn">{S("sibling_share")}</button>
+                <a id="sib-share-tg" class="sib-share-btn" target="_blank" rel="noopener" href="#">{S("tg_share_label")}</a>
                 <span id="sib-share-done" class="sib-share-done" style="display:none;">{S("sibling_share_done")}</span>
             </div>
             <div id="sib-list"></div>
