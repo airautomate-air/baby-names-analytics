@@ -21,22 +21,22 @@ from pin_renderer import render_pin
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
-COUNTRIES = ["US", "FR", "GB", "AU", "CA", "ES", "IT"]
+COUNTRIES = ["US", "FR", "GB", "AU", "CA", "ES", "IT", "NL"]
 # URL slug per country. US is empty (root). GB exposes /uk/ for branding.
-COUNTRY_SLUG = {"US": "", "FR": "fr", "GB": "uk", "AU": "au", "CA": "ca", "ES": "es", "IT": "it"}
-COUNTRY_LABEL = {"US": "US", "FR": "FR", "GB": "UK", "AU": "AU", "CA": "CA", "ES": "ES", "IT": "IT"}
+COUNTRY_SLUG = {"US": "", "FR": "fr", "GB": "uk", "AU": "au", "CA": "ca", "ES": "es", "IT": "it", "NL": "nl"}
+COUNTRY_LABEL = {"US": "US", "FR": "FR", "GB": "UK", "AU": "AU", "CA": "CA", "ES": "ES", "IT": "IT", "NL": "NL"}
 COUNTRY_NAME = {"US": "United States", "FR": "France", "GB": "United Kingdom",
-                "AU": "Australia", "CA": "Canada", "ES": "Spain", "IT": "Italy"}
-FLAG = {"US": "🇺🇸", "FR": "🇫🇷", "GB": "🇬🇧", "AU": "🇦🇺", "CA": "🇨🇦", "ES": "🇪🇸", "IT": "🇮🇹"}
+                "AU": "Australia", "CA": "Canada", "ES": "Spain", "IT": "Italy", "NL": "Netherlands"}
+FLAG = {"US": "🇺🇸", "FR": "🇫🇷", "GB": "🇬🇧", "AU": "🇦🇺", "CA": "🇨🇦", "ES": "🇪🇸", "IT": "🇮🇹", "NL": "🇳🇱"}
 # Country names rendered in each UI language (for the homepage cross-country callout).
 COUNTRY_NAMES_EN = {"US": "United States", "FR": "France", "GB": "UK",
-                    "AU": "Australia", "CA": "Canada", "ES": "Spain", "IT": "Italy"}
+                    "AU": "Australia", "CA": "Canada", "ES": "Spain", "IT": "Italy", "NL": "Netherlands"}
 COUNTRY_NAMES_FR = {"US": "États-Unis", "FR": "France", "GB": "Royaume-Uni",
-                    "AU": "Australie", "CA": "Canada", "ES": "Espagne", "IT": "Italie"}
+                    "AU": "Australie", "CA": "Canada", "ES": "Espagne", "IT": "Italie", "NL": "Pays-Bas"}
 COUNTRY_NAMES_IN_UI = {"US": COUNTRY_NAMES_EN, "FR": COUNTRY_NAMES_FR,
                        "GB": COUNTRY_NAMES_EN, "AU": COUNTRY_NAMES_EN,
                        "CA": COUNTRY_NAMES_EN, "ES": COUNTRY_NAMES_EN,
-                       "IT": COUNTRY_NAMES_EN}
+                       "IT": COUNTRY_NAMES_EN, "NL": COUNTRY_NAMES_EN}
 DATA_SOURCE_FULL = {
     "US": "U.S. Social Security Administration",
     "FR": "INSEE (France)",
@@ -45,6 +45,7 @@ DATA_SOURCE_FULL = {
     "CA": "Statistics Canada (Canadian Vital Statistics)",
     "ES": "INE Padrón (Spain) — decadal totals",
     "IT": "ISTAT Contanomi (Italy)",
+    "NL": "Meertens Voornamenbank (Netherlands)",
 }
 DATA_SOURCE_SHORT = {
     "US": "official SSA",
@@ -54,6 +55,7 @@ DATA_SOURCE_SHORT = {
     "CA": "official StatCan",
     "ES": "official INE",
     "IT": "official ISTAT",
+    "NL": "Meertens NVB",
 }
 
 DATA_DIR = Path('data/normalized')
@@ -682,7 +684,7 @@ YEARS_SET_BY_CC: dict[str, set[int]] = {}
 DECADES_SET_BY_CC: dict[str, set[int]] = {}
 LETTERS_BY_CC: dict[str, set[tuple[str, str]]] = {}  # (sex_code, uppercase_letter)
 
-HREFLANG = {"US": "en-US", "FR": "fr-FR", "GB": "en-GB", "AU": "en-AU", "CA": "en-CA", "ES": "es-ES", "IT": "it-IT"}
+HREFLANG = {"US": "en-US", "FR": "fr-FR", "GB": "en-GB", "AU": "en-AU", "CA": "en-CA", "ES": "es-ES", "IT": "it-IT", "NL": "nl-NL"}
 
 
 def build_presence_indices() -> None:
@@ -1826,7 +1828,7 @@ STRINGS_FR: dict[str, str] = {
 
 STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN,
            "AU": STRINGS_EN, "CA": STRINGS_EN, "ES": STRINGS_EN,
-           "IT": STRINGS_EN}
+           "IT": STRINGS_EN, "NL": STRINGS_EN}
 
 # Gendered forms per language. Used for "girls"/"filles", "boy's"/"de garçon", etc.
 # URL slugs always use the English form ('girls'/'boys') for cross-country URL parity.
@@ -1844,7 +1846,7 @@ GENDERED_FR = {
 }
 GENDERED = {"US": GENDERED_EN, "FR": GENDERED_FR, "GB": GENDERED_EN,
             "AU": GENDERED_EN, "CA": GENDERED_EN, "ES": GENDERED_EN,
-            "IT": GENDERED_EN}
+            "IT": GENDERED_EN, "NL": GENDERED_EN}
 
 # Origin-slug → display label per UI language. Slugs come from
 # data/normalized/name_enrichment.json (built by fetchers/enrich_wikidata.py).
@@ -1882,7 +1884,7 @@ NUMEROLOGY_TRAITS_FR: dict[int, tuple[str, str]] = {
 NUMEROLOGY_TRAITS = {"US": NUMEROLOGY_TRAITS_EN, "FR": NUMEROLOGY_TRAITS_FR,
                      "GB": NUMEROLOGY_TRAITS_EN, "AU": NUMEROLOGY_TRAITS_EN,
                      "CA": NUMEROLOGY_TRAITS_EN, "ES": NUMEROLOGY_TRAITS_EN,
-                     "IT": NUMEROLOGY_TRAITS_EN}
+                     "IT": NUMEROLOGY_TRAITS_EN, "NL": NUMEROLOGY_TRAITS_EN}
 
 
 ORIGIN_LABELS_EN: dict[str, str] = {
@@ -1980,7 +1982,7 @@ ORIGIN_LABELS_FR: dict[str, str] = {
 ORIGIN_LABELS = {"US": ORIGIN_LABELS_EN, "FR": ORIGIN_LABELS_FR,
                  "GB": ORIGIN_LABELS_EN, "AU": ORIGIN_LABELS_EN,
                  "CA": ORIGIN_LABELS_EN, "ES": ORIGIN_LABELS_EN,
-                 "IT": ORIGIN_LABELS_EN}
+                 "IT": ORIGIN_LABELS_EN, "NL": ORIGIN_LABELS_EN}
 
 
 # Common surnames per country, grouped by first letter — used by the
@@ -2131,6 +2133,30 @@ SURNAMES_BY_CC: dict[str, dict[str, list[str]]] = {
         "T": ["Toniolo", "Testa", "Trombetta"],
         "V": ["Villa", "Valentini", "Vitale", "Vinci"],
         "Z": ["Zanetti", "Zanin", "Zito"],
+    },
+    "NL": {
+        "A": ["Aalders", "Aarts", "Akkerman"],
+        "B": ["Bakker", "Boer", "Beekman", "Beumer", "Brouwer"],
+        "C": ["Claessens", "Coenen"],
+        "D": ["De Jong", "De Vries", "Dekker", "Dijkstra", "De Boer"],
+        "E": ["Evers", "Engelen"],
+        "F": ["Fokker", "Franken"],
+        "G": ["Groen", "Goedhart", "Gerritsen"],
+        "H": ["Hendriks", "Hoogendoorn", "Hofman", "Huisman"],
+        "I": ["IJsbrand"],
+        "J": ["Jansen", "Janssen", "Jacobs"],
+        "K": ["Kuiper", "Klaassen", "Kok", "Kuijpers"],
+        "L": ["Lammers", "Leenders"],
+        "M": ["Meijer", "Mulder", "Maas", "Martens"],
+        "N": ["Nijhuis", "Nieuwenhuis"],
+        "O": ["Oosterhof", "Otten"],
+        "P": ["Peters", "Prins", "Pieters"],
+        "R": ["Roos", "Reijnders"],
+        "S": ["Smit", "Schouten", "Smits", "Schreuder", "Sanders"],
+        "T": ["Timmermans", "Ten Have", "Tromp"],
+        "V": ["Van den Berg", "Van Dijk", "Visser", "Vermeer", "Van der Meer"],
+        "W": ["Wagenaar", "Wijnen", "Willems"],
+        "Z": ["Zwart", "Zijlstra"],
     },
     "CA": {
         "A": ["Anderson", "Adams", "Allen"],
@@ -5211,7 +5237,7 @@ def generate_browse_index():
 def generate_year_page(year):
     p = PREFIX
     def table_for(sex):
-        ranked = sorted(rank_by_year_sex[(year, sex)].items(), key=lambda x: x[1])[:50]
+        ranked = sorted(rank_by_year_sex.get((year, sex), {}).items(), key=lambda x: x[1])[:50]
         rows = ""
         for name, rank in ranked:
             c = counts[name][sex][year]
@@ -5226,8 +5252,10 @@ def generate_year_page(year):
 
     prev_link = f'<a href="{p}/year/{year-1}.html">← {year-1}</a>' if (year - 1) in YEARS_SET else ''
     next_link = f'<a href="{p}/year/{year+1}.html">{year+1} →</a>' if (year + 1) in YEARS_SET else ''
-    top_girl = sorted(rank_by_year_sex[(year, 'F')].items(), key=lambda x: x[1])[0][0]
-    top_boy = sorted(rank_by_year_sex[(year, 'M')].items(), key=lambda x: x[1])[0][0]
+    _girls_rank = rank_by_year_sex.get((year, 'F'), {})
+    _boys_rank = rank_by_year_sex.get((year, 'M'), {})
+    top_girl = sorted(_girls_rank.items(), key=lambda x: x[1])[0][0] if _girls_rank else '—'
+    top_boy = sorted(_boys_rank.items(), key=lambda x: x[1])[0][0] if _boys_rank else '—'
     yir_callout = ''
     if year == LATEST_YEAR and (year - 1) in YEARS_SET:
         yir_callout = (f'\n        <p style="margin:0.25rem 0 1.25rem;"><a href="{p}/year-in-review-{year}.html" '
@@ -5254,7 +5282,7 @@ def generate_year_page(year):
     canonical = f"{BASE_URL}{p}/year/{year}.html"
     top_items: list[tuple[str, str]] = []
     for sex in ('F', 'M'):
-        ranked = sorted(rank_by_year_sex[(year, sex)].items(), key=lambda x: x[1])[:25]
+        ranked = sorted(rank_by_year_sex.get((year, sex), {}).items(), key=lambda x: x[1])[:25]
         for n, _ in ranked:
             if n in HAS_PAGE:
                 top_items.append((n, f"{BASE_URL}{p}/name/{slugify(n)}.html"))
@@ -5343,8 +5371,10 @@ def generate_year_in_review_page(year: int) -> None:
         exits_by_sex[sex].sort(key=lambda t: t[0])
         exits_by_sex[sex] = exits_by_sex[sex][:10]
 
-    top_girl = sorted(rank_by_year_sex[(year, 'F')].items(), key=lambda x: x[1])[0][0]
-    top_boy = sorted(rank_by_year_sex[(year, 'M')].items(), key=lambda x: x[1])[0][0]
+    _girls_rank = rank_by_year_sex.get((year, 'F'), {})
+    _boys_rank = rank_by_year_sex.get((year, 'M'), {})
+    top_girl = sorted(_girls_rank.items(), key=lambda x: x[1])[0][0] if _girls_rank else '—'
+    top_boy = sorted(_boys_rank.items(), key=lambda x: x[1])[0][0] if _boys_rank else '—'
 
     # ----- render -----
     def card(rank_meta: str, name: str, count: int | None) -> str:
