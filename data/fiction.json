@@ -440,6 +440,142 @@
         {"name": "Aníbal", "role": "Aníbal Cortés — Rio, the youngest of the crew"},
         {"name": "Mónica", "role": "Mónica Gaztambide — Stockholm, hostage turned member"}
       ]
+    },
+    {
+      "slug": "pinocchio",
+      "title": "Le avventure di Pinocchio",
+      "kind": "books",
+      "year": 1883,
+      "blurb": "Carlo Collodi's wooden-puppet fable — Italy's most exported piece of children's literature.",
+      "names": [
+        {"name": "Pinocchio", "role": "the wooden puppet who longs to be a real boy"},
+        {"name": "Geppetto", "role": "the lonely woodcarver who carves him"},
+        {"name": "Lucignolo", "role": "Lucignolo (Candlewick) — Pinocchio's reckless friend"}
+      ]
+    },
+    {
+      "slug": "promessi-sposi",
+      "title": "I Promessi Sposi",
+      "kind": "books",
+      "year": 1827,
+      "blurb": "Alessandro Manzoni's 17th-century love story — the foundational novel of modern Italian literature.",
+      "names": [
+        {"name": "Renzo", "role": "Renzo Tramaglino — silk weaver and groom"},
+        {"name": "Lucia", "role": "Lucia Mondella — his betrothed"},
+        {"name": "Agnese", "role": "Agnese — Lucia's mother"},
+        {"name": "Cristoforo", "role": "Fra Cristoforo — Capuchin friar and protector"},
+        {"name": "Federigo", "role": "Cardinal Federigo Borromeo — Archbishop of Milan"},
+        {"name": "Perpetua", "role": "Perpetua — Don Abbondio's housekeeper"}
+      ]
+    },
+    {
+      "slug": "amelie",
+      "title": "Le Fabuleux Destin d'Amélie Poulain",
+      "kind": "film",
+      "year": 2001,
+      "blurb": "Jean-Pierre Jeunet's Montmartre fairy-tale — the film that turned Amélie into a global first name.",
+      "names": [
+        {"name": "Amélie", "role": "Amélie Poulain — shy Montmartre waitress, secret matchmaker"},
+        {"name": "Nino", "role": "Nino Quincampoix — the man she's drawn to"},
+        {"name": "Raymond", "role": "Raymond Dufayel — the 'glass man' painter next door"},
+        {"name": "Lucien", "role": "Lucien — the gentle grocery clerk"},
+        {"name": "Joseph", "role": "Joseph — the jealous café regular"},
+        {"name": "Gina", "role": "Gina — Amélie's café colleague"},
+        {"name": "Suzanne", "role": "Suzanne — the café owner"}
+      ]
+    },
+    {
+      "slug": "asterix",
+      "title": "Astérix",
+      "kind": "books",
+      "year": 1959,
+      "blurb": "René Goscinny and Albert Uderzo's Gaulish village — the bestselling French-language comic of all time.",
+      "names": [
+        {"name": "Asterix", "role": "Astérix — the cunning Gaulish warrior"},
+        {"name": "Obelix", "role": "Obélix — menhir-delivering best friend"},
+        {"name": "Julius", "role": "Jules César — recurring Roman antagonist"},
+        {"name": "Cleopatra", "role": "Cléopâtre — Queen of Egypt"}
+      ]
+    },
+    {
+      "slug": "elite",
+      "title": "Élite",
+      "kind": "tv",
+      "year": 2018,
+      "blurb": "Netflix's Spanish-language teen thriller set at Las Encinas private school — a global Gen-Z hit.",
+      "names": [
+        {"name": "Samuel", "role": "Samuel — working-class scholarship student"},
+        {"name": "Marina", "role": "Marina Nunier — the heiress at the centre of season one"},
+        {"name": "Nadia", "role": "Nadia Shanaa — the academic star"},
+        {"name": "Lucrecia", "role": "Lucrecia 'Lu' Montesinos — sharp-tongued queen bee"},
+        {"name": "Carla", "role": "Carla Rosón — the marquise's daughter"},
+        {"name": "Polo", "role": "Leopoldo 'Polo' Benavent — quiet middle of the friend group"},
+        {"name": "Guzmán", "role": "Guzmán Nunier — Marina's brother"},
+        {"name": "Ander", "role": "Ander Muñoz — the tennis prodigy"},
+        {"name": "Omar", "role": "Omar Shanaa — Nadia's brother"}
+      ]
+    },
+    {
+      "slug": "narcos",
+      "title": "Narcos",
+      "kind": "tv",
+      "year": 2015,
+      "blurb": "Netflix's chronicle of the Medellín and Cali cartels — Colombian Spanish at scale on US screens.",
+      "names": [
+        {"name": "Pablo", "role": "Pablo Escobar — head of the Medellín cartel"},
+        {"name": "Gustavo", "role": "Gustavo Gaviria — Pablo's cousin and lieutenant"},
+        {"name": "Tata", "role": "María Victoria 'Tata' Escobar — Pablo's wife"},
+        {"name": "Valeria", "role": "Valeria Velez — journalist and Pablo's mistress"},
+        {"name": "Horacio", "role": "Colonel Horacio Carrillo — head of the Search Bloc"},
+        {"name": "Helena", "role": "Helena Rodríguez Orejuela — Cali matriarch (Narcos: Mexico era spillover)"}
+      ]
+    },
+    {
+      "slug": "ghibli",
+      "title": "Studio Ghibli",
+      "kind": "film",
+      "year": 1985,
+      "blurb": "Hayao Miyazaki and Isao Takahata's animation studio — quietly responsible for many modern short Japanese girl names crossing west.",
+      "names": [
+        {"name": "Kiki", "role": "Kiki — apprentice witch (Kiki's Delivery Service)"},
+        {"name": "Sophie", "role": "Sophie Hatter — cursed hatmaker (Howl's Moving Castle)"},
+        {"name": "Howl", "role": "Howl — the wandering wizard"},
+        {"name": "Chihiro", "role": "Chihiro Ogino — the girl trapped in the bathhouse (Spirited Away)"},
+        {"name": "Haku", "role": "Haku — river spirit and Chihiro's guide"},
+        {"name": "San", "role": "San — the wolf-raised princess (Princess Mononoke)"},
+        {"name": "Ashitaka", "role": "Ashitaka — the Emishi prince"},
+        {"name": "Satsuki", "role": "Satsuki — older sister (My Neighbor Totoro)"},
+        {"name": "Mei", "role": "Mei — younger sister, Totoro's first friend"},
+        {"name": "Ponyo", "role": "Ponyo — the fish-girl"},
+        {"name": "Marnie", "role": "Marnie — the ghostly companion (When Marnie Was There)"}
+      ]
+    },
+    {
+      "slug": "marvel-cinematic-universe",
+      "title": "Marvel Cinematic Universe",
+      "kind": "film",
+      "year": 2008,
+      "blurb": "Twenty-plus years of interconnected superhero films — a discreet but real influence on US baby-name choices since Iron Man.",
+      "names": [
+        {"name": "Tony", "role": "Tony Stark — Iron Man"},
+        {"name": "Steve", "role": "Steve Rogers — Captain America"},
+        {"name": "Bruce", "role": "Bruce Banner — the Hulk"},
+        {"name": "Natasha", "role": "Natasha Romanoff — Black Widow"},
+        {"name": "Clint", "role": "Clint Barton — Hawkeye"},
+        {"name": "Thor", "role": "Thor — God of Thunder"},
+        {"name": "Loki", "role": "Loki — Thor's brother"},
+        {"name": "Wanda", "role": "Wanda Maximoff — Scarlet Witch"},
+        {"name": "Peter", "role": "Peter Parker / Peter Quill — Spider-Man / Star-Lord"},
+        {"name": "Stephen", "role": "Stephen Strange — Doctor Strange"},
+        {"name": "Pepper", "role": "Pepper Potts — Tony's partner and CEO of Stark Industries"},
+        {"name": "Nebula", "role": "Nebula — Thanos' adopted daughter"},
+        {"name": "Gamora", "role": "Gamora — Guardian of the Galaxy"},
+        {"name": "Yelena", "role": "Yelena Belova — Natasha's sister, the new Black Widow"},
+        {"name": "Kamala", "role": "Kamala Khan — Ms. Marvel"},
+        {"name": "Shuri", "role": "Shuri — princess and successor in Wakanda"},
+        {"name": "Sam", "role": "Sam Wilson — the new Captain America"},
+        {"name": "Bucky", "role": "James Buchanan 'Bucky' Barnes — the Winter Soldier"}
+      ]
     }
   ]
 }
