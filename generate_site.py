@@ -812,9 +812,11 @@ def set_active(cc: str) -> None:
     g['CANONICAL_OF'] = canonical_of_by_country[cc]
     g['top_names'] = sorted(
         g['name_total'].items(), key=lambda x: (-x[1], x[0]))[:TOP_N_NAMES]
-    # Membership set for the Pinterest-pin generator: top names get a custom
-    # 1000x1500 PNG card, everyone else falls back to og-default.png.
-    g['top_pin_set'] = {n for n, _ in g['top_names']}
+    # Pinterest pins: every name that has its own page gets a custom
+    # 1000x1500 PNG card. (Was previously gated to top 1000, which left
+    # ranks 1001+ — e.g. Serene at 5,686 in the US — falling back to
+    # the generic og-default.png with no Share / Download buttons.)
+    g['top_pin_set'] = set(g['HAS_PAGE'])
 
     out = g['OUT_DIR']
     for sub in ('name', 'year', 'similar', 'decade', 'letter', 'trends', 'pin'):
@@ -4761,6 +4763,22 @@ def _extract_pin_meaning(text: str) -> str:
     return best.rstrip(' .')
 
 
+def _prerender_pins_parallel() -> None:
+    """Build all missing per-name pins for the active country in parallel.
+    Skips names whose pin already exists on disk (cache hit)."""
+    targets: list[tuple[str, Path]] = []
+    for name in top_pin_set:
+        pin_path = OUT_DIR / 'pin' / f'{slugify(name)}.png'
+        if not pin_path.exists():
+            targets.append((name, pin_path))
+    if not targets:
+        return
+    from concurrent.futures import ThreadPoolExecutor
+    print(f"  {len(targets):,} pin renders (parallel)…")
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        list(pool.map(lambda t: _render_pin_for(*t), targets))
+
+
 def _render_pin_for(name: str, out_path: Path) -> None:
     """Build the per-name pin from active-country data. Idempotent — callers
     skip when out_path already exists."""
@@ -5976,6 +5994,12 @@ def generate_name_index_json():
     # first ("ol" → Olivia, not Olalla). All tools that read this file iterate
     # in order and break after 8 matches.
     pages = [slugify(n) for n in sorted(pages_to_generate, key=lambda n: (-name_total[n], n))]
+    # Hand-written easter-egg pages (e.g. /name/air.html) live outside the
+    # threshold gate but still need to be searchable & routable from PAGES.
+    if ACTIVE_CC == 'US':
+        for extra in ('air',):
+            if extra not in pages:
+                pages.append(extra)
     ssa = [slugify(n) for n in sorted((n for n in name_total if n not in HAS_PAGE),
                                        key=lambda n: (-name_total[n], n))]
     (OUT_DIR / 'name-index.json').write_text(
@@ -6785,6 +6809,10 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
     print(f"--- Generating [{cc}] tree ({PREFIX or '/'}) ---")
     generate_homepage()
     generate_browse_index()
+    # Pre-pass: render any missing per-name pins in parallel so the
+    # name-page loop only does HTML work. PIL/Pillow releases the GIL
+    # around the compression step, so threads give a real speed-up.
+    _prerender_pins_parallel()
     print(f"  {len(pages_to_generate)} name pages…")
     for name in pages_to_generate:
         generate_name_page(name)

@@ -149,17 +149,32 @@ def render_pin(
         for i, line in enumerate(lines):
             d.text((80, y + 34 + i * 46), line, font=mean_font, fill=INK)
 
-    # ─── Numerology card row (870 → 1380) ──────────────────────────────
+    # ─── Numerology card row ───────────────────────────────────────────
+    # When the meaning block is empty (~30% of names — Wikipedia etymology
+    # didn't parse), the 650–830 band would otherwise be blank canvas. In
+    # that case, slide the numerology block up to occupy it, add a short
+    # explainer headline, and let each card's description wrap to more
+    # lines so the card fills its taller height.
     if numerology:
-        nblock_top = 870
+        full_height = not meaning
+        nblock_top = 650 if full_height else 870
         nblock_bot = 1380
         d.rounded_rectangle([(60, nblock_top), (W - 60, nblock_bot)],
                             radius=32, fill=NUM_BG)
         d.text((90, nblock_top + 24), "NUMEROLOGY",
                font=_font(INTER, 22), fill=CORAL)
+        # Explainer (only when we have the extra room).
+        if full_height:
+            blurb = "Each number maps a different facet of the name — the path it sets, the inner self it expresses, the face it shows the world."
+            blurb_font = _font(INTER, 22)
+            blurb_lines = _wrap(d, blurb, blurb_font, W - 180, max_lines=3)
+            by = nblock_top + 60
+            for line in blurb_lines:
+                d.text((90, by), line, font=blurb_font, fill=MUTED)
+                by += 30
         cards = numerology[:3]
         card_w = (W - 60 - 60 - 40) // 3       # 60px margins, 20px gap
-        card_y = nblock_top + 70
+        card_y = nblock_top + (170 if full_height else 70)
         x = 80
         for entry in cards:
             num, lbl, trait_name, trait_desc = entry
