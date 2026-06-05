@@ -6724,6 +6724,52 @@ def write_sitemaps_and_robots(urls_by_cc: dict[str, list[str]]) -> None:
 # ---------------------------------------------------------------------------
 # Per-country build runner
 # ---------------------------------------------------------------------------
+def generate_air_easter_egg():
+    """A hand-written /name/air.html that overrides the empty default —
+    the name "Air" doesn't clear PAGE_MIN_TOTAL on its own (5 babies in
+    2024 per SSA), so without this we'd 404. This is the creator's note."""
+    p = PREFIX
+    canonical = f"{BASE_URL}/name/air.html"
+    body = """        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Air</div>
+        <div class="air-card">
+            <div class="air-card-eyebrow">A note from the creator</div>
+            <h1 class="air-card-h1">You found the creator of this page</h1>
+            <p class="air-card-lede">
+                <strong>Air</strong> is known in Telegram as a playboy who wants to settle down.
+                He loves charts, hates coriander, is scared of horror movies, looks forward to
+                being pushed around in a wheelchair, and loves to tinker and build tools.
+            </p>
+            <p class="air-card-lede">
+                He built this whole site in case he and <strong>S</strong> have a baby
+                one day and can't agree on what to name them.
+            </p>
+            <p class="air-card-cta">
+                <a href="/" class="air-card-link">Browse baby names →</a>
+                <a href="/sibling.html" class="air-card-link-alt">Try the sibling tool</a>
+            </p>
+        </div>
+        <style>
+            .air-card { background: linear-gradient(180deg, #f7fafa 0%, #ffffff 100%); border: 1px solid #d6dde2; border-radius: 14px; padding: 2.25rem 2rem; margin: 1.5rem 0; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
+            .air-card-eyebrow { color: #149E91; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.78rem; margin-bottom: 0.5rem; }
+            .air-card-h1 { margin: 0 0 1.25rem; font-size: 1.85rem; line-height: 1.15; color: #1f2933; }
+            .air-card-lede { font-size: 1.05rem; line-height: 1.6; color: #2a3540; margin: 0 0 1rem; }
+            .air-card-lede strong { color: #149E91; }
+            .air-card-cta { margin: 1.5rem 0 0; display: flex; flex-wrap: wrap; gap: 0.6rem; }
+            .air-card-link { background: #FF6B5C; color: #fff; padding: 0.55rem 1.1rem; border-radius: 999px; text-decoration: none; font-weight: 600; transition: background 0.12s ease, transform 0.12s ease; }
+            .air-card-link:hover { background: #e85a4c; transform: translateY(-1px); }
+            .air-card-link-alt { background: #fff; color: #1f2933; border: 1px solid #cfd6dc; padding: 0.55rem 1.1rem; border-radius: 999px; text-decoration: none; font-weight: 600; transition: background 0.12s ease, border-color 0.12s ease; }
+            .air-card-link-alt:hover { background: #f2f5f8; border-color: #149E91; }
+        </style>"""
+    (OUT_DIR / 'name' / 'air.html').parent.mkdir(parents=True, exist_ok=True)
+    (OUT_DIR / 'name' / 'air.html').write_text(
+        page("Air — a note from the creator",
+             body,
+             description="A personal note from the creator of NameCharted.",
+             canonical=canonical),
+        encoding='utf-8',
+    )
+
+
 def run_generators_for_active(compare_files_out: list[str]) -> None:
     cc = ACTIVE_CC
     print(f"--- Generating [{cc}] tree ({PREFIX or '/'}) ---")
@@ -6756,6 +6802,7 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
     generate_year_in_review_page(LATEST_YEAR)
 
     if cc == 'US':
+        generate_air_easter_egg()
         print("  compare pages (top 5 names)…")
         top5 = [name for name, _ in top_names[:5]]
         for i in range(len(top5)):
