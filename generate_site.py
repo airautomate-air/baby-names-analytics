@@ -282,6 +282,22 @@ def load_enrichment() -> None:
                 n_patched += 1
         print(f'  famous overrides: patched {n_patched} names')
 
+    # Curated short meanings — patches gaps in the Wikipedia auto-extractor.
+    # Maps name slug -> short blurb (used by the pin renderer when extraction
+    # fails). Override always wins over the auto-extracted meaning.
+    mp = Path('data/name_meanings.json')
+    if mp.exists():
+        with mp.open() as f:
+            mover = json.load(f)
+        n_meanings = 0
+        for slug, blurb in mover.items():
+            if not isinstance(blurb, str) or slug.startswith('_'):
+                continue
+            entry = ENRICHMENT.setdefault(slug, {})
+            entry['meaning_pin_override'] = blurb
+            n_meanings += 1
+        print(f'  meaning overrides: {n_meanings} names')
+
 
 # Fiction data (Phase 6h). Shared across countries — each country's
 # /fiction/<slug>.html links to its own /name/<slug>.html when the name exists.
@@ -4842,6 +4858,11 @@ def _render_pin_for(name: str, out_path: Path) -> None:
     meaning_text = enrich.get('meaning_fr' if ACTIVE_CC == 'FR' else 'meaning_en') \
         or enrich.get('meaning_en') or ''
     meaning = _extract_pin_meaning(meaning_text)
+    # Curated override fills gaps where the Wikipedia extractor returns nothing.
+    if not meaning:
+        ov = enrich.get('meaning_pin_override')
+        if ov:
+            meaning = _pin_strip_unrenderable(ov)[:100]
 
     destiny, soul, pers = numerology_numbers(name)
     traits = NUMEROLOGY_TRAITS[ACTIVE_CC]

@@ -15,3 +15,6 @@ data/raw/**
 !data/raw/au/sa/
 !data/raw/au/qld/README.md
 !data/raw/au/sa/README.md
+
+# Local pin sample renders (dev artefacts, not part of the site)
+pin-samples/
