@@ -1292,6 +1292,8 @@ STRINGS_EN: dict[str, str] = {
     "sibling_result_for": "Names that pair well with {name}",
     "sibling_result_for_set": "Names that pair well with {names}",
     "sibling_show_more": "Show more",
+    "sibling_share": "Copy share link",
+    "sibling_share_done": "Link copied!",
     "sibling_desc": ("Find sibling names that pair well with a child you've "
                      "already named — or with a set of 2-3 siblings. We match "
                      "on peak era, syllable rhythm and complementary "
@@ -1729,6 +1731,8 @@ STRINGS_FR: dict[str, str] = {
     "sibling_result_for": "Prénoms qui vont bien avec {name}",
     "sibling_result_for_set": "Prénoms qui vont bien avec {names}",
     "sibling_show_more": "Voir plus",
+    "sibling_share": "Copier le lien",
+    "sibling_share_done": "Lien copié !",
     "sibling_desc": ("Trouvez des prénoms pour la fratrie qui s'accordent avec "
                      "le prénom — ou les 2-3 prénoms — d'enfants déjà "
                      "choisis. Score basé sur l'époque, le nombre de syllabes "
@@ -3651,6 +3655,12 @@ SIBLING_SCRIPT = """
                 clear(listEl);
                 renderMore();
                 resultEl.style.display = '';
+
+                // Reflect the current names in the URL so the page is shareable.
+                var slugsForQs = refs.map(function(r) { return r.slug; }).join(',');
+                if (slugsForQs) {
+                    history.replaceState(null, '', window.location.pathname + '?names=' + slugsForQs);
+                }
             });
         }
 
@@ -3690,6 +3700,18 @@ SIBLING_SCRIPT = """
             });
         });
         form.addEventListener('submit', function(e) { e.preventDefault(); run(); });
+
+        var shareBtn = document.getElementById('sib-share');
+        var shareDone = document.getElementById('sib-share-done');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', function() {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(window.location.href);
+                }
+                shareDone.style.display = '';
+                setTimeout(function() { shareDone.style.display = 'none'; }, 1800);
+            });
+        }
 
         // Pre-fill from ?names=a,b,c (comma-separated) or legacy ?name=
         var qs = new URLSearchParams(window.location.search);
@@ -4322,6 +4344,10 @@ BASE_CSS = """
         .sib-more-wrap { text-align: center; margin-top: 1.5rem; }
         #sib-more { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.6rem 1.4rem; border-radius: 24px; cursor: pointer; font-weight: 500; font-size: 0.92rem; }
         #sib-more:hover { border-color: #149E91; color: #149E91; }
+        .sib-share-wrap { margin: 0.4rem 0 0.2rem; display: flex; align-items: center; gap: 0.7rem; }
+        .sib-share-btn { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.35rem 0.95rem; border-radius: 20px; cursor: pointer; font-weight: 500; font-size: 0.85rem; }
+        .sib-share-btn:hover { border-color: #149E91; color: #149E91; }
+        .sib-share-done { color: #149E91; font-size: 0.85rem; font-weight: 500; }
 """
 
 
@@ -6270,6 +6296,10 @@ def generate_sibling_page():
         <div id="sib-note" style="display:none;">{S("sibling_unknown")}</div>
         <div id="sib-result" style="display:none;">
             <h2 id="sib-header"></h2>
+            <div class="sib-share-wrap">
+                <button type="button" id="sib-share" class="sib-share-btn">{S("sibling_share")}</button>
+                <span id="sib-share-done" class="sib-share-done" style="display:none;">{S("sibling_share_done")}</span>
+            </div>
             <div id="sib-list"></div>
             <div class="sib-more-wrap">
                 <button type="button" id="sib-more" style="display:none;">{S("sibling_show_more")}</button>

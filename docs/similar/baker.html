@@ -381,6 +381,10 @@
         .sib-more-wrap { text-align: center; margin-top: 1.5rem; }
         #sib-more { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.6rem 1.4rem; border-radius: 24px; cursor: pointer; font-weight: 500; font-size: 0.92rem; }
         #sib-more:hover { border-color: #149E91; color: #149E91; }
+        .sib-share-wrap { margin: 0.4rem 0 0.2rem; display: flex; align-items: center; gap: 0.7rem; }
+        .sib-share-btn { background: #fff; border: 1px solid #d6dde2; color: #1B2440; padding: 0.35rem 0.95rem; border-radius: 20px; cursor: pointer; font-weight: 500; font-size: 0.85rem; }
+        .sib-share-btn:hover { border-color: #149E91; color: #149E91; }
+        .sib-share-done { color: #149E91; font-size: 0.85rem; font-weight: 500; }
 </style>
     <script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://namecharted.com/"}, {"@type": "ListItem", "position": 2, "name": "Baker", "item": "https://namecharted.com/name/baker.html"}, {"@type": "ListItem", "position": 3, "name": "Similar names", "item": "https://namecharted.com/similar/baker.html"}]}</script>
     <link rel="alternate" hreflang="en-US" href="https://namecharted.com/similar/baker.html">
@@ -1769,6 +1773,12 @@
                 clear(listEl);
                 renderMore();
                 resultEl.style.display = '';
+
+                // Reflect the current names in the URL so the page is shareable.
+                var slugsForQs = refs.map(function(r) { return r.slug; }).join(',');
+                if (slugsForQs) {
+                    history.replaceState(null, '', window.location.pathname + '?names=' + slugsForQs);
+                }
             });
         }
 
@@ -1808,6 +1818,18 @@
             });
         });
         form.addEventListener('submit', function(e) { e.preventDefault(); run(); });
+
+        var shareBtn = document.getElementById('sib-share');
+        var shareDone = document.getElementById('sib-share-done');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', function() {
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(window.location.href);
+                }
+                shareDone.style.display = '';
+                setTimeout(function() { shareDone.style.display = 'none'; }, 1800);
+            });
+        }
 
         // Pre-fill from ?names=a,b,c (comma-separated) or legacy ?name=
         var qs = new URLSearchParams(window.location.search);
