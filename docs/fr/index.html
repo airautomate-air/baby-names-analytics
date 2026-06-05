@@ -508,14 +508,24 @@
             function search() {
                 var q = slugify(input.value);
                 if (!q || !PAGES) { ac.style.display = 'none'; return; }
+                // Scan the full popularity-ordered list so that niche prefix
+                // matches (e.g. "Serene" for "ser") aren't crowded out by
+                // popular substring matches (e.g. "Kaiser"). Cap each bucket
+                // so the scan stays cheap on large lists.
                 var starts = [], contains = [];
-                for (var i = 0; i < PAGES.length && starts.length + contains.length < 8; i++) {
+                for (var i = 0; i < PAGES.length; i++) {
                     var s = PAGES[i];
-                    if (s.indexOf(q) === 0) starts.push(s);
-                    else if (s.indexOf(q) > 0) contains.push(s);
+                    if (s.indexOf(q) === 0) {
+                        if (starts.length < 10) starts.push(s);
+                    } else if (s.indexOf(q) > 0) {
+                        if (contains.length < 10) contains.push(s);
+                    }
+                    if (starts.length >= 10 && contains.length >= 10) break;
                 }
                 sel = -1;
-                render(starts.concat(contains).slice(0, 8));
+                // Prefix matches always come first; fill the rest with
+                // substring matches up to a 10-row dropdown.
+                render(starts.concat(contains).slice(0, 10));
             }
             input.addEventListener('input', function() { loadIndex().then(search); });
             input.addEventListener('focus', function() { loadIndex().then(search); });
