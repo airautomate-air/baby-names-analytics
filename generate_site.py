@@ -6849,15 +6849,19 @@ def generate_air_easter_egg():
     body = """        <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Air</div>
         <div class="air-card">
             <div class="air-card-eyebrow">A note from the creator</div>
-            <h1 class="air-card-h1">You found the creator of this page</h1>
+            <h1 class="air-card-h1">Congratulations! You found the creator of this website</h1>
             <p class="air-card-lede">
-                <strong>Air</strong> is known in Telegram as a playboy who wants to settle down.
-                He loves charts, hates coriander, is scared of horror movies, looks forward to
-                being pushed around in a wheelchair, and loves to tinker and build tools.
+                <strong>Air</strong> is known in Telegram as a deeply loyal, humorous,
+                quirky, weird, intelligent guy who believes fiercely in true love.
             </p>
             <p class="air-card-lede">
-                He built this whole site in case he and <strong>S</strong> have a baby
-                one day and can't agree on what to name them.
+                He obsesses over charts and statistics, hates hot weather and coriander,
+                is scared of horror movies and missing out on life, and looks forward to
+                being pushed to his limits — or towards a steep downhill in a wheelchair.
+            </p>
+            <p class="air-card-lede">
+                He built this whole site in case he and <strong>______</strong> have
+                babies one day and don't have any ideas on what to name them.
             </p>
             <p class="air-card-cta">
                 <a href="/" class="air-card-link">Browse baby names →</a>
