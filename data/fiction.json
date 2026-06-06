@@ -767,6 +767,233 @@
         {"name": "Ian", "role": "Young Ian Murray — Jamie's nephew"},
         {"name": "Jenny", "role": "Jenny Murray — Jamie's sister"}
       ]
+    },
+    {
+      "slug": "bronte-novels",
+      "title": "The Brontë Novels",
+      "kind": "books",
+      "year": 1847,
+      "blurb": "Charlotte, Emily, and Anne Brontë's Yorkshire moors fiction — three sisters who reshaped Victorian literature in a single year.",
+      "names": [
+        {"name": "Jane", "role": "Jane Eyre — Charlotte's governess heroine"},
+        {"name": "Edward", "role": "Edward Rochester — Jane Eyre's brooding master of Thornfield"},
+        {"name": "Bertha", "role": "Bertha Mason — Rochester's first wife"},
+        {"name": "Helen", "role": "Helen Burns — Jane's friend at Lowood"},
+        {"name": "Adèle", "role": "Adèle Varens — Rochester's ward"},
+        {"name": "Catherine", "role": "Catherine Earnshaw — Emily's wild heart of Wuthering Heights"},
+        {"name": "Heathcliff", "role": "Heathcliff — the foundling who consumes Catherine"},
+        {"name": "Hareton", "role": "Hareton Earnshaw — Catherine's nephew"},
+        {"name": "Isabella", "role": "Isabella Linton — Edgar's sister"},
+        {"name": "Hindley", "role": "Hindley Earnshaw — Catherine's brother"},
+        {"name": "Agnes", "role": "Agnes Grey — Anne's quietly observed governess"},
+        {"name": "Helen", "role": "Helen Graham — Anne's tenant of Wildfell Hall"},
+        {"name": "Arthur", "role": "Arthur Huntingdon — Helen Graham's dissolute husband"}
+      ]
+    },
+    {
+      "slug": "the-crown",
+      "title": "The Crown",
+      "kind": "tv",
+      "year": 2016,
+      "blurb": "Netflix's account of the second Elizabethan age — Queen Elizabeth II's reign across six seasons of British history.",
+      "names": [
+        {"name": "Elizabeth", "role": "Queen Elizabeth II"},
+        {"name": "Philip", "role": "Prince Philip — the Duke of Edinburgh"},
+        {"name": "Margaret", "role": "Princess Margaret"},
+        {"name": "Charles", "role": "Prince Charles — eventual Charles III"},
+        {"name": "Diana", "role": "Diana, Princess of Wales"},
+        {"name": "Camilla", "role": "Camilla Parker Bowles"},
+        {"name": "Anne", "role": "Princess Anne"},
+        {"name": "Andrew", "role": "Prince Andrew"},
+        {"name": "Edward", "role": "Prince Edward"},
+        {"name": "Winston", "role": "Sir Winston Churchill"},
+        {"name": "Harold", "role": "Harold Macmillan / Wilson — successive Prime Ministers"},
+        {"name": "Tony", "role": "Antony Armstrong-Jones, Lord Snowdon"}
+      ]
+    },
+    {
+      "slug": "downton-abbey",
+      "title": "Downton Abbey",
+      "kind": "tv",
+      "year": 2010,
+      "blurb": "Julian Fellowes' early-20th-century Yorkshire country house — six seasons of Crawley family life upstairs and down.",
+      "names": [
+        {"name": "Robert", "role": "Robert Crawley, Earl of Grantham"},
+        {"name": "Cora", "role": "Cora Crawley, Countess of Grantham"},
+        {"name": "Mary", "role": "Lady Mary Crawley — the eldest daughter"},
+        {"name": "Edith", "role": "Lady Edith Crawley — the middle daughter"},
+        {"name": "Sybil", "role": "Lady Sybil Crawley — the youngest"},
+        {"name": "Matthew", "role": "Matthew Crawley — heir presumptive, Mary's husband"},
+        {"name": "Tom", "role": "Tom Branson — chauffeur turned son-in-law"},
+        {"name": "Violet", "role": "Violet Crawley, Dowager Countess"},
+        {"name": "Isobel", "role": "Isobel Crawley — Matthew's mother"},
+        {"name": "Carson", "role": "Mr Carson — the butler"},
+        {"name": "Mrs Hughes", "role": "Elsie Hughes — the housekeeper"},
+        {"name": "Anna", "role": "Anna Bates — head housemaid"},
+        {"name": "Bates", "role": "John Bates — valet to Lord Grantham"},
+        {"name": "Thomas", "role": "Thomas Barrow — footman, then under-butler"},
+        {"name": "Daisy", "role": "Daisy Mason — kitchen maid"},
+        {"name": "Beryl", "role": "Mrs Patmore — head cook"},
+        {"name": "Rose", "role": "Lady Rose MacClare — the Crawleys' cousin"}
+      ]
+    },
+    {
+      "slug": "narnia",
+      "title": "The Chronicles of Narnia",
+      "kind": "books",
+      "year": 1950,
+      "blurb": "C. S. Lewis's seven-book sequence — children, talking animals, and a Christ-figure lion in a parallel world reached through a wardrobe.",
+      "names": [
+        {"name": "Lucy", "role": "Lucy Pevensie — the youngest, the first to find Narnia"},
+        {"name": "Edmund", "role": "Edmund Pevensie — the redeemed traitor"},
+        {"name": "Peter", "role": "Peter Pevensie — High King of Narnia"},
+        {"name": "Susan", "role": "Susan Pevensie — the gentle"},
+        {"name": "Aslan", "role": "Aslan — the great Lion, son of the Emperor-over-the-Sea"},
+        {"name": "Caspian", "role": "Prince Caspian — heir of Telmar"},
+        {"name": "Eustace", "role": "Eustace Scrubb — the Pevensies' cousin"},
+        {"name": "Jill", "role": "Jill Pole — Eustace's schoolmate"},
+        {"name": "Polly", "role": "Polly Plummer — the Magician's Nephew era"},
+        {"name": "Digory", "role": "Digory Kirke — present at the creation of Narnia"},
+        {"name": "Reepicheep", "role": "Reepicheep — the valiant mouse"},
+        {"name": "Tumnus", "role": "Mr Tumnus — the faun"}
+      ]
+    },
+    {
+      "slug": "roald-dahl",
+      "title": "The Roald Dahl Universe",
+      "kind": "books",
+      "year": 1961,
+      "blurb": "Dahl's children's books — sharp, dark, and full of the kind of names that bypass adults and head straight to children.",
+      "names": [
+        {"name": "Matilda", "role": "Matilda Wormwood — the telekinetic prodigy"},
+        {"name": "Charlie", "role": "Charlie Bucket — heir to the chocolate factory"},
+        {"name": "James", "role": "James — of James and the Giant Peach"},
+        {"name": "Sophie", "role": "Sophie — the BFG's friend"},
+        {"name": "Danny", "role": "Danny — Champion of the World"},
+        {"name": "Lavender", "role": "Lavender — Matilda's friend"},
+        {"name": "Veruca", "role": "Veruca Salt — the spoiled child"},
+        {"name": "Violet", "role": "Violet Beauregarde — the gum chewer"},
+        {"name": "Augustus", "role": "Augustus Gloop"},
+        {"name": "Mike", "role": "Mike Teavee"},
+        {"name": "Willy", "role": "Willy Wonka — the chocolatier"},
+        {"name": "George", "role": "George — of George's Marvellous Medicine"},
+        {"name": "Bruce", "role": "Bruce Bogtrotter — of the chocolate cake"},
+        {"name": "Honey", "role": "Miss Honey — Matilda's teacher"}
+      ]
+    },
+    {
+      "slug": "pixar",
+      "title": "Pixar",
+      "kind": "film",
+      "year": 1995,
+      "blurb": "Thirty years of Pixar — *Toy Story*, *Finding Nemo*, *Up*, *Inside Out*, *Coco* — animation that adults pretend they watch only for the kids.",
+      "names": [
+        {"name": "Andy", "role": "Andy Davis — owner of Woody and Buzz (Toy Story)"},
+        {"name": "Woody", "role": "Sheriff Woody — Andy's cowboy doll"},
+        {"name": "Buzz", "role": "Buzz Lightyear — to infinity and beyond"},
+        {"name": "Jessie", "role": "Jessie — the yodelling cowgirl"},
+        {"name": "Bonnie", "role": "Bonnie Anderson — Andy's successor"},
+        {"name": "Nemo", "role": "Nemo — the lost clownfish"},
+        {"name": "Marlin", "role": "Marlin — Nemo's anxious father"},
+        {"name": "Dory", "role": "Dory — the forgetful blue tang"},
+        {"name": "Carl", "role": "Carl Fredricksen — the widower of Up"},
+        {"name": "Ellie", "role": "Ellie — Carl's wife"},
+        {"name": "Russell", "role": "Russell — the Wilderness Explorer"},
+        {"name": "Riley", "role": "Riley Andersen — Inside Out"},
+        {"name": "Joy", "role": "Joy — Riley's primary emotion"},
+        {"name": "Miguel", "role": "Miguel Rivera — Coco"},
+        {"name": "Coco", "role": "Mamá Coco — Miguel's great-grandmother"},
+        {"name": "Hector", "role": "Héctor — Miguel's guide in the Land of the Dead"},
+        {"name": "Sully", "role": "James 'Sully' Sullivan — Monsters, Inc."},
+        {"name": "Boo", "role": "Boo — the toddler in Monsters, Inc."},
+        {"name": "Remy", "role": "Remy — the rat chef of Ratatouille"},
+        {"name": "Wall-E", "role": "WALL-E — the last cleanup robot"},
+        {"name": "Eve", "role": "EVE — the probe sent to find life"},
+        {"name": "Mei", "role": "Meilin 'Mei' Lee — Turning Red"}
+      ]
+    },
+    {
+      "slug": "the-witcher",
+      "title": "The Witcher",
+      "kind": "books",
+      "year": 1986,
+      "blurb": "Andrzej Sapkowski's Slavic dark fantasy — books, games, and Netflix series — a monster-hunter and his found family.",
+      "names": [
+        {"name": "Geralt", "role": "Geralt of Rivia — the white wolf"},
+        {"name": "Yennefer", "role": "Yennefer of Vengerberg — the sorceress"},
+        {"name": "Ciri", "role": "Princess Cirilla of Cintra — Geralt's child-surprise"},
+        {"name": "Triss", "role": "Triss Merigold — the sorceress of Maribor"},
+        {"name": "Dandelion", "role": "Dandelion / Jaskier — the bard"},
+        {"name": "Vesemir", "role": "Vesemir — the elder witcher of Kaer Morhen"},
+        {"name": "Lambert", "role": "Lambert — fellow witcher"},
+        {"name": "Eskel", "role": "Eskel — fellow witcher"},
+        {"name": "Calanthe", "role": "Queen Calanthe — Ciri's grandmother"},
+        {"name": "Emhyr", "role": "Emhyr var Emreis — Emperor of Nilfgaard"},
+        {"name": "Tissaia", "role": "Tissaia de Vries — rectoress of Aretuza"}
+      ]
+    },
+    {
+      "slug": "naruto",
+      "title": "Naruto",
+      "kind": "tv",
+      "year": 2002,
+      "blurb": "Masashi Kishimoto's ninja epic — anime and manga that introduced a generation of Western kids to Japanese given names.",
+      "names": [
+        {"name": "Naruto", "role": "Naruto Uzumaki — the orange-clad ninja"},
+        {"name": "Sasuke", "role": "Sasuke Uchiha — Naruto's rival"},
+        {"name": "Sakura", "role": "Sakura Haruno — the medical ninja"},
+        {"name": "Kakashi", "role": "Kakashi Hatake — Team 7's teacher"},
+        {"name": "Hinata", "role": "Hinata Hyuga — Naruto's eventual wife"},
+        {"name": "Itachi", "role": "Itachi Uchiha — Sasuke's brother"},
+        {"name": "Iruka", "role": "Iruka Umino — Naruto's first teacher"},
+        {"name": "Jiraiya", "role": "Jiraiya — the toad sage"},
+        {"name": "Tsunade", "role": "Tsunade — the Fifth Hokage"},
+        {"name": "Gaara", "role": "Gaara of the Sand"},
+        {"name": "Shikamaru", "role": "Shikamaru Nara — the strategist"},
+        {"name": "Neji", "role": "Neji Hyuga — Hinata's cousin"},
+        {"name": "Rock", "role": "Rock Lee — the taijutsu specialist"},
+        {"name": "Tenten", "role": "Tenten — the weapons master"},
+        {"name": "Ino", "role": "Ino Yamanaka — Sakura's rival"},
+        {"name": "Choji", "role": "Choji Akimichi — Shikamaru's friend"},
+        {"name": "Boruto", "role": "Boruto Uzumaki — Naruto's son"},
+        {"name": "Sarada", "role": "Sarada Uchiha — Sasuke's daughter"}
+      ]
+    },
+    {
+      "slug": "to-kill-a-mockingbird",
+      "title": "To Kill a Mockingbird",
+      "kind": "books",
+      "year": 1960,
+      "blurb": "Harper Lee's Depression-era Alabama novel — narrated by a six-year-old, anchored by her father Atticus Finch.",
+      "names": [
+        {"name": "Scout", "role": "Jean Louise 'Scout' Finch — the six-year-old narrator"},
+        {"name": "Jem", "role": "Jeremy 'Jem' Finch — Scout's older brother"},
+        {"name": "Atticus", "role": "Atticus Finch — their father, the lawyer"},
+        {"name": "Dill", "role": "Charles Baker 'Dill' Harris — their summer friend"},
+        {"name": "Boo", "role": "Arthur 'Boo' Radley — the reclusive neighbour"},
+        {"name": "Calpurnia", "role": "Calpurnia — the Finches' housekeeper"},
+        {"name": "Tom", "role": "Tom Robinson — the accused"},
+        {"name": "Mayella", "role": "Mayella Ewell — the accuser"},
+        {"name": "Bob", "role": "Bob Ewell — Mayella's father"},
+        {"name": "Heck", "role": "Heck Tate — the sheriff"}
+      ]
+    },
+    {
+      "slug": "the-great-gatsby",
+      "title": "The Great Gatsby",
+      "kind": "books",
+      "year": 1925,
+      "blurb": "F. Scott Fitzgerald's Jazz Age novel of Long Island excess — a hundred years old this year, still the great American novel by general assent.",
+      "names": [
+        {"name": "Jay", "role": "Jay Gatsby — the self-made millionaire"},
+        {"name": "Daisy", "role": "Daisy Buchanan — Jay's lost love"},
+        {"name": "Nick", "role": "Nick Carraway — the narrator"},
+        {"name": "Jordan", "role": "Jordan Baker — the golfer"},
+        {"name": "Tom", "role": "Tom Buchanan — Daisy's husband"},
+        {"name": "Myrtle", "role": "Myrtle Wilson — Tom's mistress"},
+        {"name": "George", "role": "George Wilson — Myrtle's husband"},
+        {"name": "Meyer", "role": "Meyer Wolfsheim — Gatsby's business associate"}
+      ]
     }
   ]
 }
