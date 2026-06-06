@@ -467,25 +467,50 @@ def load_blog() -> None:
     print(f'  blog: {n_total} posts across {sum(1 for cc in COUNTRIES if BLOG_POSTS_BY_CC[cc])} countries')
 
 
-# Saint-of-the-day calendar (Phase 6i, FR-only).
-SAINTS_FR: dict[str, str] = {}        # 'MM-DD' -> 'Marie'
-SAINT_TO_DATES: dict[str, list[str]] = {}  # 'marie' -> ['01-01', '08-15', ...]
+# Saint-of-the-day calendar (Phase 6i FR-only, Phase 34 expanded to ES + IT).
+# Each country has its own MM-DD → saint-name map and reverse slug → [dates] index.
+SAINTS_BY_CC: dict[str, dict[str, str]] = {}
+SAINT_TO_DATES_BY_CC: dict[str, dict[str, list[str]]] = {}
+
+# Module-level shorthands for the active country. Repointed by build_country()
+# at the start of each tree generation; kept for code that still reads SAINTS_FR
+# directly (legacy callers).
+SAINTS_FR: dict[str, str] = {}
+SAINT_TO_DATES: dict[str, list[str]] = {}
 
 
-def load_saints_fr() -> None:
+def load_saints_all() -> None:
+    """Load every saints_<cc>.json we have. Sets SAINTS_BY_CC and the per-CC
+    reverse indexes. Idempotent — safe to call once per build."""
+    global SAINTS_BY_CC, SAINT_TO_DATES_BY_CC
+    for cc, fname in (('FR', 'saints_fr.json'), ('ES', 'saints_es.json'),
+                      ('IT', 'saints_it.json')):
+        p = Path('data') / fname
+        if not p.exists():
+            continue
+        with p.open() as f:
+            cal = json.load(f).get('calendar', {})
+        SAINTS_BY_CC[cc] = cal
+        rev: dict[str, list[str]] = {}
+        for date, saint in cal.items():
+            slug = slugify(saint)
+            rev.setdefault(slug, []).append(date)
+        SAINT_TO_DATES_BY_CC[cc] = rev
+        print(f'  saints ({cc}): {len(cal)} calendar days, {len(rev)} unique slugs')
+
+
+def _activate_saints_for(cc: str) -> None:
+    """Point the legacy SAINTS_FR/SAINT_TO_DATES globals at the active CC's
+    data so existing render code keeps working without per-call passing."""
     global SAINTS_FR, SAINT_TO_DATES
-    p = Path('data/saints_fr.json')
-    if not p.exists():
-        return
-    with p.open() as f:
-        SAINTS_FR = json.load(f).get('calendar', {})
-    # Build saint slug -> list of dates that celebrate them
-    for date, saint in SAINTS_FR.items():
-        # Some entries are events (Toussaint, Noël, Assomption) — keep them, slug them
-        slug = slugify(saint)
-        SAINT_TO_DATES.setdefault(slug, []).append(date)
-    print(f'  saints (FR): {len(SAINTS_FR)} calendar days, '
-          f'{len(SAINT_TO_DATES)} unique saint slugs')
+    SAINTS_FR = SAINTS_BY_CC.get(cc, {})
+    SAINT_TO_DATES = SAINT_TO_DATES_BY_CC.get(cc, {})
+
+
+# Back-compat shim — old code still calls load_saints_fr().
+def load_saints_fr() -> None:
+    load_saints_all()
+    _activate_saints_for('FR')
 
 
 def build_country(cc: str) -> None:
@@ -1365,8 +1390,26 @@ STRINGS_EN: dict[str, str] = {
     "name_fiction_h2": "Also a character in",
     "name_fiction_in": "In <a href=\"{url}\">{title}</a>: {role}",
 
-    # Saint stubs — FR-only feature, EN keys exist only for S() fallback safety
+    # Saint calendar strings — used by FR, ES, and IT trees.
     "nav_saints": "Saint of the day",
+    "saints_hub_title": "Saint of the day — calendar of saints and names",
+    "saints_hub_h1": "Saint of the day",
+    "saints_hub_intro": ("The traditional Catholic calendar of saints, day by day. "
+                         "Click any day to see the saint celebrated and the popularity "
+                         "of that name."),
+    "saints_hub_desc": ("Daily calendar of saints and name days. Browse all 366 days "
+                        "and see the popularity trend of each name."),
+    "saint_page_title": "Saint{e} {name} — feast day, dates, name popularity",
+    "saint_page_h1": "Saint{e} {name}",
+    "saint_page_dates_one": "The feast is celebrated on <strong>{date}</strong>.",
+    "saint_page_dates_multi": "Celebrated on <strong>{dates}</strong>.",
+    "saint_page_popularity_link": "See the popularity of the name {name} →",
+    "saint_page_desc": "Feast day(s), meaning and popularity of the name {name}.",
+    "saint_back_to_hub": "← Back to the calendar of saints",
+    "saints_today_label": "Today is the feast of Saint {name}",
+    "saints_today_label_fem": "Today is the feast of Saint {name}",
+    "saints_today_event": "Today: {name}",
+    "saints_today_wish": "Happy feast day to everyone called {name}!",
 
     # Initials maker
     "nav_initials": "Initials maker",
@@ -3922,6 +3965,8 @@ SAINTS_SCRIPT = """
         var L_TODAY_F = __L_TODAY_F__;
         var L_TODAY_E = __L_TODAY_E__;
         var L_WISH = __L_WISH__;
+        var HUB_PREFIX = __HUB_PREFIX__;
+        var SAINT_DIR = __SAINT_DIR__;
 
         function slugify(s) {
             return (s || '').toLowerCase()
@@ -3940,7 +3985,7 @@ SAINTS_SCRIPT = """
         var fem = (last === 'e' || last === 'a') && !isEvent;
         var template = isEvent ? L_TODAY_E : (fem ? L_TODAY_F : L_TODAY_M);
         var label = template.replace('{name}', saint);
-        var href = '/fr/saint/' + slug + '.html';
+        var href = HUB_PREFIX + '/' + SAINT_DIR + '/' + slug + '.html';
 
         var box = document.getElementById('sf-today');
         if (box) {
@@ -3964,7 +4009,7 @@ SAINTS_SCRIPT = """
 
 
 def saints_script() -> str:
-    if ACTIVE_CC != 'FR' or not SAINTS_FR:
+    if ACTIVE_CC not in ('FR', 'ES', 'IT') or not SAINTS_BY_CC.get(ACTIVE_CC):
         return (SAINTS_SCRIPT
                 .replace('__SKIP__', 'true')
                 .replace('__CAL__', '{}')
@@ -3972,15 +4017,20 @@ def saints_script() -> str:
                 .replace('__L_TODAY_M__', '""')
                 .replace('__L_TODAY_F__', '""')
                 .replace('__L_TODAY_E__', '""')
-                .replace('__L_WISH__', '""'))
+                .replace('__L_WISH__', '""')
+                .replace('__HUB_PREFIX__', '""')
+                .replace('__SAINT_DIR__', '""'))
+    saint_dir = {'FR': 'saint', 'ES': 'santo', 'IT': 'onomastico'}[ACTIVE_CC]
     return (SAINTS_SCRIPT
             .replace('__SKIP__', 'false')
-            .replace('__CAL__', json.dumps(SAINTS_FR, ensure_ascii=False))
+            .replace('__CAL__', json.dumps(SAINTS_BY_CC[ACTIVE_CC], ensure_ascii=False))
             .replace('__EVENTS__', json.dumps(sorted(SAINT_EVENTS)))
             .replace('__L_TODAY_M__', json.dumps(S("saints_today_label")))
             .replace('__L_TODAY_F__', json.dumps(S("saints_today_label_fem")))
             .replace('__L_TODAY_E__', json.dumps(S("saints_today_event")))
-            .replace('__L_WISH__', json.dumps(S("saints_today_wish"))))
+            .replace('__L_WISH__', json.dumps(S("saints_today_wish")))
+            .replace('__HUB_PREFIX__', json.dumps(PREFIX))
+            .replace('__SAINT_DIR__', json.dumps(saint_dir)))
 
 
 def sibling_script() -> str:
@@ -4427,7 +4477,7 @@ def site_nav_html() -> str:
                 <a href="{p}/initials.html" role="menuitem">{S("nav_initials")}</a>
                 <a href="{p}/origins.html" role="menuitem">{S("nav_origins")}</a>
                 <a href="{p}/fiction.html" role="menuitem">{S("nav_fiction")}</a>
-                {f'<a href="{p}/jour-de-fete.html" role="menuitem">{S("nav_saints")}</a>' if ACTIVE_CC == 'FR' else ''}
+                {('<a href="' + p + '/' + {'FR': 'jour-de-fete.html', 'ES': 'dia-del-santo.html', 'IT': 'onomastico.html'}[ACTIVE_CC] + '" role="menuitem">' + S('nav_saints') + '</a>') if ACTIVE_CC in ('FR', 'ES', 'IT') and SAINTS_BY_CC.get(ACTIVE_CC) else ''}
             </div>
         </div>
         <a href="{p}/favorites.html">{S("nav_favorites")}<span class="fav-nav-count"></span></a>
@@ -6645,17 +6695,64 @@ def generate_fiction_hub_page() -> None:
 
 FR_MONTH_NAMES = ['', 'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
                   'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+ES_MONTH_NAMES = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+IT_MONTH_NAMES = ['', 'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+                  'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre']
+EN_MONTH_NAMES = ['', 'January', 'February', 'March', 'April', 'May', 'June',
+                  'July', 'August', 'September', 'October', 'November', 'December']
+
+MONTH_NAMES_BY_CC = {
+    'FR': FR_MONTH_NAMES, 'ES': ES_MONTH_NAMES, 'IT': IT_MONTH_NAMES,
+    # Other CCs fall back to English; saints calendars currently exist only for FR/ES/IT.
+}
 
 # Saints that are events rather than personal names — never get an "à tous les
 # X" wish, no name-page link, and slugged but treated as events on hub.
 SAINT_EVENTS = {
+    # French event slugs
     'marie', 'presentation-de-jesus', 'notre-dame-de-lourdes', 'conversion-de-saint-paul',
     'annonciation', 'visitation', 'transfiguration', 'assomption',
     'nativite-de-marie', 'croix-glorieuse', 'toussaint', 'defunts',
     'presentation-de-marie', 'immaculee-conception', 'noel', 'innocents',
     'pierre-et-paul', 'anne-et-joachim', 'cosme-et-damien', 'cote-et-damien',
     'come-et-damien', 'simon-et-jude',
+    # Spanish event slugs (santoral)
+    'reyes-magos', 'conversion-de-san-pablo', 'candelaria', 'catedra-de-san-pedro',
+    'anunciacion', 'visitacion-de-la-virgen', 'transfiguracion', 'asuncion',
+    'natividad-de-la-virgen', 'nombre-de-maria', 'exaltacion-de-la-cruz',
+    'dolores', 'angeles-custodios', 'virgen-del-rosario', 'virgen-del-carmen',
+    'virgen-de-fatima', 'virgen-de-la-medalla-milagrosa', 'pilar', 'maria-auxiliadora',
+    'maria-reina', 'todos-los-santos', 'fieles-difuntos', 'presentacion-de-maria',
+    'inmaculada-concepcion', 'guadalupe', 'loreto', 'nieves',
+    'navidad', 'santos-inocentes', 'pedro-y-pablo', 'joaquin-y-ana',
+    'cosme-y-damian', 'simon-y-judas', 'miguel-gabriel-y-rafael',
+    # Italian event slugs (santorale)
+    'epifania', 'presentazione-del-signore', 'madonna-di-lourdes',
+    'conversione-di-san-paolo', 'cattedra-di-san-pietro', 'annunciazione',
+    'visitazione-di-maria', 'trasfigurazione', 'assunzione-di-maria',
+    'nativita-di-maria', 'esaltazione-della-croce', 'addolorata',
+    'angeli-custodi', 'madonna-del-rosario', 'madonna-del-carmine',
+    'madonna-di-fatima', 'madonna-della-neve', 'maria-ausiliatrice',
+    'maria-regina', 'tutti-i-santi', 'defunti', 'presentazione-di-maria',
+    'immacolata-concezione', 'natale', 'santi-innocenti',
+    'pietro-e-paolo', 'anna-e-gioacchino', 'cosma-e-damiano',
+    'simone-e-giuda', 'michele-gabriele-e-raffaele',
+    'filippo-e-giacomo', 'marcellino-e-pietro', 'proto-e-giacinto',
+    'timoteo-e-tito',
 }
+
+
+def _saints_hub_filename() -> str:
+    """Per-country URL for the saints calendar hub."""
+    return {'FR': 'jour-de-fete.html', 'ES': 'dia-del-santo.html',
+            'IT': 'onomastico.html'}.get(ACTIVE_CC, 'saints.html')
+
+
+def _saint_page_dir() -> str:
+    """Per-country directory for individual saint pages."""
+    return {'FR': 'saint', 'ES': 'santo',
+            'IT': 'onomastico'}.get(ACTIVE_CC, 'saint')
 
 
 def generate_saints_hub_page() -> None:
@@ -6664,6 +6761,8 @@ def generate_saints_hub_page() -> None:
     if not SAINTS_FR:
         return
     p = PREFIX
+    month_names = MONTH_NAMES_BY_CC.get(ACTIVE_CC, EN_MONTH_NAMES)
+    saint_dir = _saint_page_dir()
     sections = []
     for month in range(1, 13):
         rows = []
@@ -6673,28 +6772,27 @@ def generate_saints_hub_page() -> None:
                 continue
             saint = SAINTS_FR[key]
             slug = slugify(saint)
-            # Link to per-saint page when one exists (i.e. saint is a personal
-            # name we'll generate a page for).
-            href = f'{p}/saint/{slug}.html'
+            href = f'{p}/{saint_dir}/{slug}.html'
             rows.append(
                 f'<li data-key="{key}"><span class="sf-day">{day}</span>'
                 f'<a href="{href}">{saint}</a></li>'
             )
         sections.append(
             f'<section class="sf-month" id="m{month:02d}">'
-            f'<h2>{FR_MONTH_NAMES[month]}</h2>'
+            f'<h2>{month_names[month]}</h2>'
             f'<ol class="sf-days">{"".join(rows)}</ol>'
             f'</section>'
         )
+    hub_file = _saints_hub_filename()
     body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; {S("nav_saints")}</div>
         <h1>{S("saints_hub_h1")}</h1>
         <p>{S("saints_hub_intro")}</p>
         <div id="sf-today" class="sf-today" style="display:none;"></div>
         <div class="sf-calendar">{''.join(sections)}</div>"""
-    (OUT_DIR / 'jour-de-fete.html').write_text(
+    (OUT_DIR / hub_file).write_text(
         page(S("saints_hub_title"), body,
              description=S("saints_hub_desc"),
-             canonical=f"{BASE_URL}{p}/jour-de-fete.html"),
+             canonical=f"{BASE_URL}{p}/{hub_file}"),
         encoding='utf-8')
 
 
@@ -6702,14 +6800,20 @@ def generate_saint_page(slug: str, dates: list[str]) -> None:
     p = PREFIX
     saint_name = SAINTS_FR[dates[0]]   # first occurrence's official spelling
     is_event = slug in SAINT_EVENTS
-    has_name_page = slug in SLUGS_WITH_PAGE_BY_CC['FR']
+    has_name_page = slug in SLUGS_WITH_PAGE_BY_CC.get(ACTIVE_CC, set())
     # Sainte vs Saint — naive heuristic: ends in 'e' or 'a' → fem
+    # Only applied for French tree (the {e} placeholder is silently dropped on
+    # English/Italian/Spanish strings, so it's safe to compute either way).
     last = saint_name[-1].lower()
     fem_suffix = 'e' if last in 'ae' and not is_event else ''
 
+    month_names = MONTH_NAMES_BY_CC.get(ACTIVE_CC, EN_MONTH_NAMES)
+    saint_dir = _saint_page_dir()
+    hub_file = _saints_hub_filename()
+
     def pretty_date(d: str) -> str:
         m, dd = d.split('-')
-        return f'{int(dd)} {FR_MONTH_NAMES[int(m)].lower()}'
+        return f'{int(dd)} {month_names[int(m)].lower()}'
 
     if len(dates) == 1:
         dates_html = S("saint_page_dates_one", date=pretty_date(dates[0]))
@@ -6723,15 +6827,16 @@ def generate_saint_page(slug: str, dates: list[str]) -> None:
                     + S("saint_page_popularity_link", name=saint_name)
                     + '</strong></a></p>')
 
-    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/jour-de-fete.html">{S("nav_saints")}</a> &rsaquo; {saint_name}</div>
+    body = f"""        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; <a href="{p}/{hub_file}">{S("nav_saints")}</a> &rsaquo; {saint_name}</div>
         <h1>{S("saint_page_h1", e=fem_suffix, name=saint_name)}</h1>
         <p class="sf-dates">{dates_html}</p>
         {pop_link}
-        <p style="margin-top:2.5rem;"><a href="{p}/jour-de-fete.html">{S("saint_back_to_hub")}</a></p>"""
-    (OUT_DIR / 'saint' / f'{slug}.html').write_text(
+        <p style="margin-top:2.5rem;"><a href="{p}/{hub_file}">{S("saint_back_to_hub")}</a></p>"""
+    (OUT_DIR / saint_dir / f'{slug}.html').parent.mkdir(parents=True, exist_ok=True)
+    (OUT_DIR / saint_dir / f'{slug}.html').write_text(
         page(S("saint_page_title", e=fem_suffix, name=saint_name), body,
              description=S("saint_page_desc", name=saint_name),
-             canonical=f"{BASE_URL}{p}/saint/{slug}.html"),
+             canonical=f"{BASE_URL}{p}/{saint_dir}/{slug}.html"),
         encoding='utf-8')
 
 
@@ -6948,9 +7053,13 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
         urls.append(f"{BASE_URL}{p}/fiction.html")
         urls += [f"{BASE_URL}{p}/fiction/{fr['slug']}.html"
                  for fr in FICTION['franchises']]
-    if cc == 'FR' and SAINTS_FR:
-        urls.append(f"{BASE_URL}{p}/jour-de-fete.html")
-        urls += [f"{BASE_URL}{p}/saint/{s}.html" for s in SAINT_TO_DATES.keys()]
+    if cc in ('FR', 'ES', 'IT') and SAINTS_BY_CC.get(cc):
+        hub_file = {'FR': 'jour-de-fete.html', 'ES': 'dia-del-santo.html',
+                    'IT': 'onomastico.html'}[cc]
+        saint_dir = {'FR': 'saint', 'ES': 'santo', 'IT': 'onomastico'}[cc]
+        urls.append(f"{BASE_URL}{p}/{hub_file}")
+        urls += [f"{BASE_URL}{p}/{saint_dir}/{s}.html"
+                 for s in SAINT_TO_DATES_BY_CC[cc].keys()]
     if BLOG_POSTS_BY_CC.get(cc):
         urls.append(f"{BASE_URL}{p}/blog/")
         urls += [f"{BASE_URL}{p}/blog/{post['slug']}.html" for post in BLOG_POSTS_BY_CC[cc]]
@@ -7136,9 +7245,10 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
         for fr in FICTION['franchises']:
             generate_fiction_franchise_page(fr)
         print(f"  fiction: {len(FICTION['franchises'])} pages")
-    # Saints calendar (Phase 6i, FR-only)
-    if cc == 'FR' and SAINTS_FR:
-        (OUT_DIR / 'saint').mkdir(parents=True, exist_ok=True)
+    # Saints calendar (Phase 6i FR; Phase 34 expanded to ES + IT)
+    if cc in ('FR', 'ES', 'IT') and SAINTS_BY_CC.get(cc):
+        _activate_saints_for(cc)
+        (OUT_DIR / _saint_page_dir()).mkdir(parents=True, exist_ok=True)
         generate_saints_hub_page()
         for slug, dates in SAINT_TO_DATES.items():
             generate_saint_page(slug, dates)
@@ -7150,7 +7260,7 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
 def main():
     load_enrichment()
     load_fiction()
-    load_saints_fr()
+    load_saints_all()
     load_blog()
     for cc in COUNTRIES:
         build_country(cc)

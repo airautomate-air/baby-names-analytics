@@ -2044,6 +2044,8 @@
         var L_TODAY_F = "";
         var L_TODAY_E = "";
         var L_WISH = "";
+        var HUB_PREFIX = "";
+        var SAINT_DIR = "";
 
         function slugify(s) {
             return (s || '').toLowerCase()
@@ -2062,7 +2064,7 @@
         var fem = (last === 'e' || last === 'a') && !isEvent;
         var template = isEvent ? L_TODAY_E : (fem ? L_TODAY_F : L_TODAY_M);
         var label = template.replace('{name}', saint);
-        var href = '/fr/saint/' + slug + '.html';
+        var href = HUB_PREFIX + '/' + SAINT_DIR + '/' + slug + '.html';
 
         var box = document.getElementById('sf-today');
         if (box) {
