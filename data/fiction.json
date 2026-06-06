@@ -576,6 +576,197 @@
         {"name": "Sam", "role": "Sam Wilson — the new Captain America"},
         {"name": "Bucky", "role": "James Buchanan 'Bucky' Barnes — the Winter Soldier"}
       ]
+    },
+    {
+      "slug": "avatar-last-airbender",
+      "title": "Avatar: The Last Airbender",
+      "kind": "tv",
+      "year": 2005,
+      "blurb": "Nickelodeon's animated saga of a world divided by element-bending — one of the most influential children's series of the 21st century.",
+      "names": [
+        {"name": "Aang", "role": "the young Air Nomad Avatar"},
+        {"name": "Katara", "role": "Water Tribe waterbender, Aang's eventual partner"},
+        {"name": "Sokka", "role": "Katara's brother, the warrior strategist"},
+        {"name": "Toph", "role": "Toph Beifong — blind earthbending prodigy"},
+        {"name": "Zuko", "role": "the exiled Fire Nation prince"},
+        {"name": "Iroh", "role": "Iroh — Zuko's tea-loving uncle"},
+        {"name": "Azula", "role": "Zuko's ruthless sister"},
+        {"name": "Suki", "role": "Suki — leader of the Kyoshi Warriors"},
+        {"name": "Mai", "role": "Mai — Fire Nation knife-thrower, Zuko's love"},
+        {"name": "Korra", "role": "Avatar Korra — successor series protagonist"},
+        {"name": "Asami", "role": "Asami Sato — Korra's partner"}
+      ]
+    },
+    {
+      "slug": "sherlock-holmes",
+      "title": "Sherlock Holmes",
+      "kind": "books",
+      "year": 1887,
+      "blurb": "Arthur Conan Doyle's consulting detective at 221B Baker Street — the foundational character of modern detective fiction.",
+      "names": [
+        {"name": "Sherlock", "role": "Sherlock Holmes — the world's only consulting detective"},
+        {"name": "John", "role": "Dr John Watson — Holmes' friend and chronicler"},
+        {"name": "Mycroft", "role": "Mycroft Holmes — Sherlock's elder brother"},
+        {"name": "Mary", "role": "Mary Morstan — Watson's wife"},
+        {"name": "Irene", "role": "Irene Adler — 'the Woman'"},
+        {"name": "James", "role": "Professor James Moriarty — the criminal mastermind"},
+        {"name": "Mrs Hudson", "role": "Mrs Hudson — Baker Street landlady"}
+      ]
+    },
+    {
+      "slug": "anne-of-green-gables",
+      "title": "Anne of Green Gables",
+      "kind": "books",
+      "year": 1908,
+      "blurb": "L.M. Montgomery's Prince Edward Island orphan with red hair and an overgrown imagination — a quiet pillar of Canadian and global children's literature.",
+      "names": [
+        {"name": "Anne", "role": "Anne Shirley — the irrepressible orphan of Green Gables"},
+        {"name": "Marilla", "role": "Marilla Cuthbert — Anne's stern adoptive mother"},
+        {"name": "Matthew", "role": "Matthew Cuthbert — Marilla's gentle brother"},
+        {"name": "Diana", "role": "Diana Barry — Anne's 'bosom friend'"},
+        {"name": "Gilbert", "role": "Gilbert Blythe — Anne's rival and eventual husband"},
+        {"name": "Rachel", "role": "Rachel Lynde — Avonlea's outspoken neighbour"},
+        {"name": "Ruby", "role": "Ruby Gillis — Anne's schoolfriend"},
+        {"name": "Jane", "role": "Jane Andrews — Anne's schoolfriend"}
+      ]
+    },
+    {
+      "slug": "little-women",
+      "title": "Little Women",
+      "kind": "books",
+      "year": 1868,
+      "blurb": "Louisa May Alcott's four March sisters growing up in Civil War-era Massachusetts — a foundational American novel of girlhood.",
+      "names": [
+        {"name": "Jo", "role": "Josephine 'Jo' March — the writer sister"},
+        {"name": "Meg", "role": "Margaret 'Meg' March — the eldest"},
+        {"name": "Beth", "role": "Elizabeth 'Beth' March — the gentle musician"},
+        {"name": "Amy", "role": "Amy March — the youngest, an artist"},
+        {"name": "Laurie", "role": "Theodore 'Laurie' Laurence — the neighbour"},
+        {"name": "Margaret", "role": "Marmee — the March mother"},
+        {"name": "Friedrich", "role": "Professor Friedrich Bhaer — Jo's eventual husband"},
+        {"name": "John", "role": "John Brooke — Meg's husband"}
+      ]
+    },
+    {
+      "slug": "percy-jackson",
+      "title": "Percy Jackson & the Olympians",
+      "kind": "books",
+      "year": 2005,
+      "blurb": "Rick Riordan's modern American demigods at Camp Half-Blood — the book series that put Greek mythology back on the children's-name chart.",
+      "names": [
+        {"name": "Percy", "role": "Perseus 'Percy' Jackson — son of Poseidon"},
+        {"name": "Annabeth", "role": "Annabeth Chase — daughter of Athena"},
+        {"name": "Grover", "role": "Grover Underwood — Percy's satyr best friend"},
+        {"name": "Luke", "role": "Luke Castellan — son of Hermes"},
+        {"name": "Nico", "role": "Nico di Angelo — son of Hades"},
+        {"name": "Thalia", "role": "Thalia Grace — daughter of Zeus"},
+        {"name": "Hazel", "role": "Hazel Levesque — daughter of Pluto"},
+        {"name": "Jason", "role": "Jason Grace — son of Jupiter"},
+        {"name": "Piper", "role": "Piper McLean — daughter of Aphrodite"},
+        {"name": "Leo", "role": "Leo Valdez — son of Hephaestus"},
+        {"name": "Frank", "role": "Frank Zhang — son of Mars"},
+        {"name": "Reyna", "role": "Reyna Avila Ramírez-Arellano — praetor of Camp Jupiter"},
+        {"name": "Bianca", "role": "Bianca di Angelo — Nico's sister"}
+      ]
+    },
+    {
+      "slug": "peaky-blinders",
+      "title": "Peaky Blinders",
+      "kind": "tv",
+      "year": 2013,
+      "blurb": "BBC's Birmingham gangster epic — the Shelby family's post-WWI rise from the Small Heath slums.",
+      "names": [
+        {"name": "Tommy", "role": "Thomas Shelby — the strategist"},
+        {"name": "Arthur", "role": "Arthur Shelby — the eldest brother"},
+        {"name": "John", "role": "John Shelby — the middle brother"},
+        {"name": "Ada", "role": "Ada Shelby — the only sister"},
+        {"name": "Polly", "role": "Polly Gray — the Shelby aunt and matriarch"},
+        {"name": "Michael", "role": "Michael Gray — Polly's long-lost son"},
+        {"name": "Alfie", "role": "Alfie Solomons — Camden Town crime boss"},
+        {"name": "Grace", "role": "Grace Burgess — Tommy's first love"},
+        {"name": "Lizzie", "role": "Lizzie Stark — Tommy's eventual wife"},
+        {"name": "Esme", "role": "Esme Shelby — John's wife"},
+        {"name": "Linda", "role": "Linda Shelby — Arthur's wife"},
+        {"name": "Finn", "role": "Finn Shelby — the youngest brother"}
+      ]
+    },
+    {
+      "slug": "the-office",
+      "title": "The Office (US)",
+      "kind": "tv",
+      "year": 2005,
+      "blurb": "Dunder Mifflin Paper Company, Scranton branch — NBC's mockumentary that defined the modern American sitcom for nine seasons.",
+      "names": [
+        {"name": "Michael", "role": "Michael Scott — regional manager"},
+        {"name": "Pam", "role": "Pam Beesly — receptionist turned saleswoman"},
+        {"name": "Jim", "role": "Jim Halpert — salesman, Pam's husband"},
+        {"name": "Dwight", "role": "Dwight Schrute — assistant (to the) regional manager"},
+        {"name": "Andy", "role": "Andy Bernard — the Cornell-quoting salesman"},
+        {"name": "Angela", "role": "Angela Martin — head of accounting"},
+        {"name": "Erin", "role": "Erin Hannon — Pam's successor at reception"},
+        {"name": "Stanley", "role": "Stanley Hudson — sales, crossword enthusiast"},
+        {"name": "Kevin", "role": "Kevin Malone — accountant"},
+        {"name": "Kelly", "role": "Kelly Kapoor — customer service"},
+        {"name": "Phyllis", "role": "Phyllis Vance — sales"},
+        {"name": "Oscar", "role": "Oscar Martinez — accountant"},
+        {"name": "Toby", "role": "Toby Flenderson — HR"},
+        {"name": "Holly", "role": "Holly Flax — Michael's match"},
+        {"name": "Robert", "role": "Robert California — late-series CEO"},
+        {"name": "Meredith", "role": "Meredith Palmer — supplier relations"}
+      ]
+    },
+    {
+      "slug": "frozen",
+      "title": "Frozen",
+      "kind": "film",
+      "year": 2013,
+      "blurb": "Disney's Norwegian-flavoured fairy-tale of two royal sisters in Arendelle — the highest-grossing animated film of its decade.",
+      "names": [
+        {"name": "Elsa", "role": "Elsa — the Snow Queen of Arendelle"},
+        {"name": "Anna", "role": "Anna — her younger sister"},
+        {"name": "Kristoff", "role": "Kristoff — the ice harvester"},
+        {"name": "Olaf", "role": "Olaf — the snowman who likes warm hugs"},
+        {"name": "Sven", "role": "Sven — Kristoff's reindeer"},
+        {"name": "Hans", "role": "Hans — Prince of the Southern Isles"}
+      ]
+    },
+    {
+      "slug": "doctor-who",
+      "title": "Doctor Who",
+      "kind": "tv",
+      "year": 1963,
+      "blurb": "The BBC's time-travelling Time Lord and a long parade of companions — sixty years and still rebooting.",
+      "names": [
+        {"name": "Rose", "role": "Rose Tyler — the Ninth and Tenth Doctors' companion"},
+        {"name": "Donna", "role": "Donna Noble — temp from Chiswick, the DoctorDonna"},
+        {"name": "Martha", "role": "Martha Jones — medical student companion"},
+        {"name": "Amy", "role": "Amy Pond — the girl who waited"},
+        {"name": "Clara", "role": "Clara Oswald — the impossible girl"},
+        {"name": "River", "role": "River Song — the Doctor's wife"},
+        {"name": "Rory", "role": "Rory Williams — Amy's husband, the centurion"},
+        {"name": "Mickey", "role": "Mickey Smith — Rose's first boyfriend"},
+        {"name": "Wilfred", "role": "Wilfred Mott — Donna's grandfather"},
+        {"name": "Yasmin", "role": "Yasmin Khan — Thirteenth Doctor companion"},
+        {"name": "Ruby", "role": "Ruby Sunday — Fifteenth Doctor companion"}
+      ]
+    },
+    {
+      "slug": "outlander",
+      "title": "Outlander",
+      "kind": "books",
+      "year": 1991,
+      "blurb": "Diana Gabaldon's 18th-century Scottish Highlands romance — a 20th-century WWII nurse hurled through time at a standing stone.",
+      "names": [
+        {"name": "Claire", "role": "Claire Randall Fraser — the time-travelling nurse"},
+        {"name": "Jamie", "role": "James 'Jamie' Fraser — the Highland warrior"},
+        {"name": "Brianna", "role": "Brianna Fraser MacKenzie — Claire and Jamie's daughter"},
+        {"name": "Roger", "role": "Roger MacKenzie — Brianna's husband, a historian"},
+        {"name": "Faith", "role": "Faith Fraser — the daughter lost in Paris"},
+        {"name": "Murtagh", "role": "Murtagh Fraser — Jamie's godfather"},
+        {"name": "Fergus", "role": "Fergus Fraser — the adopted French son"},
+        {"name": "Ian", "role": "Young Ian Murray — Jamie's nephew"},
+        {"name": "Jenny", "role": "Jenny Murray — Jamie's sister"}
+      ]
     }
   ]
 }
