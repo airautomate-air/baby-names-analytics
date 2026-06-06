@@ -994,6 +994,389 @@
         {"name": "George", "role": "George Wilson — Myrtle's husband"},
         {"name": "Meyer", "role": "Meyer Wolfsheim — Gatsby's business associate"}
       ]
+    },
+    {
+      "slug": "pokemon",
+      "title": "Pokémon",
+      "kind": "tv",
+      "year": 1997,
+      "blurb": "Nintendo's gotta-catch-'em-all franchise — games, anime, films. A generation of kids grew up calling out attack names.",
+      "names": [
+        {"name": "Ash", "role": "Ash Ketchum — the trainer from Pallet Town"},
+        {"name": "Misty", "role": "Misty — Cerulean City gym leader"},
+        {"name": "Brock", "role": "Brock — Pewter City gym leader, Pokémon doctor"},
+        {"name": "May", "role": "May — Hoenn trainer"},
+        {"name": "Dawn", "role": "Dawn — Sinnoh coordinator"},
+        {"name": "Serena", "role": "Serena — Kalos trainer"},
+        {"name": "Iris", "role": "Iris — Unova dragon master"},
+        {"name": "Cilan", "role": "Cilan — Unova gym leader"},
+        {"name": "Gary", "role": "Gary Oak — Ash's rival"},
+        {"name": "Jessie", "role": "Jessie — Team Rocket"},
+        {"name": "James", "role": "James — Team Rocket"},
+        {"name": "Lillie", "role": "Lillie — Alola student"},
+        {"name": "Goh", "role": "Goh — Ash's companion in Journeys"}
+      ]
+    },
+    {
+      "slug": "squid-game",
+      "title": "Squid Game",
+      "kind": "tv",
+      "year": 2021,
+      "blurb": "Hwang Dong-hyuk's South Korean survival drama — Netflix's most-watched series in any language.",
+      "names": [
+        {"name": "Gi-hun", "role": "Seong Gi-hun — Player 456, the protagonist"},
+        {"name": "Sang-woo", "role": "Cho Sang-woo — Player 218"},
+        {"name": "Sae-byeok", "role": "Kang Sae-byeok — Player 067, the defector"},
+        {"name": "Ali", "role": "Ali Abdul — Player 199"},
+        {"name": "Il-nam", "role": "Oh Il-nam — Player 001"},
+        {"name": "Jun-ho", "role": "Hwang Jun-ho — the detective"},
+        {"name": "Mi-nyeo", "role": "Han Mi-nyeo — Player 212"},
+        {"name": "Deok-su", "role": "Jang Deok-su — Player 101"},
+        {"name": "In-ho", "role": "Hwang In-ho — the Front Man"},
+        {"name": "Ji-yeong", "role": "Ji-yeong — Player 240"}
+      ]
+    },
+    {
+      "slug": "yellowstone",
+      "title": "Yellowstone",
+      "kind": "tv",
+      "year": 2018,
+      "blurb": "Taylor Sheridan's Montana ranch saga — five seasons of the Dutton family and the largest contiguous ranch in the US.",
+      "names": [
+        {"name": "John", "role": "John Dutton — the patriarch"},
+        {"name": "Beth", "role": "Beth Dutton — his ferocious daughter"},
+        {"name": "Kayce", "role": "Kayce Dutton — the youngest son"},
+        {"name": "Jamie", "role": "Jamie Dutton — the adopted son"},
+        {"name": "Lee", "role": "Lee Dutton — the eldest"},
+        {"name": "Rip", "role": "Rip Wheeler — ranch foreman, Beth's love"},
+        {"name": "Monica", "role": "Monica Dutton — Kayce's wife"},
+        {"name": "Tate", "role": "Tate Dutton — Kayce and Monica's son"},
+        {"name": "Walker", "role": "Walker — the singing ranch hand"},
+        {"name": "Lloyd", "role": "Lloyd Pierce — the old hand"},
+        {"name": "Thomas", "role": "Thomas Rainwater — Broken Rock tribal chairman"},
+        {"name": "Mo", "role": "Mo Brings Plenty — Rainwater's right hand"}
+      ]
+    },
+    {
+      "slug": "mad-men",
+      "title": "Mad Men",
+      "kind": "tv",
+      "year": 2007,
+      "blurb": "Matthew Weiner's 1960s Madison Avenue ad agency — seven seasons, defining American TV drama.",
+      "names": [
+        {"name": "Don", "role": "Don Draper — creative director"},
+        {"name": "Peggy", "role": "Peggy Olson — secretary turned copywriter"},
+        {"name": "Joan", "role": "Joan Holloway — office manager"},
+        {"name": "Roger", "role": "Roger Sterling — agency partner"},
+        {"name": "Betty", "role": "Betty Draper — Don's first wife"},
+        {"name": "Megan", "role": "Megan Calvet — Don's second wife"},
+        {"name": "Sally", "role": "Sally Draper — Don and Betty's daughter"},
+        {"name": "Bobby", "role": "Bobby Draper — their son"},
+        {"name": "Pete", "role": "Pete Campbell — accounts man"},
+        {"name": "Trudy", "role": "Trudy Campbell — Pete's wife"},
+        {"name": "Ken", "role": "Ken Cosgrove — accounts and aspiring writer"},
+        {"name": "Stan", "role": "Stan Rizzo — art director, Peggy's confidant"},
+        {"name": "Lane", "role": "Lane Pryce — the British financial partner"},
+        {"name": "Sal", "role": "Salvatore Romano — art director"}
+      ]
+    },
+    {
+      "slug": "succession",
+      "title": "Succession",
+      "kind": "tv",
+      "year": 2018,
+      "blurb": "Jesse Armstrong's HBO drama — the Roy family's media empire and a four-season king-of-the-hill brawl.",
+      "names": [
+        {"name": "Logan", "role": "Logan Roy — Waystar Royco patriarch"},
+        {"name": "Kendall", "role": "Kendall Roy — the second son, presumed heir"},
+        {"name": "Shiv", "role": "Siobhan 'Shiv' Roy — the only daughter"},
+        {"name": "Roman", "role": "Roman Roy — the youngest son"},
+        {"name": "Connor", "role": "Connor Roy — the eldest, from Logan's first marriage"},
+        {"name": "Tom", "role": "Tom Wambsgans — Shiv's husband"},
+        {"name": "Greg", "role": "Greg Hirsch — Logan's grandnephew"},
+        {"name": "Gerri", "role": "Gerri Kellman — general counsel"},
+        {"name": "Marcia", "role": "Marcia Roy — Logan's third wife"},
+        {"name": "Stewy", "role": "Stewart 'Stewy' Hosseini — Kendall's friend, eventual antagonist"},
+        {"name": "Frank", "role": "Frank Vernon — old Waystar lieutenant"},
+        {"name": "Karl", "role": "Karl Muller — Waystar CFO"},
+        {"name": "Karolina", "role": "Karolina Novotney — head of comms"}
+      ]
+    },
+    {
+      "slug": "the-office-uk",
+      "title": "The Office (UK)",
+      "kind": "tv",
+      "year": 2001,
+      "blurb": "Ricky Gervais and Stephen Merchant's original Slough mockumentary — the template for every workplace comedy since.",
+      "names": [
+        {"name": "David", "role": "David Brent — regional manager"},
+        {"name": "Tim", "role": "Tim Canterbury — sales rep, in love with Dawn"},
+        {"name": "Dawn", "role": "Dawn Tinsley — the receptionist"},
+        {"name": "Gareth", "role": "Gareth Keenan — assistant to the regional manager"},
+        {"name": "Lee", "role": "Lee — Dawn's fiancé"},
+        {"name": "Finchy", "role": "Chris 'Finchy' Finch — David's friend"},
+        {"name": "Neil", "role": "Neil Godwin — Swindon manager, David's rival"},
+        {"name": "Rachel", "role": "Rachel — Slough sales rep"},
+        {"name": "Donna", "role": "Donna — David's goddaughter"}
+      ]
+    },
+    {
+      "slug": "parks-and-rec",
+      "title": "Parks and Recreation",
+      "kind": "tv",
+      "year": 2009,
+      "blurb": "Mike Schur's Pawnee, Indiana — Leslie Knope and the Parks Department, seven seasons of optimistic civics.",
+      "names": [
+        {"name": "Leslie", "role": "Leslie Knope — deputy director"},
+        {"name": "Ron", "role": "Ron Swanson — director, libertarian woodworker"},
+        {"name": "Tom", "role": "Tom Haverford — Leslie's protégé"},
+        {"name": "Andy", "role": "Andy Dwyer — shoeshiner and FBI agent Burt Macklin"},
+        {"name": "April", "role": "April Ludgate — eternal intern, Andy's wife"},
+        {"name": "Ben", "role": "Ben Wyatt — state auditor, Leslie's husband"},
+        {"name": "Chris", "role": "Chris Traeger — city manager, relentlessly upbeat"},
+        {"name": "Jerry", "role": "Jerry/Garry/Larry/Terry Gergich — much-maligned coworker"},
+        {"name": "Donna", "role": "Donna Meagle — Mercedes-driving office manager"},
+        {"name": "Ann", "role": "Ann Perkins — nurse, Leslie's best friend"},
+        {"name": "Mark", "role": "Mark Brendanawicz — early-seasons love interest"}
+      ]
+    },
+    {
+      "slug": "brooklyn-nine-nine",
+      "title": "Brooklyn Nine-Nine",
+      "kind": "tv",
+      "year": 2013,
+      "blurb": "Dan Goor and Mike Schur's NYPD precinct comedy — eight seasons of Jake Peralta and the 99th.",
+      "names": [
+        {"name": "Jake", "role": "Jake Peralta — top detective, eternal manchild"},
+        {"name": "Amy", "role": "Amy Santiago — by-the-book detective, Jake's wife"},
+        {"name": "Rosa", "role": "Rosa Diaz — laconic, deadly"},
+        {"name": "Charles", "role": "Charles Boyle — Jake's foodie best friend"},
+        {"name": "Terry", "role": "Terry Jeffords — sergeant, family man"},
+        {"name": "Gina", "role": "Gina Linetti — civilian administrator, dancer"},
+        {"name": "Holt", "role": "Captain Raymond Holt — the precinct's stoic chief"},
+        {"name": "Kevin", "role": "Kevin Cozner — Holt's husband"},
+        {"name": "Hitchcock", "role": "Michael Hitchcock — sandwich-eating lifer"},
+        {"name": "Scully", "role": "Norm Scully — Hitchcock's partner"}
+      ]
+    },
+    {
+      "slug": "demon-slayer",
+      "title": "Demon Slayer",
+      "kind": "tv",
+      "year": 2019,
+      "blurb": "Koyoharu Gotouge's Taisho-era demon-hunting manga and ufotable anime — global megahit.",
+      "names": [
+        {"name": "Tanjiro", "role": "Tanjiro Kamado — the kind-hearted slayer"},
+        {"name": "Nezuko", "role": "Nezuko Kamado — his demon-turned sister"},
+        {"name": "Zenitsu", "role": "Zenitsu Agatsuma — the cowardly thunder breather"},
+        {"name": "Inosuke", "role": "Inosuke Hashibira — the wild boar"},
+        {"name": "Giyu", "role": "Giyu Tomioka — the Water Hashira"},
+        {"name": "Rengoku", "role": "Kyojuro Rengoku — the Flame Hashira"},
+        {"name": "Shinobu", "role": "Shinobu Kocho — the Insect Hashira"},
+        {"name": "Tengen", "role": "Tengen Uzui — the Sound Hashira"},
+        {"name": "Mitsuri", "role": "Mitsuri Kanroji — the Love Hashira"},
+        {"name": "Muichiro", "role": "Muichiro Tokito — the Mist Hashira"},
+        {"name": "Sanemi", "role": "Sanemi Shinazugawa — the Wind Hashira"},
+        {"name": "Obanai", "role": "Obanai Iguro — the Serpent Hashira"},
+        {"name": "Gyomei", "role": "Gyomei Himejima — the Stone Hashira"},
+        {"name": "Muzan", "role": "Muzan Kibutsuji — the demon king"},
+        {"name": "Akaza", "role": "Akaza — Upper Three demon"}
+      ]
+    },
+    {
+      "slug": "attack-on-titan",
+      "title": "Attack on Titan",
+      "kind": "tv",
+      "year": 2013,
+      "blurb": "Hajime Isayama's dystopian manga and Wit Studio / MAPPA anime — humanity behind walls, titans outside.",
+      "names": [
+        {"name": "Eren", "role": "Eren Yeager — the protagonist"},
+        {"name": "Mikasa", "role": "Mikasa Ackerman — his adoptive sister"},
+        {"name": "Armin", "role": "Armin Arlert — childhood friend, strategist"},
+        {"name": "Levi", "role": "Levi Ackerman — humanity's strongest soldier"},
+        {"name": "Erwin", "role": "Erwin Smith — commander of the Survey Corps"},
+        {"name": "Hange", "role": "Hange Zoë — the titan researcher"},
+        {"name": "Jean", "role": "Jean Kirstein — the pragmatist"},
+        {"name": "Sasha", "role": "Sasha Blouse — the potato girl"},
+        {"name": "Connie", "role": "Connie Springer — the bald one"},
+        {"name": "Historia", "role": "Historia Reiss — the true heir"},
+        {"name": "Ymir", "role": "Ymir — Historia's companion"},
+        {"name": "Reiner", "role": "Reiner Braun — the Armored Titan"},
+        {"name": "Bertholdt", "role": "Bertholdt Hoover — the Colossal Titan"},
+        {"name": "Annie", "role": "Annie Leonhart — the Female Titan"}
+      ]
+    },
+    {
+      "slug": "one-piece",
+      "title": "One Piece",
+      "kind": "tv",
+      "year": 1997,
+      "blurb": "Eiichiro Oda's never-ending pirate manga — the best-selling manga of all time. Adapted to anime, live-action, and a thousand merchandise lines.",
+      "names": [
+        {"name": "Luffy", "role": "Monkey D. Luffy — the rubber-bodied captain"},
+        {"name": "Zoro", "role": "Roronoa Zoro — three-sword swordsman"},
+        {"name": "Nami", "role": "Nami — navigator and treasure-lover"},
+        {"name": "Usopp", "role": "Usopp — sniper and storyteller"},
+        {"name": "Sanji", "role": "Sanji — chef and brawler"},
+        {"name": "Chopper", "role": "Tony Tony Chopper — reindeer doctor"},
+        {"name": "Robin", "role": "Nico Robin — archaeologist"},
+        {"name": "Franky", "role": "Franky — cyborg shipwright"},
+        {"name": "Brook", "role": "Brook — skeleton musician"},
+        {"name": "Jinbe", "role": "Jinbe — fishman helmsman"},
+        {"name": "Ace", "role": "Portgas D. Ace — Luffy's adoptive brother"},
+        {"name": "Sabo", "role": "Sabo — Luffy and Ace's sworn brother"},
+        {"name": "Shanks", "role": "Red-Haired Shanks — Yonko"},
+        {"name": "Boa", "role": "Boa Hancock — Amazon Lily empress"}
+      ]
+    },
+    {
+      "slug": "jujutsu-kaisen",
+      "title": "Jujutsu Kaisen",
+      "kind": "tv",
+      "year": 2018,
+      "blurb": "Gege Akutami's modern dark-fantasy manga and MAPPA anime — sorcerers vs cursed spirits in present-day Japan.",
+      "names": [
+        {"name": "Yuji", "role": "Yuji Itadori — vessel of Sukuna"},
+        {"name": "Megumi", "role": "Megumi Fushiguro — the shadow user"},
+        {"name": "Nobara", "role": "Nobara Kugisaki — the hammer-and-nail sorcerer"},
+        {"name": "Gojo", "role": "Satoru Gojo — the strongest sorcerer"},
+        {"name": "Sukuna", "role": "Ryomen Sukuna — the king of curses"},
+        {"name": "Maki", "role": "Maki Zenin — weapons specialist"},
+        {"name": "Yuta", "role": "Yuta Okkotsu — the special-grade student"},
+        {"name": "Toge", "role": "Toge Inumaki — the cursed speech user"},
+        {"name": "Panda", "role": "Panda — the cursed corpse"},
+        {"name": "Nanami", "role": "Kento Nanami — the salaryman sorcerer"},
+        {"name": "Mahito", "role": "Mahito — the transfigured curse"},
+        {"name": "Geto", "role": "Suguru Geto — Gojo's old friend"}
+      ]
+    },
+    {
+      "slug": "studio-ghibli-spirited-away",
+      "title": "Spirited Away",
+      "kind": "film",
+      "year": 2001,
+      "blurb": "Hayao Miyazaki's bathhouse-of-spirits masterpiece — Oscar winner, top of any animation list.",
+      "names": [
+        {"name": "Chihiro", "role": "Chihiro Ogino — the ten-year-old trapped in the spirit world"},
+        {"name": "Haku", "role": "Haku — the river spirit who guides her"},
+        {"name": "Yubaba", "role": "Yubaba — the bathhouse's witch-proprietor"},
+        {"name": "Zeniba", "role": "Zeniba — Yubaba's twin"},
+        {"name": "Lin", "role": "Lin — Chihiro's bathhouse friend"},
+        {"name": "Kamaji", "role": "Kamaji — the boiler man"}
+      ]
+    },
+    {
+      "slug": "the-princess-bride",
+      "title": "The Princess Bride",
+      "kind": "film",
+      "year": 1987,
+      "blurb": "William Goldman's novel and Rob Reiner's film — a love story, a swordfight, and 'my name is Inigo Montoya.'",
+      "names": [
+        {"name": "Westley", "role": "Westley / the Dread Pirate Roberts"},
+        {"name": "Buttercup", "role": "Princess Buttercup — Westley's true love"},
+        {"name": "Inigo", "role": "Inigo Montoya — the Spanish fencer"},
+        {"name": "Fezzik", "role": "Fezzik — the giant"},
+        {"name": "Vizzini", "role": "Vizzini — the Sicilian"},
+        {"name": "Humperdinck", "role": "Prince Humperdinck — the villain"},
+        {"name": "Tyrone", "role": "Count Tyrone Rugen — the six-fingered man"},
+        {"name": "Miracle", "role": "Miracle Max — the disgraced healer"},
+        {"name": "Valerie", "role": "Valerie — Max's wife"}
+      ]
+    },
+    {
+      "slug": "agatha-christie",
+      "title": "Agatha Christie",
+      "kind": "books",
+      "year": 1920,
+      "blurb": "Two billion books sold — Poirot, Marple, the Crime Queen's century-long output.",
+      "names": [
+        {"name": "Hercule", "role": "Hercule Poirot — the Belgian detective"},
+        {"name": "Jane", "role": "Miss Jane Marple — St Mary Mead's village sleuth"},
+        {"name": "Tommy", "role": "Tommy Beresford — half of Tommy and Tuppence"},
+        {"name": "Tuppence", "role": "Tuppence Cowley — the other half"},
+        {"name": "Ariadne", "role": "Ariadne Oliver — the detective novelist"},
+        {"name": "Arthur", "role": "Captain Arthur Hastings — Poirot's Watson"},
+        {"name": "Roger", "role": "Roger Ackroyd — the murdered man"},
+        {"name": "Linnet", "role": "Linnet Doyle — Death on the Nile"},
+        {"name": "Jacqueline", "role": "Jacqueline de Bellefort — Death on the Nile"},
+        {"name": "Simon", "role": "Simon Doyle — Linnet's husband"},
+        {"name": "Edward", "role": "Edward Rochester — recurring archetype name"}
+      ]
+    },
+    {
+      "slug": "my-hero-academia",
+      "title": "My Hero Academia",
+      "kind": "tv",
+      "year": 2014,
+      "blurb": "Kohei Horikoshi's superhero manga and Bones anime — a world where 80% of people have quirks.",
+      "names": [
+        {"name": "Izuku", "role": "Izuku 'Deku' Midoriya — quirkless hero in training"},
+        {"name": "Katsuki", "role": "Katsuki Bakugo — the explosive rival"},
+        {"name": "Ochaco", "role": "Ochaco Uraraka — zero-gravity hero"},
+        {"name": "Tenya", "role": "Tenya Iida — class representative"},
+        {"name": "Shoto", "role": "Shoto Todoroki — half-cold half-hot"},
+        {"name": "Tsuyu", "role": "Tsuyu Asui — frog hero"},
+        {"name": "Eijiro", "role": "Eijiro Kirishima — hardening hero"},
+        {"name": "Momo", "role": "Momo Yaoyorozu — creation hero"},
+        {"name": "All Might", "role": "Toshinori Yagi / All Might — symbol of peace"},
+        {"name": "Shota", "role": "Shota Aizawa / Eraserhead — homeroom teacher"},
+        {"name": "Endeavor", "role": "Enji Todoroki / Endeavor — number two hero"}
+      ]
+    },
+    {
+      "slug": "spy-x-family",
+      "title": "Spy × Family",
+      "kind": "tv",
+      "year": 2022,
+      "blurb": "Tatsuya Endo's spy-family-assassin sitcom manga and Wit/CloverWorks anime.",
+      "names": [
+        {"name": "Loid", "role": "Loid Forger / Twilight — the spy father"},
+        {"name": "Yor", "role": "Yor Forger / Thorn Princess — the assassin mother"},
+        {"name": "Anya", "role": "Anya Forger — the telepathic daughter"},
+        {"name": "Bond", "role": "Bond Forger — precognitive dog"},
+        {"name": "Yuri", "role": "Yuri Briar — Yor's brother"},
+        {"name": "Damian", "role": "Damian Desmond — Anya's classmate"},
+        {"name": "Becky", "role": "Becky Blackbell — Anya's best friend"},
+        {"name": "Fiona", "role": "Fiona Frost / Nightfall — Twilight's colleague"}
+      ]
+    },
+    {
+      "slug": "wednesday",
+      "title": "Wednesday",
+      "kind": "tv",
+      "year": 2022,
+      "blurb": "Tim Burton's Addams Family spin-off — Wednesday at Nevermore Academy, Netflix's biggest English-language launch.",
+      "names": [
+        {"name": "Wednesday", "role": "Wednesday Addams — the protagonist"},
+        {"name": "Enid", "role": "Enid Sinclair — werewolf roommate"},
+        {"name": "Tyler", "role": "Tyler Galpin — barista love interest"},
+        {"name": "Xavier", "role": "Xavier Thorpe — psychic artist"},
+        {"name": "Bianca", "role": "Bianca Barclay — siren queen bee"},
+        {"name": "Eugene", "role": "Eugene Otinger — beekeeper"},
+        {"name": "Morticia", "role": "Morticia Addams — Wednesday's mother"},
+        {"name": "Gomez", "role": "Gomez Addams — Wednesday's father"},
+        {"name": "Pugsley", "role": "Pugsley Addams — Wednesday's brother"},
+        {"name": "Larissa", "role": "Larissa Weems — principal of Nevermore"}
+      ]
+    },
+    {
+      "slug": "ted-lasso",
+      "title": "Ted Lasso",
+      "kind": "tv",
+      "year": 2020,
+      "blurb": "Bill Lawrence's Apple TV+ comedy — American football coach in the English Premier League.",
+      "names": [
+        {"name": "Ted", "role": "Ted Lasso — the optimistic coach"},
+        {"name": "Rebecca", "role": "Rebecca Welton — AFC Richmond owner"},
+        {"name": "Roy", "role": "Roy Kent — the captain"},
+        {"name": "Keeley", "role": "Keeley Jones — Roy's partner, PR firm founder"},
+        {"name": "Jamie", "role": "Jamie Tartt — Manchester transfer"},
+        {"name": "Sam", "role": "Sam Obisanya — Nigerian defender"},
+        {"name": "Nate", "role": "Nathan 'Nate' Shelley — kit man turned coach"},
+        {"name": "Beard", "role": "Coach Beard — Ted's right hand"},
+        {"name": "Higgins", "role": "Leslie Higgins — head of operations"},
+        {"name": "Dani", "role": "Dani Rojas — striker"}
+      ]
     }
   ]
 }
