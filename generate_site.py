@@ -4525,6 +4525,8 @@ def page(title, body, description="", canonical="", extra_head="",
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q5KY6BP0VV"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-Q5KY6BP0VV');</script>
     <title>{title}</title>{desc_tag}{canon_tag}{og}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
