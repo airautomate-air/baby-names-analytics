@@ -39,38 +39,63 @@
             color: #333;
             font-feature-settings: 'tnum' 1;
         }
-        .container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+        .container { max-width: 1240px; margin: 0 auto; padding: 2rem; }
         h1, h2, h3, h4 { font-family: 'Poppins', 'Inter', sans-serif; color: #1B2440; }
         h1 { color: #1B2440; }
-        .sitenav {
-            background: #1B2440; padding: 0.9rem 2rem;
-        }
-        .sitenav-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+        .sitenav { background: #1B2440; padding: 0.9rem 1.5rem; }
+        .sitenav-inner { max-width: 1240px; margin: 0 auto; display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
         .sitenav a { color: #EEF2F4; text-decoration: none; font-weight: 500; }
-        .sitenav a:hover { color: #fff; text-decoration: underline; }
+        .sitenav a:hover { color: #fff; }
         .sitenav .brand { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 700; color: #fff; margin-right: auto; display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.05rem; }
         .sitenav .brand svg { display: block; }
         .sitenav .brand .wm-teal { color: #149E91; }
-        .sitenav .brand-cc { color: #c8cfdb; font-weight: 500; font-size: 0.95rem; margin-left: 0.15rem; display: inline-flex; align-items: center; gap: 0.3rem; }
-        .sitenav .brand-cc-dash { color: #4a5269; }
-        .sitenav .brand-cc .flag { font-size: 1.05rem; line-height: 1; }
         .h1-flag { margin: 0 0.15rem; font-size: 0.8em; vertical-align: 0.1em; }
-        @media (max-width: 560px) { .sitenav .brand-cc { display: none; } }
-        .nav-tools { position: relative; display: inline-block; }
-        .nav-tools-btn { background: none; border: 0; color: #EEF2F4; font-family: inherit; font-weight: 500; font-size: 1rem; cursor: pointer; padding: 0; display: inline-flex; align-items: center; gap: 0.25rem; }
-        .nav-tools-btn:hover { color: #fff; }
-        .nav-tools-caret { font-size: 0.75rem; transition: transform 0.15s ease; }
-        .nav-tools.is-open .nav-tools-caret { transform: rotate(180deg); }
-        .nav-tools-menu { display: none; position: absolute; top: 100%; left: -0.6rem; margin-top: 0.55rem; background: #1B2440; border: 1px solid #2a3656; border-radius: 8px; min-width: 200px; padding: 0.4rem 0; box-shadow: 0 8px 24px rgba(0,0,0,0.25); z-index: 50; }
-        .nav-tools.is-open .nav-tools-menu { display: block; }
-        .nav-tools-menu a { display: block; padding: 0.55rem 1rem; color: #EEF2F4; text-decoration: none; font-weight: 500; font-size: 0.95rem; white-space: nowrap; }
-        .nav-tools-menu a:hover { background: #2a3656; color: #fff; text-decoration: none; }
-        .ccswitch { margin-left: auto; font-size: 0.95rem; color: #8a93a3; display: inline-flex; gap: 0.45rem; align-items: center; }
-        .ccswitch a { color: #c8cfdb; text-decoration: none; }
-        .ccswitch a:hover { color: #fff; }
-        .ccswitch strong { color: #fff; font-weight: 700; }
-        .ccswitch .flag { font-size: 1.05rem; line-height: 1; margin-right: 0.18rem; }
-        .ccswitch .sep { color: #4a5269; }
+
+        /* Nav links group (right side) */
+        .nav-links { display: inline-flex; align-items: center; gap: 1.5rem; flex-wrap: wrap; }
+        .nav-link { color: #EEF2F4; text-decoration: none; font-weight: 500; font-size: 0.96rem; }
+        .nav-link:hover { color: #fff; }
+        .nav-search-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #EEF2F4; width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease; padding: 0; }
+        .nav-search-btn:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); }
+        .nav-search-btn svg { width: 16px; height: 16px; }
+
+        /* Nav dropdowns (Explore / Tools) */
+        .nav-dd { position: relative; }
+        .nav-dd-btn { background: none; border: 0; cursor: pointer; color: #EEF2F4; font-family: inherit; font-weight: 500; font-size: 0.96rem; padding: 0.4rem 0; display: inline-flex; align-items: center; gap: 0.3rem; transition: color 0.15s ease; }
+        .nav-dd-btn:hover { color: #fff; }
+        .nav-dd-caret { font-size: 0.7rem; transition: transform 0.18s ease; opacity: 0.75; }
+        .nav-dd.is-open .nav-dd-btn { color: #fff; }
+        .nav-dd.is-open .nav-dd-caret { transform: rotate(180deg); }
+        .nav-dd-menu { display: none; position: absolute; top: calc(100% + 0.55rem); left: -0.5rem; background: #fff; border: 1px solid #E3E7EC; border-radius: 12px; min-width: 220px; padding: 0.4rem; box-shadow: 0 16px 40px -10px rgba(27,36,64,0.25), 0 4px 12px rgba(27,36,64,0.08); z-index: 60; animation: nc-dd-in 0.16s ease-out; }
+        .nav-dd.is-open .nav-dd-menu { display: block; }
+        .nav-dd-menu a, .nav-dd-menu a:link, .nav-dd-menu a:visited { display: block; padding: 0.6rem 0.9rem; border-radius: 8px; color: #1B2440 !important; text-decoration: none; font-size: 0.95rem; font-weight: 600; transition: background 0.12s ease, color 0.12s ease; }
+        .nav-dd-menu a:hover, .nav-dd-menu a:focus { background: #EFF8F6; color: #0E7A70 !important; text-decoration: none; }
+        @keyframes nc-dd-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Country dropdown (white pill in nav) */
+        .cc-dd { position: relative; }
+        .cc-dd-btn { display: inline-flex; align-items: center; gap: 0.55rem; background: #fff; border: 1px solid #fff; color: #1B2440; font-family: inherit; font-weight: 600; font-size: 0.92rem; padding: 0.5rem 0.95rem; border-radius: 999px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease; }
+        .cc-dd-btn:hover { background: #F2F5F8; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.22); }
+        .cc-dd-btn .cc-flag { font-size: 1.15rem; line-height: 1; }
+        .cc-dd-btn .cc-caret { font-size: 0.7rem; color: #5B6678; transition: transform 0.18s ease; margin-left: 0.2rem; }
+        .cc-dd.is-open .cc-dd-btn { background: #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
+        .cc-dd.is-open .cc-dd-btn .cc-caret { transform: rotate(180deg); color: #149E91; }
+        .cc-dd-menu { display: none; position: absolute; top: calc(100% + 0.5rem); right: 0; background: #fff; border: 1px solid #E3E7EC; border-radius: 14px; min-width: 240px; padding: 0.5rem; box-shadow: 0 16px 40px -10px rgba(27,36,64,0.25), 0 4px 12px rgba(27,36,64,0.08); z-index: 60; animation: nc-dd-in 0.16s ease-out; }
+        .cc-dd.is-open .cc-dd-menu { display: block; }
+        .cc-dd-heading { font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: #5B6678; font-weight: 600; padding: 0.5rem 0.75rem 0.4rem; }
+        a.cc-dd-item, a.cc-dd-item:link, a.cc-dd-item:visited { display: flex; align-items: center; gap: 0.7rem; padding: 0.6rem 0.8rem; border-radius: 9px; color: #1B2440 !important; text-decoration: none; font-weight: 600; font-size: 0.96rem; transition: background 0.12s ease, color 0.12s ease; }
+        a.cc-dd-item:hover { background: #F2F5F8; color: #1B2440 !important; }
+        a.cc-dd-item .cc-flag { font-size: 1.2rem; line-height: 1; }
+        a.cc-dd-item .cc-code { color: #5B6678 !important; font-size: 0.78rem; margin-left: auto; font-weight: 600; letter-spacing: 0.05em; }
+        a.cc-dd-item.is-current { background: #EFF8F6; color: #0E7A70 !important; font-weight: 700; }
+        a.cc-dd-item.is-current .cc-code { color: #149E91 !important; }
+        a.cc-dd-item .cc-check { margin-left: auto; color: #149E91; font-weight: 700; }
+        @media (max-width: 720px) {
+            .sitenav .brand span:not(.wm-teal) { font-size: 1rem; }
+            .nav-links { gap: 1rem; }
+            .cc-dd-btn { padding: 0.4rem 0.75rem; font-size: 0.85rem; }
+            .cc-dd-btn .cc-dd-label { display: none; }
+        }
         .cc-callout { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.9rem 1.25rem; margin: 1.5rem 0 2rem; font-size: 0.95rem; color: #1B2440; }
         .cc-callout a { color: #149E91; text-decoration: none; font-weight: 600; margin: 0 0.15rem; white-space: nowrap; }
         .cc-callout a:hover { text-decoration: underline; }
@@ -259,6 +284,110 @@
         #searchAc { position: absolute; left: 0; right: 0; top: 100%; background: #fff; border: 1px solid #d6dde2; border-top: 0; border-radius: 0 0 6px 6px; max-height: 280px; overflow-y: auto; z-index: 10; box-shadow: 0 4px 12px rgba(27,36,64,0.08); }
         #searchAc div { padding: 0.55rem 0.9rem; cursor: pointer; color: #1B2440; }
         #searchAc div:hover, #searchAc div.sel { background: #EEF2F4; }
+
+        /* ---------- HOMEPAGE HERO ---------- */
+        .home-hero { position: relative; background: radial-gradient(900px 420px at 80% -10%, rgba(20,158,145,0.18), transparent 60%), radial-gradient(700px 380px at 10% 100%, rgba(27,36,64,0.06), transparent 60%), linear-gradient(180deg, #FFFFFF 0%, #F7F8FA 100%); border-bottom: 1px solid #ECEFF3; padding: 4rem 1.25rem 3.5rem; margin: -2rem -2rem 2.5rem; overflow: hidden; }
+        .home-hero-inner { max-width: 760px; margin: 0 auto; text-align: center; position: relative; z-index: 2; }
+        .home-hero h1 { font-family: 'Poppins'; font-weight: 700; font-size: clamp(1.9rem, 4.2vw, 3rem); line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 0.9rem; color: #1B2440; white-space: nowrap; }
+        .home-hero h1 .accent { color: #149E91; }
+        .home-hero-sub { font-size: clamp(0.88rem, 1.05vw, 0.98rem); color: #5B6678; max-width: 600px; margin: 0 auto 2.75rem; line-height: 1.5; }
+        @media (max-width: 480px) { .home-hero { padding: 2.5rem 1rem 2.5rem; margin: -2rem -1rem 2rem; } .home-hero h1 { white-space: normal; font-size: 1.8rem; } }
+        .home-search-wrap { max-width: 720px; margin: 1.25rem auto 0; padding-top: 0.5rem; padding-bottom: 0.75rem; position: relative; }
+        .home-search { display: flex; align-items: center; background: #fff; border: 1px solid #E3E7EC; border-radius: 20px; padding: 8px; box-shadow: 0 1px 2px rgba(27,36,64,0.04), 0 16px 48px -14px rgba(20,158,145,0.28); transition: box-shadow 0.18s ease, border-color 0.18s ease; position: relative; }
+        .home-search:focus-within { border-color: #149E91; box-shadow: 0 0 0 4px rgba(20,158,145,0.15), 0 16px 40px -10px rgba(20,158,145,0.35); }
+        .home-search-icon { margin: 0 0.35rem 0 0.9rem; flex: 0 0 auto; color: #5B6678; }
+        .home-search input { flex: 1; border: 0; outline: 0; background: transparent; font-family: inherit; font-size: 1.15rem; font-weight: 500; color: #1B2440; padding: 1.15rem 0.6rem; min-width: 0; }
+        .home-search input::placeholder { color: #97a0ad; font-weight: 400; }
+        .home-search button.go { flex: 0 0 auto; background: #149E91; color: #fff; border: 0; border-radius: 14px; padding: 1rem 1.7rem; font-family: inherit; font-weight: 600; font-size: 1.02rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; transition: background 0.15s ease, transform 0.1s ease; }
+        .home-search button.go:hover { background: #117f74; }
+        .home-search button.go:active { transform: translateY(1px); }
+        .home-hero #searchAc { left: 8px; right: 8px; top: calc(100% + 4px); border-radius: 12px; border: 1px solid #E3E7EC; box-shadow: 0 16px 40px -10px rgba(27,36,64,0.18); }
+        @media (max-width: 560px) { .home-search input { font-size: 1rem; padding: 0.9rem 0.4rem; } .home-search button.go { padding: 0.85rem 1rem; font-size: 0.95rem; } .home-search button.go .go-label { display: none; } }
+        .home-hint { margin-top: 1.1rem; font-size: 0.9rem; color: #5B6678; }
+        .home-hint .chip { display: inline-block; background: #fff; border: 1px solid #E3E7EC; border-radius: 999px; padding: 0.25rem 0.75rem; margin: 0.15rem 0.15rem; color: #1B2440; font-weight: 500; text-decoration: none; font-size: 0.85rem; transition: border-color 0.12s, color 0.12s, transform 0.1s; }
+        .home-hint .chip:hover { border-color: #149E91; color: #149E91; transform: translateY(-1px); }
+        .home-browse { margin-top: 0.5rem; font-size: 0.88rem; color: #5B6678; }
+        .home-browse a { color: #149E91; font-weight: 600; text-decoration: none; }
+        .home-browse a:hover { text-decoration: underline; }
+        .home-stats { margin-top: 2.5rem; display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap; font-size: 0.88rem; color: #5B6678; }
+        .home-stats b { color: #1B2440; font-weight: 700; font-family: 'Poppins'; font-size: 1.05rem; display: block; }
+        @media (max-width: 560px) { .home-stats { gap: 1.25rem; } }
+
+        /* ---------- TOOL STRIP ---------- */
+        .tool-strip { margin-top: 2.75rem; position: relative; }
+        .tool-strip-label { display: flex; align-items: center; gap: 1rem; max-width: 720px; margin: 0 auto 1.25rem; padding: 0 1.5rem; }
+        .tool-strip-label .tsl-line { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, #D6DDE2, transparent); }
+        .tool-strip-label .tsl-text { font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: #5B6678; font-weight: 600; white-space: nowrap; }
+        .tool-track-mask { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 50px, #000 calc(100% - 50px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 50px, #000 calc(100% - 50px), transparent 100%); padding: 0.5rem 0 1rem; display: flex; flex-direction: column; gap: 0.9rem; }
+        .tool-track { display: inline-flex; gap: 1.1rem; padding: 0 0.5rem; will-change: transform; }
+        .tool-track-a { animation: tool-scroll-left 48s linear infinite; }
+        .tool-track-b { animation: tool-scroll-right 52s linear infinite; margin-left: 160px; }
+        .tool-strip:hover .tool-track, .tool-track:focus-within { animation-play-state: paused; }
+        @keyframes tool-scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes tool-scroll-right { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+        @media (prefers-reduced-motion: reduce) { .tool-track { animation: none; } .tool-track-mask { overflow-x: auto; } }
+        .tool-card { flex: 0 0 auto; width: 320px; display: flex; align-items: center; gap: 1rem; background: #fff; border: 1px solid #E3E7EC; border-radius: 18px; padding: 1.1rem 1.25rem; text-decoration: none; box-shadow: 0 2px 4px rgba(27,36,64,0.05); transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease; }
+        .tool-card:hover { transform: translateY(-3px); border-color: transparent; box-shadow: 0 16px 32px -10px rgba(27,36,64,0.2), 0 0 0 1px var(--c1); }
+        .tool-icon { flex: 0 0 auto; width: 52px; height: 52px; border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--c1), var(--c2)); color: #fff; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.4rem; letter-spacing: -0.02em; box-shadow: 0 6px 14px -3px color-mix(in srgb, var(--c1) 50%, transparent); }
+        .tool-body { min-width: 0; }
+        .tool-name { font-family: 'Poppins', sans-serif; font-weight: 700; color: #1B2440; font-size: 1.08rem; line-height: 1.2; white-space: nowrap; }
+        .tool-desc { font-size: 0.88rem; color: #5B6678; margin-top: 0.2rem; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        @media (max-width: 560px) {
+            .tool-strip { margin-top: 2rem; }
+            .tool-strip-label { padding: 0 1rem; margin-bottom: 1rem; }
+            .tool-track-mask { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%); overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; padding: 0.5rem 0 1.5rem; gap: 0; scrollbar-width: none; }
+            .tool-track-mask::-webkit-scrollbar { display: none; }
+            .tool-track { animation: none !important; gap: 0.7rem; padding: 0 1rem; }
+            .tool-track-b { display: none; }
+            .tool-card { width: 78vw; max-width: 320px; padding: 1rem 1.1rem; border-radius: 16px; scroll-snap-align: center; box-shadow: 0 6px 18px -8px rgba(27,36,64,0.18); }
+            .tool-icon { width: 48px; height: 48px; font-size: 1.3rem; border-radius: 12px; }
+            .tool-name { font-size: 1.05rem; }
+            .tool-desc { font-size: 0.85rem; white-space: normal; }
+        }
+        /* ---------- ANIMATED RACE CHART (homepage) ---------- */
+        .race-section { margin: 3rem 0 0; padding: 0; }
+        .race-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .race-head h2 { margin: 0 0 0.25rem; font-family: 'Poppins'; font-weight: 700; font-size: 1.7rem; letter-spacing: -0.01em; color: #1B2440; }
+        .race-sub { margin: 0; color: #5B6678; font-size: 0.95rem; }
+        .race-controls { display: flex; gap: 0.5rem; }
+        .race-btn { background: #1B2440; color: #fff; border: 0; border-radius: 999px; padding: 0.5rem 1rem; font-family: inherit; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: background 0.15s ease, transform 0.1s ease; }
+        .race-btn:hover { background: #0E1530; transform: translateY(-1px); }
+        .race-btn-ghost { background: #fff; color: #1B2440; border: 1px solid #E3E7EC; }
+        .race-btn-ghost:hover { background: #F2F5F8; border-color: #1B2440; }
+        .race-stage { background: radial-gradient(800px 300px at 100% 0%, rgba(20,158,145,0.08), transparent 60%), #fff; border: 1px solid #E3E7EC; border-radius: 20px; padding: 2rem 2rem 1.5rem; box-shadow: 0 4px 16px -8px rgba(27,36,64,0.08); position: relative; }
+        .race-year { font-family: 'Poppins'; font-weight: 800; font-size: clamp(3rem, 7vw, 4.5rem); letter-spacing: -0.03em; color: #149E91; line-height: 1; position: absolute; top: 1.5rem; right: 2rem; font-variant-numeric: tabular-nums; opacity: 0.85; }
+        .race-split { margin-top: 2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .race-pane { display: flex; flex-direction: column; background: #FBFCFD; border: 1px solid #ECEFF3; border-radius: 14px; padding: 1rem 1rem 0.75rem; min-width: 0; }
+        .race-pane-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.4rem; font-family: 'Poppins', sans-serif; }
+        .race-pane-icon { width: 26px; height: 26px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; color: #fff; }
+        .race-pane[data-sex="M"] .race-pane-icon { background: linear-gradient(135deg, #149E91, #0E7A70); }
+        .race-pane[data-sex="F"] .race-pane-icon { background: linear-gradient(135deg, #D26A8C, #B14770); }
+        .race-pane-title { font-weight: 700; font-size: 1rem; color: #1B2440; }
+        .race-pane-tally { margin-left: auto; font-family: 'Inter', sans-serif; font-size: 0.78rem; color: #5B6678; font-variant-numeric: tabular-nums; }
+        .race-chart { width: 100%; height: 320px; display: block; overflow: visible; }
+        .race-grid line { stroke: #ECEFF3; stroke-width: 1; stroke-dasharray: 3 4; }
+        .race-grid line.axis { stroke: #D6DDE2; stroke-dasharray: none; }
+        .race-xlabels text, .race-ylabels text { font-family: 'Inter', sans-serif; font-size: 11px; fill: #97A0AD; font-variant-numeric: tabular-nums; }
+        .race-ylabels text { text-anchor: end; }
+        .race-lines path { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 1px 2px rgba(27,36,64,0.04)); transition: stroke-dashoffset 120ms linear; }
+        .race-dots circle { transition: cx 120ms linear, cy 120ms linear, opacity 200ms ease; }
+        .race-cursor { pointer-events: none; }
+        .race-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem 0.85rem; padding: 0.75rem 0 0.25rem; border-top: 1px dashed #ECEFF3; margin-top: 0.5rem; }
+        .race-legend-item { display: flex; align-items: center; gap: 0.55rem; font-size: 0.88rem; color: #1B2440; }
+        .race-legend-swatch { width: 12px; height: 12px; border-radius: 4px; flex: 0 0 auto; }
+        .race-legend-name { font-weight: 600; font-family: 'Poppins'; }
+        .race-legend-count { margin-left: auto; color: #5B6678; font-size: 0.78rem; font-variant-numeric: tabular-nums; }
+        .race-scrubber { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px dashed #E3E7EC; }
+        .race-scrubber input[type="range"] { width: 100%; -webkit-appearance: none; appearance: none; height: 4px; background: #E3E7EC; border-radius: 2px; outline: none; cursor: pointer; }
+        .race-scrubber input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #149E91; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(20,158,145,0.4); cursor: grab; }
+        .race-scrubber input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #149E91; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(20,158,145,0.4); cursor: grab; }
+        .race-decades { display: flex; justify-content: space-between; margin-top: 0.4rem; font-size: 0.72rem; color: #5B6678; font-weight: 500; font-variant-numeric: tabular-nums; }
+        .race-foot { text-align: center; color: #5B6678; font-size: 0.9rem; margin-top: 1.5rem; }
+        .race-foot a { color: #149E91; font-weight: 600; text-decoration: none; }
+        .race-foot a:hover { text-decoration: underline; }
+        @media (max-width: 900px) { .race-split { grid-template-columns: 1fr; gap: 1rem; } .race-chart { height: 280px; } }
+        @media (max-width: 600px) { .race-stage { padding: 1.25rem 1rem 1rem; } .race-year { font-size: 2.4rem; top: 1rem; right: 1.25rem; } }
+
         .num-box { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
         .num-box h2 { margin: 0 0 0.4rem; font-size: 1.1rem; }
         .num-box > p { margin: 0 0 1rem; color: #5B6678; font-size: 0.95rem; }
@@ -401,28 +530,37 @@
 </head>
 <body>
     <div class="sitenav"><div class="sitenav-inner">
-        <a class="brand" href="/fr/"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span><span class="brand-cc"><span class="brand-cc-dash">—</span> <span class="flag" aria-hidden="true">🇫🇷</span> France</span></a>
-        <a href="/fr/">Accueil</a>
-        <a href="/fr/names.html">Parcourir A–Z</a>
-        <a href="/fr/trends.html">Tendances</a>
-        <a href="/fr/decades.html">Décennies</a>
-        <a href="/fr/year/2024.html">Classement 2024</a>
-        
-        <div class="nav-tools">
-            <button type="button" class="nav-tools-btn" aria-haspopup="true" aria-expanded="false">Outils <span class="nav-tools-caret" aria-hidden="true">▾</span></button>
-            <div class="nav-tools-menu" role="menu">
-                <a href="/fr/compare.html" role="menuitem">Comparer</a>
-                <a href="/fr/works-with.html" role="menuitem">Avec votre nom</a>
-                <a href="/fr/picker.html" role="menuitem">Sélecteur</a>
-                <a href="/fr/sibling.html" role="menuitem">Idées fratrie</a>
-                <a href="/fr/initials.html" role="menuitem">Initiales</a>
-                <a href="/fr/origins.html" role="menuitem">Origines</a>
-                <a href="/fr/fiction.html" role="menuitem">Prénoms de fiction</a>
-                <a href="/fr/jour-de-fete.html" role="menuitem">Fête du jour</a>
+        <a class="brand" href="/fr/"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span></a>
+        <div class="nav-links">
+            <a href="/fr/" class="nav-link">Accueil</a>
+            <div class="nav-dd">
+                <button type="button" class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Explorer <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+                <div class="nav-dd-menu" role="menu">
+                    <a href="/fr/names.html" role="menuitem">Parcourir A–Z</a>
+                    <a href="/fr/trends.html" role="menuitem">Tendances</a>
+                    <a href="/fr/decades.html" role="menuitem">Décennies</a>
+                    <a href="/fr/year/2024.html" role="menuitem">Classement 2024</a>
+                    <a href="/fr/rare-names.html" role="menuitem">Prénoms rares</a>
+                    <a href="/fr/favorites.html" role="menuitem">Favoris<span class="fav-nav-count"></span></a>
+                </div>
             </div>
+            <div class="nav-dd">
+                <button type="button" class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Outils <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
+                <div class="nav-dd-menu" role="menu">
+                    <a href="/fr/compare.html" role="menuitem">Comparer</a>
+                    <a href="/fr/works-with.html" role="menuitem">Avec votre nom</a>
+                    <a href="/fr/picker.html" role="menuitem">Sélecteur</a>
+                    <a href="/fr/sibling.html" role="menuitem">Idées fratrie</a>
+                    <a href="/fr/initials.html" role="menuitem">Initiales</a>
+                    <a href="/fr/origins.html" role="menuitem">Origines</a>
+                    <a href="/fr/fiction.html" role="menuitem">Prénoms de fiction</a>
+                    <a href="/fr/jour-de-fete.html" role="menuitem">Fête du jour</a>
+                </div>
+            </div>
+            
+            <button type="button" class="nav-search-btn" id="navSearchBtn" data-home="/fr/" aria-label="Rechercher des prénoms"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="20" y1="20" x2="16.65" y2="16.65"></line></svg></button>
         </div>
-        <a href="/fr/favorites.html">Favoris<span class="fav-nav-count"></span></a>
-        <span class="ccswitch"><a href="/"><span class="flag" aria-hidden="true">🇺🇸</span>US</a><span class="sep">·</span><strong><span class="flag" aria-hidden="true">🇫🇷</span>FR</strong><span class="sep">·</span><a href="/uk/"><span class="flag" aria-hidden="true">🇬🇧</span>UK</a><span class="sep">·</span><a href="/au/"><span class="flag" aria-hidden="true">🇦🇺</span>AU</a><span class="sep">·</span><a href="/ca/"><span class="flag" aria-hidden="true">🇨🇦</span>CA</a><span class="sep">·</span><a href="/es/"><span class="flag" aria-hidden="true">🇪🇸</span>ES</a><span class="sep">·</span><a href="/it/"><span class="flag" aria-hidden="true">🇮🇹</span>IT</a><span class="sep">·</span><a href="/nl/"><span class="flag" aria-hidden="true">🇳🇱</span>NL</a></span>
+        <div class="cc-dd"><button type="button" class="cc-dd-btn" aria-haspopup="listbox" aria-expanded="false"><span class="cc-flag" aria-hidden="true">🇫🇷</span><span class="cc-dd-label">France</span><span class="cc-caret" aria-hidden="true">▾</span></button><div class="cc-dd-menu" role="listbox" aria-label="Choisir un pays"><div class="cc-dd-heading">Choisir un pays</div><a class="cc-dd-item" href="/" role="option"><span class="cc-flag" aria-hidden="true">🇺🇸</span>États-Unis<span class="cc-code">US</span></a><a class="cc-dd-item is-current" href="/fr/" role="option" aria-selected="true"><span class="cc-flag" aria-hidden="true">🇫🇷</span>France<span class="cc-check" aria-hidden="true">✓</span></a><a class="cc-dd-item" href="/uk/" role="option"><span class="cc-flag" aria-hidden="true">🇬🇧</span>Royaume-Uni<span class="cc-code">UK</span></a><a class="cc-dd-item" href="/au/" role="option"><span class="cc-flag" aria-hidden="true">🇦🇺</span>Australie<span class="cc-code">AU</span></a><a class="cc-dd-item" href="/ca/" role="option"><span class="cc-flag" aria-hidden="true">🇨🇦</span>Canada<span class="cc-code">CA</span></a><a class="cc-dd-item" href="/es/" role="option"><span class="cc-flag" aria-hidden="true">🇪🇸</span>Espagne<span class="cc-code">ES</span></a><a class="cc-dd-item" href="/it/" role="option"><span class="cc-flag" aria-hidden="true">🇮🇹</span>Italie<span class="cc-code">IT</span></a><a class="cc-dd-item" href="/nl/" role="option"><span class="cc-flag" aria-hidden="true">🇳🇱</span>Pays-Bas<span class="cc-code">NL</span></a></div></div>
     </div></div>
     <div class="container">
         <div class="breadcrumb"><a href="/fr/">Accueil</a> &rsaquo; <a href="/fr/name/eros.html">Eros</a> &rsaquo; Prénoms similaires</div>
@@ -451,22 +589,48 @@
     </div>
     <script>
     (function() {
-        var wrap = document.querySelector('.nav-tools');
-        if (!wrap) return;
-        var btn = wrap.querySelector('.nav-tools-btn');
-        function close() { wrap.classList.remove('is-open'); btn.setAttribute('aria-expanded', 'false'); }
-        function toggle(e) {
-            e.stopPropagation();
-            var open = wrap.classList.toggle('is-open');
-            btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        var dropdowns = Array.prototype.slice.call(document.querySelectorAll('.nav-dd, .cc-dd'));
+        if (!dropdowns.length) return;
+        function closeAll(except) {
+            dropdowns.forEach(function(dd) {
+                if (dd === except) return;
+                dd.classList.remove('is-open');
+                var b = dd.querySelector('.nav-dd-btn, .cc-dd-btn');
+                if (b) b.setAttribute('aria-expanded', 'false');
+            });
         }
-        btn.addEventListener('click', toggle);
+        dropdowns.forEach(function(dd) {
+            var btn = dd.querySelector('.nav-dd-btn, .cc-dd-btn');
+            if (!btn) return;
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var open = dd.classList.toggle('is-open');
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                if (open) closeAll(dd);
+            });
+        });
         document.addEventListener('click', function(e) {
-            if (!wrap.contains(e.target)) close();
+            var inside = dropdowns.some(function(dd) { return dd.contains(e.target); });
+            if (!inside) closeAll(null);
         });
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') close();
+            if (e.key === 'Escape') closeAll(null);
         });
+
+        // Nav search icon focuses the hero search if present, otherwise
+        // routes to the home page where it exists.
+        var navSearch = document.getElementById('navSearchBtn');
+        if (navSearch) {
+            navSearch.addEventListener('click', function() {
+                var input = document.getElementById('searchInput');
+                if (input) {
+                    input.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    setTimeout(function() { input.focus(); }, 300);
+                } else {
+                    window.location.href = navSearch.getAttribute('data-home') || '/';
+                }
+            });
+        }
     })();
     </script>
     <script>
