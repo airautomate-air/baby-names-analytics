@@ -601,7 +601,7 @@
             <div class="race-head">
                 <div>
                     <h2>La course pour la #1</h2>
-                    <p class="race-sub">Top 10 des prénoms par année — 1880 à 2024</p>
+                    <p class="race-sub">Top 5 des prénoms par année — 1880 à 2024</p>
                 </div>
                 <div class="race-controls">
                     <button type="button" id="raceToggle" class="race-btn">⏸ Pause</button>
@@ -879,20 +879,7 @@
                     dot.setAttribute('cy', yOf(0));
                     dot.setAttribute('opacity', '0');
                     gDots.appendChild(dot);
-                    // Pre-compute length at each year via binary search.
-                    var lenAt = new Array(years.length);
-                    lenAt[0] = 0; lenAt[years.length - 1] = len;
-                    for (var f = 1; f < years.length - 1; f++) {
-                        var targetX = xOf(years[f]);
-                        var lo = 0, hi = len, mid = 0, pt;
-                        for (var k = 0; k < 18; k++) {
-                            mid = (lo + hi) / 2;
-                            pt = path.getPointAtLength(mid);
-                            if (pt.x < targetX) lo = mid; else hi = mid;
-                        }
-                        lenAt[f] = mid;
-                    }
-                    return { name: name, color: color, pts: pts, path: path, dot: dot, len: len, lenAt: lenAt };
+                    return { name: name, color: color, pts: pts, path: path, dot: dot, len: len };
                 });
 
                 var legendItems = [];
@@ -953,9 +940,15 @@
 
             function renderPane(pane, frameIdx, tallyEl, jsonForSex) {
                 var cx = DATA.xOf(DATA.years[frameIdx]);
+                var progress = frameIdx / (DATA.years.length - 1);
                 var topVal = 0, topName = '';
                 pane.series.forEach(function(s) {
-                    var lenHere = s.lenAt[frameIdx];
+                    // Length-proportional reveal. The dot sits exactly at the
+                    // tip of the revealed line by using the same length, which
+                    // keeps them visually paired (the year-cursor may drift a
+                    // few pixels on steep curves, an acceptable tradeoff vs.
+                    // the previous main-thread-blocking precompute).
+                    var lenHere = s.len * progress;
                     s.path.style.strokeDashoffset = s.len - lenHere;
                     var pt = s.path.getPointAtLength(lenHere);
                     s.dot.setAttribute('cx', pt.x);
@@ -1015,20 +1008,22 @@
                 render(frameIdx);
             });
 
-            // Lazy-load the data only when the chart enters the viewport.
+            // Defer load until the main thread is idle so it never competes
+            // with the rest of the homepage's first paint. requestIdleCallback
+            // where available, falling back to a short setTimeout.
             function load() {
                 fetch(nameUrlPrefix + '/top-race.json')
                     .then(function(r) { return r.json(); })
                     .then(init)
-                    .catch(function() { stage.style.display = 'none'; });
+                    .catch(function(err) {
+                        console && console.warn && console.warn('race chart load failed', err);
+                        stage.style.display = 'none';
+                    });
             }
-            if ('IntersectionObserver' in window) {
-                var io = new IntersectionObserver(function(entries) {
-                    if (entries[0].isIntersecting) { io.disconnect(); load(); }
-                }, { rootMargin: '200px' });
-                io.observe(stage);
+            if (typeof requestIdleCallback === 'function') {
+                requestIdleCallback(load, { timeout: 1500 });
             } else {
-                load();
+                setTimeout(load, 600);
             }
         })();
         </script>

@@ -664,14 +664,17 @@ def build_country(cc: str) -> None:
         }
         phonetic_by_sex[dom].setdefault(pkey, []).append(n)
 
-    # Top-10 names per year per sex for the homepage animated race chart.
+    # Top-5 names per year per sex for the homepage animated race chart.
     # Walked from per_year_rows which is already sorted in the rank step above.
+    # Top-5 (not top-10) keeps the chart light: fewer line redraws + smaller
+    # JSON, important because the client renders one SVG path per unique name
+    # that ever made the cut.
     race_M: dict[int, list] = {}
     race_F: dict[int, list] = {}
     for (year, sex), rows in per_year_rows.items():
-        top10 = sorted(rows, key=lambda x: (-x[1], x[0]))[:10]
+        top5 = sorted(rows, key=lambda x: (-x[1], x[0]))[:5]
         target = race_M if sex == 'M' else race_F
-        target[year] = [[n, c] for n, c in top10]
+        target[year] = [[n, c] for n, c in top5]
     top_race_by_country[cc] = {
         'years': years,
         'M': race_M,
@@ -1083,7 +1086,7 @@ STRINGS_EN: dict[str, str] = {
     "home_tools_label": "Or try one of our tools",
     "home_range_short": "{start} to {end}",
     "home_race_h2": "The race for #1",
-    "home_race_sub": "Top 10 names per year — {range_short}",
+    "home_race_sub": "Top 5 names per year — {range_short}",
     "home_race_pause": "Pause",
     "home_race_play": "Play",
     "home_race_restart": "Restart",
@@ -1584,7 +1587,7 @@ STRINGS_FR: dict[str, str] = {
     "home_tools_label": "Ou essayez un de nos outils",
     "home_range_short": "{start} à {end}",
     "home_race_h2": "La course pour la #1",
-    "home_race_sub": "Top 10 des prénoms par année — {range_short}",
+    "home_race_sub": "Top 5 des prénoms par année — {range_short}",
     "home_race_pause": "Pause",
     "home_race_play": "Lecture",
     "home_race_restart": "Recommencer",
@@ -5259,20 +5262,7 @@ def generate_homepage():
                     dot.setAttribute('cy', yOf(0));
                     dot.setAttribute('opacity', '0');
                     gDots.appendChild(dot);
-                    // Pre-compute length at each year via binary search.
-                    var lenAt = new Array(years.length);
-                    lenAt[0] = 0; lenAt[years.length - 1] = len;
-                    for (var f = 1; f < years.length - 1; f++) {{
-                        var targetX = xOf(years[f]);
-                        var lo = 0, hi = len, mid = 0, pt;
-                        for (var k = 0; k < 18; k++) {{
-                            mid = (lo + hi) / 2;
-                            pt = path.getPointAtLength(mid);
-                            if (pt.x < targetX) lo = mid; else hi = mid;
-                        }}
-                        lenAt[f] = mid;
-                    }}
-                    return {{ name: name, color: color, pts: pts, path: path, dot: dot, len: len, lenAt: lenAt }};
+                    return {{ name: name, color: color, pts: pts, path: path, dot: dot, len: len }};
                 }});
 
                 var legendItems = [];
@@ -5333,9 +5323,15 @@ def generate_homepage():
 
             function renderPane(pane, frameIdx, tallyEl, jsonForSex) {{
                 var cx = DATA.xOf(DATA.years[frameIdx]);
+                var progress = frameIdx / (DATA.years.length - 1);
                 var topVal = 0, topName = '';
                 pane.series.forEach(function(s) {{
-                    var lenHere = s.lenAt[frameIdx];
+                    // Length-proportional reveal. The dot sits exactly at the
+                    // tip of the revealed line by using the same length, which
+                    // keeps them visually paired (the year-cursor may drift a
+                    // few pixels on steep curves, an acceptable tradeoff vs.
+                    // the previous main-thread-blocking precompute).
+                    var lenHere = s.len * progress;
                     s.path.style.strokeDashoffset = s.len - lenHere;
                     var pt = s.path.getPointAtLength(lenHere);
                     s.dot.setAttribute('cx', pt.x);
@@ -5395,20 +5391,22 @@ def generate_homepage():
                 render(frameIdx);
             }});
 
-            // Lazy-load the data only when the chart enters the viewport.
+            // Defer load until the main thread is idle so it never competes
+            // with the rest of the homepage's first paint. requestIdleCallback
+            // where available, falling back to a short setTimeout.
             function load() {{
                 fetch(nameUrlPrefix + '/top-race.json')
                     .then(function(r) {{ return r.json(); }})
                     .then(init)
-                    .catch(function() {{ stage.style.display = 'none'; }});
+                    .catch(function(err) {{
+                        console && console.warn && console.warn('race chart load failed', err);
+                        stage.style.display = 'none';
+                    }});
             }}
-            if ('IntersectionObserver' in window) {{
-                var io = new IntersectionObserver(function(entries) {{
-                    if (entries[0].isIntersecting) {{ io.disconnect(); load(); }}
-                }}, {{ rootMargin: '200px' }});
-                io.observe(stage);
+            if (typeof requestIdleCallback === 'function') {{
+                requestIdleCallback(load, {{ timeout: 1500 }});
             }} else {{
-                load();
+                setTimeout(load, 600);
             }}
         }})();
         </script>"""
