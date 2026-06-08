@@ -387,6 +387,14 @@
         .race-foot a:hover { text-decoration: underline; }
         @media (max-width: 900px) { .race-split { grid-template-columns: 1fr; gap: 1rem; } .race-chart { height: 280px; } }
         @media (max-width: 600px) { .race-stage { padding: 1.25rem 1rem 1rem; } .race-year { font-size: 2.4rem; top: 1rem; right: 1.25rem; } }
+        /* Mobile uses a pre-rendered video instead of the live SVG to dodge
+           the per-frame redraw cost of 80+ paths on low-end GPUs. Desktop
+           keeps the interactive chart with scrub + clickable legend. */
+        .race-video { display: none; width: 100%; border-radius: 18px; background: #F7F8FA; box-shadow: 0 4px 16px -8px rgba(27,36,64,0.08); }
+        @media (max-width: 760px) {
+            .race-section .race-stage, .race-section .race-controls { display: none; }
+            .race-section .race-video { display: block; }
+        }
 
         .num-box { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 1rem 1.25rem; margin: 1.5rem 0; }
         .num-box h2 { margin: 0 0 0.4rem; font-size: 1.1rem; }
@@ -662,6 +670,9 @@
                     <div class="race-decades" id="raceDecades"></div>
                 </div>
             </div>
+            <video class="race-video" autoplay loop muted playsinline preload="metadata" aria-label="The race for #1">
+                <source src="/top-race.webm" type="video/webm">
+            </video>
             <p class="race-foot">Watch how a generation's favourites rise and fall. <a href="/year/2024.html">See full data →</a></p>
         </section>
 
