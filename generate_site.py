@@ -4487,8 +4487,9 @@ BASE_CSS = """
         .race-grid line.axis { stroke: #D6DDE2; stroke-dasharray: none; }
         .race-xlabels text, .race-ylabels text { font-family: 'Inter', sans-serif; font-size: 11px; fill: #97A0AD; font-variant-numeric: tabular-nums; }
         .race-ylabels text { text-anchor: end; }
-        .race-lines path { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 1px 2px rgba(27,36,64,0.04)); transition: stroke-dashoffset 120ms linear; }
-        .race-dots circle { transition: cx 120ms linear, cy 120ms linear, opacity 200ms ease; }
+        .race-lines path { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 1px 2px rgba(27,36,64,0.04)); }
+        .race-clip-rect { transition: width 110ms linear; }
+        .race-dots circle { transition: cx 110ms linear, cy 110ms linear, opacity 200ms ease; }
         .race-cursor { pointer-events: none; }
         .race-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem 0.85rem; padding: 0.75rem 0 0.25rem; border-top: 1px dashed #ECEFF3; margin-top: 0.5rem; }
         .race-legend-item { display: flex; align-items: center; gap: 0.55rem; font-size: 0.88rem; color: #1B2440; }
@@ -5213,6 +5214,24 @@ def generate_homepage():
                 var cursor = svg.querySelector('.race-cursor');
                 var legend = pane.querySelector('.race-legend');
 
+                // Build a clipPath that grows in width by year. All lines are
+                // clipped at the same X, so a name that peaks sharply doesn't
+                // race ahead of a flatter name when revealed.
+                var clipId = 'raceClip-' + sex + '-' + Math.random().toString(36).slice(2, 8);
+                var defs = svgEl('defs');
+                var clip = svgEl('clipPath');
+                clip.setAttribute('id', clipId);
+                var clipRect = svgEl('rect');
+                clipRect.setAttribute('class', 'race-clip-rect');
+                clipRect.setAttribute('x', PAD.l);
+                clipRect.setAttribute('y', 0);
+                clipRect.setAttribute('width', 0);
+                clipRect.setAttribute('height', VB_H);
+                clip.appendChild(clipRect);
+                defs.appendChild(clip);
+                svg.insertBefore(defs, svg.firstChild);
+                gLines.setAttribute('clip-path', 'url(#' + clipId + ')');
+
                 [0, 0.5, 1].forEach(function(t) {{
                     var v = t * yMax;
                     var ln = svgEl('line');
@@ -5261,9 +5280,6 @@ def generate_homepage():
                     path.setAttribute('stroke', color);
                     path.setAttribute('d', pathOf(pts, xOf, yOf));
                     gLines.appendChild(path);
-                    var len = path.getTotalLength();
-                    path.style.strokeDasharray = len;
-                    path.style.strokeDashoffset = len;
                     var dot = svgEl('circle');
                     dot.setAttribute('r', '4.5');
                     dot.setAttribute('fill', color);
@@ -5273,7 +5289,7 @@ def generate_homepage():
                     dot.setAttribute('cy', yOf(0));
                     dot.setAttribute('opacity', '0');
                     gDots.appendChild(dot);
-                    return {{ name: name, color: color, pts: pts, path: path, dot: dot, len: len }};
+                    return {{ name: name, color: color, pts: pts, path: path, dot: dot }};
                 }});
 
                 var legendItems = [];
@@ -5289,7 +5305,7 @@ def generate_homepage():
                     legendItems.push({{ row: row, sw: sw, link: link, ct: ct }});
                 }}
 
-                return {{ series: SERIES, cursor: cursor, legendItems: legendItems, sex: sex }};
+                return {{ series: SERIES, cursor: cursor, legendItems: legendItems, sex: sex, clipRect: clipRect }};
             }}
 
             var DATA = null;
@@ -5334,20 +5350,15 @@ def generate_homepage():
 
             function renderPane(pane, frameIdx, tallyEl, jsonForSex) {{
                 var cx = DATA.xOf(DATA.years[frameIdx]);
-                var progress = frameIdx / (DATA.years.length - 1);
                 var topVal = 0, topName = '';
+                // Grow the per-pane clip rectangle to the year position. All
+                // lines clip at the same X, so the leading edge stays unified
+                // across every name regardless of each curve's total length.
+                pane.clipRect.setAttribute('width', Math.max(0, cx - PAD.l));
                 pane.series.forEach(function(s) {{
-                    // Length-proportional reveal. The dot sits exactly at the
-                    // tip of the revealed line by using the same length, which
-                    // keeps them visually paired (the year-cursor may drift a
-                    // few pixels on steep curves, an acceptable tradeoff vs.
-                    // the previous main-thread-blocking precompute).
-                    var lenHere = s.len * progress;
-                    s.path.style.strokeDashoffset = s.len - lenHere;
-                    var pt = s.path.getPointAtLength(lenHere);
-                    s.dot.setAttribute('cx', pt.x);
-                    s.dot.setAttribute('cy', pt.y);
                     var cur = s.pts[frameIdx];
+                    s.dot.setAttribute('cx', DATA.xOf(cur[0]));
+                    s.dot.setAttribute('cy', DATA.yOf(cur[1]));
                     s.dot.setAttribute('opacity', cur[1] > DATA.yMax * 0.02 ? '1' : '0');
                     s.curVal = cur[1];
                     if (cur[1] > topVal) {{ topVal = cur[1]; topName = s.name; }}

@@ -367,8 +367,9 @@
         .race-grid line.axis { stroke: #D6DDE2; stroke-dasharray: none; }
         .race-xlabels text, .race-ylabels text { font-family: 'Inter', sans-serif; font-size: 11px; fill: #97A0AD; font-variant-numeric: tabular-nums; }
         .race-ylabels text { text-anchor: end; }
-        .race-lines path { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 1px 2px rgba(27,36,64,0.04)); transition: stroke-dashoffset 120ms linear; }
-        .race-dots circle { transition: cx 120ms linear, cy 120ms linear, opacity 200ms ease; }
+        .race-lines path { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 1px 2px rgba(27,36,64,0.04)); }
+        .race-clip-rect { transition: width 110ms linear; }
+        .race-dots circle { transition: cx 110ms linear, cy 110ms linear, opacity 200ms ease; }
         .race-cursor { pointer-events: none; }
         .race-legend { display: grid; grid-template-columns: 1fr 1fr; gap: 0.3rem 0.85rem; padding: 0.75rem 0 0.25rem; border-top: 1px dashed #ECEFF3; margin-top: 0.5rem; }
         .race-legend-item { display: flex; align-items: center; gap: 0.55rem; font-size: 0.88rem; color: #1B2440; }
