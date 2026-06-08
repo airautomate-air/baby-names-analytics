@@ -1065,10 +1065,10 @@ STRINGS_EN: dict[str, str] = {
     "home_cc_callout": "Also available for:",
     "home_total_babies": "{n} total babies",
     "home_mostly": "mostly {label}",
-    "home_title": "NameCharted — {country} Name Popularity & Trends",
-    "home_desc": ("Explore {country} name popularity and trends from {range}. "
-                  "Search {n}+ names for yearly counts, rankings, gender split, "
-                  "and interactive trend charts."),
+    "home_title": "NameCharted — Every name, charted.",
+    "home_desc": ("Every name, charted. Yearly counts, rankings, gender split "
+                  "and interactive trends for {n}+ names across 8 countries, "
+                  "from {range}."),
     # Redesigned hero (Phase 1)
     "home_h1": "Every name, <span class=\"accent\">charted.</span>",
     "home_subhead": ("Yearly counts, rankings, gender split and interactive trends "
@@ -1565,10 +1565,10 @@ STRINGS_FR: dict[str, str] = {
     "home_cc_callout": "Aussi disponible pour :",
     "home_total_babies": "{n} naissances au total",
     "home_mostly": "majoritairement {label}",
-    "home_title": "NameCharted — Prénoms en France : popularité et tendances",
-    "home_desc": ("Explorez la popularité et les tendances des prénoms en France "
-                  "de {range}. Recherchez parmi plus de {n} prénoms : effectifs "
-                  "annuels, classements, répartition par sexe et graphiques interactifs."),
+    "home_title": "NameCharted — Chaque prénom, en graphique.",
+    "home_desc": ("Chaque prénom, en graphique. Effectifs annuels, classements, "
+                  "répartition par sexe et tendances interactives pour plus de "
+                  "{n} prénoms dans 8 pays, de {range}."),
     # Redesigned hero (Phase 1) — FR copy
     "home_h1": "Chaque prénom, <span class=\"accent\">en graphique.</span>",
     "home_subhead": ("Effectifs annuels, classements, répartition par sexe et "
