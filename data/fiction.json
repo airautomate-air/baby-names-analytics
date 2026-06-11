@@ -1377,6 +1377,209 @@
         {"name": "Higgins", "role": "Leslie Higgins — head of operations"},
         {"name": "Dani", "role": "Dani Rojas — striker"}
       ]
+    },
+    {
+      "slug": "charles-dickens",
+      "title": "Charles Dickens",
+      "kind": "books",
+      "year": 1838,
+      "blurb": "The Victorian master's gallery of unforgettable characters — Oliver Twist, David Copperfield, A Tale of Two Cities and more.",
+      "names": [
+        {"name": "Oliver", "role": "Oliver Twist — the orphan who asked for more"},
+        {"name": "David", "role": "David Copperfield — the autobiographical hero"},
+        {"name": "Nicholas", "role": "Nicholas Nickleby — young idealist"},
+        {"name": "Florence", "role": "Florence Dombey — devoted daughter"},
+        {"name": "Agnes", "role": "Agnes Wickfield — David's steadfast love"},
+        {"name": "Amy", "role": "Amy Dorrit — the Little Dorrit, born in debtors' prison"},
+        {"name": "Lucie", "role": "Lucie Manette — golden thread of A Tale of Two Cities"},
+        {"name": "Estella", "role": "Estella Havisham — Miss Havisham's ward"},
+        {"name": "Ada", "role": "Ada Clare — ward in Chancery, Bleak House"},
+        {"name": "Sydney", "role": "Sydney Carton — 'far, far better thing' hero"},
+        {"name": "Arthur", "role": "Arthur Clennam — Little Dorrit's rescuer"},
+        {"name": "Rosa", "role": "Rosa Bud — Edwin Drood's fiancée"},
+        {"name": "Edwin", "role": "Edwin Drood — the mystery at the centre"},
+        {"name": "Martin", "role": "Martin Chuzzlewit — the self-seeking heir"},
+        {"name": "Nell", "role": "Little Nell Trent — The Old Curiosity Shop"}
+      ]
+    },
+    {
+      "slug": "greys-anatomy",
+      "title": "Grey's Anatomy",
+      "kind": "tv",
+      "year": 2005,
+      "blurb": "Shonda Rhimes's long-running medical drama — surgeons, interns, and impossible choices at Seattle Grace.",
+      "names": [
+        {"name": "Meredith", "role": "Meredith Grey — the intern who became chief"},
+        {"name": "Cristina", "role": "Cristina Yang — cardiothoracic ace, Meredith's 'person'"},
+        {"name": "Derek", "role": "Derek Shepherd — the neurosurgeon, McDreamy"},
+        {"name": "Alex", "role": "Alex Karev — peds surgeon with a rough past"},
+        {"name": "Izzie", "role": "Izzie Stevens — the empathetic intern"},
+        {"name": "Callie", "role": "Callie Torres — orthopaedic surgeon"},
+        {"name": "Miranda", "role": "Miranda Bailey — the Resident Nazi, then chief"},
+        {"name": "Owen", "role": "Owen Hunt — trauma surgeon, army vet"},
+        {"name": "Addison", "role": "Addison Montgomery — neonatal specialist"},
+        {"name": "Arizona", "role": "Arizona Robbins — paeds surgeon"},
+        {"name": "Jackson", "role": "Jackson Avery — plastic surgeon, Harper Avery heir"},
+        {"name": "April", "role": "April Kepner — trauma attending, devout Christian"},
+        {"name": "Lexie", "role": "Lexie Grey — Meredith's half-sister"},
+        {"name": "Maggie", "role": "Maggie Pierce — cardiothoracic chief"},
+        {"name": "Teddy", "role": "Teddy Altman — cardiothoracic surgeon"}
+      ]
+    },
+    {
+      "slug": "gilmore-girls",
+      "title": "Gilmore Girls",
+      "kind": "tv",
+      "year": 2000,
+      "blurb": "Amy Sherman-Palladino's mother-daughter comedy set in the fast-talking world of Stars Hollow, Connecticut.",
+      "names": [
+        {"name": "Rory", "role": "Rory Gilmore — book-loving daughter, journalist"},
+        {"name": "Emily", "role": "Emily Gilmore — the formidable grandmother"},
+        {"name": "Luke", "role": "Luke Danes — diner owner, Lorelai's love"},
+        {"name": "Logan", "role": "Logan Huntzberger — Rory's Yale beau"},
+        {"name": "Dean", "role": "Dean Forester — Rory's first boyfriend"},
+        {"name": "Jess", "role": "Jess Mariano — the brooding literary love"},
+        {"name": "Lane", "role": "Lane Kim — Rory's best friend, drummer"},
+        {"name": "Sookie", "role": "Sookie St. James — head chef, Lorelai's best friend"},
+        {"name": "Paris", "role": "Paris Geller — Chilton rival turned Harvard lawyer"},
+        {"name": "Richard", "role": "Richard Gilmore — patriarch, Yale man"},
+        {"name": "April", "role": "April Nardini — Luke's daughter"}
+      ]
+    },
+    {
+      "slug": "encanto",
+      "title": "Encanto",
+      "kind": "films",
+      "year": 2021,
+      "blurb": "Disney's Colombian magical-realism musical — the Madrigal family, each with a gift, except Mirabel.",
+      "names": [
+        {"name": "Mirabel", "role": "Mirabel Madrigal — the giftless heart of the family"},
+        {"name": "Luisa", "role": "Luisa Madrigal — super-strength, carries everything"},
+        {"name": "Isabela", "role": "Isabela Madrigal — the 'perfect' flower-grower"},
+        {"name": "Camilo", "role": "Camilo Madrigal — shapeshifter"},
+        {"name": "Bruno", "role": "Bruno Madrigal — we don't talk about Bruno"},
+        {"name": "Dolores", "role": "Dolores Madrigal — hears everything"},
+        {"name": "Julieta", "role": "Julieta Madrigal — healer through food"},
+        {"name": "Felix", "role": "Félix Madrigal — Pepa's sunny husband"},
+        {"name": "Antonio", "role": "Antonio Madrigal — talks to animals"},
+        {"name": "Pepa", "role": "Pepa Madrigal — controls the weather with her emotions"},
+        {"name": "Agustin", "role": "Agustín Madrigal — Julieta's accident-prone husband"}
+      ]
+    },
+    {
+      "slug": "vampire-diaries",
+      "title": "The Vampire Diaries",
+      "kind": "tv",
+      "year": 2009,
+      "blurb": "Kevin Williamson and Julie Plec's supernatural drama — vampires, witches, and werewolves in Mystic Falls, Virginia.",
+      "names": [
+        {"name": "Elena", "role": "Elena Gilbert — the doppelgänger at the centre"},
+        {"name": "Stefan", "role": "Stefan Salvatore — the noble vampire brother"},
+        {"name": "Damon", "role": "Damon Salvatore — the reckless vampire brother"},
+        {"name": "Bonnie", "role": "Bonnie Bennett — the powerful witch, Elena's best friend"},
+        {"name": "Caroline", "role": "Caroline Forbes — cheerleader turned vampire"},
+        {"name": "Tyler", "role": "Tyler Lockwood — the werewolf football star"},
+        {"name": "Jeremy", "role": "Jeremy Gilbert — Elena's younger brother"},
+        {"name": "Elijah", "role": "Elijah Mikaelson — the honourable Original"},
+        {"name": "Rebekah", "role": "Rebekah Mikaelson — the Original sister"},
+        {"name": "Alaric", "role": "Alaric Saltzman — the history teacher vampire hunter"},
+        {"name": "Enzo", "role": "Enzo St. John — the sardonic vampire"}
+      ]
+    },
+    {
+      "slug": "gossip-girl",
+      "title": "Gossip Girl",
+      "kind": "tv",
+      "year": 2007,
+      "blurb": "The CW's guilty pleasure — Manhattan Upper East Side socialites navigating ambition, betrayal, and anonymous gossip.",
+      "names": [
+        {"name": "Serena", "role": "Serena van der Woodsen — golden girl, the 'it' girl"},
+        {"name": "Blair", "role": "Blair Waldorf — scheming queen bee"},
+        {"name": "Dan", "role": "Dan Humphrey — the outsider from Brooklyn"},
+        {"name": "Nate", "role": "Nate Archibald — the golden boy"},
+        {"name": "Jenny", "role": "Jenny Humphrey — fashion-obsessed younger sister"},
+        {"name": "Lily", "role": "Lily van der Woodsen-Bass — the socialite mother"},
+        {"name": "Eric", "role": "Eric van der Woodsen — Serena's younger brother"},
+        {"name": "Vanessa", "role": "Vanessa Abrams — Dan's artistic childhood friend"},
+        {"name": "Georgina", "role": "Georgina Sparks — the scheming wild card"},
+        {"name": "Ivy", "role": "Ivy Dickens — the impostor cousin"}
+      ]
+    },
+    {
+      "slug": "schitts-creek",
+      "title": "Schitt's Creek",
+      "kind": "tv",
+      "year": 2015,
+      "blurb": "Dan and Eugene Levy's Canadian comedy — a formerly wealthy family forced to rebuild in a small town they once bought as a joke.",
+      "names": [
+        {"name": "David", "role": "David Rose — the deadpan son, apothecary owner"},
+        {"name": "Alexis", "role": "Alexis Rose — the jet-setting socialite daughter"},
+        {"name": "Moira", "role": "Moira Rose — the theatrical ex-soap-opera star"},
+        {"name": "Johnny", "role": "Johnny Rose — the grounded, practical father"},
+        {"name": "Patrick", "role": "Patrick Brewer — David's business partner and husband"},
+        {"name": "Stevie", "role": "Stevie Budd — the sardonic motel manager"},
+        {"name": "Ted", "role": "Ted Mullens — the cheerful vet"},
+        {"name": "Roland", "role": "Roland Schitt — the small-town mayor"},
+        {"name": "Twyla", "role": "Twyla Sands — the endlessly optimistic diner waitress"},
+        {"name": "Jocelyn", "role": "Jocelyn Schitt — the mayor's wife, teacher"}
+      ]
+    },
+    {
+      "slug": "fullmetal-alchemist",
+      "title": "Fullmetal Alchemist: Brotherhood",
+      "kind": "anime",
+      "year": 2009,
+      "blurb": "Hiromu Arakawa's anime classic — brothers Edward and Alphonse Elric search for the Philosopher's Stone to restore their bodies.",
+      "names": [
+        {"name": "Edward", "role": "Edward Elric — the Fullmetal Alchemist"},
+        {"name": "Alphonse", "role": "Alphonse Elric — soul bound to a suit of armour"},
+        {"name": "Roy", "role": "Roy Mustang — the Flame Alchemist"},
+        {"name": "Riza", "role": "Riza Hawkeye — Roy's sharpshooter lieutenant"},
+        {"name": "Winry", "role": "Winry Rockbell — automail engineer and Edward's love"},
+        {"name": "Gracia", "role": "Gracia Hughes — Maes's devoted wife"},
+        {"name": "Nina", "role": "Nina Tucker — the tragic little girl"},
+        {"name": "Maria", "role": "Maria Ross — soldier assigned to the Elrics"},
+        {"name": "Olivier", "role": "Olivier Armstrong — the formidable Major General"},
+        {"name": "Trisha", "role": "Trisha Elric — the brothers' mother"}
+      ]
+    },
+    {
+      "slug": "buffy-the-vampire-slayer",
+      "title": "Buffy the Vampire Slayer",
+      "kind": "tv",
+      "year": 1997,
+      "blurb": "Joss Whedon's cult classic — a California teenager chosen to fight the forces of darkness, with her 'Scooby Gang' by her side.",
+      "names": [
+        {"name": "Buffy", "role": "Buffy Summers — the Slayer"},
+        {"name": "Willow", "role": "Willow Rosenberg — the witch, Buffy's best friend"},
+        {"name": "Xander", "role": "Xander Harris — the everyman heart of the Scoobies"},
+        {"name": "Rupert", "role": "Rupert Giles — the Watcher, school librarian"},
+        {"name": "Cordelia", "role": "Cordelia Chase — queen bee turned seer"},
+        {"name": "Angel", "role": "Angel — the vampire with a soul"},
+        {"name": "Anya", "role": "Anya Jenkins — ex-vengeance demon"},
+        {"name": "Dawn", "role": "Dawn Summers — Buffy's mystical younger sister"},
+        {"name": "Wesley", "role": "Wesley Wyndam-Price — rogue Watcher"},
+        {"name": "Tara", "role": "Tara Maclay — Willow's partner, gentle witch"},
+        {"name": "Spike", "role": "Spike (William) — the Big Bad turned unlikely hero"}
+      ]
+    },
+    {
+      "slug": "firefly",
+      "title": "Firefly",
+      "kind": "tv",
+      "year": 2002,
+      "blurb": "Joss Whedon's short-lived space Western — the crew of Serenity, outlaws with a code, flying to stay free.",
+      "names": [
+        {"name": "Malcolm", "role": "Malcolm Reynolds — captain of Serenity"},
+        {"name": "Zoe", "role": "Zoe Washburne — first mate, war veteran"},
+        {"name": "Kaylee", "role": "Kaylee Frye — the ship's sunny mechanic"},
+        {"name": "Simon", "role": "Simon Tam — the doctor who gave up everything"},
+        {"name": "River", "role": "River Tam — the gifted, dangerous passenger"},
+        {"name": "Inara", "role": "Inara Serra — the Companion"},
+        {"name": "Jayne", "role": "Jayne Cobb — mercenary muscle"},
+        {"name": "Shepherd", "role": "Shepherd Book — the mysterious preacher"},
+        {"name": "Hoban", "role": "Hoban 'Wash' Washburne — the pilot"}
+      ]
     }
   ]
 }
