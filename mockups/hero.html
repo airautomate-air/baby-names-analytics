@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero redesign — Mockup</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap');
+
+:root {
+  --teal: #149E91;
+  --teal-dark: #117f74;
+  --navy: #1B2440;
+  --navy-soft: #2a3656;
+  --ink: #1B2440;
+  --muted: #5B6678;
+  --line: #d6dde2;
+  --bg: #F7F8FA;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0; padding: 0;
+  background: var(--bg); color: #333;
+  font-feature-settings: 'tnum' 1;
+}
+h1, h2, h3 { font-family: 'Poppins', 'Inter', sans-serif; color: var(--ink); }
+
+/* ---------- NAV (kept from live site) ---------- */
+.sitenav { background: var(--navy); padding: 0.9rem 2rem; }
+.sitenav-inner { max-width: 1040px; margin: 0 auto; display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; }
+.sitenav a { color: #EEF2F4; text-decoration: none; font-weight: 500; font-size: 0.96rem; }
+.sitenav a:hover { color: #fff; text-decoration: underline; }
+.sitenav .brand { font-family: 'Poppins'; font-weight: 700; color: #fff; margin-right: auto; display: inline-flex; align-items: center; gap: 0.55rem; font-size: 1.05rem; }
+.nav-links { display: inline-flex; align-items: center; gap: 1.5rem; }
+.nav-search-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #EEF2F4;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+.nav-search-btn:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); }
+.nav-search-btn svg { width: 16px; height: 16px; }
+.brand-mark { width: 28px; height: 28px; border-radius: 7px; background: var(--teal); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 0.9rem; }
+
+/* ---------- NAV DROPDOWNS (Explore / Tools) ---------- */
+.nav-dd { position: relative; }
+.nav-dd-btn {
+  background: none; border: 0; cursor: pointer;
+  color: #EEF2F4;
+  font-family: inherit; font-weight: 500; font-size: 0.96rem;
+  padding: 0.4rem 0;
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  transition: color 0.15s ease;
+}
+.nav-dd-btn:hover { color: #fff; }
+.nav-dd-caret { font-size: 0.7rem; transition: transform 0.18s ease; opacity: 0.75; }
+.nav-dd.is-open .nav-dd-btn { color: #fff; }
+.nav-dd.is-open .nav-dd-caret { transform: rotate(180deg); }
+.nav-dd-menu {
+  display: none;
+  position: absolute; top: calc(100% + 0.55rem); left: -0.5rem;
+  background: #fff;
+  border: 1px solid #E3E7EC;
+  border-radius: 12px;
+  min-width: 220px;
+  padding: 0.4rem;
+  box-shadow: 0 16px 40px -10px rgba(27,36,64,0.25), 0 4px 12px rgba(27,36,64,0.08);
+  z-index: 60;
+  animation: cc-dd-in 0.16s ease-out;
+}
+.nav-dd.is-open .nav-dd-menu { display: block; }
+.nav-dd-menu a,
+.nav-dd-menu a:link,
+.nav-dd-menu a:visited {
+  display: block;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  color: #1B2440 !important;
+  text-decoration: none;
+  font-size: 0.95rem; font-weight: 600;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.nav-dd-menu a:hover,
+.nav-dd-menu a:focus {
+  background: #EFF8F6;
+  color: #0E7A70 !important;
+  text-decoration: none;
+}
+.nav-link { color: #EEF2F4; text-decoration: none; font-weight: 500; font-size: 0.96rem; }
+.nav-link:hover { color: #fff; }
+/* ---------- COUNTRY DROPDOWN ---------- */
+.cc-dd { position: relative; }
+.cc-dd-btn {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  background: #fff;
+  border: 1px solid #fff;
+  color: var(--ink);
+  font-family: inherit; font-weight: 600; font-size: 0.92rem;
+  padding: 0.5rem 0.95rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+}
+.cc-dd-btn:hover {
+  background: #F2F5F8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+}
+.cc-dd-btn .cc-flag { font-size: 1.15rem; line-height: 1; }
+.cc-dd-btn .cc-caret { font-size: 0.7rem; color: var(--muted); transition: transform 0.18s ease; margin-left: 0.2rem; }
+.cc-dd.is-open .cc-dd-btn { background: #fff; box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
+.cc-dd.is-open .cc-dd-btn .cc-caret { transform: rotate(180deg); color: var(--teal); }
+
+.cc-dd-menu {
+  display: none;
+  position: absolute; top: calc(100% + 0.5rem); right: 0;
+  background: #fff;
+  border: 1px solid #E3E7EC;
+  border-radius: 14px;
+  min-width: 240px;
+  padding: 0.5rem;
+  box-shadow: 0 16px 40px -10px rgba(27,36,64,0.25), 0 4px 12px rgba(27,36,64,0.08);
+  z-index: 60;
+  animation: cc-dd-in 0.16s ease-out;
+}
+@keyframes cc-dd-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.cc-dd.is-open .cc-dd-menu { display: block; }
+
+.cc-dd-menu .cc-dd-heading {
+  font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted); font-weight: 600;
+  padding: 0.5rem 0.75rem 0.4rem;
+}
+a.cc-dd-item,
+a.cc-dd-item:link,
+a.cc-dd-item:visited {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 9px;
+  color: #1B2440 !important;
+  text-decoration: none;
+  font-weight: 600; font-size: 0.96rem;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+a.cc-dd-item:hover { background: #F2F5F8; color: #1B2440 !important; }
+a.cc-dd-item .cc-flag { font-size: 1.2rem; line-height: 1; }
+a.cc-dd-item .cc-code {
+  color: #5B6678 !important; font-size: 0.78rem;
+  margin-left: auto; font-weight: 600; letter-spacing: 0.05em;
+}
+a.cc-dd-item.is-current { background: #EFF8F6; color: #0E7A70 !important; font-weight: 700; }
+a.cc-dd-item.is-current .cc-code { color: #149E91 !important; }
+a.cc-dd-item .cc-check { margin-left: auto; color: #149E91; font-weight: 700; }
+
+/* ---------- HERO ---------- */
+.hero {
+  position: relative;
+  background:
+    radial-gradient(900px 420px at 80% -10%, rgba(20,158,145,0.18), transparent 60%),
+    radial-gradient(700px 380px at 10% 100%, rgba(27,36,64,0.06), transparent 60%),
+    linear-gradient(180deg, #FFFFFF 0%, var(--bg) 100%);
+  border-bottom: 1px solid #ECEFF3;
+  padding: 4rem 1.25rem 3.5rem;
+  overflow: hidden;
+}
+.hero-inner {
+  max-width: 760px; margin: 0 auto; text-align: center;
+  position: relative; z-index: 2;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: #fff; border: 1px solid #E3E7EC;
+  border-radius: 999px; padding: 0.3rem 0.85rem;
+  font-size: 0.82rem; font-weight: 500; color: var(--muted);
+  margin-bottom: 1.25rem;
+  box-shadow: 0 1px 2px rgba(27,36,64,0.04);
+}
+.hero-eyebrow .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--teal);
+  box-shadow: 0 0 0 4px rgba(20,158,145,0.15);
+}
+.hero h1 {
+  font-family: 'Poppins'; font-weight: 700;
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.9rem;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.hero h1 .accent { color: var(--teal); }
+.hero-sub {
+  font-size: clamp(0.88rem, 1.05vw, 0.98rem);
+  color: var(--muted);
+  max-width: 600px;
+  margin: 0 auto 2.75rem;
+  line-height: 1.5;
+}
+@media (max-width: 480px) {
+  .hero h1 { white-space: normal; font-size: 1.8rem; }
+}
+
+/* ---------- BIG SEARCH ---------- */
+.hero-search-wrap {
+  max-width: 720px;
+  margin: 1.25rem auto 0;
+  padding-top: 0.5rem;
+  padding-bottom: 0.75rem;
+  position: relative;
+}
+.hero-search {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #E3E7EC;
+  border-radius: 20px;
+  padding: 8px;
+  box-shadow:
+    0 1px 2px rgba(27,36,64,0.04),
+    0 16px 48px -14px rgba(20,158,145,0.28);
+  transition: box-shadow 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+.hero-search:focus-within {
+  border-color: var(--teal);
+  box-shadow:
+    0 0 0 4px rgba(20,158,145,0.15),
+    0 16px 40px -10px rgba(20,158,145,0.35);
+}
+.hero-search svg.search-icon {
+  margin: 0 0.35rem 0 0.9rem;
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+.hero-search input {
+  flex: 1;
+  border: 0; outline: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--ink);
+  padding: 1.15rem 0.6rem;
+  min-width: 0;
+}
+.hero-search input::placeholder { color: #97a0ad; font-weight: 400; }
+.hero-search button {
+  flex: 0 0 auto;
+  background: var(--teal);
+  color: #fff;
+  border: 0;
+  border-radius: 14px;
+  padding: 1rem 1.7rem;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 1.02rem;
+  cursor: pointer;
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.hero-search button:hover { background: var(--teal-dark); }
+.hero-search button:active { transform: translateY(1px); }
+
+.hero-hint {
+  margin-top: 1.1rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.hero-hint .chip {
+  display: inline-block;
+  background: #fff;
+  border: 1px solid #E3E7EC;
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  margin: 0.15rem 0.15rem;
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: border-color 0.12s, color 0.12s, transform 0.1s;
+}
+.hero-hint .chip:hover {
+  border-color: var(--teal); color: var(--teal); transform: translateY(-1px);
+}
+.hero-browse {
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+.hero-browse a { color: var(--teal); font-weight: 600; text-decoration: none; }
+.hero-browse a:hover { text-decoration: underline; }
+
+/* trust strip below */
+.hero-stats {
+  margin-top: 2.5rem;
+  display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap;
+  font-size: 0.88rem; color: var(--muted);
+}
+.hero-stats b { color: var(--ink); font-weight: 700; font-family: 'Poppins'; font-size: 1.05rem; display: block; }
+
+/* ---------- mockup chrome (annotation only) ---------- */
+.mock-label {
+  position: fixed; top: 12px; left: 12px; z-index: 100;
+  background: var(--navy); color: #fff;
+  font-size: 0.75rem; font-weight: 600;
+  padding: 0.3rem 0.65rem; border-radius: 6px;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+}
+.section-after {
+  max-width: 900px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem;
+}
+.section-after h2 {
+  color: var(--teal); border-bottom: 2px solid #EEF2F4;
+  padding-bottom: 0.5rem; font-size: 1.4rem;
+}
+.trending-list {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+  gap: 1rem; list-style: none; padding: 0; margin: 1.5rem 0 0;
+}
+.trending-list li {
+  background: #fff; border: 1px solid var(--line);
+  border-radius: 10px; padding: 0.9rem 1rem;
+}
+.trending-list h3 { margin: 0 0 0.2rem; font-size: 1.05rem; }
+.trending-list p { margin: 0.1rem 0; color: var(--muted); font-size: 0.88rem; }
+.trending-list a { color: var(--ink); text-decoration: none; }
+.trending-list a:hover h3 { color: var(--teal); }
+
+@media (max-width: 560px) {
+  .hero { padding: 2.5rem 1rem 2.5rem; }
+  .hero-search input { font-size: 1rem; padding: 0.85rem 0.4rem; }
+  .hero-search button { padding: 0.75rem 1rem; font-size: 0.9rem; }
+  .hero-stats { gap: 1.25rem; }
+}
+
+/* ---------- TOOL STRIP (carousel) ---------- */
+.tool-strip {
+  margin-top: 2.75rem;
+  position: relative;
+}
+.tool-strip-label {
+  display: flex; align-items: center; gap: 1rem;
+  max-width: 720px; margin: 0 auto 1.25rem;
+  padding: 0 1.5rem;
+}
+.tool-strip-label .tsl-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, #D6DDE2, transparent);
+}
+.tool-strip-label .tsl-text {
+  font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); font-weight: 600; white-space: nowrap;
+}
+.tool-track-mask {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
+  padding: 0.5rem 0 1rem;
+  display: flex; flex-direction: column;
+  gap: 0.9rem;
+}
+.tool-track {
+  display: inline-flex;
+  gap: 1.1rem;
+  padding: 0 0.5rem;
+  will-change: transform;
+}
+.tool-track-a {
+  animation: tool-scroll-left 48s linear infinite;
+  /* offset row B by half a card width so rows feel staggered */
+}
+.tool-track-b {
+  animation: tool-scroll-right 52s linear infinite;
+  margin-left: 160px; /* shift to break vertical alignment with row A */
+}
+.tool-strip:hover .tool-track,
+.tool-track:focus-within { animation-play-state: paused; }
+@keyframes tool-scroll-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes tool-scroll-right {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tool-track { animation: none; }
+  .tool-track-mask { overflow-x: auto; }
+}
+
+.tool-card {
+  flex: 0 0 auto;
+  width: 320px;
+  display: flex; align-items: center; gap: 1rem;
+  background: #fff;
+  border: 1px solid #E3E7EC;
+  border-radius: 18px;
+  padding: 1.1rem 1.25rem;
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(27,36,64,0.05);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+.tool-card:hover {
+  transform: translateY(-3px);
+  border-color: transparent;
+  box-shadow: 0 16px 32px -10px rgba(27,36,64,0.2), 0 0 0 1px var(--c1);
+}
+.tool-icon {
+  flex: 0 0 auto;
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--c1), var(--c2));
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: -0.02em;
+  box-shadow: 0 6px 14px -3px color-mix(in srgb, var(--c1) 50%, transparent);
+}
+.tool-body { min-width: 0; }
+.tool-name {
+  font-family: 'Poppins', sans-serif; font-weight: 700;
+  color: var(--ink); font-size: 1.08rem; line-height: 1.2;
+  white-space: nowrap;
+}
+.tool-desc {
+  font-size: 0.88rem; color: var(--muted);
+  margin-top: 0.2rem; line-height: 1.35;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+@media (max-width: 560px) {
+  .tool-strip { margin-top: 2rem; }
+
+  /* On mobile, kill the auto-scroll marquee — it's hard to read and you
+     can't tap a moving target. Make it a single, swipeable, snapping row. */
+  .tool-strip-label { padding: 0 1rem; margin-bottom: 1rem; }
+  .tool-track-mask {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding: 0.5rem 0 1.5rem;
+    gap: 0;
+  }
+  .tool-track-mask::-webkit-scrollbar { display: none; }
+  .tool-track-mask { scrollbar-width: none; }
+  .tool-track {
+    animation: none !important;
+    gap: 0.7rem;
+    padding: 0 1rem;
+  }
+  /* Hide row B on mobile — one row is enough, less visual noise */
+  .tool-track-b { display: none; }
+
+  .tool-card {
+    width: 78vw; max-width: 320px;
+    padding: 1rem 1.1rem;
+    border-radius: 16px;
+    scroll-snap-align: center;
+    box-shadow: 0 6px 18px -8px rgba(27,36,64,0.18);
+  }
+  .tool-icon { width: 48px; height: 48px; font-size: 1.3rem; border-radius: 12px; }
+  .tool-name { font-size: 1.05rem; }
+  .tool-desc { font-size: 0.85rem; white-space: normal; }
+}
+
+/* ---------- BAR CHART RACE ---------- */
+.race-section {
+  max-width: 1240px; margin: 0 auto;
+  padding: 3.5rem 1.5rem 4rem;
+}
+.race-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+}
+.race-head h2 {
+  margin: 0 0 0.25rem;
+  font-family: 'Poppins'; font-weight: 700; font-size: 1.7rem;
+  letter-spacing: -0.01em; color: var(--ink);
+}
+.race-sub { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.race-controls { display: flex; gap: 0.5rem; }
+.race-btn {
+  background: var(--ink); color: #fff;
+  border: 0; border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-family: inherit; font-weight: 600; font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.race-btn:hover { background: #0E1530; transform: translateY(-1px); }
+.race-btn-ghost {
+  background: #fff; color: var(--ink); border: 1px solid #E3E7EC;
+}
+.race-btn-ghost:hover { background: #F2F5F8; border-color: var(--ink); }
+
+.race-stage {
+  background:
+    radial-gradient(800px 300px at 100% 0%, rgba(20,158,145,0.08), transparent 60%),
+    #fff;
+  border: 1px solid #E3E7EC;
+  border-radius: 20px;
+  padding: 2rem 2rem 1.5rem;
+  box-shadow: 0 4px 16px -8px rgba(27,36,64,0.08);
+  position: relative;
+}
+.race-year {
+  font-family: 'Poppins'; font-weight: 800;
+  font-size: clamp(3rem, 7vw, 4.5rem);
+  letter-spacing: -0.03em;
+  color: var(--teal);
+  line-height: 1;
+  position: absolute;
+  top: 1.5rem; right: 2rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+.race-split {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.race-pane {
+  display: flex; flex-direction: column;
+  background: #FBFCFD;
+  border: 1px solid #ECEFF3;
+  border-radius: 14px;
+  padding: 1rem 1rem 0.75rem;
+  min-width: 0;
+}
+.race-pane-head {
+  display: flex; align-items: center; gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  font-family: 'Poppins', sans-serif;
+}
+.race-pane-icon {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 700; color: #fff;
+}
+.race-pane[data-sex="boys"]  .race-pane-icon { background: linear-gradient(135deg, #149E91, #0E7A70); }
+.race-pane[data-sex="girls"] .race-pane-icon { background: linear-gradient(135deg, #D26A8C, #B14770); }
+.race-pane-title {
+  font-weight: 700; font-size: 1rem; color: var(--ink);
+}
+.race-pane-tally {
+  margin-left: auto;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem; color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.race-chart {
+  width: 100%;
+  height: 320px;
+  display: block;
+  overflow: visible;
+}
+@media (max-width: 900px) {
+  .race-split { grid-template-columns: 1fr; }
+  .race-chart { height: 280px; }
+}
+.race-grid line { stroke: #ECEFF3; stroke-width: 1; stroke-dasharray: 3 4; }
+.race-grid line.axis { stroke: #D6DDE2; stroke-dasharray: none; }
+.race-xlabels text, .race-ylabels text {
+  font-family: 'Inter', sans-serif; font-size: 11px;
+  fill: #97A0AD; font-variant-numeric: tabular-nums;
+}
+.race-ylabels text { text-anchor: end; }
+.race-lines path {
+  fill: none; stroke-width: 2.5;
+  stroke-linecap: round; stroke-linejoin: round;
+  filter: drop-shadow(0 1px 2px rgba(27,36,64,0.04));
+  transition: stroke-dashoffset 120ms linear;
+}
+.race-dots circle {
+  transition: cx 120ms linear, cy 120ms linear, opacity 200ms ease;
+}
+.race-cursor {
+  pointer-events: none;
+  transition: transform 120ms linear;
+}
+
+.race-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 0.85rem;
+  padding: 0.75rem 0 0.25rem;
+  border-top: 1px dashed #ECEFF3;
+  margin-top: 0.5rem;
+}
+.race-legend-title { display: none; }
+.race-legend-item {
+  display: flex; align-items: center; gap: 0.55rem;
+  font-size: 0.88rem; color: var(--ink);
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.race-legend-swatch {
+  width: 12px; height: 12px; border-radius: 4px;
+  background: var(--bc1);
+  flex: 0 0 auto;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--bc1) 18%, transparent);
+}
+.race-legend-name { font-weight: 600; font-family: 'Poppins'; }
+.race-legend-count {
+  margin-left: auto; color: var(--muted);
+  font-size: 0.78rem; font-variant-numeric: tabular-nums;
+}
+
+
+.race-scrubber {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #E3E7EC;
+}
+#raceScrub {
+  width: 100%;
+  -webkit-appearance: none; appearance: none;
+  height: 4px; background: #E3E7EC; border-radius: 2px;
+  outline: none; cursor: pointer;
+}
+#raceScrub::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--teal); border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(20,158,145,0.4);
+  cursor: grab;
+}
+#raceScrub::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--teal); border: 3px solid #fff;
+  box-shadow: 0 2px 6px rgba(20,158,145,0.4);
+  cursor: grab;
+}
+.race-decades {
+  display: flex; justify-content: space-between;
+  margin-top: 0.4rem;
+  font-size: 0.72rem; color: var(--muted); font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.race-foot {
+  text-align: center; color: var(--muted);
+  font-size: 0.9rem; margin-top: 1.5rem;
+}
+.race-foot a { color: var(--teal); font-weight: 600; text-decoration: none; }
+.race-foot a:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .race-stage { padding: 1.25rem 1rem 1rem; }
+  .race-year { font-size: 2.4rem; top: 1rem; right: 1.25rem; }
+  .race-name { flex-basis: 78px; font-size: 0.88rem; }
+  .race-bars { height: calc(10 * 32px + 9 * 0.4rem); }
+  .race-row { height: 28px; }
+  .race-bar { height: 18px; }
+  .race-count { font-size: 0.78rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="mock-label">Mockup · not live</div>
+
+<nav class="sitenav">
+  <div class="sitenav-inner">
+    <a href="#" class="brand">
+      <span class="brand-mark">N</span>
+      Name<span style="color: var(--teal);">Charted</span>
+    </a>
+    <div class="nav-links">
+      <a href="#" class="nav-link">Home</a>
+
+      <div class="nav-dd" id="navExploreDd">
+        <button type="button" class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">
+          Explore <span class="nav-dd-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="nav-dd-menu" role="menu">
+          <a href="#" role="menuitem">Browse A–Z</a>
+          <a href="#" role="menuitem">Trends</a>
+          <a href="#" role="menuitem">Decades</a>
+          <a href="#" role="menuitem">Year Rankings</a>
+          <a href="#" role="menuitem">Rare Names</a>
+        </div>
+      </div>
+
+      <div class="nav-dd" id="navToolsDd">
+        <button type="button" class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">
+          Tools <span class="nav-dd-caret" aria-hidden="true">▾</span>
+        </button>
+        <div class="nav-dd-menu" role="menu">
+          <a href="#" role="menuitem">Compare</a>
+          <a href="#" role="menuitem">Name Picker</a>
+          <a href="#" role="menuitem">Sibling Ideas</a>
+          <a href="#" role="menuitem">Works With Surname</a>
+          <a href="#" role="menuitem">Initials Maker</a>
+          <a href="#" role="menuitem">Origins</a>
+          <a href="#" role="menuitem">Fictional Names</a>
+        </div>
+      </div>
+
+      <a href="#" class="nav-link">Blog</a>
+
+      <button type="button" class="nav-search-btn" id="navSearchBtn" aria-label="Search names">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="20" y1="20" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div class="cc-dd" id="ccDd">
+      <button type="button" class="cc-dd-btn" id="ccDdBtn" aria-haspopup="listbox" aria-expanded="false">
+        <span class="cc-flag" aria-hidden="true">🇺🇸</span>
+        <span>United States</span>
+        <span class="cc-caret" aria-hidden="true">▾</span>
+      </button>
+      <div class="cc-dd-menu" role="listbox" aria-label="Choose country">
+        <div class="cc-dd-heading">Choose a country</div>
+        <a class="cc-dd-item is-current" href="#" role="option" aria-selected="true">
+          <span class="cc-flag" aria-hidden="true">🇺🇸</span>United States
+          <span class="cc-check" aria-hidden="true">✓</span>
+        </a>
+        <a class="cc-dd-item" href="#" role="option"><span class="cc-flag" aria-hidden="true">🇬🇧</span>United Kingdom<span class="cc-code">UK</span></a>
+        <a class="cc-dd-item" href="#" role="option"><span class="cc-flag" aria-hidden="true">🇫🇷</span>France<span class="cc-code">FR</span></a>
+        <a class="cc-dd-item" href="#" role="option"><span class="cc-flag" aria-hidden="true">🇦🇺</span>Australia<span class="cc-code">AU</span></a>
+        <a class="cc-dd-item" href="#" role="option"><span class="cc-flag" aria-hidden="true">🇨🇦</span>Canada<span class="cc-code">CA</span></a>
+        <a class="cc-dd-item" href="#" role="option"><span class="cc-flag" aria-hidden="true">🇪🇸</span>Spain<span class="cc-code">ES</span></a>
+        <a class="cc-dd-item" href="#" role="option"><span class="cc-flag" aria-hidden="true">🇮🇹</span>Italy<span class="cc-code">IT</span></a>
+        <a class="cc-dd-item" href="#" role="option"><span class="cc-flag" aria-hidden="true">🇳🇱</span>Netherlands<span class="cc-code">NL</span></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- REDESIGNED HERO -->
+<section class="hero">
+  <div class="hero-inner">
+
+    <h1>Every name, <span class="accent">charted.</span></h1>
+
+    <p class="hero-sub">
+      Yearly counts, rankings, gender split and interactive trends — for every name across 8 countries, from 1880 to today.
+    </p>
+
+    <div class="hero-search-wrap">
+      <form class="hero-search" onsubmit="event.preventDefault();">
+        <svg class="search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="20" y1="20" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" placeholder="Search a name — try Emma, Liam, Maeve…">
+        <button type="submit">Explore →</button>
+      </form>
+
+      <div class="hero-hint">
+        Popular right now:
+        <a href="#" class="chip">Olivia</a>
+        <a href="#" class="chip">Noah</a>
+        <a href="#" class="chip">Emma</a>
+        <a href="#" class="chip">Liam</a>
+        <a href="#" class="chip">Maeve</a>
+      </div>
+      <p class="hero-browse">or <a href="#">browse all 18,085 names A–Z →</a></p>
+    </div>
+
+    <div class="hero-stats">
+      <div><b>145 years</b>of name data</div>
+      <div><b>18,085</b>names tracked</div>
+      <div><b>8 countries</b>covered</div>
+    </div>
+  </div>
+
+  <!-- Tool carousel -->
+  <div class="tool-strip" aria-label="Explore our tools">
+    <div class="tool-strip-label">
+      <span class="tsl-line"></span>
+      <span class="tsl-text">Or try one of our tools</span>
+      <span class="tsl-line"></span>
+    </div>
+    <div class="tool-track-mask">
+      <div class="tool-track tool-track-a">
+        <a class="tool-card" href="#" style="--c1:#149E91;--c2:#0E7A70;">
+          <div class="tool-icon">⇄</div>
+          <div class="tool-body"><div class="tool-name">Compare</div><div class="tool-desc">Two names side-by-side</div></div>
+        </a>
+        <a class="tool-card" href="#" style="--c1:#F4A340;--c2:#E0871D;">
+          <div class="tool-icon">✦</div>
+          <div class="tool-body"><div class="tool-name">Name Picker</div><div class="tool-desc">Match your style + criteria</div></div>
+        </a>
+        <a class="tool-card" href="#" style="--c1:#6C8FE0;--c2:#4B6FC4;">
+          <div class="tool-icon">♕</div>
+          <div class="tool-body"><div class="tool-name">Sibling Ideas</div><div class="tool-desc">Names that pair well</div></div>
+        </a>
+        <a class="tool-card" href="#" style="--c1:#D26A8C;--c2:#B14770;">
+          <div class="tool-icon">A·B</div>
+          <div class="tool-body"><div class="tool-name">Works With Surname</div><div class="tool-desc">Sound-check first + last</div></div>
+        </a>
+        <!-- dup -->
+        <a class="tool-card" href="#" aria-hidden="true" tabindex="-1" style="--c1:#149E91;--c2:#0E7A70;">
+          <div class="tool-icon">⇄</div>
+          <div class="tool-body"><div class="tool-name">Compare</div><div class="tool-desc">Two names side-by-side</div></div>
+        </a>
+        <a class="tool-card" href="#" aria-hidden="true" tabindex="-1" style="--c1:#F4A340;--c2:#E0871D;">
+          <div class="tool-icon">✦</div>
+          <div class="tool-body"><div class="tool-name">Name Picker</div><div class="tool-desc">Match your style + criteria</div></div>
+        </a>
+        <a class="tool-card" href="#" aria-hidden="true" tabindex="-1" style="--c1:#6C8FE0;--c2:#4B6FC4;">
+          <div class="tool-icon">♕</div>
+          <div class="tool-body"><div class="tool-name">Sibling Ideas</div><div class="tool-desc">Names that pair well</div></div>
+        </a>
+        <a class="tool-card" href="#" aria-hidden="true" tabindex="-1" style="--c1:#D26A8C;--c2:#B14770;">
+          <div class="tool-icon">A·B</div>
+          <div class="tool-body"><div class="tool-name">Works With Surname</div><div class="tool-desc">Sound-check first + last</div></div>
+        </a>
+      </div>
+
+      <div class="tool-track tool-track-b">
+        <a class="tool-card" href="#" style="--c1:#7DBC6F;--c2:#599A4C;">
+          <div class="tool-icon">◉</div>
+          <div class="tool-body"><div class="tool-name">Initials Maker</div><div class="tool-desc">Monograms, instantly</div></div>
+        </a>
+        <a class="tool-card" href="#" style="--c1:#9A6BD0;--c2:#7847B5;">
+          <div class="tool-icon">⊕</div>
+          <div class="tool-body"><div class="tool-name">Origins</div><div class="tool-desc">By culture and language</div></div>
+        </a>
+        <a class="tool-card" href="#" style="--c1:#E07A6B;--c2:#C0584A;">
+          <div class="tool-icon">✎</div>
+          <div class="tool-body"><div class="tool-name">Fictional Names</div><div class="tool-desc">From books and film</div></div>
+        </a>
+        <a class="tool-card" href="#" style="--c1:#2C8FB5;--c2:#1C6F90;">
+          <div class="tool-icon">⌛</div>
+          <div class="tool-body"><div class="tool-name">Decades</div><div class="tool-desc">Top names by era</div></div>
+        </a>
+        <!-- dup -->
+        <a class="tool-card" href="#" aria-hidden="true" tabindex="-1" style="--c1:#7DBC6F;--c2:#599A4C;">
+          <div class="tool-icon">◉</div>
+          <div class="tool-body"><div class="tool-name">Initials Maker</div><div class="tool-desc">Monograms, instantly</div></div>
+        </a>
+        <a class="tool-card" href="#" aria-hidden="true" tabindex="-1" style="--c1:#9A6BD0;--c2:#7847B5;">
+          <div class="tool-icon">⊕</div>
+          <div class="tool-body"><div class="tool-name">Origins</div><div class="tool-desc">By culture and language</div></div>
+        </a>
+        <a class="tool-card" href="#" aria-hidden="true" tabindex="-1" style="--c1:#E07A6B;--c2:#C0584A;">
+          <div class="tool-icon">✎</div>
+          <div class="tool-body"><div class="tool-name">Fictional Names</div><div class="tool-desc">From books and film</div></div>
+        </a>
+        <a class="tool-card" href="#" aria-hidden="true" tabindex="-1" style="--c1:#2C8FB5;--c2:#1C6F90;">
+          <div class="tool-icon">⌛</div>
+          <div class="tool-body"><div class="tool-name">Decades</div><div class="tool-desc">Top names by era</div></div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Animated bar-chart race: Top names over time -->
+<section class="race-section">
+  <div class="race-head">
+    <div>
+      <h2>The race for #1</h2>
+      <p class="race-sub">Top 10 names, by year — 1880 to 2025</p>
+    </div>
+    <div class="race-controls">
+      <button type="button" id="raceToggle" class="race-btn">⏸ Pause</button>
+      <button type="button" id="raceRestart" class="race-btn race-btn-ghost">↻ Restart</button>
+    </div>
+  </div>
+
+  <div class="race-stage">
+    <div class="race-year" id="raceYear">1880</div>
+
+    <div class="race-split">
+      <div class="race-pane" data-sex="boys">
+        <div class="race-pane-head">
+          <span class="race-pane-icon" aria-hidden="true">♂</span>
+          <span class="race-pane-title">Boys</span>
+          <span class="race-pane-tally" id="raceTallyBoys"></span>
+        </div>
+        <svg class="race-chart" data-sex="boys" viewBox="0 0 800 320" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="cursorGradBoys" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#149E91" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#149E91" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="#149E91" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <g class="race-grid"></g>
+          <g class="race-lines"></g>
+          <g class="race-dots"></g>
+          <line class="race-cursor" x1="0" y1="20" x2="0" y2="290" stroke="url(#cursorGradBoys)" stroke-width="2"/>
+          <g class="race-xlabels"></g>
+          <g class="race-ylabels"></g>
+        </svg>
+        <div class="race-legend" data-sex="boys"></div>
+      </div>
+
+      <div class="race-pane" data-sex="girls">
+        <div class="race-pane-head">
+          <span class="race-pane-icon" aria-hidden="true">♀</span>
+          <span class="race-pane-title">Girls</span>
+          <span class="race-pane-tally" id="raceTallyGirls"></span>
+        </div>
+        <svg class="race-chart" data-sex="girls" viewBox="0 0 800 320" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="cursorGradGirls" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#D26A8C" stop-opacity="0"/>
+              <stop offset="50%" stop-color="#D26A8C" stop-opacity="0.7"/>
+              <stop offset="100%" stop-color="#D26A8C" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <g class="race-grid"></g>
+          <g class="race-lines"></g>
+          <g class="race-dots"></g>
+          <line class="race-cursor" x1="0" y1="20" x2="0" y2="290" stroke="url(#cursorGradGirls)" stroke-width="2"/>
+          <g class="race-xlabels"></g>
+          <g class="race-ylabels"></g>
+        </svg>
+        <div class="race-legend" data-sex="girls"></div>
+      </div>
+    </div>
+
+    <div class="race-scrubber">
+      <input type="range" id="raceScrub" min="0" max="0" value="0" step="1" aria-label="Year">
+      <div class="race-decades" id="raceDecades"></div>
+    </div>
+  </div>
+
+  <p class="race-foot">
+    Watch how a generation's favorites rise and fall. <a href="#">See full data →</a>
+  </p>
+</section>
+
+<script>
+/* ---------- ANIMATED LINE CHARTS (boys + girls, shared timeline) ---------- */
+(function () {
+  // Each name = a Gaussian-ish popularity curve.
+  var BOYS = [
+    { name: 'John',        color: '#149E91', peak: 1923, val: 62100, w: 25, tail: 1.2 },
+    { name: 'James',       color: '#F4A340', peak: 1948, val: 87400, w: 20, tail: 1.3 },
+    { name: 'Robert',      color: '#1B2440', peak: 1948, val: 80900, w: 18, tail: 1.1 },
+    { name: 'William',     color: '#6C8FE0', peak: 1916, val: 28500, w: 22, tail: 1.5 },
+    { name: 'Michael',     color: '#2C8FB5', peak: 1964, val: 87800, w: 17, tail: 1.4 },
+    { name: 'David',       color: '#9A6BD0', peak: 1960, val: 86200, w: 16, tail: 1.2 },
+    { name: 'Christopher', color: '#E07A6B', peak: 1985, val: 53000, w: 10, tail: 1.0 },
+    { name: 'Jacob',       color: '#7DBC6F', peak: 2003, val: 34600, w: 9,  tail: 0.9 },
+    { name: 'Noah',        color: '#C28442', peak: 2018, val: 19500, w: 9,  tail: 1.1 },
+    { name: 'Liam',        color: '#D26A8C', peak: 2022, val: 21100, w: 11, tail: 1.2 }
+  ];
+  var GIRLS = [
+    { name: 'Mary',     color: '#D26A8C', peak: 1921, val: 73900, w: 22, tail: 1.1 },
+    { name: 'Linda',    color: '#149E91', peak: 1948, val: 67500, w: 6,  tail: 0.9 },
+    { name: 'Susan',    color: '#F4A340', peak: 1957, val: 38000, w: 9,  tail: 1.0 },
+    { name: 'Lisa',     color: '#6C8FE0', peak: 1965, val: 57000, w: 8,  tail: 0.8 },
+    { name: 'Jennifer', color: '#9A6BD0', peak: 1973, val: 62500, w: 8,  tail: 0.9 },
+    { name: 'Jessica',  color: '#E07A6B', peak: 1987, val: 55800, w: 7,  tail: 0.8 },
+    { name: 'Ashley',   color: '#C28442', peak: 1991, val: 46000, w: 7,  tail: 0.8 },
+    { name: 'Emily',    color: '#2C8FB5', peak: 2001, val: 26000, w: 8,  tail: 0.9 },
+    { name: 'Emma',     color: '#7DBC6F', peak: 2015, val: 21400, w: 9,  tail: 1.1 },
+    { name: 'Olivia',   color: '#1B2440', peak: 2021, val: 18500, w: 10, tail: 1.2 }
+  ];
+  var YEAR_MIN = 1880, YEAR_MAX = 2025;
+  var YEARS = [];
+  for (var y = YEAR_MIN; y <= YEAR_MAX; y++) YEARS.push(y);
+
+  // Sample popularity for a name at given year (gaussian)
+  function sample(spec, year) {
+    var dy = (year - spec.peak) / spec.w;
+    if (year > spec.peak) dy = dy / spec.tail; // wider tail after peak
+    return Math.max(0, spec.val * Math.exp(-(dy * dy)));
+  }
+
+  function buildSeries(specs) {
+    var series = specs.map(function (s) {
+      var pts = YEARS.map(function (y) { return [y, sample(s, y)]; });
+      return { spec: s, pts: pts };
+    });
+    var max = 0;
+    series.forEach(function (s) { s.pts.forEach(function (p) { if (p[1] > max) max = p[1]; }); });
+    return { series: series, max: Math.ceil(max / 10000) * 10000 };
+  }
+
+  var BUNDLE = {
+    boys:  buildSeries(BOYS),
+    girls: buildSeries(GIRLS)
+  };
+  // Shared Y_MAX so both charts are directly comparable
+  var Y_MAX = Math.max(BUNDLE.boys.max, BUNDLE.girls.max);
+
+  // SVG geometry
+  var VB_W = 800, VB_H = 320;
+  var PAD = { l: 44, r: 12, t: 16, b: 32 };
+  var PW = VB_W - PAD.l - PAD.r;
+  var PH = VB_H - PAD.t - PAD.b;
+
+  function xOf(year) { return PAD.l + ((year - YEAR_MIN) / (YEAR_MAX - YEAR_MIN)) * PW; }
+  function yOf(val)  { return PAD.t + (1 - val / Y_MAX) * PH; }
+
+  // Build a smooth Catmull-Rom-ish path for a slice of points
+  function pathOf(pts) {
+    if (!pts.length) return '';
+    var d = 'M ' + xOf(pts[0][0]).toFixed(2) + ' ' + yOf(pts[0][1]).toFixed(2);
+    for (var i = 1; i < pts.length; i++) {
+      var p0 = pts[i - 1], p1 = pts[i];
+      var x0 = xOf(p0[0]), y0 = yOf(p0[1]);
+      var x1 = xOf(p1[0]), y1 = yOf(p1[1]);
+      var cx = (x0 + x1) / 2;
+      d += ' C ' + cx.toFixed(2) + ' ' + y0.toFixed(2) + ', ' + cx.toFixed(2) + ' ' + y1.toFixed(2) + ', ' + x1.toFixed(2) + ' ' + y1.toFixed(2);
+    }
+    return d;
+  }
+
+  var yearEl = document.getElementById('raceYear');
+  var scrub = document.getElementById('raceScrub');
+  var toggle = document.getElementById('raceToggle');
+  var restart = document.getElementById('raceRestart');
+  var decadesEl = document.getElementById('raceDecades');
+  if (!yearEl || !scrub) return;
+
+  function svgEl(name) { return document.createElementNS('http://www.w3.org/2000/svg', name); }
+
+  function setupPane(sex) {
+    var pane = document.querySelector('.race-pane[data-sex="' + sex + '"]');
+    var svg = pane.querySelector('.race-chart');
+    var gGrid = svg.querySelector('.race-grid');
+    var gLines = svg.querySelector('.race-lines');
+    var gDots = svg.querySelector('.race-dots');
+    var gX = svg.querySelector('.race-xlabels');
+    var gY = svg.querySelector('.race-ylabels');
+    var cursor = svg.querySelector('.race-cursor');
+    var legend = pane.querySelector('.race-legend');
+    var series = BUNDLE[sex].series;
+
+    var Y_TICKS = [0, 0.5, 1].map(function (t) { return t * Y_MAX; });
+    Y_TICKS.forEach(function (v) {
+      var ln = svgEl('line');
+      ln.setAttribute('x1', PAD.l); ln.setAttribute('x2', VB_W - PAD.r);
+      ln.setAttribute('y1', yOf(v)); ln.setAttribute('y2', yOf(v));
+      if (v === 0) ln.setAttribute('class', 'axis');
+      gGrid.appendChild(ln);
+      var t = svgEl('text');
+      t.setAttribute('x', PAD.l - 8); t.setAttribute('y', yOf(v) + 4);
+      t.textContent = v >= 1000 ? (v / 1000).toFixed(0) + 'k' : v;
+      gY.appendChild(t);
+    });
+    [1880, 1920, 1960, 2000, 2025].forEach(function (yr) {
+      var t = svgEl('text');
+      t.setAttribute('x', xOf(yr)); t.setAttribute('y', VB_H - 10);
+      t.setAttribute('text-anchor', 'middle');
+      t.textContent = yr;
+      gX.appendChild(t);
+    });
+
+    series.forEach(function (s) {
+      var path = svgEl('path');
+      path.setAttribute('class', 'race-line');
+      path.setAttribute('stroke', s.spec.color);
+      path.setAttribute('d', pathOf(s.pts));
+      gLines.appendChild(path);
+      var len = path.getTotalLength();
+      path.style.strokeDasharray = len;
+      path.style.strokeDashoffset = len;
+      s.pathEl = path;
+      s.pathLen = len;
+
+      // Precompute path length at each year via binary search on x.
+      // This locks dot position + reveal length to the SAME spot on the curve.
+      s.lenAtFrame = new Array(YEARS.length);
+      s.lenAtFrame[0] = 0;
+      s.lenAtFrame[YEARS.length - 1] = len;
+      for (var f = 1; f < YEARS.length - 1; f++) {
+        var targetX = xOf(YEAR_MIN + f);
+        var lo = 0, hi = len, mid = 0, pt;
+        for (var k = 0; k < 18; k++) {
+          mid = (lo + hi) / 2;
+          pt = path.getPointAtLength(mid);
+          if (pt.x < targetX) lo = mid; else hi = mid;
+        }
+        s.lenAtFrame[f] = mid;
+      }
+
+      var dot = svgEl('circle');
+      dot.setAttribute('r', '4.5');
+      dot.setAttribute('fill', s.spec.color);
+      dot.setAttribute('stroke', '#fff');
+      dot.setAttribute('stroke-width', '2');
+      dot.setAttribute('cx', xOf(YEAR_MIN));
+      dot.setAttribute('cy', yOf(s.pts[0][1]));
+      dot.setAttribute('opacity', '0');
+      s.dotEl = dot;
+      gDots.appendChild(dot);
+    });
+
+    var legendItems = [];
+    for (var li = 0; li < 4; li++) {
+      var row = document.createElement('div');
+      row.className = 'race-legend-item';
+      var sw = document.createElement('span'); sw.className = 'race-legend-swatch';
+      var nm = document.createElement('span'); nm.className = 'race-legend-name';
+      var ct = document.createElement('span'); ct.className = 'race-legend-count';
+      row.appendChild(sw); row.appendChild(nm); row.appendChild(ct);
+      legend.appendChild(row);
+      legendItems.push({ row: row, sw: sw, nm: nm, ct: ct });
+    }
+
+    return { series: series, cursor: cursor, legendItems: legendItems };
+  }
+
+  var PANES = { boys: setupPane('boys'), girls: setupPane('girls') };
+  var tallyBoys  = document.getElementById('raceTallyBoys');
+  var tallyGirls = document.getElementById('raceTallyGirls');
+
+  // Scrubber + decade markers
+  scrub.max = String(YEARS.length - 1);
+  while (decadesEl.firstChild) decadesEl.removeChild(decadesEl.firstChild);
+  [1880, 1920, 1960, 2000, 2025].forEach(function (yr) {
+    var s = document.createElement('span'); s.textContent = yr; decadesEl.appendChild(s);
+  });
+
+  function renderPane(pane, frameIdx, tallyEl) {
+    var cx = xOf(YEAR_MIN + frameIdx);
+    var topVal = 0, topName = '';
+
+    pane.series.forEach(function (s) {
+      // Reveal exactly to year-aligned length, and put the dot at that same point on the path
+      var lenHere = s.lenAtFrame[frameIdx];
+      s.pathEl.style.strokeDashoffset = s.pathLen - lenHere;
+      var pt = s.pathEl.getPointAtLength(lenHere);
+      s.dotEl.setAttribute('cx', pt.x);
+      s.dotEl.setAttribute('cy', pt.y);
+      var cur = s.pts[frameIdx];
+      s.dotEl.setAttribute('opacity', cur[1] > Y_MAX * 0.02 ? '1' : '0');
+      s.curVal = cur[1];
+      if (cur[1] > topVal) { topVal = cur[1]; topName = s.spec.name; }
+    });
+
+    pane.cursor.setAttribute('x1', cx);
+    pane.cursor.setAttribute('x2', cx);
+
+    var sorted = pane.series.slice().sort(function (a, b) { return b.curVal - a.curVal; });
+    for (var i = 0; i < pane.legendItems.length; i++) {
+      var s = sorted[i];
+      pane.legendItems[i].sw.style.background = s.spec.color;
+      pane.legendItems[i].sw.style.boxShadow = '0 0 0 2px ' + s.spec.color + '30';
+      pane.legendItems[i].nm.textContent = s.spec.name;
+      pane.legendItems[i].ct.textContent = s.curVal >= 1000 ? (s.curVal / 1000).toFixed(1) + 'k' : Math.round(s.curVal);
+    }
+
+    if (tallyEl) {
+      tallyEl.textContent = topName ? ('#1 · ' + topName) : '';
+    }
+  }
+
+  function render(frameIdx) {
+    yearEl.textContent = YEAR_MIN + frameIdx;
+    renderPane(PANES.boys, frameIdx, tallyBoys);
+    renderPane(PANES.girls, frameIdx, tallyGirls);
+  }
+
+  var frameIdx = 0;
+  var playing = true;
+  var FRAME_MS = 90; // year per ~90ms → 145 years in ~13s
+  var timer = null;
+
+  function step() {
+    render(frameIdx);
+    scrub.value = String(frameIdx);
+    if (frameIdx >= YEARS.length - 1) { frameIdx = 0; }
+    else { frameIdx++; }
+  }
+  function start() { stop(); timer = setInterval(step, FRAME_MS); }
+  function stop() { if (timer) clearInterval(timer); timer = null; }
+
+  toggle.addEventListener('click', function () {
+    playing = !playing;
+    if (playing) { toggle.textContent = '⏸ Pause'; start(); }
+    else { toggle.textContent = '▶ Play'; stop(); }
+  });
+  restart.addEventListener('click', function () { frameIdx = 0; step(); });
+  scrub.addEventListener('input', function () {
+    playing = false; toggle.textContent = '▶ Play'; stop();
+    frameIdx = parseInt(scrub.value, 10);
+    render(frameIdx);
+  });
+
+  render(0);
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    playing = false; toggle.textContent = '▶ Play';
+    // show full chart
+    frameIdx = YEARS.length - 1; render(frameIdx);
+  } else {
+    start();
+  }
+})();
+
+(function () {
+  // Generic dropdown wiring: any element with class .nav-dd or .cc-dd toggles its own .is-open.
+  var dropdowns = Array.prototype.slice.call(document.querySelectorAll('.nav-dd, .cc-dd'));
+  if (!dropdowns.length) return;
+
+  function closeAll(except) {
+    dropdowns.forEach(function (dd) {
+      if (dd === except) return;
+      dd.classList.remove('is-open');
+      var b = dd.querySelector('.nav-dd-btn, .cc-dd-btn');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  dropdowns.forEach(function (dd) {
+    var btn = dd.querySelector('.nav-dd-btn, .cc-dd-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = dd.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) closeAll(dd);
+    });
+  });
+
+  document.addEventListener('click', function (e) {
+    var inside = dropdowns.some(function (dd) { return dd.contains(e.target); });
+    if (!inside) closeAll(null);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeAll(null);
+  });
+
+  var navSearchBtn = document.getElementById('navSearchBtn');
+  if (navSearchBtn) {
+    navSearchBtn.addEventListener('click', function () {
+      var input = document.querySelector('.hero-search input');
+      if (!input) return;
+      input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function () { input.focus(); }, 300);
+    });
+  }
+})();
+</script>
+</body>
+</html>
