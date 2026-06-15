@@ -2963,9 +2963,494 @@ STRINGS_IT: dict[str, str] = {
                       "dal nostro database di nomi classificati per popolarità."),
 }
 
+STRINGS_NL: dict[str, str] = {
+    "nav_home": "Home",
+    "nav_browse": "Blader A–Z",
+    "nav_trends": "Trends",
+    "nav_decades": "Decennia",
+    "nav_rankings": "Ranglijst {year}",
+    "nav_favorites": "Favorieten",
+    "nav_tools": "Tools",
+    "nav_compare": "Vergelijk",
+    "compare_title": "Vergelijk twee namen — NameCharted",
+    "compare_h1": "Vergelijk twee namen",
+    "compare_intro": "Zie twee namen naast elkaar. Kies er twee en we vergelijken ze: geboorten, topjaar, huidige positie en gecombineerde grafiek.",
+    "compare_desc": "Vergelijk twee babynamen: jaarlijkse geboorten, topjaar, huidige positie en gecombineerde trendgrafiek.",
+    "compare_input_a": "Eerste naam",
+    "compare_input_b": "Tweede naam",
+    "compare_go": "Vergelijk",
+    "compare_loading": "Laden…",
+    "compare_not_found": "Een van die namen is niet gevonden. Probeer opnieuw.",
+    "compare_chart_h2": "Populariteit door de tijd",
+    "compare_stat_total": "Totaal geboorten",
+    "compare_stat_peak": "Topjaar",
+    "compare_stat_latest_rank": "Positie {year}",
+    "compare_with_link": "Vergelijk {name} met een andere naam →",
+    "fav_add_tip": "Opslaan in favorieten",
+    "fav_remove_tip": "Verwijderen uit favorieten",
+    "pin_share_tip": "Opslaan op Pinterest",
+    "pin_share_label": "Opslaan op Pinterest",
+    "share_btn_tip": "Delen of opslaan in Foto's",
+    "share_btn_label": "Delen",
+    "share_copied": "Link gekopieerd!",
+    "download_btn_tip": "Download de kaart (PNG)",
+    "download_btn_label": "Download",
+    "tg_share_tip": "Delen via Telegram",
+    "tg_share_label": "Telegram",
+    "blog_h1": "Artikelen en lijsten",
+    "blog_title": "Artikelen en lijsten over namen — NameCharted",
+    "blog_intro": "Trends, vintage-comebacks en thematische lijsten op basis van NameCharted-data.",
+    "blog_desc": "Redactionele artikelen over babynamen: trends, vintage-comebacks, ranglijsten per decennium — gebaseerd op officiële statistieken.",
+    "blog_read_more": "Lees",
+    "blog_back": "Terug naar alle artikelen",
+    "nav_blog": "Blog",
+    "fav_h1": "Jouw opgeslagen namen",
+    "fav_title": "Jouw opgeslagen namen — NameCharted",
+    "fav_desc": "Jouw persoonlijke lijst met favoriete namen.",
+    "fav_intro": "De namen die je hebt opgeslagen. Bewaard alleen in je browser — sitegegevens wissen verwijdert ze.",
+    "fav_empty": "Nog geen namen opgeslagen. Tik op het hartje op een naampagina om het hier toe te voegen.",
+    "fav_share_btn": "Kopieer deelbare link",
+    "fav_share_done": "Link gekopieerd!",
+    "fav_print_btn": "Afdrukken / Opslaan als PDF",
+    "fav_print_h1": "Mijn favoriete babynamen",
+    "fav_print_foot": "Opgeslagen van namecharted.com",
+    "fav_meta_peak": "Piek jaren {d}",
+    "fav_meta_unranked": "niet gerangschikt",
+    "fav_remove": "Verwijder",
+    "footer_data": "Data: {source} ({range})",
+
+    "crumb_home": "Home",
+    "crumb_names": "Namen",
+    "crumb_browse": "Blader A–Z",
+    "crumb_decades": "Decennia",
+    "crumb_trends": "Trends",
+    "crumb_rising": "Stijgend",
+    "crumb_falling": "Dalend",
+    "crumb_similar": "Vergelijkbare namen",
+    "crumb_rare": "Zeldzame namen",
+
+    "home_tagline": "Namen, in grafiek.",
+    "home_intro": ("Verken de populariteit en trends van namen van {range}. "
+                   "Zoek een naam om jaarlijkse geboorten, rangpositie, "
+                   "geslachtsverdeling en een interactieve trendgrafiek te zien."),
+    "home_search_placeholder": "Voer een naam in om te verkennen…",
+    "home_try": "Probeer namen als {samples} &middot; of",
+    "home_browse_link": "blader door alle {n} namen A–Z",
+    "home_top_h2": "Meest populaire namen aller tijden",
+    "home_cc_callout": "Ook beschikbaar voor:",
+    "home_total_babies": "{n} baby's in totaal",
+    "home_mostly": "voornamelijk {label}",
+    "home_title": "NameCharted — Elke naam, in grafiek.",
+    "home_desc": ("Elke naam, in grafiek. Jaarlijkse geboorten, ranglijsten, "
+                  "geslachtsverdeling en interactieve trends voor meer dan "
+                  "{n} namen in 8 landen, van {range}."),
+    "home_h1": "Elke naam, <span class=\"accent\">in grafiek.</span>",
+    "home_subhead": ("Jaarlijkse geboorten, ranglijsten, geslachtsverdeling en "
+                     "interactieve trends — voor elke naam in 8 landen, van {range_short}."),
+    "home_search_placeholder_v2": "Zoek een naam — probeer {samples}…",
+    "home_search_cta": "Verken",
+    "home_popular_label": "Nu populair:",
+    "home_browse_chip": "of blader door alle {n} namen A–Z →",
+    "home_stats_years": "{n} jaar",
+    "home_stats_years_sub": "aan data",
+    "home_stats_names": "{n}",
+    "home_stats_names_sub": "namen bijgehouden",
+    "home_stats_countries": "{n} landen",
+    "home_stats_countries_sub": "gedekt",
+    "home_tools_label": "Of probeer een van onze tools",
+    "home_range_short": "{start}–{end}",
+    "home_race_h2": "De race naar #1",
+    "home_race_sub": "Top 5 namen per jaar — {range_short}",
+    "home_race_pause": "Pauze",
+    "home_race_play": "Afspelen",
+    "home_race_restart": "Opnieuw",
+    "home_race_boys": "Jongens",
+    "home_race_girls": "Meisjes",
+    "home_race_no1": "#1 · {name}",
+    "home_race_foot": "Zie hoe de favorieten van een generatie stijgen en dalen.",
+    "home_race_foot_link": "Bekijk alle data →",
+    "nav_explore": "Verken",
+    "nav_search_aria": "Zoek namen",
+    "nav_choose_country": "Kies een land",
+    "tool_desc_compare": "Twee namen naast elkaar",
+    "tool_desc_picker": "Op basis van jouw stijl en criteria",
+    "tool_desc_sibling": "Namen die goed passen",
+    "tool_desc_works_with": "Controleer voornaam + achternaam",
+    "tool_desc_initials": "Monogrammen direct",
+    "tool_desc_origins": "Per cultuur en taal",
+    "tool_desc_fiction": "Uit boeken en films",
+    "tool_desc_decades": "Topnamen per tijdperk",
+
+    "name_primarily": "Voornamelijk een {singular}snaam",
+    "name_variants_label": "Ook gespeld als:",
+    "rare_variant_of": "→ zie {canonical}",
+    "name_unisex": "Uniseks — {f}% meisjes / {m}% jongens",
+    "name_pct_one": "{pct}% {label}",
+    "insight_first": ("<strong>{name}</strong> verschijnt voor het eerst in de data in "
+                      "<strong>{year}</strong> en is geregistreerd in {n} verschillende jaren "
+                      "als {singular}snaam."),
+    "insight_peak_ranked": ("Het grootste jaar was <strong>{year}</strong> met "
+                            "<strong>{count}</strong> baby's (positie #{rank} dat jaar)."),
+    "insight_peak": ("Het grootste jaar was <strong>{year}</strong> met "
+                     "<strong>{count}</strong> baby's."),
+    "insight_latest_ranked": ("In {year} werd het gegeven aan {count} {label} "
+                              "(positie <strong>#{rank}</strong>)."),
+    "insight_latest": "In {year} werd het gegeven aan {count} {label}.",
+    "insight_latest_missing": "De naam staat niet in de data van {year}.",
+    "insight_rising": "De naam is de afgelopen vijf jaar <strong>gestegen</strong>.",
+    "insight_declining": "De naam is de afgelopen vijf jaar <strong>gedaald</strong>.",
+    "insight_steady": "De populariteit is recentelijk <strong>vrij stabiel</strong>.",
+    "stat_total": "Totaal baby's (alle jaren)",
+    "stat_years": "Jaren in de data",
+    "stat_peak": "Piek in één jaar",
+    "name_popularity_h2": "Populariteit door de tijd — {label_cap}",
+    "name_yby_h2": "Detail per jaar",
+    "name_rank_note": "De positie is onder alle {label}namen geregistreerd dat jaar.",
+    "table_year": "Jaar",
+    "table_babies": "Baby's",
+    "table_rank": "Positie",
+    "table_num": "#",
+    "table_name": "Naam",
+    "table_total": "Totaal baby's",
+    "table_year_rank": "Positie {year}",
+    "rel_see_similar": "&rarr; Zie namen vergelijkbaar met {name}",
+    "rel_pop_decade": "Populaire namen van de jaren {d}",
+    "rel_letter_link": "{label_cap}namen die beginnen met {letter}",
+    "rel_more_popular": "Populairdere {label}namen",
+    "rel_near_in": "Namen gerangschikt naast {name} in {year}",
+    "rel_other_init": "Andere {label}namen die beginnen met {letter}",
+    "name_title": "{name} — Populariteit en trends",
+    "name_desc": ("Populariteit van de naam {name}: {total} geboorten geregistreerd "
+                  "{range}, piek in {year} met {peak}. Jaarlijkse geboorten, positie, "
+                  "geslachtsverdeling en interactieve trendgrafiek."),
+    "chart_label": "Baby's genaamd {name} per jaar ({label})",
+    "chart_y_axis": "Baby's per jaar",
+
+    "browse_h1": "Blader door alle namen A–Z",
+    "browse_title": "Blader door alle namen A–Z",
+    "browse_intro": ("Alle {n} namen met een eigen populariteitspagina, gegroepeerd "
+                     "op beginletter. Op zoek naar een zeldzamere naam? Zie de "
+                     "<a href=\"{url}\">volledige A–Z-index van zeldzame namen</a>."),
+    "browse_desc": ("Blader door alle {n} namen A–Z. Klik op een naam voor "
+                    "trends, ranglijsten en jaarlijkse geboorten ({range})."),
+    "browse_explore_h2": "Verken op thema",
+    "browse_rising_link": "Stijgende namen",
+    "browse_falling_link": "Dalende namen",
+    "browse_decades_link": "Namen per decennium",
+    "browse_girls_by_letter": "Meisjesnamen per letter:",
+    "browse_boys_by_letter": "Jongensnamen per letter:",
+    "browse_all_h2": "Alle namen",
+
+    "year_h1": "Populairste namen van {year}",
+    "year_intro": ("De populairste namen van {year} waren "
+                   "<strong>{g}</strong> voor meisjes en <strong>{b}</strong> voor jongens. "
+                   "Volledige top 50 hieronder, uit {source}-data."),
+    "year_girls_h2": "Meisjes",
+    "year_boys_h2": "Jongens",
+    "year_title": "Populairste namen van {year} — ranglijsten en cijfers",
+    "year_desc": ("Top 50 populairste namen van {year} voor meisjes en jongens, "
+                  "met geboortecijfers uit {source}-data. #1: {g} en {b}."),
+
+    "yir_title": "Babynamen {year}: het jaar in review",
+    "yir_h1": "Babynamen {year} — het jaar in review",
+    "yir_intro": ("Wat veranderde er in {year}? De grootste stijgers, de grootste "
+                   "dalers, namen die voor het eerst verschijnen en namen die de "
+                   "top 100 binnenkwamen of verlieten."),
+    "yir_desc": ("Samenvatting namen {year}: grootste stijgers, dalers en "
+                  "nieuwkomers in de top 100. #1 van het jaar: {g} en {b}."),
+    "yir_link": "Bekijk de jaaroverzicht van {year} →",
+    "yir_no_data": "Onvoldoende vergelijkbare geschiedenis voor een volledig overzicht van {year}.",
+    "yir_top_h2": "De #1 van het jaar",
+    "yir_top_lead": "<strong>{g}</strong> stond aan de top bij de meisjes en <strong>{b}</strong> bij de jongens in {year}.",
+    "yir_risers_h2": "Grootste stijgers",
+    "yir_risers_lead": "Namen waarvan de positie het meest verbeterde ten opzichte van het vorige jaar.",
+    "yir_fallers_h2": "Grootste dalers",
+    "yir_fallers_lead": "Namen waarvan de positie het meest daalde ten opzichte van het vorige jaar.",
+    "yir_debut_h2": "Debuterende namen",
+    "yir_debut_lead": "Namen die voor het allereerst in de data verschijnen.",
+    "yir_newcomers_h2": "Nieuw in de top 100",
+    "yir_newcomers_lead": "Namen die voor het eerst sinds {prev} de top 100 binnenkomen.",
+    "yir_exits_h2": "Verlaten de top 100",
+    "yir_exits_lead": "Namen die de top 100 verlaten nadat ze er in {prev} in stonden.",
+    "yir_rank_change": "{prev_rank} → {rank} (▲{delta})",
+    "yir_rank_drop": "{prev_rank} → {rank} (▼{delta})",
+    "yir_rank_new": "Nieuwkomer — positie #{rank}",
+    "yir_rank_exit": "Was #{prev_rank} — nu buiten de lijst",
+    "yir_count_year": "{n} dit jaar",
+    "crumb_yir": "Jaaroverzicht {year}",
+
+    "decade_h1": "Populairste namen van de jaren {label}",
+    "decade_intro": ("De meest gegeven namen in de jaren {label} ({span}), "
+                     "opgeteld over het hele decennium. De #1 van het decennium "
+                     "waren <strong>{g}</strong> voor meisjes en "
+                     "<strong>{b}</strong> voor jongens."),
+    "decade_girls_h2": "Meisjes — Top 50",
+    "decade_boys_h2": "Jongens — Top 50",
+    "decade_title": "Populairste namen van de jaren {label}",
+    "decade_desc": ("Populairste namen van de jaren {label} ({span}). Top 50 "
+                    "meisjes en jongens per gecumuleerde geboorten over het decennium, "
+                    "uit {source}-data. #1: {g} en {b}."),
+    "decades_h1": "Namen per decennium",
+    "decades_title": "Namen per decennium — de populairste van elk tijdperk",
+    "decades_intro": ("Verken de populairste namen van elk decennium, "
+                      "van de jaren {first} tot de jaren {last}, uit {source}-data."),
+    "decades_desc": ("Populairste namen per decennium, jaren {first}–{last}. "
+                     "De #1 meisjes- en jongensnamen van elk decennium uit {source}-data."),
+    "decades_th_decade": "Decennium",
+    "decades_th_g": "#1 meisjes",
+    "decades_th_b": "#1 jongens",
+
+    "trends_h1": "Babynamen trends",
+    "trends_intro": ("Welke namen stijgen en welke dalen? Deze ranglijsten "
+                     "vergelijken recente geboorten met die van vijf jaar geleden ({range})."),
+    "trends_title": "Namentrends — stijgend en dalend",
+    "trends_desc": ("Ontdek welke namen stijgen en welke dalen richting {year}, "
+                    "plus topnamen per decennium, uit {source}-data."),
+    "trends_rising_h1": "Snelst stijgende namen ({year})",
+    "trends_rising_intro": ("De meisjes- en jongensnamen die het snelst in populariteit "
+                            "groeien — geboorten van ongeveer vijf jaar geleden vergeleken "
+                            "met de meest recente jaren. Alleen namen met substantieel "
+                            "huidig gebruik zijn opgenomen."),
+    "trends_rising_title": "Snelst stijgende namen van {year}",
+    "trends_rising_desc": ("De snelst stijgende namen richting {year}, "
+                           "voor meisjes en jongens, uit {source}-data."),
+    "trends_falling_h1": "Snelst dalende namen ({year})",
+    "trends_falling_intro": ("Vroeger veelgebruikte namen die het snelst dalen — "
+                             "geboorten van ongeveer vijf jaar geleden vergeleken "
+                             "met de meest recente jaren."),
+    "trends_falling_title": "Snelst dalende namen van {year}",
+    "trends_falling_desc": ("De snelst dalende namen richting {year}, "
+                            "voor meisjes en jongens, uit {source}-data."),
+    "trends_th_older": "~5 jaar geleden",
+    "trends_th_change": "Verandering",
+    "trends_card_rising": "Stijgende namen",
+    "trends_card_rising_sub": "Grootste stijgers van {year}",
+    "trends_card_falling": "Dalende namen",
+    "trends_card_falling_sub": "Grootste dalers van {year}",
+    "trends_card_decades": "Namen per decennium",
+    "trends_card_decades_sub": "De topnamen van elk tijdperk",
+
+    "letter_h1": "{label_cap}namen die beginnen met {letter}",
+    "letter_title": "{label_cap}namen die beginnen met {letter} — gerangschikt op populariteit",
+    "letter_intro": ("Alle {n} {label}namen die beginnen met <strong>{letter}</strong> "
+                     "met een eigen pagina, gerangschikt op totale geboorten ({range}). "
+                     "{cross_q}"),
+    "letter_cross_link": "{label_cap}namen die beginnen met {letter}",
+    "letter_cross_q": "Op zoek naar {link}?",
+    "letter_desc": ("{label_cap}namen die beginnen met {letter}: {n} opties "
+                    "gerangschikt op populariteit, met totale geboorten en huidige "
+                    "positie uit {source}-data."),
+
+    "rare_h1": "Zeldzame namen — volledige A–Z-index",
+    "rare_title": "Zeldzame namen — volledige A–Z-index",
+    "rare_intro": ("Deze {n} namen komen voor in de data ({range}) maar hebben "
+                   "minder dan {min} geboorten in totaal, dus ze hebben nog geen "
+                   "eigen trendpagina. Ze zijn hier A–Z vermeld met totale geboorten."),
+    "rare_tip": ("Tip: gebruik <kbd>Ctrl</kbd>+<kbd>F</kbd> (of <kbd>⌘</kbd>+<kbd>F</kbd>) "
+                 "om op deze pagina te zoeken."),
+    "rare_letter_count": "({n} namen)",
+    "rare_mostly": "({total} · voornamelijk {label})",
+    "rare_desc": ("Index van {n} zeldzame namen ({range}) met minder dan {min} "
+                  "totale geboorten, A–Z vermeld."),
+
+    "nav_works_with": "Combineert met achternaam",
+    "ww_title": "Voornamen die passen bij jouw achternaam — NameCharted",
+    "ww_h1": "Voornamen die passen bij jouw achternaam",
+    "ww_intro": ("Voer je achternaam in en we scoren elke voornaam — "
+                 "waarbij ritmisch contrast beloond wordt en botsende klanken "
+                 "aan de grens voornaam / achternaam bestraft."),
+    "ww_input": "Jouw achternaam",
+    "ww_go": "Vind namen",
+    "ww_loading": "Scores berekenen…",
+    "ww_empty": "Voer een achternaam in om suggesties te zien.",
+    "ww_tab_all": "Alle",
+    "ww_tab_girls": "Meisjes",
+    "ww_tab_boys": "Jongens",
+    "ww_result_for": "Beste overeenkomsten voor {surname}",
+    "ww_score": "Score",
+    "ww_desc": ("Vind voornamen die goed klinken met elke achternaam. We scoren "
+                "namen op ritme, klanktbotsingen en gedeelde initialen zodat je "
+                "snel een shortlist kunt maken."),
+    "ww_show_more": "Meer tonen",
+    "ww_how_h": "Wat een goede combinatie maakt",
+    "ww_how_1": "<strong>Andere beginletter</strong> dan je achternaam — geen <em>Sam Smith</em>.",
+    "ww_how_2": "<strong>Ander aantal lettergrepen</strong> dan je achternaam — geen <em>Jack Black</em>.",
+    "ww_how_3": "<strong>Geen rijmende eindklanken</strong> — geen <em>Aiden Hayden</em>.",
+
+    "nav_picker": "Namenkiezer",
+    "picker_title": "Babynamenkiezer — veeg, filter, willekeurig — NameCharted",
+    "picker_h1": "Vind sneller jouw shortlist",
+    "picker_intro": ("Drie manieren om namen te ontdekken: veeg er één voor één "
+                     "doorheen, filter op tijdperk en stijl, of laat je verrassen."),
+    "picker_tab_swipe": "Vegen",
+    "picker_tab_filter": "Filteren",
+    "picker_tab_random": "Verras me",
+    "picker_swipe_skip": "Overslaan",
+    "picker_swipe_save": "Opslaan",
+    "picker_swipe_undo": "Ongedaan maken",
+    "picker_swipe_saved": "Opgeslagen bij jouw favorieten.",
+    "picker_swipe_exhausted": "Geen namen meer — verander het filter of begin opnieuw.",
+    "picker_swipe_restart": "Opnieuw beginnen",
+    "picker_swipe_filter_sex": "Toon",
+    "picker_swipe_filter_era": "Tijdperk",
+    "picker_filter_sex": "Geslacht",
+    "picker_filter_syll": "Lettergrepen",
+    "picker_filter_era": "Piek-tijdperk",
+    "picker_filter_letter": "Begint met",
+    "picker_filter_rank": "Huidige populariteit",
+    "picker_filter_origin": "Oorsprong",
+    "picker_filter_any": "Elk",
+    "picker_filter_rank_top100": "Huidige top 100",
+    "picker_filter_rank_top1000": "Huidige top 1.000",
+    "picker_filter_rank_rare": "Vintage / buiten de lijst",
+    "picker_filter_match_one": "1 naam komt overeen",
+    "picker_filter_match_many": "{n} namen komen overeen",
+    "picker_filter_match_none": "Geen namen — probeer de filters te verruimen.",
+    "picker_random_count": "Hoeveel",
+    "picker_random_go": "Gooi de dobbelstenen",
+    "picker_random_share": "Kopieer deelbare link",
+    "picker_random_share_done": "Link gekopieerd!",
+    "picker_random_again": "Opnieuw gooien",
+    "picker_random_empty": "Geen overeenkomst — probeer een andere combinatie.",
+    "picker_peak_decade": "Piek in de jaren {d}",
+    "picker_currently_rank": "#{rank} nu",
+    "picker_not_ranked": "Buiten de lijst",
+    "picker_desc": ("Ontdek babynamen door te vegen, te filteren op decennium en "
+                    "lettergrepen, of willekeurig. Sla je favorieten op terwijl je gaat."),
+
+    "nav_sibling": "Broer/zusideeën",
+    "sibling_title": "Naamideeën voor een broertje of zusje — NameCharted",
+    "sibling_h1": "Vind een naam voor het broertje of zusje",
+    "sibling_intro": ("Geef ons één tot drie kindnamen en we stellen namen voor "
+                      "met een vergelijkbaar tijdperk en ritme — zonder rijmen of "
+                      "dezelfde beginletter."),
+    "sibling_input": "Naam van het eerste kind",
+    "sibling_input_more": "Naam van een ander kind",
+    "sibling_add_name": "+ Voeg een naam toe",
+    "sibling_remove_name": "Verwijder deze naam",
+    "sibling_target_sex": "Volgende baby",
+    "sibling_go": "Stel namen voor",
+    "sibling_empty": "Voer een naam in om suggesties te zien.",
+    "sibling_unknown": ("We hebben geen data voor een van die namen, dus we "
+                        "matchen alleen op ritme. Kies voor beste resultaten "
+                        "namen met hun eigen populariteitspagina."),
+    "sibling_result_for": "Namen die goed passen bij {name}",
+    "sibling_result_for_set": "Namen die goed passen bij {names}",
+    "sibling_show_more": "Meer tonen",
+    "sibling_share": "Kopieer link",
+    "sibling_share_done": "Link gekopieerd!",
+    "sibling_desc": ("Vind namen voor een broertje of zusje die passen bij een "
+                     "naam — of bij 2-3 broers/zussen. We matchen op piek-tijdperk, "
+                     "lettergreepritme en aanvullende beginletters."),
+
+    "nav_origins": "Oorsprong",
+    "origins_hub_title": "Oorsprong van babynamen per taal en cultuur",
+    "origins_hub_h1": "Oorsprong van namen",
+    "origins_hub_intro": ("Verken babynamen op basis van hun taal van oorsprong. "
+                          "Elke pagina toont populaire meisjes- en jongensnamen "
+                          "geworteld in die cultuur, met populariteitsdata."),
+    "origins_hub_desc": ("Blader door babynamen gegroepeerd per taaloorsprong — "
+                         "Iers, Hebreeuws, Grieks, Latijn, Japans, Arabisch en meer."),
+    "origins_hub_count": "{n} namen",
+    "origin_page_title": "Namen van {label} oorsprong — populariteit en trends",
+    "origin_page_h1": "Namen van {label} oorsprong",
+    "origin_page_intro": ("Populaire babynamen van {label} oorsprong. Deze namen "
+                          "zijn geworteld in de {label} taal en cultuur, gerangschikt "
+                          "op totale populariteit in {country}."),
+    "origin_page_desc": ("Namen van {label} oorsprong: ranglijsten meisjes en "
+                         "jongens, jaarlijkse trends en betekenissen."),
+    "origin_page_girls_h2": "Meisjesnamen van {label} oorsprong",
+    "origin_page_boys_h2": "Jongensnamen van {label} oorsprong",
+    "origin_back_to_hub": "← Alle oorsprongen",
+    "name_origin_badge": "Oorsprong: {label}",
+    "name_meaning_h2": "Betekenis",
+    "name_meaning_source": "Bron: Wikipedia",
+    "numerology_h2": "Numerologie van {name}",
+    "numerology_intro": ("In Pythagoreïsche numerologie heeft elke letter een waarde "
+                          "van 1 tot 9. Door de letters van <strong>{name}</strong> "
+                          "op te tellen ontstaan deze drie getallen — een speelse "
+                          "kijk op het karakter van de naam."),
+    "numerology_destiny_lbl": "Lotsbestemminggetal",
+    "numerology_destiny_desc": "Som van alle letters. Het algemene karakter van de naam.",
+    "numerology_soul_lbl": "Zielsdrang",
+    "numerology_soul_desc": "Som van de klinkers — wat wordt gezegd het hart te drijven.",
+    "numerology_personality_lbl": "Persoonlijkheid",
+    "numerology_personality_desc": "Som van de medeklinkers — de uitstraling naar buiten.",
+    "numerology_footer": "Numerologie is geen wetenschap — het is naamgerelateerde waarzeggerij. Geniet ervan als zodanig.",
+    "name_famous_h2": "Bekende personen genaamd {name}",
+    "name_famous_occ_sep": " · ",
+    "name_famous_born": "geb. {year}",
+
+    "nav_fiction": "Fictieve namen",
+    "fiction_hub_title": "Namen uit boeken, films en series",
+    "fiction_hub_h1": "Fictieve namen",
+    "fiction_hub_intro": ("Samengestelde personagelijsten van {n} franchises — Harry "
+                          "Potter, Star Wars, Bridgerton, Jane Austen en meer. "
+                          "Wanneer een fictieve naam overeenkomt met een echte naam "
+                          "in onze data, linken we naar de populariteitspagina."),
+    "fiction_hub_desc": ("Babynamen uit boeken, films en series. Samengestelde lijsten "
+                         "van Harry Potter, Game of Thrones, Star Wars, "
+                         "Bridgerton en meer."),
+    "fiction_franchise_title": "Personages van {title}",
+    "fiction_franchise_intro": ("{n} personages van {title}. Namen in blauw "
+                                "hebben hun eigen populariteitspagina met "
+                                "jaarlijkse geboorten."),
+    "fiction_franchise_desc": ("Babynamen van {title}. Samengestelde personagelijst "
+                               "met links naar echte populariteitsdata."),
+    "fiction_back_to_hub": "← Alle franchises",
+    "fiction_card_count": "{n} personages",
+    "fiction_year": "since {year}",
+    "name_fiction_h2": "Ook een personage in",
+    "name_fiction_in": "In <a href=\"{url}\">{title}</a>: {role}",
+
+    "nav_saints": "Heilige van de dag",
+    "saints_hub_title": "Heilige van de dag — heiligenkalender en namen",
+    "saints_hub_h1": "Heilige van de dag",
+    "saints_hub_intro": ("De traditionele katholieke heiligenkalender, dag voor dag. "
+                         "Klik op een dag om de gevierde heilige te zien en "
+                         "de populariteit van die naam."),
+    "saints_hub_desc": ("Dagelijkse heiligenkalender en naamsdagen. Blader door "
+                        "alle 366 dagen en zie de populariteitstrend van elke naam."),
+    "saint_page_title": "Sint{e} {name} — feestdag, data, populariteit",
+    "saint_page_h1": "Sint{e} {name}",
+    "saint_page_dates_one": "Het feest wordt gevierd op <strong>{date}</strong>.",
+    "saint_page_dates_multi": "Gevierd op <strong>{dates}</strong>.",
+    "saint_page_popularity_link": "Zie de populariteit van de naam {name} →",
+    "saint_page_desc": "Feestdag(en), betekenis en populariteit van de naam {name}.",
+    "saint_back_to_hub": "← Terug naar de heiligenkalender",
+    "saints_today_label": "Vandaag is het feest van Sint {name}",
+    "saints_today_label_fem": "Vandaag is het feest van Sint {name}",
+    "saints_today_event": "Vandaag: {name}",
+    "saints_today_wish": "Gelukkige naamdag aan iedereen die {name} heet!",
+    "saints_month_jan": "Januari", "saints_month_feb": "Februari",
+    "saints_month_mar": "Maart",   "saints_month_apr": "April",
+    "saints_month_may": "Mei",     "saints_month_jun": "Juni",
+    "saints_month_jul": "Juli",    "saints_month_aug": "Augustus",
+    "saints_month_sep": "September", "saints_month_oct": "Oktober",
+    "saints_month_nov": "November",  "saints_month_dec": "December",
+
+    "nav_initials": "Initialengenerator",
+    "initials_title": "Babynamen initialengenerator — NameCharted",
+    "initials_h1": "Kies de initialen",
+    "initials_intro": ("Voer de gewenste initialen in en we genereren 20 "
+                       "naamscombinatiesdie daarmee overeenkomen — een leuke "
+                       "manier om monogramvriendelijke namen te bedenken."),
+    "initials_input": "bijv. A.J.K",
+    "initials_go": "Genereer combinaties",
+    "initials_again": "Opnieuw genereren",
+    "initials_filter_sex": "Voornaamgeslacht",
+    "initials_empty": "Voer 2 of 3 initialen in om te beginnen.",
+    "initials_no_match": "We hebben geen voornamen die beginnen met {letter} — probeer een andere letter.",
+    "initials_share": "Kopieer deelbare link",
+    "initials_share_done": "Link gekopieerd!",
+    "initials_desc": ("Genereer naamscombinatiesop basis van gekozen initialen. "
+                      "Voornamen, tweede namen en achternamen afkomstig uit onze "
+                      "gerangschikte naamsdatabase."),
+}
+
 STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN,
            "AU": STRINGS_EN, "CA": STRINGS_EN, "ES": STRINGS_ES,
-           "IT": STRINGS_IT, "NL": STRINGS_EN}
+           "IT": STRINGS_IT, "NL": STRINGS_NL}
 
 # Gendered forms per language. Used for "girls"/"filles", "boy's"/"de garçon", etc.
 # URL slugs always use the English form ('girls'/'boys') for cross-country URL parity.
@@ -2993,9 +3478,15 @@ GENDERED_IT = {
     "singular_F": "femmina", "singular_M": "maschio",
     "of_singular_F": "femmina", "of_singular_M": "maschio",
 }
+GENDERED_NL = {
+    "label_F": "meisjes", "label_M": "jongens",
+    "label_cap_F": "Meisjes", "label_cap_M": "Jongens",
+    "singular_F": "meisje", "singular_M": "jongen",
+    "of_singular_F": "meisje", "of_singular_M": "jongen",
+}
 GENDERED = {"US": GENDERED_EN, "FR": GENDERED_FR, "GB": GENDERED_EN,
             "AU": GENDERED_EN, "CA": GENDERED_EN, "ES": GENDERED_ES,
-            "IT": GENDERED_IT, "NL": GENDERED_EN}
+            "IT": GENDERED_IT, "NL": GENDERED_NL}
 
 # Origin-slug → display label per UI language. Slugs come from
 # data/normalized/name_enrichment.json (built by fetchers/enrich_wikidata.py).
@@ -3058,10 +3549,24 @@ NUMEROLOGY_TRAITS_IT: dict[int, tuple[str, str]] = {
     22: ("Il maestro costruttore", "Trasforma visioni in strutture — un 4 amplificato."),
     33: ("Il maestro educatore", "Guida disinteressata e elevazione — un 6 amplificato."),
 }
+NUMEROLOGY_TRAITS_NL: dict[int, tuple[str, str]] = {
+    1: ("De leider", "Onafhankelijk, baanbrekend, gedreven om als eerste te gaan."),
+    2: ("De vredestichter", "Diplomatisch, gevoelig, gericht op samenwerking."),
+    3: ("De creatieveling", "Expressief, sociaal, gedreven door speelse energie."),
+    4: ("De bouwer", "Praktisch, standvastig, behaalt resultaten door hard werken."),
+    5: ("De vrije geest", "Nieuwsgierig, onrustig, geënergiseerd door verandering."),
+    6: ("De zorger", "Zorgzaam, verantwoordelijk, familie staat centraal."),
+    7: ("De zoeker", "Introspectief, analytisch, aangetrokken tot het onbekende."),
+    8: ("De bereiker", "Gedreven, bekwaam, comfortabel met invloed uitoefenen."),
+    9: ("De humanitair", "Idealistisch, meelevend, denkt in grote lijnen."),
+    11: ("De visionair (meester)", "Intuïtief en inspirerend — een versterkte 2."),
+    22: ("De meesterbouwer", "Zet visies om in structuren — een versterkte 4."),
+    33: ("De meesterleraar", "Onzelfzuchtige begeleiding en verheffing — een versterkte 6."),
+}
 NUMEROLOGY_TRAITS = {"US": NUMEROLOGY_TRAITS_EN, "FR": NUMEROLOGY_TRAITS_FR,
                      "GB": NUMEROLOGY_TRAITS_EN, "AU": NUMEROLOGY_TRAITS_EN,
                      "CA": NUMEROLOGY_TRAITS_EN, "ES": NUMEROLOGY_TRAITS_ES,
-                     "IT": NUMEROLOGY_TRAITS_IT, "NL": NUMEROLOGY_TRAITS_EN}
+                     "IT": NUMEROLOGY_TRAITS_IT, "NL": NUMEROLOGY_TRAITS_NL}
 
 
 ORIGIN_LABELS_EN: dict[str, str] = {
@@ -3248,10 +3753,56 @@ ORIGIN_LABELS_IT: dict[str, str] = {
     'yoruba': 'yoruba',
     'igbo': 'igbo',
 }
+ORIGIN_LABELS_NL: dict[str, str] = {
+    'english': 'Engels',
+    'irish': 'Iers',
+    'scottish': 'Schots',
+    'welsh': 'Welsh',
+    'french': 'Frans',
+    'german': 'Duits',
+    'italian': 'Italiaans',
+    'spanish': 'Spaans',
+    'portuguese': 'Portugees',
+    'dutch': 'Nederlands',
+    'swedish': 'Zweeds',
+    'norwegian': 'Noors',
+    'danish': 'Deens',
+    'finnish': 'Fins',
+    'scandinavian': 'Scandinavisch',
+    'latin': 'Latijn',
+    'greek': 'Grieks',
+    'hebrew': 'Hebreeuws',
+    'arabic': 'Arabisch',
+    'aramaic': 'Aramees',
+    'persian': 'Perzisch',
+    'sanskrit': 'Sanskriet',
+    'russian': 'Russisch',
+    'polish': 'Pools',
+    'czech': 'Tsjechisch',
+    'hungarian': 'Hongaars',
+    'romanian': 'Roemeens',
+    'ukrainian': 'Oekraïens',
+    'bulgarian': 'Bulgaars',
+    'serbo-croatian': 'Servo-Kroatisch',
+    'japanese': 'Japans',
+    'chinese': 'Chinees',
+    'korean': 'Koreaans',
+    'vietnamese': 'Vietnamees',
+    'turkish': 'Turks',
+    'armenian': 'Armeens',
+    'tamil': 'Tamil',
+    'hindi': 'Hindi',
+    'urdu': 'Urdu',
+    'thai': 'Thais',
+    'indonesian': 'Indonesisch',
+    'swahili': 'Swahili',
+    'yoruba': 'Yoruba',
+    'igbo': 'Igbo',
+}
 ORIGIN_LABELS = {"US": ORIGIN_LABELS_EN, "FR": ORIGIN_LABELS_FR,
                  "GB": ORIGIN_LABELS_EN, "AU": ORIGIN_LABELS_EN,
                  "CA": ORIGIN_LABELS_EN, "ES": ORIGIN_LABELS_ES,
-                 "IT": ORIGIN_LABELS_IT, "NL": ORIGIN_LABELS_EN}
+                 "IT": ORIGIN_LABELS_IT, "NL": ORIGIN_LABELS_NL}
 
 
 # Common surnames per country, grouped by first letter — used by the
