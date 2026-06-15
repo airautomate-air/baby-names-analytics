@@ -2476,9 +2476,496 @@ STRINGS_ES: dict[str, str] = {
                       "de nuestra base de datos de nombres clasificados por popularidad."),
 }
 
+STRINGS_IT: dict[str, str] = {
+    "nav_home": "Home",
+    "nav_browse": "Sfoglia A–Z",
+    "nav_trends": "Tendenze",
+    "nav_decades": "Decenni",
+    "nav_rankings": "Classifica {year}",
+    "nav_favorites": "Preferiti",
+    "nav_tools": "Strumenti",
+    "nav_compare": "Confronta",
+    "compare_title": "Confronta due nomi — NameCharted",
+    "compare_h1": "Confronta due nomi",
+    "compare_intro": "Vedi due nomi fianco a fianco. Scegline due e li confronteremo: nascite, anno di punta, classifica attuale e grafico combinato.",
+    "compare_desc": "Confronta due nomi di battesimo: nascite annuali, anno di punta, classifica attuale e grafico combinato.",
+    "compare_input_a": "Primo nome",
+    "compare_input_b": "Secondo nome",
+    "compare_go": "Confronta",
+    "compare_loading": "Caricamento…",
+    "compare_not_found": "Uno dei nomi non è stato trovato. Riprova.",
+    "compare_chart_h2": "Popolarità nel tempo",
+    "compare_stat_total": "Nascite totali",
+    "compare_stat_peak": "Anno di punta",
+    "compare_stat_latest_rank": "Classifica {year}",
+    "compare_with_link": "Confronta {name} con un altro nome →",
+    "fav_add_tip": "Salva nei preferiti",
+    "fav_remove_tip": "Rimuovi dai preferiti",
+    "pin_share_tip": "Salva su Pinterest",
+    "pin_share_label": "Salva su Pinterest",
+    "share_btn_tip": "Condividi o salva nelle Foto",
+    "share_btn_label": "Condividi",
+    "share_copied": "Link copiato!",
+    "download_btn_tip": "Scarica la scheda (PNG)",
+    "download_btn_label": "Scarica",
+    "tg_share_tip": "Condividi su Telegram",
+    "tg_share_label": "Telegram",
+    "blog_h1": "Articoli e classifiche",
+    "blog_title": "Articoli e classifiche sui nomi — NameCharted",
+    "blog_intro": "Tendenze, ritorni vintage e classifiche tematiche dai dati NameCharted.",
+    "blog_desc": "Articoli editoriali sui nomi: tendenze, ritorni vintage, classifiche per decennio — basati su dati ufficiali.",
+    "blog_read_more": "Leggi",
+    "blog_back": "Torna a tutti gli articoli",
+    "nav_blog": "Blog",
+    "fav_h1": "I tuoi nomi salvati",
+    "fav_title": "I tuoi nomi salvati — NameCharted",
+    "fav_desc": "La tua lista personale di nomi preferiti.",
+    "fav_intro": "I nomi che hai salvato. Archiviati solo nel tuo browser — cancellare i dati del sito li rimuove.",
+    "fav_empty": "Nessun nome salvato. Tocca il cuore su qualsiasi pagina nome per aggiungerlo qui.",
+    "fav_share_btn": "Copia link condivisibile",
+    "fav_share_done": "Link copiato!",
+    "fav_print_btn": "Stampa / Salva come PDF",
+    "fav_print_h1": "I miei nomi preferiti",
+    "fav_print_foot": "Salvato da namecharted.com",
+    "fav_meta_peak": "Picco anni {d}",
+    "fav_meta_unranked": "non classificato",
+    "fav_remove": "Rimuovi",
+    "footer_data": "Dati: {source} ({range})",
+
+    "crumb_home": "Home",
+    "crumb_names": "Nomi",
+    "crumb_browse": "Sfoglia A–Z",
+    "crumb_decades": "Decenni",
+    "crumb_trends": "Tendenze",
+    "crumb_rising": "In crescita",
+    "crumb_falling": "In calo",
+    "crumb_similar": "Nomi simili",
+    "crumb_rare": "Nomi rari",
+
+    "home_tagline": "Nomi, in grafico.",
+    "home_intro": ("Esplora la popolarità e le tendenze dei nomi dal {range}. "
+                   "Cerca qualsiasi nome per vedere le nascite annuali, "
+                   "la classifica, la suddivisione per sesso e un grafico interattivo."),
+    "home_search_placeholder": "Inserisci un nome da esplorare…",
+    "home_try": "Prova nomi come {samples} &middot; o",
+    "home_browse_link": "sfoglia tutti i {n} nomi A–Z",
+    "home_top_h2": "Nomi più popolari di sempre",
+    "home_cc_callout": "Disponibile anche per:",
+    "home_total_babies": "{n} bambini in totale",
+    "home_mostly": "principalmente {label}",
+    "home_title": "NameCharted — Ogni nome, in grafico.",
+    "home_desc": ("Ogni nome, in grafico. Nascite annuali, classifiche, "
+                  "suddivisione per sesso e tendenze interattive per più di "
+                  "{n} nomi in 8 paesi, dal {range}."),
+    "home_h1": "Ogni nome, <span class=\"accent\">in grafico.</span>",
+    "home_subhead": ("Nascite annuali, classifiche, suddivisione per sesso e "
+                     "tendenze interattive — per ogni nome in 8 paesi, dal {range_short}."),
+    "home_search_placeholder_v2": "Cerca un nome — prova {samples}…",
+    "home_search_cta": "Esplora",
+    "home_popular_label": "Popolari adesso:",
+    "home_browse_chip": "o sfoglia tutti i {n} nomi A–Z →",
+    "home_stats_years": "{n} anni",
+    "home_stats_years_sub": "di dati",
+    "home_stats_names": "{n}",
+    "home_stats_names_sub": "nomi monitorati",
+    "home_stats_countries": "{n} paesi",
+    "home_stats_countries_sub": "coperti",
+    "home_tools_label": "O prova uno dei nostri strumenti",
+    "home_range_short": "{start}–{end}",
+    "home_race_h2": "La corsa al #1",
+    "home_race_sub": "Top 5 nomi per anno — {range_short}",
+    "home_race_pause": "Pausa",
+    "home_race_play": "Riproduci",
+    "home_race_restart": "Ricomincia",
+    "home_race_boys": "Maschi",
+    "home_race_girls": "Femmine",
+    "home_race_no1": "#1 · {name}",
+    "home_race_foot": "Guarda come salgono e scendono i preferiti di una generazione.",
+    "home_race_foot_link": "Vedi tutti i dati →",
+    "nav_explore": "Esplora",
+    "nav_search_aria": "Cerca nomi",
+    "nav_choose_country": "Scegli un paese",
+    "tool_desc_compare": "Due nomi a confronto",
+    "tool_desc_picker": "In base al tuo stile e criteri",
+    "tool_desc_sibling": "Nomi che si abbinano bene",
+    "tool_desc_works_with": "Verifica nome + cognome",
+    "tool_desc_initials": "Monogrammi all'istante",
+    "tool_desc_origins": "Per cultura e lingua",
+    "tool_desc_fiction": "Da libri e film",
+    "tool_desc_decades": "Top nomi per epoca",
+
+    "name_primarily": "Principalmente un nome da {singular}",
+    "name_variants_label": "Scritto anche:",
+    "rare_variant_of": "→ vedi {canonical}",
+    "name_unisex": "Unisex — {f}% femmine / {m}% maschi",
+    "name_pct_one": "{pct}% {label}",
+    "insight_first": ("<strong>{name}</strong> compare per la prima volta nei dati nel "
+                      "<strong>{year}</strong> ed è stato registrato in {n} anni diversi "
+                      "come nome da {singular}."),
+    "insight_peak_ranked": ("Il suo anno di punta è stato il <strong>{year}</strong> con "
+                            "<strong>{count}</strong> bambini (posizione #{rank} quell'anno)."),
+    "insight_peak": ("Il suo anno di punta è stato il <strong>{year}</strong> con "
+                     "<strong>{count}</strong> bambini."),
+    "insight_latest_ranked": ("Nel {year} è stato dato a {count} {label} "
+                              "(posizione <strong>#{rank}</strong>)."),
+    "insight_latest": "Nel {year} è stato dato a {count} {label}.",
+    "insight_latest_missing": "Non compare nei dati del {year}.",
+    "insight_rising": "Il nome è stato <strong>in crescita</strong> negli ultimi cinque anni.",
+    "insight_declining": "Il nome è stato <strong>in calo</strong> negli ultimi cinque anni.",
+    "insight_steady": "La sua popolarità è stata <strong>abbastanza stabile</strong> di recente.",
+    "stat_total": "Bambini in totale (tutti gli anni)",
+    "stat_years": "Anni nei dati",
+    "stat_peak": "Picco in un singolo anno",
+    "name_popularity_h2": "Popolarità nel tempo — {label_cap}",
+    "name_yby_h2": "Dettaglio anno per anno",
+    "name_rank_note": "La posizione è tra tutti i nomi da {label} registrati quell'anno.",
+    "table_year": "Anno",
+    "table_babies": "Bambini",
+    "table_rank": "Posizione",
+    "table_num": "#",
+    "table_name": "Nome",
+    "table_total": "Bambini totali",
+    "table_year_rank": "Posizione {year}",
+    "rel_see_similar": "&rarr; Vedi nomi simili a {name}",
+    "rel_pop_decade": "Nomi popolari degli anni {d}",
+    "rel_letter_link": "Nomi da {label} che iniziano con {letter}",
+    "rel_more_popular": "Nomi da {label} più popolari",
+    "rel_near_in": "Nomi classificati vicino a {name} nel {year}",
+    "rel_other_init": "Altri nomi da {label} che iniziano con {letter}",
+    "name_title": "{name} — Popolarità e tendenze del nome",
+    "name_desc": ("Popolarità del nome {name}: {total} nascite registrate "
+                  "{range}, picco nel {year} con {peak}. Nascite annuali, "
+                  "posizione, suddivisione per sesso e grafico interattivo."),
+    "chart_label": "Bambini chiamati {name} per anno ({label})",
+    "chart_y_axis": "Bambini per anno",
+
+    "browse_h1": "Sfoglia tutti i nomi A–Z",
+    "browse_title": "Sfoglia tutti i nomi A–Z",
+    "browse_intro": ("Tutti i {n} nomi con una pagina di popolarità dedicata, "
+                     "raggruppati per prima lettera. Cerchi un nome più raro? "
+                     "Vedi l'<a href=\"{url}\">indice A–Z completo dei nomi rari</a>."),
+    "browse_desc": ("Sfoglia tutti i {n} nomi A–Z. Clicca su un nome per "
+                    "vedere tendenze, classifiche e nascite annuali ({range})."),
+    "browse_explore_h2": "Esplora per tema",
+    "browse_rising_link": "Nomi in crescita",
+    "browse_falling_link": "Nomi in calo",
+    "browse_decades_link": "Nomi per decennio",
+    "browse_girls_by_letter": "Nomi femminili per lettera:",
+    "browse_boys_by_letter": "Nomi maschili per lettera:",
+    "browse_all_h2": "Tutti i nomi",
+
+    "year_h1": "Nomi più popolari del {year}",
+    "year_intro": ("I nomi più popolari del {year} sono stati "
+                   "<strong>{g}</strong> per le femmine e <strong>{b}</strong> per i maschi. "
+                   "Top 50 completa qui sotto, dai dati {source}."),
+    "year_girls_h2": "Femmine",
+    "year_boys_h2": "Maschi",
+    "year_title": "Nomi più popolari del {year} — classifiche e dati",
+    "year_desc": ("Top 50 nomi più popolari del {year} per femmine e maschi, "
+                  "con nascite dai dati {source}. #1: {g} e {b}."),
+
+    "yir_title": "Nomi {year}: l'anno in rassegna",
+    "yir_h1": "Nomi {year} — l'anno in rassegna",
+    "yir_intro": ("Cosa è cambiato nel {year}? Le maggiori crescite, i maggiori "
+                   "cali, nomi nuovi che compaiono per la prima volta e quelli "
+                   "entrati o usciti dalla top 100."),
+    "yir_desc": ("Riepilogo nomi {year}: maggiori crescite, cali e novità "
+                  "della top 100. Il #1 dell'anno: {g} e {b}."),
+    "yir_link": "Vedi il riepilogo del {year} →",
+    "yir_no_data": "Dati storici insufficienti per un riepilogo completo del {year}.",
+    "yir_top_h2": "I #1 dell'anno",
+    "yir_top_lead": "<strong>{g}</strong> ha guidato la classifica femminile e <strong>{b}</strong> quella maschile nel {year}.",
+    "yir_risers_h2": "Maggiori crescite",
+    "yir_risers_lead": "Nomi la cui posizione è migliorata di più rispetto all'anno precedente.",
+    "yir_fallers_h2": "Maggiori cali",
+    "yir_fallers_lead": "Nomi la cui posizione è calata di più rispetto all'anno precedente.",
+    "yir_debut_h2": "Nomi al debutto",
+    "yir_debut_lead": "Nomi che compaiono nei dati per la primissima volta.",
+    "yir_newcomers_h2": "Nuovi nella top 100",
+    "yir_newcomers_lead": "Nomi entrati nella top 100 per la prima volta dal {prev}.",
+    "yir_exits_h2": "Usciti dalla top 100",
+    "yir_exits_lead": "Nomi usciti dalla top 100 dopo esserci stati nel {prev}.",
+    "yir_rank_change": "{prev_rank} → {rank} (▲{delta})",
+    "yir_rank_drop": "{prev_rank} → {rank} (▼{delta})",
+    "yir_rank_new": "Nuova entrata — posizione #{rank}",
+    "yir_rank_exit": "Era #{prev_rank} — ora fuori classifica",
+    "yir_count_year": "{n} quest'anno",
+    "crumb_yir": "Anno in rassegna {year}",
+
+    "decade_h1": "Nomi più popolari degli anni {label}",
+    "decade_intro": ("I nomi più dati negli anni {label} ({span}), "
+                     "cumulati nell'arco del decennio. I #1 del decennio sono stati "
+                     "<strong>{g}</strong> per le femmine e <strong>{b}</strong> per i maschi."),
+    "decade_girls_h2": "Femmine — Top 50",
+    "decade_boys_h2": "Maschi — Top 50",
+    "decade_title": "Nomi più popolari degli anni {label}",
+    "decade_desc": ("Nomi più popolari degli anni {label} ({span}). Top 50 "
+                    "femmine e maschi per nascite cumulate nel decennio, "
+                    "dai dati {source}. #1: {g} e {b}."),
+    "decades_h1": "Nomi per decennio",
+    "decades_title": "Nomi per decennio — i più popolari di ogni epoca",
+    "decades_intro": ("Esplora i nomi più popolari di ogni decennio, "
+                      "dagli anni {first} agli anni {last}, dai dati {source}."),
+    "decades_desc": ("Nomi più popolari per decennio, anni {first}–{last}. "
+                     "I #1 femminili e maschili di ogni decennio dai dati {source}."),
+    "decades_th_decade": "Decennio",
+    "decades_th_g": "N. 1 femmine",
+    "decades_th_b": "N. 1 maschi",
+
+    "trends_h1": "Tendenze dei nomi",
+    "trends_intro": ("Quali nomi sono in crescita e quali in calo? Queste "
+                     "classifiche confrontano le nascite recenti con quelle di cinque "
+                     "anni fa ({range})."),
+    "trends_title": "Tendenze dei nomi — in crescita e in calo",
+    "trends_desc": ("Scopri quali nomi stanno crescendo e quali calando verso "
+                    "{year}, più i nomi di punta per decennio, dai dati {source}."),
+    "trends_rising_h1": "Nomi in maggiore crescita ({year})",
+    "trends_rising_intro": ("I nomi femminili e maschili che crescono più velocemente "
+                            "in popolarità — confrontando le nascite di circa cinque "
+                            "anni fa con gli anni più recenti. Sono inclusi solo i "
+                            "nomi con un uso attuale significativo."),
+    "trends_rising_title": "Nomi in maggiore crescita del {year}",
+    "trends_rising_desc": ("I nomi che crescono più velocemente verso il {year}, "
+                           "femminili e maschili, dai dati {source}."),
+    "trends_falling_h1": "Nomi in maggiore calo ({year})",
+    "trends_falling_intro": ("Nomi un tempo comuni che calano più rapidamente — "
+                             "confrontando le nascite di circa cinque anni fa con "
+                             "gli anni più recenti."),
+    "trends_falling_title": "Nomi in maggiore calo del {year}",
+    "trends_falling_desc": ("I nomi che calano più velocemente verso il {year}, "
+                            "femminili e maschili, dai dati {source}."),
+    "trends_th_older": "~5 anni fa",
+    "trends_th_change": "Variazione",
+    "trends_card_rising": "Nomi in crescita",
+    "trends_card_rising_sub": "Maggiori crescite del {year}",
+    "trends_card_falling": "Nomi in calo",
+    "trends_card_falling_sub": "Maggiori cali del {year}",
+    "trends_card_decades": "Nomi per decennio",
+    "trends_card_decades_sub": "I protagonisti di ogni epoca",
+
+    "letter_h1": "Nomi da {label_cap} che iniziano con {letter}",
+    "letter_title": "Nomi da {label_cap} che iniziano con {letter} — classifica per popolarità",
+    "letter_intro": ("Tutti i {n} nomi da {label} che iniziano con <strong>{letter}</strong> "
+                     "con una pagina dedicata, classificati per nascite totali ({range}). "
+                     "{cross_q}"),
+    "letter_cross_link": "Nomi da {label} che iniziano con {letter}",
+    "letter_cross_q": "Cerchi {link}?",
+    "letter_desc": ("Nomi da {label} che iniziano con {letter}: {n} opzioni "
+                    "classificate per popolarità, con nascite totali e "
+                    "posizione attuale dai dati {source}."),
+
+    "rare_h1": "Nomi rari — indice completo A–Z",
+    "rare_title": "Nomi rari — indice completo A–Z",
+    "rare_intro": ("Questi {n} nomi compaiono nei dati ({range}) ma hanno "
+                   "meno di {min} nascite cumulate, quindi non hanno ancora "
+                   "una pagina dedicata. Sono elencati qui A–Z "
+                   "con i totali delle nascite."),
+    "rare_tip": ("Suggerimento: usa <kbd>Ctrl</kbd>+<kbd>F</kbd> (o <kbd>⌘</kbd>+<kbd>F</kbd>) "
+                 "per cercare in questa pagina."),
+    "rare_letter_count": "({n} nomi)",
+    "rare_mostly": "({total} · principalmente {label})",
+    "rare_desc": ("Indice di {n} nomi rari ({range}) con meno di {min} "
+                  "nascite cumulate, elencati A–Z."),
+
+    "nav_works_with": "Con il cognome",
+    "ww_title": "Nomi che funzionano con il tuo cognome — NameCharted",
+    "ww_h1": "Nomi che funzionano con il tuo cognome",
+    "ww_intro": ("Inserisci il tuo cognome e valuteremo ogni nome di battesimo — "
+                 "premiando il contrasto ritmico e penalizzando i suoni che "
+                 "si scontrano all'unione nome / cognome."),
+    "ww_input": "Il tuo cognome",
+    "ww_go": "Trova nomi",
+    "ww_loading": "Calcolo punteggi…",
+    "ww_empty": "Inserisci un cognome sopra per vedere i suggerimenti.",
+    "ww_tab_all": "Tutti",
+    "ww_tab_girls": "Femmine",
+    "ww_tab_boys": "Maschi",
+    "ww_result_for": "Migliori nomi per {surname}",
+    "ww_score": "Punteggio",
+    "ww_desc": ("Trova nomi di battesimo che suonino bene con qualsiasi cognome. "
+                "Valutiamo ritmo, scontri di suoni e iniziali condivise per "
+                "creare rapidamente una selezione."),
+    "ww_show_more": "Mostra altri",
+    "ww_how_h": "Cosa rende una buona combinazione",
+    "ww_how_1": "<strong>Iniziale diversa</strong> dal tuo cognome — no <em>Sam Smith</em>.",
+    "ww_how_2": "<strong>Numero di sillabe diverso</strong> — no <em>Jack Black</em>.",
+    "ww_how_3": "<strong>Niente rime all'unione</strong> — no <em>Aiden Hayden</em>.",
+
+    "nav_picker": "Selettore di nomi",
+    "picker_title": "Selettore nomi — scorri, filtra, casuale — NameCharted",
+    "picker_h1": "Trova la tua selezione più in fretta",
+    "picker_intro": ("Tre modi per scoprire nomi: scorri uno alla volta, "
+                     "filtra per epoca e stile, o lasciati sorprendere."),
+    "picker_tab_swipe": "Scorri",
+    "picker_tab_filter": "Filtra",
+    "picker_tab_random": "Sorprendimi",
+    "picker_swipe_skip": "Salta",
+    "picker_swipe_save": "Salva",
+    "picker_swipe_undo": "Annulla",
+    "picker_swipe_saved": "Salvato nei tuoi preferiti.",
+    "picker_swipe_exhausted": "Nessun altro nome — cambia il filtro o riparti.",
+    "picker_swipe_restart": "Ricomincia",
+    "picker_swipe_filter_sex": "Mostra",
+    "picker_swipe_filter_era": "Epoca",
+    "picker_filter_sex": "Sesso",
+    "picker_filter_syll": "Sillabe",
+    "picker_filter_era": "Epoca di punta",
+    "picker_filter_letter": "Inizia con",
+    "picker_filter_rank": "Popolarità attuale",
+    "picker_filter_origin": "Origine",
+    "picker_filter_any": "Qualsiasi",
+    "picker_filter_rank_top100": "Top 100 attuale",
+    "picker_filter_rank_top1000": "Top 1.000 attuale",
+    "picker_filter_rank_rare": "Vintage / fuori classifica",
+    "picker_filter_match_one": "1 nome corrisponde",
+    "picker_filter_match_many": "{n} nomi corrispondono",
+    "picker_filter_match_none": "Nessun nome — prova ad allargare i filtri.",
+    "picker_random_count": "Quanti",
+    "picker_random_go": "Lancia i dadi",
+    "picker_random_share": "Copia link condivisibile",
+    "picker_random_share_done": "Link copiato!",
+    "picker_random_again": "Lancia ancora",
+    "picker_random_empty": "Nessun risultato — prova un'altra combinazione.",
+    "picker_peak_decade": "Picco negli anni {d}",
+    "picker_currently_rank": "#{rank} ora",
+    "picker_not_ranked": "Fuori classifica",
+    "picker_desc": ("Scopri nomi scorrendo, filtrando per decennio e sillabe, "
+                    "o in modo casuale. Salva i preferiti man mano."),
+
+    "nav_sibling": "Idee fratelli",
+    "sibling_title": "Idee di nomi per i fratelli — NameCharted",
+    "sibling_h1": "Trova un nome per il fratellino o la sorellina",
+    "sibling_intro": ("Dammi da uno a tre nomi di figli e suggerirò "
+                      "nomi di epoca e ritmo simili, senza rime né "
+                      "stessa iniziale."),
+    "sibling_input": "Nome del primo figlio",
+    "sibling_input_more": "Nome di un altro figlio",
+    "sibling_add_name": "+ Aggiungi un nome",
+    "sibling_remove_name": "Rimuovi questo nome",
+    "sibling_target_sex": "Prossimo bebè",
+    "sibling_go": "Suggerisci nomi",
+    "sibling_empty": "Inserisci un nome sopra per vedere suggerimenti.",
+    "sibling_unknown": ("Non abbiamo dati per uno di quei nomi, quindi "
+                        "corrisponderemo solo sul ritmo. Per risultati migliori "
+                        "scegli nomi con la propria pagina di popolarità."),
+    "sibling_result_for": "Nomi che si abbinano bene con {name}",
+    "sibling_result_for_set": "Nomi che si abbinano bene con {names}",
+    "sibling_show_more": "Mostra altri",
+    "sibling_share": "Copia link",
+    "sibling_share_done": "Link copiato!",
+    "sibling_desc": ("Trova nomi per fratelli che si abbinino a un nome "
+                     "— o a un insieme di 2-3 fratelli. Valutiamo epoca "
+                     "di punta, ritmo sillabico e iniziali complementari."),
+
+    "nav_origins": "Origini",
+    "origins_hub_title": "Origini dei nomi per lingua e cultura",
+    "origins_hub_h1": "Origini dei nomi",
+    "origins_hub_intro": ("Esplora i nomi di battesimo in base alla loro lingua "
+                          "di origine. Ogni pagina elenca i nomi femminili e "
+                          "maschili radicati in quella cultura, con dati di popolarità."),
+    "origins_hub_desc": ("Sfoglia i nomi di battesimo raggruppati per origine "
+                         "linguistica — irlandese, ebraico, greco, latino, giapponese, "
+                         "arabo e altro."),
+    "origins_hub_count": "{n} nomi",
+    "origin_page_title": "Nomi di origine {label} — popolarità e tendenze",
+    "origin_page_h1": "Nomi di origine {label}",
+    "origin_page_intro": ("Nomi di battesimo popolari di origine {label}. Questi nomi "
+                          "affondano le radici nella lingua e cultura {label}, "
+                          "elencati per popolarità totale in {country}."),
+    "origin_page_desc": ("Nomi di origine {label}: classifiche femminili e "
+                         "maschili, tendenze annuali e significati."),
+    "origin_page_girls_h2": "Nomi femminili di origine {label}",
+    "origin_page_boys_h2": "Nomi maschili di origine {label}",
+    "origin_back_to_hub": "← Tutte le origini",
+    "name_origin_badge": "Origine: {label}",
+    "name_meaning_h2": "Significato",
+    "name_meaning_source": "Fonte: Wikipedia",
+    "numerology_h2": "Numerologia di {name}",
+    "numerology_intro": ("In numerologia pitagorica, ogni lettera ha un valore "
+                          "da 1 a 9. Sommando le lettere di <strong>{name}</strong> "
+                          "si ottengono questi tre numeri — una lettura ludica del "
+                          "carattere del nome."),
+    "numerology_destiny_lbl": "Numero del destino",
+    "numerology_destiny_desc": "Somma di tutte le lettere. Il carattere generale del nome.",
+    "numerology_soul_lbl": "Impulso dell'anima",
+    "numerology_soul_desc": "Somma delle vocali — ciò che si dice muova il cuore.",
+    "numerology_personality_lbl": "Personalità",
+    "numerology_personality_desc": "Somma delle consonanti — l'impressione esteriore.",
+    "numerology_footer": "La numerologia non è una scienza — è un gioco di parole tematico. Goditela così.",
+    "name_famous_h2": "Persone famose di nome {name}",
+    "name_famous_occ_sep": " · ",
+    "name_famous_born": "n. {year}",
+
+    "nav_fiction": "Nomi di finzione",
+    "fiction_hub_title": "Nomi da libri, film e serie TV",
+    "fiction_hub_h1": "Nomi di finzione",
+    "fiction_hub_intro": ("Selezione di personaggi da {n} franchise — Harry "
+                          "Potter, Star Wars, Bridgerton, Jane Austen e altro. "
+                          "Quando un nome fittizio coincide con un nome reale "
+                          "nei nostri dati, colleghiamo alla sua pagina di popolarità."),
+    "fiction_hub_desc": ("Nomi da libri, film e serie TV. Selezione da "
+                         "Harry Potter, Game of Thrones, Star Wars, "
+                         "Bridgerton e altro."),
+    "fiction_franchise_title": "Personaggi di {title}",
+    "fiction_franchise_intro": ("{n} personaggi di {title}. I nomi in azzurro "
+                                "hanno la propria pagina di popolarità con "
+                                "nascite annuali."),
+    "fiction_franchise_desc": ("Nomi da {title}. Selezione di personaggi "
+                               "con link ai dati di popolarità reali."),
+    "fiction_back_to_hub": "← Tutti i franchise",
+    "fiction_card_count": "{n} personaggi",
+    "fiction_year": "dal {year}",
+    "name_fiction_h2": "Anche un personaggio in",
+    "name_fiction_in": "In <a href=\"{url}\">{title}</a>: {role}",
+
+    "nav_saints": "Santo del giorno",
+    "saints_hub_title": "Santo del giorno — calendario dei santi e dei nomi",
+    "saints_hub_h1": "Santo del giorno",
+    "saints_hub_intro": ("Il tradizionale calendario cattolico dei santi, giorno per giorno. "
+                         "Clicca su qualsiasi giorno per vedere il santo celebrato "
+                         "e la popolarità di quel nome."),
+    "saints_hub_desc": ("Calendario giornaliero di santi e onomastici. Sfoglia tutti "
+                        "i 366 giorni e vedi la tendenza di popolarità di ogni nome."),
+    "saint_page_title": "San{ta} {name} — onomastico, date, popolarità",
+    "saint_page_h1": "San{ta} {name}",
+    "saint_page_dates_one": "La festa è celebrata il <strong>{date}</strong>.",
+    "saint_page_dates_multi": "Celebrato il <strong>{dates}</strong>.",
+    "saint_page_popularity_link": "Vedi la popolarità del nome {name} →",
+    "saint_page_desc": "Giorno/i della festa, significato e popolarità del nome {name}.",
+    "saint_back_to_hub": "← Torna al calendario dei santi",
+    "saints_today_label": "Oggi è la festa di San {name}",
+    "saints_today_label_fem": "Oggi è la festa di Santa {name}",
+    "saints_today_event": "Oggi: {name}",
+    "saints_today_wish": "Buon onomastico a tutti i {name}!",
+    "saints_month_jan": "Gennaio", "saints_month_feb": "Febbraio",
+    "saints_month_mar": "Marzo",   "saints_month_apr": "Aprile",
+    "saints_month_may": "Maggio",  "saints_month_jun": "Giugno",
+    "saints_month_jul": "Luglio",  "saints_month_aug": "Agosto",
+    "saints_month_sep": "Settembre", "saints_month_oct": "Ottobre",
+    "saints_month_nov": "Novembre",  "saints_month_dec": "Dicembre",
+
+    "nav_initials": "Generatore iniziali",
+    "initials_title": "Generatore di nomi dalle iniziali — NameCharted",
+    "initials_h1": "Componi le iniziali",
+    "initials_intro": ("Inserisci le iniziali che vuoi e genereremo 20 "
+                       "combinazioni di nomi corrispondenti — un modo creativo "
+                       "per fare brainstorming sui monogrammi."),
+    "initials_input": "es. A.J.K",
+    "initials_go": "Genera combinazioni",
+    "initials_again": "Genera ancora",
+    "initials_filter_sex": "Sesso del nome",
+    "initials_empty": "Inserisci 2 o 3 iniziali sopra per iniziare.",
+    "initials_no_match": "Non abbiamo nomi di battesimo che inizino con {letter} — prova un'altra lettera.",
+    "initials_share": "Copia link condivisibile",
+    "initials_share_done": "Link copiato!",
+    "initials_desc": ("Genera combinazioni di nomi dalle iniziali scelte. "
+                      "Nomi di battesimo, secondo nome e cognomi estratti "
+                      "dal nostro database di nomi classificati per popolarità."),
+}
+
 STRINGS = {"US": STRINGS_EN, "FR": STRINGS_FR, "GB": STRINGS_EN,
            "AU": STRINGS_EN, "CA": STRINGS_EN, "ES": STRINGS_ES,
-           "IT": STRINGS_EN, "NL": STRINGS_EN}
+           "IT": STRINGS_IT, "NL": STRINGS_EN}
 
 # Gendered forms per language. Used for "girls"/"filles", "boy's"/"de garçon", etc.
 # URL slugs always use the English form ('girls'/'boys') for cross-country URL parity.
@@ -2500,9 +2987,15 @@ GENDERED_ES = {
     "singular_F": "niña", "singular_M": "niño",
     "of_singular_F": "niña", "of_singular_M": "niño",
 }
+GENDERED_IT = {
+    "label_F": "femmine", "label_M": "maschi",
+    "label_cap_F": "Femmine", "label_cap_M": "Maschi",
+    "singular_F": "femmina", "singular_M": "maschio",
+    "of_singular_F": "femmina", "of_singular_M": "maschio",
+}
 GENDERED = {"US": GENDERED_EN, "FR": GENDERED_FR, "GB": GENDERED_EN,
             "AU": GENDERED_EN, "CA": GENDERED_EN, "ES": GENDERED_ES,
-            "IT": GENDERED_EN, "NL": GENDERED_EN}
+            "IT": GENDERED_IT, "NL": GENDERED_EN}
 
 # Origin-slug → display label per UI language. Slugs come from
 # data/normalized/name_enrichment.json (built by fetchers/enrich_wikidata.py).
@@ -2551,10 +3044,24 @@ NUMEROLOGY_TRAITS_ES: dict[int, tuple[str, str]] = {
     22: ("El maestro constructor", "Convierte visiones en estructuras — un 4 amplificado."),
     33: ("El maestro educador", "Guía desinteresada y elevación — un 6 amplificado."),
 }
+NUMEROLOGY_TRAITS_IT: dict[int, tuple[str, str]] = {
+    1: ("Il leader", "Indipendente, pioniere, nato per andare per primo."),
+    2: ("Il pacificatore", "Diplomatico, sensibile, orientato alla collaborazione."),
+    3: ("Il creativo", "Espressivo, socievole, mosso da energia gioiosa."),
+    4: ("Il costruttore", "Pratico, costante, ottiene risultati con il lavoro."),
+    5: ("Lo spirito libero", "Curioso, irrequieto, energizzato dal cambiamento."),
+    6: ("Il protettore", "Premuroso, responsabile, la famiglia al centro."),
+    7: ("Il ricercatore", "Introspettivo, analitico, attratto dall'ignoto."),
+    8: ("L'ambizioso", "Determinato, capace, a proprio agio nell'esercitare influenza."),
+    9: ("L'umanitario", "Idealista, compassionevole, pensa in termini globali."),
+    11: ("Il visionario (maestro)", "Intuitivo e ispirante — un 2 amplificato."),
+    22: ("Il maestro costruttore", "Trasforma visioni in strutture — un 4 amplificato."),
+    33: ("Il maestro educatore", "Guida disinteressata e elevazione — un 6 amplificato."),
+}
 NUMEROLOGY_TRAITS = {"US": NUMEROLOGY_TRAITS_EN, "FR": NUMEROLOGY_TRAITS_FR,
                      "GB": NUMEROLOGY_TRAITS_EN, "AU": NUMEROLOGY_TRAITS_EN,
                      "CA": NUMEROLOGY_TRAITS_EN, "ES": NUMEROLOGY_TRAITS_ES,
-                     "IT": NUMEROLOGY_TRAITS_EN, "NL": NUMEROLOGY_TRAITS_EN}
+                     "IT": NUMEROLOGY_TRAITS_IT, "NL": NUMEROLOGY_TRAITS_EN}
 
 
 ORIGIN_LABELS_EN: dict[str, str] = {
@@ -2695,10 +3202,56 @@ ORIGIN_LABELS_ES: dict[str, str] = {
     'yoruba': 'yoruba',
     'igbo': 'igbo',
 }
+ORIGIN_LABELS_IT: dict[str, str] = {
+    'english': 'inglese',
+    'irish': 'irlandese',
+    'scottish': 'scozzese',
+    'welsh': 'gallese',
+    'french': 'francese',
+    'german': 'tedesco',
+    'italian': 'italiano',
+    'spanish': 'spagnolo',
+    'portuguese': 'portoghese',
+    'dutch': 'olandese',
+    'swedish': 'svedese',
+    'norwegian': 'norvegese',
+    'danish': 'danese',
+    'finnish': 'finlandese',
+    'scandinavian': 'scandinavo',
+    'latin': 'latino',
+    'greek': 'greco',
+    'hebrew': 'ebraico',
+    'arabic': 'arabo',
+    'aramaic': 'aramaico',
+    'persian': 'persiano',
+    'sanskrit': 'sanscrito',
+    'russian': 'russo',
+    'polish': 'polacco',
+    'czech': 'ceco',
+    'hungarian': 'ungherese',
+    'romanian': 'rumeno',
+    'ukrainian': 'ucraino',
+    'bulgarian': 'bulgaro',
+    'serbo-croatian': 'serbo-croato',
+    'japanese': 'giapponese',
+    'chinese': 'cinese',
+    'korean': 'coreano',
+    'vietnamese': 'vietnamita',
+    'turkish': 'turco',
+    'armenian': 'armeno',
+    'tamil': 'tamil',
+    'hindi': 'hindi',
+    'urdu': 'urdu',
+    'thai': 'tailandese',
+    'indonesian': 'indonesiano',
+    'swahili': 'swahili',
+    'yoruba': 'yoruba',
+    'igbo': 'igbo',
+}
 ORIGIN_LABELS = {"US": ORIGIN_LABELS_EN, "FR": ORIGIN_LABELS_FR,
                  "GB": ORIGIN_LABELS_EN, "AU": ORIGIN_LABELS_EN,
                  "CA": ORIGIN_LABELS_EN, "ES": ORIGIN_LABELS_ES,
-                 "IT": ORIGIN_LABELS_EN, "NL": ORIGIN_LABELS_EN}
+                 "IT": ORIGIN_LABELS_IT, "NL": ORIGIN_LABELS_EN}
 
 
 # Common surnames per country, grouped by first letter — used by the
