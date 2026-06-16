@@ -217,7 +217,7 @@ def parse_frontmatter(text: str) -> tuple[dict, str]:
 # ---------------------------------------------------------------------------
 # Pexels API
 # ---------------------------------------------------------------------------
-def search_pexels(query: str) -> str | None:
+def search_pexels(query: str):
     """Return the URL of the best landscape photo for query, or None."""
     params = urllib.parse.urlencode({
         'query': query,
@@ -227,7 +227,7 @@ def search_pexels(query: str) -> str | None:
     })
     req = urllib.request.Request(
         f'https://api.pexels.com/v1/search?{params}',
-        headers={'Authorization': API_KEY},
+        headers={'Authorization': API_KEY, 'User-Agent': 'Mozilla/5.0'},
     )
     try:
         with urllib.request.urlopen(req, timeout=15) as resp:
