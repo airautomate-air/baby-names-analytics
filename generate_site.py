@@ -5905,17 +5905,29 @@ BASE_CSS = """
         .blog-card-tag { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #8A93A3; }
         .blog-meta { font-size: 0.78rem; color: #8A93A3; letter-spacing: 0.04em; text-transform: uppercase; }
         .blog-readmore { color: #149E91; font-weight: 600; margin-top: 0.25rem; font-size: 0.9rem; }
-        .blog-hero { border-radius: 12px; padding: 2rem 2.25rem 1.75rem; margin-bottom: 2rem; max-width: 720px; }
+        .blog-hero { border-radius: 12px; padding: 2rem 2.25rem 1.75rem; margin-bottom: 2rem; max-width: 720px; position: relative; overflow: hidden; }
         .blog-hero--teal { background: linear-gradient(135deg, #0a5f58 0%, #149E91 100%); }
         .blog-hero--purple { background: linear-gradient(135deg, #3d2566 0%, #7B5EA7 100%); }
         .blog-hero--amber { background: linear-gradient(135deg, #7a3e0e 0%, #D4883A 100%); }
         .blog-hero--blue { background: linear-gradient(135deg, #1a2e60 0%, #3B6EA6 100%); }
         .blog-hero--green { background: linear-gradient(135deg, #0f3d22 0%, #2E8B57 100%); }
         .blog-hero--navy { background: linear-gradient(135deg, #060c18 0%, #1B2440 100%); }
+        .blog-hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+        .blog-hero-overlay { position: absolute; inset: 0; z-index: 1; }
+        .blog-hero-overlay--teal { background: linear-gradient(135deg, rgba(10,95,88,0.82) 0%, rgba(20,158,145,0.72) 100%); }
+        .blog-hero-overlay--purple { background: linear-gradient(135deg, rgba(61,37,102,0.84) 0%, rgba(123,94,167,0.74) 100%); }
+        .blog-hero-overlay--amber { background: linear-gradient(135deg, rgba(122,62,14,0.84) 0%, rgba(212,136,58,0.74) 100%); }
+        .blog-hero-overlay--blue { background: linear-gradient(135deg, rgba(26,46,96,0.84) 0%, rgba(59,110,166,0.74) 100%); }
+        .blog-hero-overlay--green { background: linear-gradient(135deg, rgba(15,61,34,0.84) 0%, rgba(46,139,87,0.74) 100%); }
+        .blog-hero-overlay--navy { background: linear-gradient(135deg, rgba(6,12,24,0.88) 0%, rgba(27,36,64,0.78) 100%); }
+        .blog-hero-content { position: relative; z-index: 2; }
         .blog-hero-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
         .blog-hero-tag { background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.92); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.65rem; border-radius: 999px; }
         .blog-hero h1 { color: #fff; font-size: 2.1rem; line-height: 1.2; margin: 0 0 0.8rem; }
         .blog-hero .blog-meta { color: rgba(255,255,255,0.65); }
+        .blog-card-img-wrap { overflow: hidden; height: 180px; }
+        .blog-card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s ease; }
+        .blog-card:hover .blog-card-img-wrap img { transform: scale(1.04); }
         .blog-post { max-width: 720px; }
         .blog-post h2 { font-size: 1.45rem; margin-top: 2rem; }
         .blog-post h3 { font-size: 1.15rem; margin-top: 1.5rem; }
@@ -11187,9 +11199,17 @@ def generate_blog_index():
         tags = post.get('tags', [])
         color = _blog_color(tags)
         primary_tag = tags[0] if tags else ''
+        img_path = Path('docs/blog/images') / f'{post["slug"]}.jpg'
+        img_html = (
+            f'<div class="blog-card-img-wrap">'
+            f'<img src="/blog/images/{post["slug"]}.jpg" alt="{post["title"]}" loading="lazy">'
+            f'</div>'
+        ) if img_path.exists() else (
+            f'<div class="blog-card-accent blog-card-accent--{color}"></div>'
+        )
         items.append(
             f'<li class="blog-card">'
-            f'<div class="blog-card-accent blog-card-accent--{color}"></div>'
+            f'{img_html}'
             f'<div class="blog-card-body">'
             f'{"<p class=blog-card-tag>" + primary_tag + "</p>" if primary_tag else ""}'
             f'<a href="{p}/blog/{post["slug"]}.html"><h3>{post["title"]}</h3></a>'
@@ -11225,11 +11245,24 @@ def generate_blog_post(post: dict):
     tags = post.get('tags', [])
     color = _blog_color(tags)
     tag_pills = ''.join(f'<span class="blog-hero-tag">{t}</span>' for t in tags)
+    img_path = Path('docs/blog/images') / f'{post["slug"]}.jpg'
+    if img_path.exists():
+        img_tag = f'<img class="blog-hero-bg" src="/blog/images/{post["slug"]}.jpg" alt="" aria-hidden="true">'
+        overlay = f'<div class="blog-hero-overlay blog-hero-overlay--{color}"></div>'
+        inner_open = '<div class="blog-hero-content">'
+        inner_close = '</div>'
+    else:
+        img_tag = overlay = ''
+        inner_open = inner_close = ''
     hero = (
         f'        <div class="blog-hero blog-hero--{color}">\n'
+        f'            {img_tag}\n'
+        f'            {overlay}\n'
+        f'            {inner_open}\n'
         f'            {"<div class=blog-hero-tags>" + tag_pills + "</div>" if tag_pills else ""}\n'
         f'            <h1>{post["title"]}</h1>\n'
         f'            <p class="blog-meta">{_blog_date_display(post["date"])}</p>\n'
+        f'            {inner_close}\n'
         f'        </div>\n'
     )
     body = (
@@ -11241,11 +11274,13 @@ def generate_blog_post(post: dict):
         f'        </article>\n'
         f'        <p class="blog-back"><a href="{p}/blog/">← {S("blog_back")}</a></p>'
     )
+    og_img = f"{BASE_URL}/blog/images/{post['slug']}.jpg" if img_path.exists() else ""
     (OUT_DIR / 'blog').mkdir(parents=True, exist_ok=True)
     (OUT_DIR / 'blog' / f'{post["slug"]}.html').write_text(
         page(post['title'] + ' — NameCharted', body,
              description=post['description'],
-             canonical=canonical),
+             canonical=canonical,
+             og_image_url=og_img),
         encoding='utf-8')
 
 
