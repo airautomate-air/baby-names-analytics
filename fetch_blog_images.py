@@ -10,13 +10,19 @@ Or put the key in a .env file:
     python3 fetch_blog_images.py
 
 Get a free API key at: https://www.pexels.com/api/
-Free tier: 200 req/hour, 20,000/month. This script makes one request per post.
+Free tier: 200 req/hour, 20,000/month.
 
-Images are saved to docs/blog/images/{slug}.jpg at 1200×630 (social/OG size).
-Re-run any time to pick up new posts; existing images are skipped.
+Images saved:
+  docs/blog/images/{slug}.jpg        — hero image (1200×630)
+  docs/blog/images/{slug}-s1.jpg     — inline section image 1 (900×500)
+  docs/blog/images/{slug}-s2.jpg     — inline section image 2
+  docs/blog/images/{slug}-s3.jpg     — inline section image 3 (if post is long)
+
+Re-run any time to pick up new posts; existing images are always skipped.
 """
 
 import os
+import re
 import sys
 import json
 import urllib.request
@@ -243,8 +249,25 @@ def search_pexels(query: str):
     return src.get('large2x') or src.get('large') or src.get('original')
 
 
-def download_and_save(url: str, dest: Path) -> bool:
-    """Download image, resize to 1200×630, save as JPEG."""
+_STOP_WORDS = {'the', 'a', 'an', 'and', 'or', 'of', 'in', 'on', 'at', 'to',
+               'for', 'is', 'are', 'was', 'were', 'how', 'why', 'what',
+               'that', 'this', 'with', 'from', 'its', 'it', 'by', 'as',
+               'but', 'not', 'no', 'so', 'do', 'did', 'has', 'have'}
+
+def _section_query(heading: str, post_query: str) -> str:
+    """Build a Pexels search query from a ## heading + the post's main topic."""
+    # Strip markdown, punctuation, numbers, rank arrows
+    clean = re.sub(r'[#\-:,\(\)\[\]0-9→#@!?]', ' ', heading)
+    clean = re.sub(r'\s+', ' ', clean).strip()
+    words = [w for w in clean.lower().split() if w not in _STOP_WORDS and len(w) > 2][:5]
+    # Add 1-2 topic anchor words from the post-level query
+    topic = [w for w in post_query.split()[:3] if w.lower() not in _STOP_WORDS][:2]
+    combined = words + [w for w in topic if w.lower() not in [x.lower() for x in words]]
+    return ' '.join(combined[:6])
+
+
+def download_and_save(url: str, dest: Path, size=(1200, 630)) -> bool:
+    """Download image, center-crop to size, save as JPEG."""
     try:
         req = urllib.request.Request(url, headers={'User-Agent': 'NameCharted/1.0'})
         with urllib.request.urlopen(req, timeout=30) as resp:
@@ -256,8 +279,7 @@ def download_and_save(url: str, dest: Path) -> bool:
     if HAS_PILLOW:
         try:
             img = Image.open(io.BytesIO(data)).convert('RGB')
-            # Smart crop to 1200×630 (16:8.4) — center crop
-            target_w, target_h = 1200, 630
+            target_w, target_h = size
             orig_w, orig_h = img.size
             scale = max(target_w / orig_w, target_h / orig_h)
             new_w = int(orig_w * scale)
@@ -291,37 +313,59 @@ def main():
     failed = 0
 
     for md_path in posts:
-        meta, _ = parse_frontmatter(md_path.read_text(encoding='utf-8'))
+        text = md_path.read_text(encoding='utf-8')
+        meta, body = parse_frontmatter(text)
         slug = meta.get('slug', '')
         if not slug:
             continue
-        country = meta.get('country', 'US')
-        if country != 'US':
-            continue  # images only for US posts
-
-        dest = img_dir / f'{slug}.jpg'
-        if dest.exists():
-            skipped += 1
+        if meta.get('country', 'US') != 'US':
             continue
 
         tags = meta.get('tags', [])
-        query = get_query(slug, tags)
-        print(f"  [{slug}]")
-        print(f"    query: {query!r}")
+        post_query = get_query(slug, tags)
 
-        url = search_pexels(query)
-        if not url:
-            print(f"    No results — skipping")
-            failed += 1
-            continue
-
-        ok = download_and_save(url, dest)
-        if ok:
-            size_kb = dest.stat().st_size // 1024
-            print(f"    saved {dest.name} ({size_kb}KB)")
-            fetched += 1
+        # --- Hero image ---
+        dest = img_dir / f'{slug}.jpg'
+        if not dest.exists():
+            print(f"  [{slug}] hero")
+            print(f"    query: {post_query!r}")
+            url = search_pexels(post_query)
+            if url:
+                ok = download_and_save(url, dest, size=(1200, 630))
+                if ok:
+                    print(f"    saved {dest.name} ({dest.stat().st_size // 1024}KB)")
+                    fetched += 1
+                else:
+                    failed += 1
+            else:
+                print(f"    No results — skipping")
+                failed += 1
         else:
-            failed += 1
+            skipped += 1
+
+        # --- Section images: every 2nd ## heading, up to 3 ---
+        headings = re.findall(r'^## (.+)', body, re.MULTILINE)
+        # Pick headings at index 1, 3, 5 (0-based: the 2nd, 4th, 6th sections)
+        section_headings = [h for i, h in enumerate(headings) if i % 2 == 1][:3]
+        for s_idx, heading in enumerate(section_headings, start=1):
+            s_dest = img_dir / f'{slug}-s{s_idx}.jpg'
+            if s_dest.exists():
+                skipped += 1
+                continue
+            query = _section_query(heading, post_query)
+            print(f"  [{slug}] section {s_idx}: {heading[:40]!r}")
+            print(f"    query: {query!r}")
+            url = search_pexels(query)
+            if url:
+                ok = download_and_save(url, s_dest, size=(900, 500))
+                if ok:
+                    print(f"    saved {s_dest.name} ({s_dest.stat().st_size // 1024}KB)")
+                    fetched += 1
+                else:
+                    failed += 1
+            else:
+                print(f"    No results — skipping")
+                failed += 1
 
     print(f"\nDone: {fetched} downloaded, {skipped} already existed, {failed} failed.")
     if fetched > 0:

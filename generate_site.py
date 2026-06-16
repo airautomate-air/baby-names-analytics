@@ -5914,7 +5914,9 @@ BASE_CSS = """
         .blog-hero--navy { background: linear-gradient(135deg, #060c18 0%, #1B2440 100%); }
         .blog-featured-img { max-width: 720px; border-radius: 12px; overflow: hidden; margin: 0 0 2rem; }
         .blog-featured-img img { width: 100%; height: 380px; object-fit: cover; display: block; }
-        @media (max-width: 600px) { .blog-featured-img img { height: 220px; } }
+        .blog-inline-img { border-radius: 10px; overflow: hidden; margin: 1.75rem 0 2rem; }
+        .blog-inline-img img { width: 100%; height: 300px; object-fit: cover; display: block; }
+        @media (max-width: 600px) { .blog-featured-img img { height: 220px; } .blog-inline-img img { height: 180px; } }
         .blog-hero-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
         .blog-hero-tag { background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.92); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.65rem; border-radius: 999px; }
         .blog-hero h1 { color: #fff; font-size: 2.1rem; line-height: 1.2; margin: 0 0 0.8rem; }
@@ -11236,13 +11238,29 @@ def generate_blog_post(post: dict):
     if p:
         html = re.sub(r'href="(/(?:name|similar|origin|fiction|year|decade|letter)/[^"]+)"',
                       lambda m: f'href="{p}{m.group(1)}"', html)
+    # Inject section images after every 2nd <h2> in the article
+    slug = post['slug']
+    _img_dir = Path('docs/blog/images')
+    _s_idx = [0]
+    _h2_count = [0]
+    def _inject_section_img(m):
+        _h2_count[0] += 1
+        result = m.group(0)
+        if _h2_count[0] % 2 == 0:
+            _s_idx[0] += 1
+            s_path = _img_dir / f'{slug}-s{_s_idx[0]}.jpg'
+            if s_path.exists():
+                img_src = f'{p}/blog/images/{slug}-s{_s_idx[0]}.jpg' if p else f'/blog/images/{slug}-s{_s_idx[0]}.jpg'
+                result += f'\n<figure class="blog-inline-img"><img src="{img_src}" alt="" loading="lazy"></figure>'
+        return result
+    html = re.sub(r'<h2>[^<]*</h2>', _inject_section_img, html)
     tags = post.get('tags', [])
     color = _blog_color(tags)
     tag_pills = ''.join(f'<span class="blog-hero-tag">{t}</span>' for t in tags)
-    img_path = Path('docs/blog/images') / f'{post["slug"]}.jpg'
+    img_path = _img_dir / f'{slug}.jpg'
     featured_img = (
         f'        <figure class="blog-featured-img">\n'
-        f'            <img src="/blog/images/{post["slug"]}.jpg" alt="{post["title"]}" loading="eager">\n'
+        f'            <img src="/blog/images/{slug}.jpg" alt="{post["title"]}" loading="eager">\n'
         f'        </figure>\n'
     ) if img_path.exists() else ''
     hero = (
@@ -11262,7 +11280,7 @@ def generate_blog_post(post: dict):
         f'        </article>\n'
         f'        <p class="blog-back"><a href="{p}/blog/">← {S("blog_back")}</a></p>'
     )
-    og_img = f"{BASE_URL}/blog/images/{post['slug']}.jpg" if img_path.exists() else ""
+    og_img = f"{BASE_URL}/blog/images/{slug}.jpg" if img_path.exists() else ""
     (OUT_DIR / 'blog').mkdir(parents=True, exist_ok=True)
     (OUT_DIR / 'blog' / f'{post["slug"]}.html').write_text(
         page(post['title'] + ' — NameCharted', body,
