@@ -115,15 +115,34 @@
         h1 .fav-btn { margin-left: 0.5rem; vertical-align: -4px; }
         .blog-list { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1.5rem 0; }
         @media (min-width: 720px) { .blog-list { grid-template-columns: 1fr 1fr; } }
-        .blog-card { background: #fff; border: 1px solid #d6dde2; border-radius: 10px; padding: 1.1rem 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; }
+        .blog-card { background: #fff; border: 1px solid #d6dde2; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+        .blog-card-accent { height: 5px; flex-shrink: 0; }
+        .blog-card-accent--teal { background: linear-gradient(90deg, #0f8f84, #149E91); }
+        .blog-card-accent--purple { background: linear-gradient(90deg, #5B3F87, #7B5EA7); }
+        .blog-card-accent--amber { background: linear-gradient(90deg, #A05A1A, #D4883A); }
+        .blog-card-accent--blue { background: linear-gradient(90deg, #2B4A8E, #3B6EA6); }
+        .blog-card-accent--green { background: linear-gradient(90deg, #1a5c38, #2E8B57); }
+        .blog-card-accent--navy { background: linear-gradient(90deg, #0d1729, #1B2440); }
+        .blog-card-body { padding: 1.1rem 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; flex: 1; }
         .blog-card h3 { margin: 0; color: #1B2440; font-size: 1.2rem; line-height: 1.3; }
         .blog-card a { text-decoration: none; }
         .blog-card a:hover h3 { color: #149E91; }
         .blog-card p { margin: 0; color: #5B6678; font-size: 0.95rem; }
+        .blog-card-tag { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #8A93A3; }
         .blog-meta { font-size: 0.78rem; color: #8A93A3; letter-spacing: 0.04em; text-transform: uppercase; }
         .blog-readmore { color: #149E91; font-weight: 600; margin-top: 0.25rem; font-size: 0.9rem; }
+        .blog-hero { border-radius: 12px; padding: 2rem 2.25rem 1.75rem; margin-bottom: 2rem; max-width: 720px; }
+        .blog-hero--teal { background: linear-gradient(135deg, #0a5f58 0%, #149E91 100%); }
+        .blog-hero--purple { background: linear-gradient(135deg, #3d2566 0%, #7B5EA7 100%); }
+        .blog-hero--amber { background: linear-gradient(135deg, #7a3e0e 0%, #D4883A 100%); }
+        .blog-hero--blue { background: linear-gradient(135deg, #1a2e60 0%, #3B6EA6 100%); }
+        .blog-hero--green { background: linear-gradient(135deg, #0f3d22 0%, #2E8B57 100%); }
+        .blog-hero--navy { background: linear-gradient(135deg, #060c18 0%, #1B2440 100%); }
+        .blog-hero-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+        .blog-hero-tag { background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.92); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.65rem; border-radius: 999px; }
+        .blog-hero h1 { color: #fff; font-size: 2.1rem; line-height: 1.2; margin: 0 0 0.8rem; }
+        .blog-hero .blog-meta { color: rgba(255,255,255,0.65); }
         .blog-post { max-width: 720px; }
-        .blog-post h1 { font-size: 2.1rem; line-height: 1.2; margin-bottom: 0.25rem; }
         .blog-post h2 { font-size: 1.45rem; margin-top: 2rem; }
         .blog-post h3 { font-size: 1.15rem; margin-top: 1.5rem; }
         .blog-post p, .blog-post li { font-size: 1.02rem; line-height: 1.65; color: #2a3548; }
@@ -568,9 +587,12 @@
     </div></div>
     <div class="container">
         <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/blog/">Stories & lists</a> &rsaquo; Origin Spotlight — Arabic and Persian Names on the US Chart in 2024</div>
-        <article class="blog-post">
+        <div class="blog-hero blog-hero--teal">
+            <div class=blog-hero-tags><span class="blog-hero-tag">origins</span><span class="blog-hero-tag">arabic</span><span class="blog-hero-tag">persian</span><span class="blog-hero-tag">middle-eastern</span><span class="blog-hero-tag">evergreen</span></div>
             <h1>Origin Spotlight — Arabic and Persian Names on the US Chart in 2024</h1>
             <p class="blog-meta">June 5, 2026</p>
+        </div>
+        <article class="blog-post">
             <p>The Arabic and Persian layers of the US chart have grown faster than almost any other origin category over the past two decades. Layla is a top-40 girl name. Amir and Adam are top-100 boys. And the long tail is full of names — Yara, Nour, Rayan, Idris — that simply did not appear in American data in 2000.</p>
 <h2>Arabic-origin girls</h2>
 <table class="blog-table"><thead><tr><th>Name</th><th>2024 rank</th><th>Arabic root</th></tr></thead><tbody><tr><td><strong><a href="/name/layla.html">Layla</a></strong></td><td>#37</td><td><em>layla</em>, "night"</td></tr><tr><td><strong><a href="/name/aaliyah.html">Aaliyah</a></strong></td><td>#93</td><td><em>'aaliya</em>, "ascending" or "exalted"</td></tr><tr><td><strong><a href="/name/sarah.html">Sarah</a></strong></td><td>#95</td><td>shared with Hebrew — "princess"</td></tr><tr><td><strong><a href="/name/amira.html">Amira</a></strong></td><td>#136</td><td>"princess" or "leader"</td></tr><tr><td><strong><a href="/name/sara.html">Sara</a></strong></td><td>#188</td><td>shorter form of Sarah</td></tr><tr><td><strong><a href="/name/lila.html">Lila</a></strong></td><td>#207</td><td>"night" (cognate of Layla)</td></tr><tr><td><strong><a href="/name/zara.html">Zara</a></strong></td><td>#234</td><td>"flower in bloom"</td></tr><tr><td><strong><a href="/name/aliyah.html">Aliyah</a></strong></td><td>#235</td><td>variant of Aaliyah</td></tr><tr><td><strong><a href="/name/leila.html">Leila</a></strong></td><td>#268</td><td>variant of Layla</td></tr><tr><td><strong><a href="/name/fatima.html">Fatima</a></strong></td><td>#316</td><td>the Prophet's daughter — "she who weans"</td></tr><tr><td><strong><a href="/name/aisha.html">Aisha</a></strong></td><td>#346</td><td>"living" or "she who lives"</td></tr><tr><td><strong><a href="/name/mira.html">Mira</a></strong></td><td>#380</td><td>"princess" or "wonder" (also Slavic)</td></tr><tr><td><strong><a href="/name/maryam.html">Maryam</a></strong></td><td>#390</td><td>Arabic form of Mary</td></tr><tr><td><strong><a href="/name/nadia.html">Nadia</a></strong></td><td>#513</td><td>from <em>nada</em>, "dew" or "generosity"</td></tr><tr><td><strong><a href="/name/lina.html">Lina</a></strong></td><td>#567</td><td>"tender"</td></tr><tr><td><strong><a href="/name/yara.html">Yara</a></strong></td><td>#578</td><td>"small butterfly"</td></tr><tr><td><strong><a href="/name/noor.html">Noor</a></strong></td><td>#709</td><td>"light"</td></tr><tr><td><strong><a href="/name/inaya.html">Inaya</a></strong></td><td>#760</td><td>"care" or "concern"</td></tr><tr><td><strong><a href="/name/salma.html">Salma</a></strong></td><td>#870</td><td>"safe" or "peaceful"</td></tr></tbody></table>

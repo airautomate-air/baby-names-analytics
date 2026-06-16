@@ -115,15 +115,34 @@
         h1 .fav-btn { margin-left: 0.5rem; vertical-align: -4px; }
         .blog-list { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1.5rem 0; }
         @media (min-width: 720px) { .blog-list { grid-template-columns: 1fr 1fr; } }
-        .blog-card { background: #fff; border: 1px solid #d6dde2; border-radius: 10px; padding: 1.1rem 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; }
+        .blog-card { background: #fff; border: 1px solid #d6dde2; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+        .blog-card-accent { height: 5px; flex-shrink: 0; }
+        .blog-card-accent--teal { background: linear-gradient(90deg, #0f8f84, #149E91); }
+        .blog-card-accent--purple { background: linear-gradient(90deg, #5B3F87, #7B5EA7); }
+        .blog-card-accent--amber { background: linear-gradient(90deg, #A05A1A, #D4883A); }
+        .blog-card-accent--blue { background: linear-gradient(90deg, #2B4A8E, #3B6EA6); }
+        .blog-card-accent--green { background: linear-gradient(90deg, #1a5c38, #2E8B57); }
+        .blog-card-accent--navy { background: linear-gradient(90deg, #0d1729, #1B2440); }
+        .blog-card-body { padding: 1.1rem 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; flex: 1; }
         .blog-card h3 { margin: 0; color: #1B2440; font-size: 1.2rem; line-height: 1.3; }
         .blog-card a { text-decoration: none; }
         .blog-card a:hover h3 { color: #149E91; }
         .blog-card p { margin: 0; color: #5B6678; font-size: 0.95rem; }
+        .blog-card-tag { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #8A93A3; }
         .blog-meta { font-size: 0.78rem; color: #8A93A3; letter-spacing: 0.04em; text-transform: uppercase; }
         .blog-readmore { color: #149E91; font-weight: 600; margin-top: 0.25rem; font-size: 0.9rem; }
+        .blog-hero { border-radius: 12px; padding: 2rem 2.25rem 1.75rem; margin-bottom: 2rem; max-width: 720px; }
+        .blog-hero--teal { background: linear-gradient(135deg, #0a5f58 0%, #149E91 100%); }
+        .blog-hero--purple { background: linear-gradient(135deg, #3d2566 0%, #7B5EA7 100%); }
+        .blog-hero--amber { background: linear-gradient(135deg, #7a3e0e 0%, #D4883A 100%); }
+        .blog-hero--blue { background: linear-gradient(135deg, #1a2e60 0%, #3B6EA6 100%); }
+        .blog-hero--green { background: linear-gradient(135deg, #0f3d22 0%, #2E8B57 100%); }
+        .blog-hero--navy { background: linear-gradient(135deg, #060c18 0%, #1B2440 100%); }
+        .blog-hero-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+        .blog-hero-tag { background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.92); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.65rem; border-radius: 999px; }
+        .blog-hero h1 { color: #fff; font-size: 2.1rem; line-height: 1.2; margin: 0 0 0.8rem; }
+        .blog-hero .blog-meta { color: rgba(255,255,255,0.65); }
         .blog-post { max-width: 720px; }
-        .blog-post h1 { font-size: 2.1rem; line-height: 1.2; margin-bottom: 0.25rem; }
         .blog-post h2 { font-size: 1.45rem; margin-top: 2rem; }
         .blog-post h3 { font-size: 1.15rem; margin-top: 1.5rem; }
         .blog-post p, .blog-post li { font-size: 1.02rem; line-height: 1.65; color: #2a3548; }
@@ -568,9 +587,12 @@
     </div></div>
     <div class="container">
         <div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/blog/">Stories & lists</a> &rsaquo; What Was Popular in 1954 — Baby Boom Names, 70 Years On</div>
-        <article class="blog-post">
+        <div class="blog-hero blog-hero--amber">
+            <div class=blog-hero-tags><span class="blog-hero-tag">history</span><span class="blog-hero-tag">vintage</span><span class="blog-hero-tag">1950s</span><span class="blog-hero-tag">evergreen</span></div>
             <h1>What Was Popular in 1954 — Baby Boom Names, 70 Years On</h1>
             <p class="blog-meta">June 5, 2026</p>
+        </div>
+        <article class="blog-post">
             <p>1954 sits squarely in the post-war baby boom. About 4 million American babies were born that year — the population was 162 million — and naming was at peak concentration: the top three boys' names alone accounted for nearly 250,000 babies, more than the entire 2024 top 10 combined. Here's the full top 20 then, and what each name is doing today.</p>
 <h2>Boys — top 20 of 1954</h2>
 <table class="blog-table"><thead><tr><th>Name</th><th>1954 babies</th><th>2024 rank</th><th>Status</th></tr></thead><tbody><tr><td><strong><a href="/name/michael.html">Michael</a></strong></td><td>88,564</td><td><strong>#18</strong></td><td>Still top 20 — the most resilient top-1 name of the postwar era</td></tr><tr><td><strong><a href="/name/robert.html">Robert</a></strong></td><td>86,333</td><td><strong>#90</strong></td><td>Sliding but stubbornly held</td></tr><tr><td><strong><a href="/name/james.html">James</a></strong></td><td>86,312</td><td><strong>#5</strong></td><td>Back in the top 5 after a long mid-chart dip</td></tr><tr><td><strong><a href="/name/john.html">John</a></strong></td><td>81,176</td><td><strong>#21</strong></td><td>One of the great survivors</td></tr><tr><td><strong><a href="/name/david.html">David</a></strong></td><td>79,560</td><td><strong>#31</strong></td><td>Held on</td></tr><tr><td><strong><a href="/name/william.html">William</a></strong></td><td>61,431</td><td><strong>#10</strong></td><td>Back in the top 10</td></tr><tr><td><strong><a href="/name/richard.html">Richard</a></strong></td><td>57,043</td><td><strong>#232</strong></td><td>Down from the top 10 to mid-chart</td></tr><tr><td><strong><a href="/name/thomas.html">Thomas</a></strong></td><td>47,157</td><td><strong>#39</strong></td><td>Quietly held on</td></tr><tr><td><strong><a href="/name/gary.html">Gary</a></strong></td><td>37,921</td><td><strong>#1,130</strong></td><td>Boomer-coded, sliding fast</td></tr><tr><td><strong><a href="/name/charles.html">Charles</a></strong></td><td>37,467</td><td><strong>#51</strong></td><td>Came back via the vintage wave</td></tr><tr><td><strong><a href="/name/steven.html">Steven</a></strong></td><td>36,630</td><td><strong>#269</strong></td><td>The 'ph' Stephen and the 'v' Steven both peaked then</td></tr><tr><td><strong><a href="/name/mark.html">Mark</a></strong></td><td>36,198</td><td><strong>#246</strong></td><td>Mid-chart decline</td></tr><tr><td><strong><a href="/name/joseph.html">Joseph</a></strong></td><td>31,224</td><td><strong>#32</strong></td><td>Held on, climbing slightly</td></tr><tr><td><strong><a href="/name/donald.html">Donald</a></strong></td><td>29,279</td><td><strong>#672</strong></td><td>A name that may never recover</td></tr><tr><td><strong><a href="/name/ronald.html">Ronald</a></strong></td><td>27,624</td><td><strong>#575</strong></td><td>Boomer-locked</td></tr><tr><td><strong><a href="/name/paul.html">Paul</a></strong></td><td>26,221</td><td><strong>#264</strong></td><td>Slow decline</td></tr><tr><td><strong><a href="/name/kenneth.html">Kenneth</a></strong></td><td>26,185</td><td><strong>#284</strong></td><td>Same</td></tr><tr><td><strong><a href="/name/daniel.html">Daniel</a></strong></td><td>25,275</td><td><strong>#16</strong></td><td>Top 20 still — biblical anchor</td></tr><tr><td><strong><a href="/name/larry.html">Larry</a></strong></td><td>24,612</td><td><strong>#1,068</strong></td><td>Almost completely tied to the boomer cohort</td></tr><tr><td><strong><a href="/name/stephen.html">Stephen</a></strong></td><td>21,879</td><td><strong>#377</strong></td><td>The 'ph' spelling lost ground to 'v'</td></tr></tbody></table>

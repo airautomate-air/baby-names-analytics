@@ -5889,15 +5889,34 @@ BASE_CSS = """
         h1 .fav-btn { margin-left: 0.5rem; vertical-align: -4px; }
         .blog-list { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1.5rem 0; }
         @media (min-width: 720px) { .blog-list { grid-template-columns: 1fr 1fr; } }
-        .blog-card { background: #fff; border: 1px solid #d6dde2; border-radius: 10px; padding: 1.1rem 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; }
+        .blog-card { background: #fff; border: 1px solid #d6dde2; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column; }
+        .blog-card-accent { height: 5px; flex-shrink: 0; }
+        .blog-card-accent--teal { background: linear-gradient(90deg, #0f8f84, #149E91); }
+        .blog-card-accent--purple { background: linear-gradient(90deg, #5B3F87, #7B5EA7); }
+        .blog-card-accent--amber { background: linear-gradient(90deg, #A05A1A, #D4883A); }
+        .blog-card-accent--blue { background: linear-gradient(90deg, #2B4A8E, #3B6EA6); }
+        .blog-card-accent--green { background: linear-gradient(90deg, #1a5c38, #2E8B57); }
+        .blog-card-accent--navy { background: linear-gradient(90deg, #0d1729, #1B2440); }
+        .blog-card-body { padding: 1.1rem 1.3rem; display: flex; flex-direction: column; gap: 0.45rem; flex: 1; }
         .blog-card h3 { margin: 0; color: #1B2440; font-size: 1.2rem; line-height: 1.3; }
         .blog-card a { text-decoration: none; }
         .blog-card a:hover h3 { color: #149E91; }
         .blog-card p { margin: 0; color: #5B6678; font-size: 0.95rem; }
+        .blog-card-tag { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #8A93A3; }
         .blog-meta { font-size: 0.78rem; color: #8A93A3; letter-spacing: 0.04em; text-transform: uppercase; }
         .blog-readmore { color: #149E91; font-weight: 600; margin-top: 0.25rem; font-size: 0.9rem; }
+        .blog-hero { border-radius: 12px; padding: 2rem 2.25rem 1.75rem; margin-bottom: 2rem; max-width: 720px; }
+        .blog-hero--teal { background: linear-gradient(135deg, #0a5f58 0%, #149E91 100%); }
+        .blog-hero--purple { background: linear-gradient(135deg, #3d2566 0%, #7B5EA7 100%); }
+        .blog-hero--amber { background: linear-gradient(135deg, #7a3e0e 0%, #D4883A 100%); }
+        .blog-hero--blue { background: linear-gradient(135deg, #1a2e60 0%, #3B6EA6 100%); }
+        .blog-hero--green { background: linear-gradient(135deg, #0f3d22 0%, #2E8B57 100%); }
+        .blog-hero--navy { background: linear-gradient(135deg, #060c18 0%, #1B2440 100%); }
+        .blog-hero-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.9rem; }
+        .blog-hero-tag { background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.92); font-size: 0.68rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.65rem; border-radius: 999px; }
+        .blog-hero h1 { color: #fff; font-size: 2.1rem; line-height: 1.2; margin: 0 0 0.8rem; }
+        .blog-hero .blog-meta { color: rgba(255,255,255,0.65); }
         .blog-post { max-width: 720px; }
-        .blog-post h1 { font-size: 2.1rem; line-height: 1.2; margin-bottom: 0.25rem; }
         .blog-post h2 { font-size: 1.45rem; margin-top: 2rem; }
         .blog-post h3 { font-size: 1.15rem; margin-top: 1.5rem; }
         .blog-post p, .blog-post li { font-size: 1.02rem; line-height: 1.65; color: #2a3548; }
@@ -11125,6 +11144,23 @@ def generate_fiction_franchise_page(fr: dict) -> None:
 # ---------------------------------------------------------------------------
 # Blog (/blog/) — markdown posts from data/blog/*.md, per-country.
 # ---------------------------------------------------------------------------
+_TAG_COLOR: dict[str, str] = {
+    'trends': 'teal', 'analysis': 'teal', 'evergreen': 'teal', 'data': 'teal',
+    'vintage': 'amber', 'history': 'amber', 'decade': 'amber',
+    'pop-culture': 'purple', 'celebrity': 'purple', 'tv': 'purple', 'film': 'purple',
+        'literary': 'purple', 'music': 'purple',
+    'origin': 'blue', 'mythology': 'blue', 'biblical': 'blue',
+    'nature': 'green', 'botanical': 'green', 'sports': 'green',
+}
+
+_COLOR_PRIORITY = ['purple', 'amber', 'blue', 'green', 'navy', 'teal']
+
+def _blog_color(tags: list) -> str:
+    found = [_TAG_COLOR[t.lower()] for t in tags if t.lower() in _TAG_COLOR]
+    if not found:
+        return 'teal'
+    return min(found, key=lambda c: _COLOR_PRIORITY.index(c) if c in _COLOR_PRIORITY else 99)
+
 def _blog_date_display(iso: str) -> str:
     """'2026-06-05' → 'June 5, 2026' (English) or '5 juin 2026' (French)."""
     try:
@@ -11148,12 +11184,19 @@ def generate_blog_index():
     p = PREFIX
     items = []
     for post in posts:
+        tags = post.get('tags', [])
+        color = _blog_color(tags)
+        primary_tag = tags[0] if tags else ''
         items.append(
             f'<li class="blog-card">'
+            f'<div class="blog-card-accent blog-card-accent--{color}"></div>'
+            f'<div class="blog-card-body">'
+            f'{"<p class=blog-card-tag>" + primary_tag + "</p>" if primary_tag else ""}'
             f'<a href="{p}/blog/{post["slug"]}.html"><h3>{post["title"]}</h3></a>'
             f'<p class="blog-meta">{_blog_date_display(post["date"])}</p>'
             f'<p>{post["description"]}</p>'
             f'<a class="blog-readmore" href="{p}/blog/{post["slug"]}.html">{S("blog_read_more")} →</a>'
+            f'</div>'
             f'</li>'
         )
     body = (
@@ -11179,12 +11222,21 @@ def generate_blog_post(post: dict):
     if p:
         html = re.sub(r'href="(/(?:name|similar|origin|fiction|year|decade|letter)/[^"]+)"',
                       lambda m: f'href="{p}{m.group(1)}"', html)
+    tags = post.get('tags', [])
+    color = _blog_color(tags)
+    tag_pills = ''.join(f'<span class="blog-hero-tag">{t}</span>' for t in tags)
+    hero = (
+        f'        <div class="blog-hero blog-hero--{color}">\n'
+        f'            {"<div class=blog-hero-tags>" + tag_pills + "</div>" if tag_pills else ""}\n'
+        f'            <h1>{post["title"]}</h1>\n'
+        f'            <p class="blog-meta">{_blog_date_display(post["date"])}</p>\n'
+        f'        </div>\n'
+    )
     body = (
         f'        <div class="breadcrumb"><a href="{home_path()}">{S("crumb_home")}</a> &rsaquo; '
         f'<a href="{p}/blog/">{S("blog_h1")}</a> &rsaquo; {post["title"]}</div>\n'
+        f'{hero}'
         f'        <article class="blog-post">\n'
-        f'            <h1>{post["title"]}</h1>\n'
-        f'            <p class="blog-meta">{_blog_date_display(post["date"])}</p>\n'
         f'            {html}\n'
         f'        </article>\n'
         f'        <p class="blog-back"><a href="{p}/blog/">← {S("blog_back")}</a></p>'
