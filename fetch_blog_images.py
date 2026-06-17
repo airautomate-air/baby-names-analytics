@@ -169,6 +169,18 @@ SLUG_QUERIES = {
     # Misc
     'virtue-names': 'elegant graceful virtue calm meditation',
     'hidden-gem-names': 'treasure unique rare jewel gem discovery',
+
+    # New batch — Phase 94-103
+    'son-ending-names': 'baby boy nursery surname vintage wooden letters',
+    'ley-ending-names': 'baby girl nursery soft pastel modern flowers',
+    'norse-mythology-names': 'viking norse scandinavia mythology landscape dramatic',
+    'boy-names-ending-a': 'baby boy newborn soft light blue nursery',
+    'n-ending-boy-names': 'baby boy toddler playing outdoors sunny',
+    'stranger-things-names': '1980s retro childhood nostalgia colorful neon',
+    'downton-abbey-names': 'english manor house estate countryside elegant',
+    'names-meaning-fire': 'fire flames dramatic orange glow warm',
+    'jane-austen-names': 'regency era elegant writing quill letter book',
+    'office-names': 'office desk workplace corporate modern',
 }
 
 TAG_QUERIES = {
