@@ -171,6 +171,17 @@ SLUG_QUERIES = {
     'hidden-gem-names': 'treasure unique rare jewel gem discovery',
 
     # New batch — Phase 94-103
+    'hawaiian-names': 'hawaii ocean tropical beach island palm',
+    'pandemic-baby-names': 'family home cozy indoor warmth comfort',
+    'zodiac-names': 'stars night sky astrology constellation horoscope',
+    'preppy-names': 'preppy lifestyle sailing nautical stripe classic',
+    'names-meaning-earth': 'earth nature soil clay garden botanical green',
+    'ie-ending-names': 'happy baby girl laughing playful warm nursery',
+    'latin-american-names-us': 'latin america colorful vibrant culture celebration',
+    'old-testament-names': 'ancient scroll manuscript stone tablet biblical',
+    'defining-2020s-names': 'modern nursery minimalist contemporary baby decade',
+
+    # Previous batch
     'son-ending-names': 'baby boy nursery surname vintage wooden letters',
     'ley-ending-names': 'baby girl nursery soft pastel modern flowers',
     'norse-mythology-names': 'viking norse scandinavia mythology landscape dramatic',
