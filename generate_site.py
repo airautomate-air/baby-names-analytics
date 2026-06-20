@@ -10,10 +10,12 @@ US lives at the root (preserving every legacy URL); FR/GB/AU live at
 from __future__ import annotations
 
 import csv
+import html
 import json
 import re
 import unicodedata
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from pin_renderer import render_pin
@@ -37,6 +39,9 @@ COUNTRY_NAMES_IN_UI = {"US": COUNTRY_NAMES_EN, "FR": COUNTRY_NAMES_FR,
                        "GB": COUNTRY_NAMES_EN, "AU": COUNTRY_NAMES_EN,
                        "CA": COUNTRY_NAMES_EN, "ES": COUNTRY_NAMES_EN,
                        "IT": COUNTRY_NAMES_EN, "NL": COUNTRY_NAMES_EN}
+OG_LOCALE = {"US": "en_US", "FR": "fr_FR", "GB": "en_GB", "AU": "en_AU",
+             "CA": "en_CA", "ES": "es_ES", "IT": "it_IT", "NL": "nl_NL"}
+
 DATA_SOURCE_FULL = {
     "US": "U.S. Social Security Administration",
     "FR": "INSEE (France)",
@@ -67,12 +72,18 @@ PAGE_MIN_TOTAL = 500
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 
+def _fold(s: str) -> str:
+    """Lowercase and strip diacritical marks (NFD decompose → drop Mn)."""
+    return ''.join(
+        c for c in unicodedata.normalize('NFD', s.lower())
+        if unicodedata.category(c) != 'Mn'
+    )
+
+
 def count_syllables(name: str) -> int:
     """Cheap heuristic: count vowel groups in the diacritic-folded name,
     drop a trailing silent 'e'. Good enough for rhythm scoring."""
-    folded = unicodedata.normalize('NFD', name.lower())
-    folded = ''.join(c for c in folded if unicodedata.category(c) != 'Mn')
-    folded = re.sub(r'[^a-z]', '', folded)
+    folded = re.sub(r'[^a-z]', '', _fold(name))
     if not folded:
         return 1
     n = 0
@@ -106,8 +117,7 @@ def numerology_numbers(name: str) -> tuple[int, int, int]:
       soul_urge   — sum of VOWELS only
       personality — sum of CONSONANTS only
     Diacritics are folded; non-letters are ignored."""
-    s = unicodedata.normalize('NFD', name.lower())
-    s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
+    s = _fold(name)
     letters = [c for c in s if 'a' <= c <= 'z']
     if not letters:
         return (0, 0, 0)
@@ -124,16 +134,13 @@ def filter_famous_for(famous: list, given_name: str) -> list:
     Meryl (Mary Louise) Streep, Amelia (Mary) Earhart. They use a different
     public name; we don't want them in the 'Famous people named Mary' list.
     """
-    target = unicodedata.normalize('NFD', given_name.lower())
-    target = ''.join(c for c in target if unicodedata.category(c) != 'Mn')
-    target = re.sub(r'[^a-z]', '', target)
+    target = re.sub(r'[^a-z]', '', _fold(given_name))
     if not target:
         return famous
     out = []
     for p in famous:
         label = p.get('name', '')
-        folded = unicodedata.normalize('NFD', label.lower())
-        folded = ''.join(c for c in folded if unicodedata.category(c) != 'Mn')
+        folded = _fold(label)
         # Treat hyphens/apostrophes as word boundaries (Jean-Pierre, O'Connor)
         tokens = re.split(r"[^a-z]+", folded)
         if tokens and tokens[0] == target:
@@ -159,9 +166,7 @@ def phonetic_key(name: str) -> str:
                                                    merge but not phonetic
                                                    twins)
     """
-    s = unicodedata.normalize('NFD', name.lower())
-    s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
-    s = re.sub(r'[^a-z]', '', s)
+    s = re.sub(r'[^a-z]', '', _fold(name))
     if not s:
         return ''
     # Silent / awkward starting clusters
@@ -213,9 +218,7 @@ def slugify(name: str) -> str:
     """Consistent URL slug used for every internal link and file name.
     Strips diacritics so 'Léa' → 'lea' (not 'l-a') — keeps URLs ASCII-clean
     and avoids accented-vs-unaccented variants overwriting each other."""
-    folded = unicodedata.normalize('NFD', name.lower())
-    folded = ''.join(c for c in folded if unicodedata.category(c) != 'Mn')
-    s = re.sub(r'[^a-z0-9]+', '-', folded).strip('-')
+    s = re.sub(r'[^a-z0-9]+', '-', _fold(name)).strip('-')
     return s or 'name'
 
 
@@ -360,7 +363,7 @@ _MD_CODE = re.compile(r'`([^`]+)`')
 
 def _md_inline(s: str) -> str:
     """Escape HTML then apply inline markdown (links, bold, italic, code)."""
-    s = (s.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;'))
+    s = html.escape(s, quote=False)
     s = _MD_LINK.sub(r'<a href="\2">\1</a>', s)
     s = _MD_BOLD.sub(r'<strong>\1</strong>', s)
     s = _MD_ITAL.sub(r'<em>\1</em>', s)
@@ -508,12 +511,6 @@ def _activate_saints_for(cc: str) -> None:
     global SAINTS_FR, SAINT_TO_DATES
     SAINTS_FR = SAINTS_BY_CC.get(cc, {})
     SAINT_TO_DATES = SAINT_TO_DATES_BY_CC.get(cc, {})
-
-
-# Back-compat shim — old code still calls load_saints_fr().
-def load_saints_fr() -> None:
-    load_saints_all()
-    _activate_saints_for('FR')
 
 
 def build_country(cc: str) -> None:
@@ -795,51 +792,33 @@ def hreflang_for_hub(rel: str) -> str:
 
 
 def hreflang_for_name(slug: str) -> str:
-    paths = {}
-    for cc in COUNTRIES:
-        if slug in SLUGS_WITH_PAGE_BY_CC[cc]:
-            paths[cc] = f"{_country_prefix(cc)}/name/{slug}.html"
-    return hreflang_block(paths)
+    return hreflang_block({cc: f"{_country_prefix(cc)}/name/{slug}.html"
+                           for cc in COUNTRIES if slug in SLUGS_WITH_PAGE_BY_CC[cc]})
 
 
 def hreflang_for_similar(slug: str) -> str:
-    paths = {}
-    for cc in COUNTRIES:
-        if slug in SLUGS_WITH_PAGE_BY_CC[cc]:
-            paths[cc] = f"{_country_prefix(cc)}/similar/{slug}.html"
-    return hreflang_block(paths)
+    return hreflang_block({cc: f"{_country_prefix(cc)}/similar/{slug}.html"
+                           for cc in COUNTRIES if slug in SLUGS_WITH_PAGE_BY_CC[cc]})
 
 
 def hreflang_for_year(year: int) -> str:
-    paths = {}
-    for cc in COUNTRIES:
-        if year in YEARS_SET_BY_CC[cc]:
-            paths[cc] = f"{_country_prefix(cc)}/year/{year}.html"
-    return hreflang_block(paths)
+    return hreflang_block({cc: f"{_country_prefix(cc)}/year/{year}.html"
+                           for cc in COUNTRIES if year in YEARS_SET_BY_CC[cc]})
 
 
 def hreflang_for_decade(d: int) -> str:
-    paths = {}
-    for cc in COUNTRIES:
-        if d in DECADES_SET_BY_CC[cc]:
-            paths[cc] = f"{_country_prefix(cc)}/decade/{d}s.html"
-    return hreflang_block(paths)
+    return hreflang_block({cc: f"{_country_prefix(cc)}/decade/{d}s.html"
+                           for cc in COUNTRIES if d in DECADES_SET_BY_CC[cc]})
 
 
 def hreflang_for_origin(origin: str) -> str:
-    paths = {}
-    for cc in COUNTRIES:
-        if origin in ORIGIN_TO_NAMES_BY_CC.get(cc, {}):
-            paths[cc] = f"{_country_prefix(cc)}/origin/{origin}.html"
-    return hreflang_block(paths)
+    return hreflang_block({cc: f"{_country_prefix(cc)}/origin/{origin}.html"
+                           for cc in COUNTRIES if origin in ORIGIN_TO_NAMES_BY_CC.get(cc, {})})
 
 
 def hreflang_for_letter(sex: str, letter: str) -> str:
-    paths = {}
-    for cc in COUNTRIES:
-        if (sex, letter) in LETTERS_BY_CC[cc]:
-            paths[cc] = f"{_country_prefix(cc)}/letter/{sex_label(sex)}-{letter.lower()}.html"
-    return hreflang_block(paths)
+    return hreflang_block({cc: f"{_country_prefix(cc)}/letter/{sex_label(sex)}-{letter.lower()}.html"
+                           for cc in COUNTRIES if (sex, letter) in LETTERS_BY_CC[cc]})
 
 
 def set_active(cc: str) -> None:
@@ -5864,11 +5843,34 @@ BASE_CSS = """
         a.cc-dd-item.is-current { background: #EFF8F6; color: #0E7A70 !important; font-weight: 700; }
         a.cc-dd-item.is-current .cc-code { color: #149E91 !important; }
         a.cc-dd-item .cc-check { margin-left: auto; color: #149E91; font-weight: 700; }
+        /* Hamburger — hidden on desktop */
+        .nav-ham { display: none; }
         @media (max-width: 720px) {
             .sitenav .brand span:not(.wm-teal) { font-size: 1rem; }
-            .nav-links { gap: 1rem; }
             .cc-dd-btn { padding: 0.4rem 0.75rem; font-size: 0.85rem; }
             .cc-dd-btn .cc-dd-label { display: none; }
+
+            /* Hamburger button */
+            .nav-ham { display: inline-flex; align-items: center; justify-content: center; background: none; border: 0; cursor: pointer; color: #EEF2F4; padding: 0.35rem; margin-left: auto; }
+            .nav-ham svg { display: block; width: 24px; height: 24px; }
+            .nav-ham .icon-x { display: none; }
+            body.mob-open .nav-ham .icon-ham { display: none; }
+            body.mob-open .nav-ham .icon-x { display: block; }
+            body.mob-open { overflow: hidden; }
+
+            /* Mobile nav overlay */
+            .nav-links { display: none; position: fixed; inset: 0; background: #1B2440; flex-direction: column; align-items: flex-start; padding: 4.5rem 1.5rem 2rem; gap: 0; z-index: 50; overflow-y: auto; }
+            body.mob-open .nav-links { display: flex; }
+
+            /* Items inside mobile overlay */
+            .nav-links .nav-link { font-size: 1.15rem; padding: 0.85rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); width: 100%; }
+            .nav-links .nav-dd { width: 100%; border-bottom: 1px solid rgba(255,255,255,0.08); }
+            .nav-links .nav-dd-btn { width: 100%; justify-content: space-between; font-size: 1.15rem; padding: 0.85rem 0; }
+            .nav-links .nav-dd-menu { display: none; position: static; box-shadow: none; border: 0; background: rgba(255,255,255,0.06); border-radius: 8px; margin: 0 0 0.75rem; padding: 0.25rem 0.5rem; animation: none; min-width: unset; left: unset; }
+            .nav-links .nav-dd.is-open .nav-dd-menu { display: block; }
+            .nav-links .nav-dd-menu a, .nav-links .nav-dd-menu a:link, .nav-links .nav-dd-menu a:visited { color: #EEF2F4 !important; font-weight: 500; padding: 0.55rem 0.75rem; }
+            .nav-links .nav-dd-menu a:hover { background: rgba(255,255,255,0.1); color: #fff !important; }
+            .nav-links .nav-search-btn { margin-top: 1rem; }
         }
         .cc-callout { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.9rem 1.25rem; margin: 1.5rem 0 2rem; font-size: 0.95rem; color: #1B2440; }
         .cc-callout a { color: #149E91; text-decoration: none; font-weight: 600; margin: 0 0.15rem; white-space: nowrap; }
@@ -6373,7 +6375,6 @@ def nav_tools_script() -> str:
     <script>
     (function() {
         var dropdowns = Array.prototype.slice.call(document.querySelectorAll('.nav-dd, .cc-dd'));
-        if (!dropdowns.length) return;
         function closeAll(except) {
             dropdowns.forEach(function(dd) {
                 if (dd === except) return;
@@ -6396,15 +6397,35 @@ def nav_tools_script() -> str:
             var inside = dropdowns.some(function(dd) { return dd.contains(e.target); });
             if (!inside) closeAll(null);
         });
+
+        // Hamburger (mobile menu)
+        var ham = document.getElementById('navHam');
+        var navLinks = document.getElementById('navLinks');
+        function closeMob() {
+            document.body.classList.remove('mob-open');
+            if (ham) ham.setAttribute('aria-expanded', 'false');
+        }
+        if (ham) {
+            ham.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var open = document.body.classList.toggle('mob-open');
+                ham.setAttribute('aria-expanded', open ? 'true' : 'false');
+                if (open) closeAll(null);
+            });
+        }
+        if (navLinks) {
+            navLinks.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A' && e.target.getAttribute('href')) closeMob();
+            });
+        }
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeAll(null);
+            if (e.key === 'Escape') { closeAll(null); closeMob(); }
         });
 
-        // Nav search icon focuses the hero search if present, otherwise
-        // routes to the home page where it exists.
         var navSearch = document.getElementById('navSearchBtn');
         if (navSearch) {
             navSearch.addEventListener('click', function() {
+                closeMob();
                 var input = document.getElementById('searchInput');
                 if (input) {
                     input.scrollIntoView({behavior: 'smooth', block: 'center'});
@@ -6428,7 +6449,7 @@ def site_nav_html() -> str:
     return f"""
     <div class="sitenav"><div class="sitenav-inner">
         <a class="brand" href="{home_path()}"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span></a>
-        <div class="nav-links">
+        <div id="navLinks" class="nav-links">
             <a href="{home_path()}" class="nav-link">{S("nav_home")}</a>
             <div class="nav-dd">
                 <button type="button" class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">{S("nav_explore")} <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
@@ -6457,6 +6478,7 @@ def site_nav_html() -> str:
             {blog_link}
             <button type="button" class="nav-search-btn" id="navSearchBtn" data-home="{home_path()}" aria-label="{S("nav_search_aria")}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="20" y1="20" x2="16.65" y2="16.65"></line></svg></button>
         </div>
+        <button type="button" class="nav-ham" id="navHam" aria-label="Menu" aria-expanded="false" aria-controls="navLinks"><svg class="icon-ham" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg><svg class="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         {country_switcher_html()}
     </div></div>"""
 
@@ -6485,7 +6507,7 @@ def page(title, body, description="", canonical="", extra_head="",
             f'\n    <meta property="og:description" content="{description}">'
             f'\n    <meta property="og:type" content="website">'
             f'\n    <meta property="og:site_name" content="NameCharted">'
-            f'\n    <meta property="og:locale" content="{"fr_FR" if ACTIVE_CC == "FR" else ("en_GB" if ACTIVE_CC == "GB" else ("en_AU" if ACTIVE_CC == "AU" else "en_US"))}">'
+            f'\n    <meta property="og:locale" content="{OG_LOCALE[ACTIVE_CC]}">'
             f'\n    <meta property="og:image" content="{img_url}">'
             f'\n    <meta property="og:image:width" content="{og_image_w}">'
             f'\n    <meta property="og:image:height" content="{og_image_h}">'
@@ -6513,6 +6535,7 @@ def page(title, body, description="", canonical="", extra_head="",
     <meta name="apple-mobile-web-app-title" content="NameCharted">
     <meta name="mobile-web-app-capable" content="yes">
     <style>{BASE_CSS}</style>{extra_head}
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7807747366780690" crossorigin="anonymous"></script>
 </head>
 <body>{site_nav_html()}
     <div class="container">
@@ -9264,7 +9287,6 @@ def _prerender_pins_parallel() -> None:
             targets.append((name, pin_path))
     if not targets:
         return
-    from concurrent.futures import ThreadPoolExecutor
     print(f"  {len(targets):,} pin renders (parallel)…")
     with ThreadPoolExecutor(max_workers=8) as pool:
         list(pool.map(lambda t: _render_pin_for(*t), targets))
@@ -9631,9 +9653,7 @@ def generate_name_page(name):
     meaning_text = enrich.get(meaning_key) or enrich.get('meaning_en') or ''
     meaning_section_html = ''
     if meaning_text:
-        safe = (meaning_text.replace('&', '&amp;')
-                            .replace('<', '&lt;')
-                            .replace('>', '&gt;'))
+        safe = html.escape(meaning_text, quote=False)
         meaning_section_html = (
             f'<div class="meaning-box"><h2>{S("name_meaning_h2")}</h2>'
             f'<p>{safe}</p>'

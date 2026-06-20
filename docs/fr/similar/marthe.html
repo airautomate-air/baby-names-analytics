@@ -90,11 +90,34 @@
         a.cc-dd-item.is-current { background: #EFF8F6; color: #0E7A70 !important; font-weight: 700; }
         a.cc-dd-item.is-current .cc-code { color: #149E91 !important; }
         a.cc-dd-item .cc-check { margin-left: auto; color: #149E91; font-weight: 700; }
+        /* Hamburger — hidden on desktop */
+        .nav-ham { display: none; }
         @media (max-width: 720px) {
             .sitenav .brand span:not(.wm-teal) { font-size: 1rem; }
-            .nav-links { gap: 1rem; }
             .cc-dd-btn { padding: 0.4rem 0.75rem; font-size: 0.85rem; }
             .cc-dd-btn .cc-dd-label { display: none; }
+
+            /* Hamburger button */
+            .nav-ham { display: inline-flex; align-items: center; justify-content: center; background: none; border: 0; cursor: pointer; color: #EEF2F4; padding: 0.35rem; margin-left: auto; }
+            .nav-ham svg { display: block; width: 24px; height: 24px; }
+            .nav-ham .icon-x { display: none; }
+            body.mob-open .nav-ham .icon-ham { display: none; }
+            body.mob-open .nav-ham .icon-x { display: block; }
+            body.mob-open { overflow: hidden; }
+
+            /* Mobile nav overlay */
+            .nav-links { display: none; position: fixed; inset: 0; background: #1B2440; flex-direction: column; align-items: flex-start; padding: 4.5rem 1.5rem 2rem; gap: 0; z-index: 50; overflow-y: auto; }
+            body.mob-open .nav-links { display: flex; }
+
+            /* Items inside mobile overlay */
+            .nav-links .nav-link { font-size: 1.15rem; padding: 0.85rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); width: 100%; }
+            .nav-links .nav-dd { width: 100%; border-bottom: 1px solid rgba(255,255,255,0.08); }
+            .nav-links .nav-dd-btn { width: 100%; justify-content: space-between; font-size: 1.15rem; padding: 0.85rem 0; }
+            .nav-links .nav-dd-menu { display: none; position: static; box-shadow: none; border: 0; background: rgba(255,255,255,0.06); border-radius: 8px; margin: 0 0 0.75rem; padding: 0.25rem 0.5rem; animation: none; min-width: unset; left: unset; }
+            .nav-links .nav-dd.is-open .nav-dd-menu { display: block; }
+            .nav-links .nav-dd-menu a, .nav-links .nav-dd-menu a:link, .nav-links .nav-dd-menu a:visited { color: #EEF2F4 !important; font-weight: 500; padding: 0.55rem 0.75rem; }
+            .nav-links .nav-dd-menu a:hover { background: rgba(255,255,255,0.1); color: #fff !important; }
+            .nav-links .nav-search-btn { margin-top: 1rem; }
         }
         .cc-callout { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 0.9rem 1.25rem; margin: 1.5rem 0 2rem; font-size: 0.95rem; color: #1B2440; }
         .cc-callout a { color: #149E91; text-decoration: none; font-weight: 600; margin: 0 0.15rem; white-space: nowrap; }
@@ -562,11 +585,12 @@
     <link rel="alternate" hreflang="fr-FR" href="https://namecharted.com/fr/similar/marthe.html">
     <link rel="alternate" hreflang="nl-NL" href="https://namecharted.com/nl/similar/marthe.html">
     <link rel="alternate" hreflang="x-default" href="https://namecharted.com/fr/similar/marthe.html">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7807747366780690" crossorigin="anonymous"></script>
 </head>
 <body>
     <div class="sitenav"><div class="sitenav-inner">
         <a class="brand" href="/fr/"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="7" fill="#149E91"/><polyline points="6,22 12,17 17,20 24,10" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="10" r="3" fill="#FF6B5C"/></svg><span>Name<span class="wm-teal">Charted</span></span></a>
-        <div class="nav-links">
+        <div id="navLinks" class="nav-links">
             <a href="/fr/" class="nav-link">Accueil</a>
             <div class="nav-dd">
                 <button type="button" class="nav-dd-btn" aria-haspopup="true" aria-expanded="false">Explorer <span class="nav-dd-caret" aria-hidden="true">▾</span></button>
@@ -595,6 +619,7 @@
             
             <button type="button" class="nav-search-btn" id="navSearchBtn" data-home="/fr/" aria-label="Rechercher des prénoms"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="20" y1="20" x2="16.65" y2="16.65"></line></svg></button>
         </div>
+        <button type="button" class="nav-ham" id="navHam" aria-label="Menu" aria-expanded="false" aria-controls="navLinks"><svg class="icon-ham" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg><svg class="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         <div class="cc-dd"><button type="button" class="cc-dd-btn" aria-haspopup="listbox" aria-expanded="false"><span class="cc-flag" aria-hidden="true">🇫🇷</span><span class="cc-dd-label">France</span><span class="cc-caret" aria-hidden="true">▾</span></button><div class="cc-dd-menu" role="listbox" aria-label="Choisir un pays"><div class="cc-dd-heading">Choisir un pays</div><a class="cc-dd-item" href="/" role="option"><span class="cc-flag" aria-hidden="true">🇺🇸</span>États-Unis<span class="cc-code">US</span></a><a class="cc-dd-item is-current" href="/fr/" role="option" aria-selected="true"><span class="cc-flag" aria-hidden="true">🇫🇷</span>France<span class="cc-check" aria-hidden="true">✓</span></a><a class="cc-dd-item" href="/uk/" role="option"><span class="cc-flag" aria-hidden="true">🇬🇧</span>Royaume-Uni<span class="cc-code">UK</span></a><a class="cc-dd-item" href="/au/" role="option"><span class="cc-flag" aria-hidden="true">🇦🇺</span>Australie<span class="cc-code">AU</span></a><a class="cc-dd-item" href="/ca/" role="option"><span class="cc-flag" aria-hidden="true">🇨🇦</span>Canada<span class="cc-code">CA</span></a><a class="cc-dd-item" href="/es/" role="option"><span class="cc-flag" aria-hidden="true">🇪🇸</span>Espagne<span class="cc-code">ES</span></a><a class="cc-dd-item" href="/it/" role="option"><span class="cc-flag" aria-hidden="true">🇮🇹</span>Italie<span class="cc-code">IT</span></a><a class="cc-dd-item" href="/nl/" role="option"><span class="cc-flag" aria-hidden="true">🇳🇱</span>Pays-Bas<span class="cc-code">NL</span></a></div></div>
     </div></div>
     <div class="container">
@@ -636,7 +661,6 @@
     <script>
     (function() {
         var dropdowns = Array.prototype.slice.call(document.querySelectorAll('.nav-dd, .cc-dd'));
-        if (!dropdowns.length) return;
         function closeAll(except) {
             dropdowns.forEach(function(dd) {
                 if (dd === except) return;
@@ -659,15 +683,35 @@
             var inside = dropdowns.some(function(dd) { return dd.contains(e.target); });
             if (!inside) closeAll(null);
         });
+
+        // Hamburger (mobile menu)
+        var ham = document.getElementById('navHam');
+        var navLinks = document.getElementById('navLinks');
+        function closeMob() {
+            document.body.classList.remove('mob-open');
+            if (ham) ham.setAttribute('aria-expanded', 'false');
+        }
+        if (ham) {
+            ham.addEventListener('click', function(e) {
+                e.stopPropagation();
+                var open = document.body.classList.toggle('mob-open');
+                ham.setAttribute('aria-expanded', open ? 'true' : 'false');
+                if (open) closeAll(null);
+            });
+        }
+        if (navLinks) {
+            navLinks.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A' && e.target.getAttribute('href')) closeMob();
+            });
+        }
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeAll(null);
+            if (e.key === 'Escape') { closeAll(null); closeMob(); }
         });
 
-        // Nav search icon focuses the hero search if present, otherwise
-        // routes to the home page where it exists.
         var navSearch = document.getElementById('navSearchBtn');
         if (navSearch) {
             navSearch.addEventListener('click', function() {
+                closeMob();
                 var input = document.getElementById('searchInput');
                 if (input) {
                     input.scrollIntoView({behavior: 'smooth', block: 'center'});
