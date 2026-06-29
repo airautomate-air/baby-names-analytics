@@ -6488,6 +6488,13 @@ def footer_html() -> str:
         <div class="footer">
             <p>&copy; 2026 NameCharted</p>
             <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.25rem;">{S("footer_data", source=data_source_full(), range=DATA_RANGE)}</p>
+            <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.5rem;">
+                <a href="/about.html" style="color:#8a93a3; text-decoration:none;">About</a>
+                &nbsp;·&nbsp;
+                <a href="/contact.html" style="color:#8a93a3; text-decoration:none;">Contact</a>
+                &nbsp;·&nbsp;
+                <a href="/privacy.html" style="color:#8a93a3; text-decoration:none;">Privacy</a>
+            </p>
         </div>"""
 
 
@@ -6765,6 +6772,53 @@ def generate_homepage():
                 <source src="{p}/top-race.webm" type="video/webm">
             </video>
             <p class="race-foot">{S("home_race_foot")} <a href="{p}/year/{LATEST_YEAR}.html">{S("home_race_foot_link")}</a></p>
+        </section>
+
+        <section class="home-about" style="max-width:860px;margin:3rem auto;padding:0 1.25rem;">
+            <h2 style="font-size:1.35rem;margin-bottom:1rem;">How NameCharted works</h2>
+            <p style="line-height:1.8;margin-bottom:1rem;">
+                Every chart on NameCharted is built from official government birth records — no editorial guesswork,
+                no sponsored rankings. Our primary dataset is the
+                <a href="https://www.ssa.gov/oact/babynames/">U.S. Social Security Administration's</a>
+                annual name release, which tracks every first name given to at least five babies born in the
+                United States each year, going all the way back to 1880. We extend this with comparable
+                official data from the UK's Office for National Statistics, INSEE in France, the Australian
+                Bureau of Statistics, Statistics Canada, and registries in Spain, Italy, and the Netherlands.
+            </p>
+            <p style="line-height:1.8;margin-bottom:1rem;">
+                Search any name to see its full popularity history as a chart — how many babies received it each
+                year, whether it's rising or falling, and where it sits in the current rankings. You can compare
+                two names side by side, explore names by decade, filter by origin or meaning, or use our
+                sibling-name tool to find names that pair well with a name you already love.
+            </p>
+            <p style="line-height:1.8;margin-bottom:2rem;">
+                The {fmt(n_pages)} names in our database each have their own page with a full trend chart,
+                peak year, and rank history. We update annually when new SSA data is released —
+                the current data runs from 1880 through {LATEST_YEAR}.
+            </p>
+            <div style="display:flex;gap:2rem;flex-wrap:wrap;">
+                <div style="flex:1;min-width:200px;">
+                    <h3 style="font-size:1rem;margin-bottom:0.4rem;">Rising &amp; falling names</h3>
+                    <p style="font-size:0.9rem;line-height:1.7;">
+                        See which names gained or lost the most rank positions in the latest year.
+                        <a href="{p}/trends/rising.html">View fastest rising →</a>
+                    </p>
+                </div>
+                <div style="flex:1;min-width:200px;">
+                    <h3 style="font-size:1rem;margin-bottom:0.4rem;">Names by decade</h3>
+                    <p style="font-size:0.9rem;line-height:1.7;">
+                        What were parents choosing in the 1950s? The 1990s? Explore full top-100 lists
+                        for every decade. <a href="{p}/decades.html">Browse decades →</a>
+                    </p>
+                </div>
+                <div style="flex:1;min-width:200px;">
+                    <h3 style="font-size:1rem;margin-bottom:0.4rem;">Name origins</h3>
+                    <p style="font-size:0.9rem;line-height:1.7;">
+                        Browse names grouped by language origin — Hebrew, Greek, Latin, Irish, and more.
+                        <a href="{p}/origins.html">Explore origins →</a>
+                    </p>
+                </div>
+            </div>
         </section>
 
         <script>
@@ -11301,12 +11355,31 @@ def generate_blog_post(post: dict):
         f'        <p class="blog-back"><a href="{p}/blog/">← {S("blog_back")}</a></p>'
     )
     og_img = f"{BASE_URL}/blog/images/{slug}.jpg" if img_path.exists() else ""
+    schema = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post['title'],
+        "description": post['description'],
+        "datePublished": post['date'],
+        "dateModified": post['date'],
+        "url": canonical,
+        "author": {"@type": "Organization", "name": "NameCharted"},
+        "publisher": {
+            "@type": "Organization",
+            "name": "NameCharted",
+            "url": BASE_URL,
+        },
+    }
+    if og_img:
+        schema["image"] = og_img
+    extra_head = f'\n    <script type="application/ld+json">{json.dumps(schema, separators=(",", ":"))}</script>'
     (OUT_DIR / 'blog').mkdir(parents=True, exist_ok=True)
     (OUT_DIR / 'blog' / f'{post["slug"]}.html').write_text(
         page(post['title'] + ' — NameCharted', body,
              description=post['description'],
              canonical=canonical,
-             og_image_url=og_img),
+             og_image_url=og_img,
+             extra_head=extra_head),
         encoding='utf-8')
 
 
@@ -11335,6 +11408,154 @@ def generate_favorites_page():
              description=S("fav_desc"),
              canonical=f"{BASE_URL}{p}/favorites.html",
              extra_head=extra_head),
+        encoding='utf-8')
+
+
+def generate_about_page() -> None:
+    body = """
+    <div style="max-width:720px; margin:2rem auto 0;">
+        <h1>About NameCharted</h1>
+        <p>NameCharted is a free baby-name research tool that turns raw government birth records into
+        interactive trend charts. Every chart and ranking on this site is built directly from
+        official data — no guessing, no sponsored placements, no manufactured "most popular" lists.</p>
+
+        <h2 style="margin-top:2rem;">The data</h2>
+        <p>Our primary dataset is the U.S. Social Security Administration's (SSA) annual name
+        release, which covers every first name given to at least five babies born in the United
+        States in a given year, going back to 1880. We also include official records from the
+        UK's Office for National Statistics (ONS), INSEE in France, the Australian Bureau of
+        Statistics (ABS), Statistics Canada, and national registries in Spain, Italy, and the
+        Netherlands.</p>
+        <p>All source data is public-domain or openly licensed by the issuing government agency.
+        We process it as-is — no smoothing, no interpolation — so the numbers you see match
+        exactly what the agencies publish.</p>
+
+        <h2 style="margin-top:2rem;">What you can do here</h2>
+        <ul style="line-height:1.9;">
+            <li>Look up any name and see a year-by-year popularity chart going back to 1880</li>
+            <li>Compare two names on the same chart</li>
+            <li>Browse the top names for any year or decade</li>
+            <li>Find names rising or falling fastest in the latest data</li>
+            <li>Filter names by origin, initial letters, or sibling compatibility</li>
+            <li>Check how a first name sounds with a particular surname</li>
+            <li>Explore names from fiction, mythology, or history</li>
+        </ul>
+
+        <h2 style="margin-top:2rem;">Accuracy and limitations</h2>
+        <p>Name data reflects registered births, not the full population. Very rare names
+        (fewer than five births in a year) are suppressed by the SSA for privacy reasons and
+        do not appear in the data. Rankings are calculated separately for boys and girls within
+        each country and year. Spelling variants are treated as separate names — "Aidan" and
+        "Aiden" each have their own trend line.</p>
+        <p>The enrichment data (meanings, origins, famous bearers) is sourced from publicly
+        available encyclopedic references and is provided for informational purposes.
+        Numerology readings are a playful feature, not a scientific analysis.</p>
+
+        <h2 style="margin-top:2rem;">Updates</h2>
+        <p>We update the dataset each year when the SSA and partner agencies publish their
+        annual release, typically in May. The current data covers births through 2024.</p>
+    </div>"""
+    (OUTPUT_DIR / 'about.html').write_text(
+        page("About — NameCharted", body,
+             description="NameCharted turns government birth records into interactive name trend charts. Learn about our data sources, methodology, and what the site can do.",
+             canonical=f"{BASE_URL}/about.html"),
+        encoding='utf-8')
+
+
+def generate_contact_page() -> None:
+    body = """
+    <div style="max-width:720px; margin:2rem auto 0;">
+        <h1>Contact</h1>
+        <p>Have a question, spotted an error, or want to suggest a feature?
+        We'd love to hear from you.</p>
+
+        <div style="background:#F7F8FA; border:1px solid #e2e8ed; border-radius:10px; padding:1.5rem 2rem; margin:2rem 0;">
+            <p style="margin:0 0 0.5rem; font-weight:600;">Email</p>
+            <p style="margin:0; color:#5B6678;">
+                <a href="mailto:hello@namecharted.com" style="color:#149E91;">hello@namecharted.com</a>
+            </p>
+        </div>
+
+        <h2 style="margin-top:2rem;">What to include</h2>
+        <ul style="line-height:1.9;">
+            <li><strong>Data errors</strong> — let us know the name, country, and year so we can check against the source.</li>
+            <li><strong>Missing names</strong> — names with fewer than five births in any single year are suppressed in the official data and cannot be added.</li>
+            <li><strong>Feature requests</strong> — we read every suggestion, even if we can't respond to all of them.</li>
+            <li><strong>Press or partnership enquiries</strong> — include a brief description and we'll get back to you.</li>
+        </ul>
+
+        <p style="margin-top:2rem; color:#5B6678; font-size:0.9rem;">We aim to respond within a few business days.</p>
+    </div>"""
+    (OUTPUT_DIR / 'contact.html').write_text(
+        page("Contact — NameCharted", body,
+             description="Get in touch with the NameCharted team — for data corrections, feature requests, or general enquiries.",
+             canonical=f"{BASE_URL}/contact.html"),
+        encoding='utf-8')
+
+
+def generate_privacy_page() -> None:
+    body = """
+    <div style="max-width:720px; margin:2rem auto 0;">
+        <h1>Privacy Policy</h1>
+        <p style="color:#5B6678; font-size:0.9rem;">Last updated: June 2026</p>
+
+        <p>This policy explains what information NameCharted collects, how it is used,
+        and your rights regarding that information.</p>
+
+        <h2 style="margin-top:2rem;">Information we collect</h2>
+        <p>NameCharted does not require you to create an account or provide any personal
+        information to use the site. We collect the following automatically:</p>
+        <ul style="line-height:1.9;">
+            <li><strong>Usage data</strong> — pages visited, time on site, referring URL, browser type, and device type, collected via Google Analytics (GA4). This data is anonymised and aggregated.</li>
+            <li><strong>Advertising data</strong> — NameCharted uses Google AdSense to display advertisements. Google may use cookies or device identifiers to serve ads based on your prior visits to this and other websites.</li>
+        </ul>
+        <p>We do not collect your name, email address, or any other identifying information
+        unless you contact us directly.</p>
+
+        <h2 style="margin-top:2rem;">Cookies</h2>
+        <p>We use the following types of cookies:</p>
+        <ul style="line-height:1.9;">
+            <li><strong>Analytics cookies</strong> — set by Google Analytics to measure how visitors use the site. You can opt out via <a href="https://tools.google.com/dlpage/gaoptout" style="color:#149E91;">Google's opt-out tool</a>.</li>
+            <li><strong>Advertising cookies</strong> — set by Google AdSense to deliver relevant advertisements. You can manage your ad preferences at <a href="https://adssettings.google.com" style="color:#149E91;">adssettings.google.com</a>.</li>
+            <li><strong>Preference cookies</strong> — a small amount of data may be stored in your browser's local storage to remember your selected country and saved favourite names. This data never leaves your device.</li>
+        </ul>
+        <p>You can disable cookies in your browser settings, though this may affect some features of the site.</p>
+
+        <h2 style="margin-top:2rem;">The name data</h2>
+        <p>All name popularity data displayed on NameCharted comes from official government
+        sources (U.S. SSA, UK ONS, INSEE, ABS, Statistics Canada, and others). This data is
+        aggregated and contains no personally identifiable information — it tells us how many
+        babies were given a particular name in a given year, nothing more.</p>
+
+        <h2 style="margin-top:2rem;">Third-party services</h2>
+        <p>NameCharted uses the following third-party services, each with their own privacy policies:</p>
+        <ul style="line-height:1.9;">
+            <li><a href="https://policies.google.com/privacy" style="color:#149E91;">Google Analytics</a> — site usage measurement</li>
+            <li><a href="https://policies.google.com/privacy" style="color:#149E91;">Google AdSense</a> — advertising</li>
+        </ul>
+
+        <h2 style="margin-top:2rem;">Your rights</h2>
+        <p>If you are in the European Economic Area (EEA) or United Kingdom, you have rights
+        under GDPR / UK GDPR including the right to access, correct, or delete personal data
+        we hold about you. Because we collect only anonymised analytics data, there is typically
+        no personal data to access or delete. For any privacy enquiries, contact us at
+        <a href="mailto:hello@namecharted.com" style="color:#149E91;">hello@namecharted.com</a>.</p>
+
+        <h2 style="margin-top:2rem;">California residents (CCPA)</h2>
+        <p>California residents have the right to know what personal information is collected
+        and to opt out of the sale of personal information. NameCharted does not sell personal
+        information. For Google's data practices, see
+        <a href="https://policies.google.com/privacy" style="color:#149E91;">Google's Privacy Policy</a>.</p>
+
+        <h2 style="margin-top:2rem;">Changes to this policy</h2>
+        <p>We may update this policy from time to time. The date at the top of this page
+        reflects when it was last revised. Continued use of the site after changes are posted
+        constitutes acceptance of the updated policy.</p>
+    </div>"""
+    (OUTPUT_DIR / 'privacy.html').write_text(
+        page("Privacy Policy — NameCharted", body,
+             description="NameCharted privacy policy — what data we collect, how we use it, and your rights under GDPR, UK GDPR, and CCPA.",
+             canonical=f"{BASE_URL}/privacy.html"),
         encoding='utf-8')
 
 
@@ -11401,6 +11622,7 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
              for sex in ('F', 'M') for letter in sorted(letter_names_by_country[cc][sex].keys())]
     if cc == 'US':
         urls += [f"{BASE_URL}/compare/{f}" for f in compare_files]
+        urls += [f"{BASE_URL}/about.html", f"{BASE_URL}/contact.html", f"{BASE_URL}/privacy.html"]
     return urls
 
 
@@ -11600,8 +11822,11 @@ def main():
         run_generators_for_active(compare_files)
         urls_by_cc[cc] = collect_country_urls(cc, compare_files)
 
-    # 404 + sitemap + robots — emit once at root. Render 404 under US nav.
+    # Root-only pages — emit once under US nav.
     set_active("US")
+    generate_about_page()
+    generate_contact_page()
+    generate_privacy_page()
     generate_404_page()
     write_sitemaps_and_robots(urls_by_cc)
     print("Done!")

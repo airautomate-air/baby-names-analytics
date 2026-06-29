@@ -139,7 +139,6 @@ SLUG_QUERIES = {
     'occupational-names': 'craftsman workshop tools handmade',
     'skip-generation-names': 'grandparent grandchild generations family',
     'generational-names': 'three generations family portrait',
-    'gender-shift-names': 'balance balance symmetry yin yang',
     'twin-names': 'twins baby matching cute siblings',
     'sibling-names': 'siblings children playing together',
 
@@ -148,7 +147,6 @@ SLUG_QUERIES = {
     'vintage-boy-names-comeback': 'vintage boy portrait 1920s classic',
     'timeless-names': 'classic antique elegant timeless',
     'fallen-names': 'vintage abandoned old forgotten classic',
-    'hidden-gem-names': 'hidden treasure gem discovery unique',
 
     # Meaning posts
     'names-meaning-light': 'golden sunrise light rays warm glow',
