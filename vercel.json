@@ -1,4 +1,12 @@
 {
   "version": 2,
-  "outputDirectory": "docs"
+  "outputDirectory": "docs",
+  "functions": {
+    "api/submit-story.js": {
+      "runtime": "@vercel/node@3"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/submit-story", "destination": "/api/submit-story.js" }
+  ]
 }
