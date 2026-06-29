@@ -6251,6 +6251,20 @@ BASE_CSS = """
         .story-card::before { content: '\\201C'; position: absolute; top: 0.5rem; left: 0.9rem; font-size: 2.5rem; line-height: 1; color: #d6dde2; font-family: Georgia, serif; }
         .story-text { font-size: 0.95rem; line-height: 1.7; color: #1B2440; margin: 0 0 0.6rem; padding-left: 1.4rem; }
         .story-from { font-size: 0.8rem; color: #8a93a3; text-align: right; }
+        .story-submit { margin: 2rem 0 1rem; border-top: 1px solid #EEF2F4; padding-top: 1.5rem; }
+        .story-submit h2 { font-size: 1.1rem; margin: 0 0 0.3rem; }
+        .story-submit > p { font-size: 0.9rem; color: #5B6678; margin: 0 0 1rem; }
+        .story-form textarea { width: 100%; box-sizing: border-box; min-height: 110px; padding: 0.75rem; border: 1px solid #d6dde2; border-radius: 6px; font-size: 0.95rem; font-family: inherit; resize: vertical; color: #1B2440; }
+        .story-form textarea:focus { outline: none; border-color: #149E91; box-shadow: 0 0 0 3px rgba(20,158,145,0.12); }
+        .story-form-row { display: flex; gap: 0.6rem; margin: 0.6rem 0; flex-wrap: wrap; }
+        .story-form-row input, .story-form-row select { flex: 1; min-width: 150px; padding: 0.6rem 0.75rem; border: 1px solid #d6dde2; border-radius: 6px; font-size: 0.9rem; font-family: inherit; color: #1B2440; background: #fff; }
+        .story-form-row input:focus, .story-form-row select:focus { outline: none; border-color: #149E91; box-shadow: 0 0 0 3px rgba(20,158,145,0.12); }
+        .story-form button[type=submit] { margin-top: 0.5rem; background: #149E91; color: #fff; border: 0; border-radius: 6px; padding: 0.65rem 1.4rem; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+        .story-form button[type=submit]:hover { background: #117d73; }
+        .story-form button[type=submit]:disabled { background: #a0c8c4; cursor: default; }
+        .story-form-note { font-size: 0.78rem; color: #8a93a3; margin: 0.5rem 0 0; }
+        .story-success { background: #f0faf9; border: 1px solid #149E91; border-radius: 8px; padding: 1rem 1.2rem; color: #0d6b62; font-size: 0.95rem; }
+        .story-error { color: #c0392b; font-size: 0.85rem; margin: 0.4rem 0 0; }
         .sf-today { background: #149E91; color: #fff; padding: 0.85rem 1.25rem; border-radius: 8px; margin: 1rem 0 1.5rem; font-size: 1rem; }
         .sf-today a { color: #fff; font-weight: 700; text-decoration: underline; }
         .sf-calendar { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
@@ -9747,6 +9761,74 @@ def generate_name_page(name):
             f'<ul class="fiction-appears">{"".join(items)}</ul>'
         )
 
+    year_opts = '<option value="">Year (optional)</option>' + ''.join(
+        f'<option value="{y}">{y}</option>' for y in range(2025, 1999, -1))
+
+    safe_name_js = name.replace("'", "\\'").replace('"', '&quot;')
+    story_submit_html = f'''<div class="story-submit">
+          <h2>Share your {html.escape(name)} story</h2>
+          <p>Why did you choose this name — or what does it mean to you? Approved stories appear on this page.</p>
+          <form class="story-form" id="storyForm" novalidate>
+            <input type="text" name="_hp" style="display:none" tabindex="-1" autocomplete="off">
+            <input type="hidden" name="name" value="{html.escape(name)}">
+            <textarea name="story" placeholder="We named our daughter {html.escape(name)} because..." required minlength="30" maxlength="1200" aria-label="Your story"></textarea>
+            <p class="story-error" id="storyErr" style="display:none"></p>
+            <div class="story-form-row">
+              <input type="text" name="attribution" placeholder="First name, city (e.g. Sarah, Austin TX)" maxlength="80" aria-label="Your name and city">
+              <select name="year" aria-label="Year named">{year_opts}</select>
+            </div>
+            <button type="submit">Submit story</button>
+            <p class="story-form-note">Stories are reviewed before publishing. No last names or contact info needed.</p>
+          </form>
+          <div class="story-success" id="storyThanks" style="display:none">
+            Thank you! Your story has been submitted for review. If approved it will appear on this page within a few days.
+          </div>
+        </div>
+        <script>
+        (function(){{
+          var form = document.getElementById('storyForm');
+          var err  = document.getElementById('storyErr');
+          var ok   = document.getElementById('storyThanks');
+          if (!form) return;
+          form.addEventListener('submit', function(e) {{
+            e.preventDefault();
+            err.style.display = 'none';
+            var data = Object.fromEntries(new FormData(form).entries());
+            if (!data.story || data.story.trim().length < 30) {{
+              err.textContent = 'Please write at least a sentence or two (30 characters minimum).';
+              err.style.display = '';
+              return;
+            }}
+            var btn = form.querySelector('button[type=submit]');
+            btn.disabled = true;
+            btn.textContent = 'Submitting…';
+            fetch('/api/submit-story', {{
+              method: 'POST',
+              headers: {{'Content-Type': 'application/json'}},
+              body: JSON.stringify(data)
+            }})
+            .then(function(r) {{ return r.json(); }})
+            .then(function(j) {{
+              if (j.success) {{
+                form.style.display = 'none';
+                ok.style.display = '';
+              }} else {{
+                err.textContent = j.error || 'Something went wrong — please try again.';
+                err.style.display = '';
+                btn.disabled = false;
+                btn.textContent = 'Submit story';
+              }}
+            }})
+            .catch(function() {{
+              err.textContent = 'Network error — please try again.';
+              err.style.display = '';
+              btn.disabled = false;
+              btn.textContent = 'Submit story';
+            }});
+          }});
+        }})();
+        </script>'''
+
     stories_section_html = ''
     stories = NAME_STORIES.get(slugify(name), [])
     if stories:
@@ -9819,6 +9901,7 @@ def generate_name_page(name):
         {fiction_section_html}
         {famous_section_html}
         {stories_section_html}
+        {story_submit_html}
 
 {rel}
         <h2>{S("name_yby_h2")}</h2>
