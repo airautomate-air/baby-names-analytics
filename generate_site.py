@@ -311,6 +311,19 @@ FICTION: dict = {"franchises": []}
 # Reverse index: name slug -> list of franchise dicts that include that name
 FICTION_BY_NAME: dict[str, list[dict]] = {}
 
+# Name stories — crowd-sourced parent/person stories keyed by name slug.
+NAME_STORIES: dict[str, list[dict]] = {}
+
+
+def load_name_stories() -> None:
+    global NAME_STORIES
+    p = Path('data/name_stories.json')
+    if not p.exists():
+        return
+    with p.open() as f:
+        NAME_STORIES = json.load(f)
+    print(f'  name stories: {sum(len(v) for v in NAME_STORIES.values())} stories across {len(NAME_STORIES)} names')
+
 
 def load_fiction() -> None:
     global FICTION, FICTION_BY_NAME
@@ -6232,6 +6245,12 @@ BASE_CSS = """
         .fiction-appears li { margin: 0.35rem 0; }
         .fiction-appears a { color: #149E91; text-decoration: none; font-weight: 500; }
         .fiction-appears a:hover { text-decoration: underline; }
+        .stories-section { margin: 2rem 0; }
+        .stories-section h2 { font-size: 1.15rem; margin: 0 0 1rem; }
+        .story-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 1rem 1.2rem 0.85rem; margin-bottom: 0.85rem; position: relative; }
+        .story-card::before { content: '\\201C'; position: absolute; top: 0.5rem; left: 0.9rem; font-size: 2.5rem; line-height: 1; color: #d6dde2; font-family: Georgia, serif; }
+        .story-text { font-size: 0.95rem; line-height: 1.7; color: #1B2440; margin: 0 0 0.6rem; padding-left: 1.4rem; }
+        .story-from { font-size: 0.8rem; color: #8a93a3; text-align: right; }
         .sf-today { background: #149E91; color: #fff; padding: 0.85rem 1.25rem; border-radius: 8px; margin: 1rem 0 1.5rem; font-size: 1rem; }
         .sf-today a { color: #fff; font-weight: 700; text-decoration: underline; }
         .sf-calendar { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
@@ -9728,6 +9747,28 @@ def generate_name_page(name):
             f'<ul class="fiction-appears">{"".join(items)}</ul>'
         )
 
+    stories_section_html = ''
+    stories = NAME_STORIES.get(slugify(name), [])
+    if stories:
+        cards = ''
+        for s in stories:
+            safe_text = html.escape(s.get('text', ''), quote=False)
+            safe_from = html.escape(s.get('from', ''), quote=False)
+            year = s.get('year', '')
+            attr = safe_from + (f', {year}' if year else '')
+            cards += (
+                f'<div class="story-card">'
+                f'<p class="story-text">{safe_text}</p>'
+                f'<p class="story-from">— {attr}</p>'
+                f'</div>'
+            )
+        stories_section_html = (
+            f'<div class="stories-section">'
+            f'<h2>Stories about the name {html.escape(name)}</h2>'
+            f'{cards}'
+            f'</div>'
+        )
+
     famous_section_html = ''
     if famous:
         items = []
@@ -9777,6 +9818,7 @@ def generate_name_page(name):
 
         {fiction_section_html}
         {famous_section_html}
+        {stories_section_html}
 
 {rel}
         <h2>{S("name_yby_h2")}</h2>
@@ -11809,6 +11851,7 @@ def run_generators_for_active(compare_files_out: list[str]) -> None:
 def main():
     load_enrichment()
     load_fiction()
+    load_name_stories()
     load_saints_all()
     load_blog()
     for cc in COUNTRIES:
