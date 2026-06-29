@@ -32,9 +32,58 @@ A few patterns:
 
 Only **Lainey** broke the top 50 in 2024 — the rest are all in the 100–300 range. Names this far down the chart can move *fast*; the same Ailany move on the boys' side would have been ten times harder because boys' charts churn slower.
 
+## Origin analysis
+
+**Ailany** is a modern phonetic construction — there's no single origin language. It reads as a feminine name in the Latinx tradition, with vowel patterns that feel Spanish-adjacent while being distinct enough to feel invented. The rise is concentrated in communities that prize distinctiveness but also familiarity of sound.
+
+**Scottie** derives from the Scottish surname tradition, originally denoting someone from Scotland. On girls it reads as a cheerful diminutive in the Charlie/Frankie vein. Unlike Charlie, which started as a nickname for Charles, Scottie for girls has no natural full-form — it's standing on its own.
+
+**Wrenley** is a compound: Wren (the bird, now a rising standalone name at around #240) plus the "-ley" feminine suffix. Wren on its own has been climbing for a decade thanks to its nature credentials and three-letter compactness. Wrenley is the elaborated version for parents who want the same aesthetic with more formality.
+
+**Antonella** is the Italian diminutive of Antonia, built with the "-ella" suffix that marks feminine forms in Italian. Its rise mirrors the broader Italian girls' wave that also pushed [Gianna](/name/gianna.html), [Mia](/name/mia.html), and [Stella](/name/stella.html) up the chart. Four syllables used to feel too long for American parents; that preference has clearly shifted.
+
+**Daphne** comes from Greek mythology — the nymph who was transformed into a laurel tree to escape Apollo's pursuit. It entered English via the Elizabethan era but was rare in the US until the 2010s. Its current rise is partly mythology-wave and partly driven by TV characters who bear the name.
+
+## What each name sounds like and pairs well with
+
+- **Ailany** — AY-lah-nee. Pairs well with short middle names: Ailany Rose, Ailany June, Ailany Claire.
+- **Scottie** — SKAH-tee. Works with both traditional and modern middle names; the -ie ending is very forgiving.
+- **Wrenley** — REN-lee. Shares the soft Ren- opening with Renata, Renée; pairs beautifully with longer, classic middle names.
+- **Alora** — ah-LOR-ah. Three clean syllables; pairs well with one-syllable middle names to avoid overrunning.
+- **Lainey** — LAY-nee. Essentially a nickname energy for a first name; pairs best with longer, formal middle names.
+- **Antonella** — an-toh-NEL-ah. Four syllables — works best with a one-syllable middle name (Antonella Grace, Antonella Mae).
+- **Daphne** — DAF-nee. Two syllables, ends in a soft vowel sound; pairs with almost anything.
+- **Celine** — seh-LEEN. French pronunciation; pairs well with classic or French middle names.
+- **Hallie** — HAL-ee. Cheerful and light; pairs with longer, more formal middle names.
+- **Alanna** — ah-LAN-ah. Three syllables; pairs with short middles (Alanna Kate, Alanna Rose).
+
+## Social media and regional hotspots
+
+**Ailany's** extraordinary jump is partially explained by TikTok and Instagram, where the name appeared in viral posts celebrating its uniqueness. This is now a documented naming phenomenon: a name can jump from obscure to widely considered in weeks via social media, with the SSA data capturing the outcome two years later.
+
+**Lainey** has a country music angle: Lainey Wilson won the CMA Entertainer of the Year award in 2023, giving the name enormous visibility among exactly the demographic most likely to be naming children.
+
+**Daphne** got a boost from a popular character in *Bridgerton* (Daphne Bridgerton, played by Phoebe Dynevor), the Netflix series that debuted in 2020. The show's enormous viewership during pandemic lockdowns translated into real naming effects that show up in the 2021–2024 data.
+
+**Antonella** is concentrated in communities with Italian and Latino heritage — the name works in both traditions and has been climbing in Miami, Houston, Los Angeles, and Chicago. Its regional hotspot is the greater Miami metro, where it has been a top-50 girl name for several years.
+
 ## Compare them yourself
 
 > Open any name above to see its full popularity chart from 1880 to today, or use our [compare tool](/compare.html) to put two side by side.
+
+## Frequently asked questions
+
+**How long do these surges typically last?**
+Most rapid climbers plateau within 3–5 years. Names that jump 700+ places tend to settle into a stable band rather than continue rising indefinitely — the early adopters move on and the name finds its natural level. Ailany's trajectory will be interesting to watch through 2026–2028.
+
+**Will Daphne keep rising?**
+Daphne is a strong candidate for continued growth. It has genuine mythological depth, a clean two-syllable sound, easy spelling, and ongoing pop-culture reinforcement. It's currently at #192 — the #100 barrier is plausible within a few years.
+
+**Why are Mediterranean names (Italian, French) rising now?**
+The Scandinavian wave that dominated the 2010s (Astrid, Freya, Axel) has matured and is ceding some ground. Italian names fit the same aesthetic — short to medium length, vowel-rich, melodic — but bring a warmer, sunnier cultural association. Antonella and Celine are riding this shift.
+
+**What's the difference between Alana, Alanna, and Alannah?**
+All three are on the US chart. Alanna (double-N) is currently rising fastest; Alana (single-N) is the most common overall; Alannah (Irish spelling, with an H) is less common but visible. They're treated as separate names in SSA data, which is why the combined family ranks higher than any individual spelling suggests.
 
 ---
 

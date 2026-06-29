@@ -50,6 +50,38 @@ Some of the most common 2024 American names are Italian: **Mia** is #5 girls, **
 | **[Sienna](/name/sienna.html)** | #139 | the Tuscan city Siena, also the orange-brown colour |
 | **[Lia](/name/lia.html)** | #187 | short form of Lia / Leah, used in Italian |
 
+## Italian immigrant naming patterns
+
+The great wave of Italian immigration to the United States peaked between roughly 1880 and 1924, when roughly 4 million Italians arrived — mostly from the south of Italy (Calabria, Sicily, Campania) rather than the industrial north. This shaped which Italian names appeared first in US data.
+
+Southern Italian names like **Salvatore**, **Carmela**, **Pasquale**, **Concetta**, and **Nunzio** were common in Italian-American communities in the early 20th century but rarely crossed into wider American use. They felt too distinctly Italian — too Catholic, too immigrant-coded — during the assimilation era when many Italian-American families Anglicised aggressively (changing Guiseppe to Joseph, Carmela to Carmen).
+
+By the second and third generations, the Italian layer largely disappeared from the chart. The Italian-Americans of the mid-20th century were mostly named Michael, John, and Mary rather than Giovanni, Mario, or Maria.
+
+## The -ello, -ella, -ino, -ina endings
+
+Italian diminutive suffixes create some of the most recognizable Italian name forms:
+
+**-ello / -ella** (masculine/feminine) convey smallness or affection: Antonello (little Anthony), Rossella, Brunella, Fiorella, Marinella. These endings have entered English through Italian channels — Bella and Stella are the most successful, at #109 and #49 respectively.
+
+**-ino / -ina** (masculine/feminine) are similar diminutives: Valentino, Martino, Angelina, Rosina, Paulina. Valentino (#656 boys) and Angelina (#296 girls) are the most visible in US data.
+
+**-enzo / -enza** come from the Laurence/Florence root: Lorenzo (#116 boys), Vicenza, Florenza. The -enzo ending specifically has become very fashionable — Enzo itself (#74 boys) is now in the top 100 as a standalone name.
+
+**-o endings for boys** are broadly distinctive of Italian masculine names: Luca, Enzo, Marco, Bruno, Mario, Dante, Romeo. The -o ending is so associated with Italian that it reads as an immediate cultural marker, which is partly why these names have crossed so successfully — the Italianness is part of the appeal.
+
+## Which names crossed over and why
+
+**The crossover names** — the ones non-Italian families adopted freely — share a few traits:
+
+1. **Short enough to stand alone.** Mia (two letters), Luca (four letters), Enzo (four letters), Bella (five letters). These don't require an Italian cultural context to feel natural.
+
+2. **Easy to spell and pronounce in English.** Luca, Mia, Bella, Stella, Dante — all immediately readable. Names like Giancarlo, Brunella, or Concetta present more friction.
+
+3. **Media exposure.** Leonardo DiCaprio made Leonardo feel like a global name rather than an Italian one. Romeo (Shakespeare, various celebrities) has a specific cultural gravity. Dante (the poet, various TV characters) has literary prestige.
+
+4. **The -a ending for girls.** English speakers have long been comfortable with names ending in -a, and Italian girls' names overwhelmingly follow this pattern. Mia, Sofia, Aurora, Elena, Stella, Anna, Lucia, Bella — every major Italian girls' crossover name ends in -a.
+
 ## Two distinct waves
 
 What's interesting about the Italian set is that two different waves are visible side by side.
@@ -59,6 +91,20 @@ What's interesting about the Italian set is that two different waves are visible
 **The 2010s wave** is shorter and more about aesthetics than ancestry: Luca, Enzo, Mia, Mila, Gianna, Stella, Bella. These are names that read as Italian *and* as universal — Mia could be picked by a family with no Italian heritage at all, and frequently is.
 
 The current sweet spot is in names that fit *both* waves: short, easy to pronounce, vowel-rich, and recognisably Italian without requiring an Italian accent. Luca, Mia, and Sofia all tick every box. Don't be surprised when they're joined by Matteo, Lorenzo, and Gianna in the modern top 50 over the next decade.
+
+## Frequently asked questions
+
+**Is Mia really Italian, or is it Scandinavian?**
+Both. Mia originated as an Italian and Spanish short form of Maria. It was also independently common in Scandinavian countries as a short form of Maria. In the US chart, it's nearly impossible to separate the Italian stream from the Scandinavian one — both contribute to its #5 ranking. The Italian interpretation is older; the Scandinavian use became common in the mid-20th century.
+
+**What's the difference between Luca and Luca/Lucas?**
+Lucas (#9 boys in 2024) and Luca (#23) are counted separately in SSA data. Lucas is the Latinised/English form via the New Testament; Luca is the Italian form. A family choosing Luca is almost certainly consciously choosing the Italian aesthetic rather than the English one, which is why the name reads as distinctly Italian despite sharing the same root as Lucas.
+
+**Why did Dante become popular in the 2020s?**
+Dante Alighieri (*The Divine Comedy*, c.1320) gives the name permanent literary prestige. More recently, *Dante* appeared as a central character in several popular media properties, including Marvel's Moon Knight and as the dog's name in *Coco* (which likely helped among Hispanic families, given Spanish cultural overlap with Italian naming aesthetics).
+
+**Are there Italian names popular in Italy that haven't crossed to the US yet?**
+Many. Italian names like Mattia (boys), Gaia, Giorgia, Alessia, and Eleonora are top-10 names in modern Italy that are barely registered in US data. Mattia is the most likely to cross — it looks like a girls' name to English speakers (the -ia ending reads feminine), but it's firmly masculine in Italian. Eleonora is simply too long and too Italian to cross easily, though its short form Eleanor already ranks at #14 in the US.
 
 For other origin spotlights see [Greek](/blog/greek-origin-names.html), [Hebrew](/blog/hebrew-origin-names.html), and [Irish](/blog/irish-origin-names.html).
 

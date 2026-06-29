@@ -31,7 +31,19 @@ Honourable mentions further down the French top 100: **Léandre**, **Andrea** (u
 5. **[Jeanne](/name/jeanne.html)** — France #25 (1,635). Joan of Arc's name. **US #4,311.** This one is almost a statistical anomaly given how iconically Jeanne d'Arc looms in French history.
 6. **[Romane](/name/romane.html)** — France #38 (1,185). The feminine of Romain. Two syllables, no accent issues. Unranked in the US.
 
-## What gets a name across?
+## Why these names haven't crossed
+
+The pronunciation barrier is the most decisive factor. French phonology differs from English in several ways that make straightforward reading impossible for English speakers:
+
+**Nasal vowels.** French uses nasal vowels (sounds made with air through the nose) that don't exist in English. Gabin (-in), Romain (-ain), and Maëlynn contain nasal vowel endings that English speakers round to an -n or -an sound, losing the distinctively French quality. The written form gives no clue to an English reader.
+
+**Final-e silence.** In French, a final "e" is mostly silent or nearly so. Romane is "ro-MAN," not "ro-MAHN-eh." Agathe is "ah-GAT," not "ah-GAH-theh." English speakers consistently attempt the final syllable, making the name sound wrong to French ears and odd to English ones.
+
+**Accents change everything.** Côme without the accent becomes "Come" — an English word with an unrelated meaning and a completely different pronunciation. Ambre loses its accent and becomes Amber (which already exists). The accent is doing work that the English spelling can't preserve.
+
+**Liaison and linking.** French speech links words in ways that change where a name's sounds fall. In everyday French speech, "Côme" flows differently than the same letters would in English.
+
+## Why pronunciation has to be guessable
 
 Looking at French names that *did* cross — Charlotte, Emma, Chloe, Olivia, Genevieve — versus these that haven't, three patterns stand out:
 
@@ -39,7 +51,56 @@ Looking at French names that *did* cross — Charlotte, Emma, Chloe, Olivia, Gen
 2. **Accents don't make it.** Names with é, è, ê tend to lose the accent on the way across (Adèle → Adele, Léonie → Leonie). Names where the accent carries the pronunciation (Côme, Agathe with silent e) struggle more.
 3. **A famous bearer accelerates the crossing.** Cillian Murphy made Cillian work in English. Saoirse Ronan made Saoirse work. The French names on this list mostly lack a globally-famous current bearer in the English-speaking world.
 
-If you're betting on the next French name to break out in the US, the candidates with the best phonetic luck are probably **Sacha**, **Malo**, **Romy**, and **Ambre**. We'll check back in 2030.
+## Names that DID cross — what made them work
+
+**Charlotte** — present in both French and English for centuries, with a clear English spelling and pronunciation. No French-specific phonology to learn.
+
+**Emma** — identical in French and English. No crossing required.
+
+**Chloe** — the accent over the e (*Chloé* in French) is dropped in English, but the name remains pronounceable. The Greek origin gives it independent English credibility.
+
+**Olivia** — also present in Italian, Spanish, and Latin. The French share of its usage is small; this name crossed from multiple directions at once.
+
+**Genevieve** — a rare case of a phonologically complex French name that crossed successfully. It works because the stress pattern (gen-uh-VEEV) is pronounceable in English and the name has long Catholic history in the English-speaking world.
+
+**Adele** — the accent dropped (*Adèle* → *Adele*) and the result is pronounceable. The singer Adele provided the final push.
+
+## Comparison: French names still on the fence
+
+Several French names are in an intermediate position — visible in US data but not yet mainstream:
+
+- **Maël** / **Mael** (#1,057 boys) — Breton origin, fast-climbing in France, beginning to register in the US. The accent typically drops (Mael) and the name becomes phonetically manageable.
+- **Romy** (#926 girls) — registered in the US. If a prominent American bearer emerges, this could accelerate.
+- **Léon** / **Leon** (#195 boys) — the accent drops and this is Leon, which already ranks well in the US for independent reasons. The French version is harder to distinguish in data.
+- **Hugo** — already mainstream in the US (#230 boys), shared between French, Spanish, and Germanic traditions.
+
+## Which might be next to cross
+
+If you're betting on the next French name to break out in the US, the candidates with the best phonetic luck are probably **Sacha**, **Malo**, **Romy**, and **Ambre**.
+
+**Sacha** is the strongest bet: it's two syllables, both completely pronounceable in English, and it already has minor English-language recognition from Sacha Baron Cohen. The only barrier is that it reads as masculine in French but could read as gender-neutral or feminine in English.
+
+**Malo** has the profile of names that travel — two syllables, ends in -o, easy to spell. Its Breton saint origin gives it the kind of obscure historical depth that appeals to parents seeking something genuinely distinctive.
+
+**Romy** is already registering. If Romy Schneider's film legacy gets a streaming-era revival or a prominent American parent uses the name, it has everything it needs.
+
+**Ambre** faces the challenge of existing too close to Amber, which parents might see as the simpler version. But the -e ending could become a point of distinction rather than confusion.
+
+We'll check back in 2030.
+
+## Frequently asked questions
+
+**Why doesn't a name like Victoire cross when the meaning (Victory) is so appealing?**
+Victoire has two problems: it requires French phonology to pronounce correctly ("vik-TWAR"), and its English equivalent Victoria is already extremely common at #14. Parents seeking the "victory" meaning will pick Victoria. The French form adds complexity without adding distinctiveness that English parents would value.
+
+**Could Sacha work as either a boys' or girls' name in the US?**
+In France, Sacha is primarily a boys' name. In the US, it would likely land as gender-neutral — the -a ending reads feminine to American ears, and Sacha could follow the path of names like Riley, Quinn, and Morgan that crossed gender lines on their way into broad use. This could actually help it — gender-neutral names have performed very well in the US for two decades.
+
+**Are there French girls' names in the US that crossed successfully from the recent era?**
+Amélie / Amelia is the closest example — though Amelia has independent English history, the *Amélie* film (2001) normalized the name's French cultural associations. Margot (from French Margot) has been climbing in the US and sits around #126. Colette has also been rising, helped by the *Ratatouille* character.
+
+**What about French boys' names that already crossed?**
+Olivier → Oliver (#3 boys in 2024) is the most successful example — the French form dropped the French pronunciation and became English. Pierre → Peter is ancient. Henri → Henry (#6) is another very old crossing. The recent period has seen fewer French boys' names cross because the market for new boys' names is satisfied by other origins (Irish, Hebrew, mythological).
 
 ---
 

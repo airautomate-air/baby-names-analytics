@@ -32,7 +32,62 @@ A few themes show up across the list:
 - **Modern biblical and theophoric** names with non-traditional spellings: Eithan, Jaziel, Aziel.
 - **Mythology, geography, and one-word concepts** are filling slots that "classic" English names used to occupy: Ares, Milan, Saint.
 
-Worth noting that the absolute volume here is small. The #218 boy in 2024 was given to roughly 1,400 babies — a real foothold, but a fraction of the ~12,000 babies named Liam (#1). Rising names take years to reach the top of the chart, but watching the trend lines early is half the fun.
+Worth noting that the absolute volume here is small. The #218 boy in 2024 was given to roughly 1,400 babies — a real foothold, but a fraction of the ~22,000 babies named Liam (#1). Rising names take years to reach the top of the chart, but watching the trend lines early is half the fun.
+
+## Origin analysis
+
+**Colter** is an English occupational surname meaning a person who breeds or tends colts. It traces to the Old English *colt* and has been used as a surname in English-speaking countries for centuries. As a first name it barely existed in the US before 2015. Its rise tracks the broader western surname-name aesthetic: Colter, Colt, Colton, and Stetson are all part of the same cultural moment.
+
+**Eithan** has a fascinating position in the data. It's a respelling of the Hebrew [Ethan](/name/ethan.html) (meaning "strong" or "enduring"), and while Ethan remains far more common overall, Eithan is growing faster. This mirrors the Karson-vs-Carson dynamic on the falling side of the chart — but Eithan reads more distinctly because the "Ei-" opening creates a different visual and phonetic impression, closer to German or Hebrew pronunciation.
+
+**Jaziel** is a rare Old Testament name — appearing once in 1 Chronicles — that has been adopted widely in Spanish-speaking communities. Like [Aziel](/name/aziel.html) and other "-iel" ending names (Daniel, Nathaniel, Uriel), the theophoric suffix ("-iel" meaning "of God") gives it an instantly recognizable biblical quality while the specific name remains unusual enough to feel distinctive.
+
+**Stetson** is entirely a brand name turned surname turned first name. The Stetson hat company was founded in 1865 by John B. Stetson, and the "Stetson" became synonymous with cowboy culture. As a first name it reads as an amplified version of the western aesthetic — more distinctly cowboy-coded than even Colter.
+
+**Ares** is the Greek god of war, a name that would have been unthinkable on a US birth certificate twenty years ago. It now sits at #295. It's part of a pattern with [Atlas](/name/atlas.html) (#101), [Apollo](/name/apollo.html) (#414), and [Orion](/name/orion.html) (#325) — Greek mythology names that work because they're short, pronounceable, and carry a grandeur that parents find aspirational.
+
+**Koa** is a Hawaiian word for the koa tree (*Acacia koa*), a large hardwood tree sacred in Hawaiian culture. As a name it means "brave" or "bold." Its rise in the mainland US follows exposure through Hawaii-set media, the broader appetite for short three-letter boy names, and a general openness to names from Pacific cultures.
+
+**Saint** falls into the category of one-word aspiration names (alongside [King](/name/king.html), Legend, and Royal). Its trajectory is unusual: the celebrity Kardashian-Jenner use of Saint for a child in 2015 created immediate visibility, but the name took several years to filter into broader adoption. It's now at #282, suggesting a second wave of adoption that will carry it further.
+
+## What these names sound like and pair with
+
+- **Colter** — KOHL-ter. Two syllables, ends in -er. Works with classic middle names (Colter James, Colter William) or modern ones.
+- **Eithan** — EE-than. Essentially the same sound as Ethan; pairs identically.
+- **Jaziel** — jah-ZEE-el. Three syllables; pairs well with shorter middle names.
+- **Stetson** — STET-son. Unambiguously western; pairs with both cowboy-coded names and surprising contrasts.
+- **Ares** — AIR-eez. Two syllables; the hard ending works with almost any middle name.
+- **Koa** — KOH-ah. Two syllables, ends in a vowel; light and easy with most middle names.
+- **Saint** — one syllable; needs a full middle name to round out the name.
+- **Milan** — mih-LAN or MEE-lan. Two syllables; works in both European and American pronunciation.
+
+## Regional hotspots
+
+**Jaziel** and **Aziel** are concentrated in states with large Latino populations — Texas, California, Florida, and Arizona. They're part of a broader wave of Spanish-influenced biblical names that includes Ezekiel, Ezra, and Eliel.
+
+**Stetson** and **Colter** skew heavily toward the South and Mountain West — the states where country music and cowboy culture are strongest. In states like Wyoming, Montana, and rural Texas, Stetson ranks considerably higher than its national #155 suggests.
+
+**Koa** has its strongest showing in Hawaii (where it's a top-30 name) and on the West Coast, where Pacific cultural connections are strongest. Its national rank understates its regional significance.
+
+**Ares** and **Atlas** are broadly distributed, with slight concentration in the suburban South and Northeast — similar geography to where Percy Jackson readership was strongest a decade ago.
+
+## The social media factor
+
+Several names on this list have been amplified by TikTok and baby naming communities on Instagram. Saint's rise is partly trackable to naming influencer posts; Koa and Ares both appear frequently in "unique but not weird" name lists that circulate widely in online parenting communities. The pandemic years (2020–2022) saw a measurable increase in social media's influence on naming, as isolated parents spent more time online researching and discussing names.
+
+## Frequently asked questions
+
+**Is Stetson really being used as a first name widely?**
+Yes — it's now at #155, which means roughly 1,900 babies were named Stetson in 2024. That's a real name with real parents behind it, not a curiosity. The hat-brand origin doesn't seem to bother most parents; if anything, the brand association reads as western authenticity rather than commercial.
+
+**Will Ares keep rising?**
+The mythology wave is ongoing and Ares has the right profile — two syllables, easy to spell, culturally significant. Apollo (#414) and Orion (#325) are further behind but also rising. Ares at #295 is likely not near its ceiling yet.
+
+**What's the difference between Jaziel and Aziel?**
+Both trace to Hebrew roots and the "-iel" theophoric suffix. Jaziel is the direct Old Testament spelling; Aziel is a modern variant. Both are rising, often in the same communities. They're treated as separate names in SSA data.
+
+**How unusual are these names really?**
+The #218 boy name in the US is given to roughly 1,400–1,600 babies per year. In a typical US kindergarten of 25 kids, you'd have to sample roughly 400 classrooms to find one named Colter. These names are genuinely uncommon in most communities, even as they show significant growth trends.
 
 > See how all 10 names compare on a single chart with our [name comparison tool](/compare.html), or browse the full [2024 rankings](/year/2024.html).
 

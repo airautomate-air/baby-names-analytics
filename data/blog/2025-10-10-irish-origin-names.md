@@ -50,6 +50,55 @@ Girls:
 - **[Ciara](/name/ciara.html)** — #1,361
 - **[Caitlin](/name/caitlin.html)** — #1,679 (the original spelling, where the older surge of Caitlyn / Katelyn / Kaitlyn ultimately came from)
 
+## Anglicisation history
+
+Most Irish names that appear in the US were filtered through centuries of English colonial rule over Ireland, during which Gaelic names were systematically Anglicised — either transcribed phonetically into English spelling, or replaced by English names with similar sounds.
+
+This created the bifurcated landscape visible on the modern US chart:
+
+**The Anglicised layer** — names that crossed centuries ago and now read as straightforwardly English: Liam (from the Irish form of William), Kevin (from *Caoimhín*), Finn (from *Fionn*), Maeve (from *Méabh*). These feel like normal English names because they've been in English usage long enough to lose their foreignness.
+
+**The Gaelic layer** — names that have been used in Ireland all along but were rarely written on English-language documents: Saoirse, Aoife, Niamh, Cillian. These are the names now crossing for the first time.
+
+## Original Irish spellings
+
+For the core names on the mainstays list, here are the original Irish forms:
+
+| English form | Irish form | Pronunciation note |
+|---|---|---|
+| Liam | Liam | same |
+| Riley | Raghailleach / Raghallaigh | the English is a phonetic approximation |
+| Maeve | Méabh | the fada (accent) signals a long vowel |
+| Quinn | Conn / Ó Cuinn | Quinn is the anglicised surname form |
+| Declan | Deaglán | no close English equivalent |
+| Connor | Conchobhar | the original is almost unrecognizable |
+| Kevin | Caoimhín | "KWEE-veen" in Irish; Kevin is entirely phonetic |
+| Finn | Fionn | the -nn is doubled in Irish |
+| Patrick | Pádraig | "PAW-drig" in Irish; Patrick is the Latinised form |
+| Ronan | Rónán | the accent marks a long "o" |
+
+## How to pronounce the harder names
+
+The Gaelic-spelling names require learning a few Irish phonological rules:
+
+- **Mh / bh** = a "v" or "w" sound. Siobhan = "shi-VAWN" (the bh is a v). Caoimhe = "KWEE-vah."
+- **Gh / dh** = mostly silent or a very soft sound at the back of the throat
+- **Fh** = completely silent. Aoife's "f" is silent entirely; it's just "EE-fah."
+- **Ai / ea** = complex; context-dependent. Caitlin = "KAHT-leen" in Irish (not "KATE-lin" as commonly said in the US)
+- **Sio-** at the start of a word = "shi." Siobhan = "shi-VAWN"
+
+The single biggest mispronunciation in the US: **Caitlin** as "KATE-lin" — the Irish original is "KAHT-leen," which is why the name became Cathleen in Anglicised form. The surge of Kaitlyn and Katelyn spellings in the 1990s was an attempt to match the English pronunciation to the name's sound.
+
+## Regional Irish variants
+
+Ireland has distinct regional dialects (Connacht, Munster, Ulster) and some names have regional variants:
+
+- **Saoirse** is pronounced "SEER-sha" in Ulster Irish but "SUHR-sha" in Munster Irish — Saoirse Ronan uses the Ulster pronunciation, which is what most Americans have heard.
+- **Tadhg** (a boy's name, "TY-ig") varies by region; it's more common in Munster.
+- **Roisin** (pronounced "ro-SHEEN," meaning "little rose") is widespread but the Connacht pronunciation differs slightly.
+
+In the US, these regional distinctions collapse — parents pick whichever pronunciation they've heard, usually from a specific famous bearer.
+
 ## What's driving it
 
 Two forces:
@@ -58,6 +107,20 @@ Two forces:
 2. **Specific high-profile bearers.** Cillian Murphy, Saoirse Ronan, Aoife O'Donovan. One famous figure with a correctly-spelled Gaelic name removes the "how do I write this" objection for thousands of parents.
 
 The two waves are likely to keep merging. Expect more Aoife, more Eoin, more Tadhg in the next decade — names that look completely opaque on the page until you've heard them once, and then permanently aren't.
+
+## Frequently asked questions
+
+**Is Liam actually Irish or just associated with Ireland?**
+Liam is genuinely Irish — it's the Irish and Scottish Gaelic form of William, ultimately from the Germanic *Willahelm*. It was used in Ireland and Ireland alone for centuries before spreading internationally in the late 20th century. The US adoption of Liam as #1 follows its popularity in Ireland and the UK.
+
+**Why do so many Irish names look so different from how they're pronounced?**
+Irish (Gaeilge) uses a spelling system based on Old Irish, which is quite different from Modern Irish pronunciation. The spelling rules are internally consistent — once you know the system — but they're not intuitive for English speakers. Irish was also largely not written in standardised form during the centuries of English rule, which meant the spellings that survived were often archaic forms frozen in time.
+
+**Are names like Aidan, Brendan, and Brigid Irish?**
+Yes. Aidan comes from *Aodhán* (diminutive of Aodh, "fire"), Brendan from *Breandán*, and Brigid from *Bríd* — the great Irish saint also venerated as a pagan goddess. All three have been substantially Anglicised and are not included in the Gaelic-spelling wave because they've been in English usage long enough to feel native.
+
+**What's the next Gaelic name likely to break into the top 500?**
+Cillian is the most obvious candidate, driven by Cillian Murphy's Oscar and *Peaky Blinders* fame. Saoirse is also climbing; the fact that Saoirse Ronan has been a consistently prominent actress for over a decade has normalized the spelling significantly. On the boys' side, **Tadhg** and **Eoin** (the Irish form of John, "OH-in") are the names most frequently cited in Irish parenting communities as likely to cross.
 
 For more origin spotlights, see [Greek names on the modern US chart](/blog/greek-origin-names.html).
 
