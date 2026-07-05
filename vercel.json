@@ -11,7 +11,8 @@
     { "source": "/year/2025.html", "destination": "/year/2024.html", "permanent": false },
     { "source": "/fr/letter/boys-%C3%A9.html", "destination": "/fr/letter/boys-e.html", "permanent": true },
     { "source": "/fr/letter/girls-%C3%A9.html", "destination": "/fr/letter/girls-e.html", "permanent": true },
-    { "source": "/fr/letter/boys-%C3%B6.html", "destination": "/fr/letter/boys-o.html", "permanent": true }
+    { "source": "/fr/letter/boys-%C3%B6.html", "destination": "/fr/letter/boys-o.html", "permanent": true },
+    { "source": "/it/name/anastasia-santa.html", "destination": "/it/name/anastasia.html", "permanent": true }
   ],
   "rewrites": [
     { "source": "/api/submit-story", "destination": "/api/submit-story.js" }
