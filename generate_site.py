@@ -9614,11 +9614,12 @@ def generate_name_page(name):
     )
     famous_for_jsonld = filter_famous_for(
         (ENRICHMENT.get(slugify(name), {}) or {}).get('famous', []), name)
+    noindex_tag = '\n    <meta name="robots" content="noindex">' if total < 1000 else ""
     extra_head = breadcrumb_jsonld([
         (S("crumb_home"), home_url()),
         (S("crumb_names"), f"{BASE_URL}{p}/names.html"),
         (name, canonical),
-    ]) + person_jsonld_block(famous_for_jsonld, name) + chart_js + hreflang_for_name(slugify(name))
+    ]) + person_jsonld_block(famous_for_jsonld, name) + chart_js + hreflang_for_name(slugify(name)) + noindex_tag
 
     variants = VARIANTS_OF.get(name, [])
     variants_line = ""
@@ -10304,11 +10305,12 @@ def generate_similar_page(name):
         <p>{similar_intro}</p>
         <ul class="trending-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:1rem; list-style:none; padding:0;">
 {cards}        </ul>"""
+    noindex_tag = '\n    <meta name="robots" content="noindex">' if name_total.get(name, 0) < 1000 else ""
     extra_head = breadcrumb_jsonld([
         (S("crumb_home"), home_url()),
         (name, f"{BASE_URL}{p}/name/{slugify(name)}.html"),
         (S("crumb_similar"), canonical),
-    ]) + hreflang_for_similar(slugify(name))
+    ]) + hreflang_for_similar(slugify(name)) + noindex_tag
     (OUT_DIR / 'similar' / f'{slugify(name)}.html').write_text(
         page(similar_title, body,
              description=similar_desc, canonical=canonical, extra_head=extra_head),
