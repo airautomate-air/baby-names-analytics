@@ -1,6 +1,11 @@
 {
   "version": 2,
   "outputDirectory": "docs",
+  "functions": {
+    "api/submit-story.js": {
+      "runtime": "@vercel/node@3"
+    }
+  },
   "redirects": [
     { "source": "/year/2025", "destination": "/year/2024", "permanent": false },
     { "source": "/year/2025.html", "destination": "/year/2024.html", "permanent": false },
