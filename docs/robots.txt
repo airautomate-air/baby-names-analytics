@@ -1,4 +1,13 @@
 User-agent: *
 Allow: /
 
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
 Sitemap: https://namecharted.com/sitemap.xml

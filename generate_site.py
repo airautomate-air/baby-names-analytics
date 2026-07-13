@@ -11791,6 +11791,12 @@ def write_sitemaps_and_robots(urls_by_cc: dict[str, list[str]]) -> None:
     robots = (
         "User-agent: *\n"
         "Allow: /\n\n"
+        "User-agent: meta-externalagent\n"
+        "Disallow: /\n\n"
+        "User-agent: SemrushBot\n"
+        "Disallow: /\n\n"
+        "User-agent: PetalBot\n"
+        "Disallow: /\n\n"
         f"Sitemap: {BASE_URL}/sitemap.xml\n"
     )
     (OUTPUT_DIR / 'robots.txt').write_text(robots, encoding='utf-8')
