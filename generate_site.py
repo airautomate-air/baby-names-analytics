@@ -328,6 +328,21 @@ def load_name_stories() -> None:
     print(f'  name stories: {sum(len(v) for v in NAME_STORIES.values())} stories across {len(NAME_STORIES)} names')
 
 
+# Hand-written editorial analysis for top US names (AdSense E-E-A-T signal).
+# slug -> {text: str, updated: 'YYYY-MM-DD'}. US tree only, name pages only.
+NAME_EDITORIAL: dict[str, dict] = {}
+
+
+def load_name_editorial() -> None:
+    global NAME_EDITORIAL
+    p = Path('data/editorial/us_name_editorial.json')
+    if not p.exists():
+        return
+    with p.open() as f:
+        NAME_EDITORIAL = json.load(f)
+    print(f'  name editorial: {len(NAME_EDITORIAL)} hand-written analyses')
+
+
 def load_fiction() -> None:
     global FICTION, FICTION_BY_NAME
     p = Path('data/fiction.json')
@@ -6251,6 +6266,10 @@ BASE_CSS = """
         .fiction-appears li { margin: 0.35rem 0; }
         .fiction-appears a { color: #149E91; text-decoration: none; font-weight: 500; }
         .fiction-appears a:hover { text-decoration: underline; }
+        .editorial-section { margin: 2rem 0; background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 1.25rem 1.5rem; }
+        .editorial-section h2 { font-size: 1.15rem; margin: 0 0 0.75rem; }
+        .editorial-section p { font-size: 0.95rem; line-height: 1.7; color: #1B2440; margin: 0 0 0.85rem; }
+        .editorial-section p.editorial-byline { font-size: 0.8rem; color: #8a93a3; margin: 0.5rem 0 0; }
         .stories-section { margin: 2rem 0; }
         .stories-section h2 { font-size: 1.15rem; margin: 0 0 1rem; }
         .story-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 1rem 1.2rem 0.85rem; margin-bottom: 0.85rem; position: relative; }
@@ -9861,6 +9880,21 @@ def generate_name_page(name):
             f'</div>'
         )
 
+    editorial_section_html = ''
+    editorial = NAME_EDITORIAL.get(slugify(name)) if ACTIVE_CC == 'US' else None
+    if editorial:
+        paras = ''.join(f'<p>{html.escape(para, quote=False)}</p>'
+                        for para in editorial['text'].split('\n\n') if para.strip())
+        updated = editorial.get('updated')
+        byline_suffix = f', updated {updated}' if updated else ''
+        editorial_section_html = (
+            f'<div class="editorial-section">'
+            f'<h2>Editor’s take on {html.escape(name)}</h2>'
+            f'{paras}'
+            f'<p class="editorial-byline">— NameCharted editorial{byline_suffix}</p>'
+            f'</div>'
+        )
+
     famous_section_html = ''
     if famous:
         items = []
@@ -9908,6 +9942,7 @@ def generate_name_page(name):
         <h2>{S("name_popularity_h2", label_cap=loc_label_cap(dom))}</h2>
         <div class="chart-wrap"><canvas id="trendChart" height="120"></canvas></div>
 
+        {editorial_section_html}
         {fiction_section_html}
         {famous_section_html}
         {stories_section_html}
@@ -11955,6 +11990,7 @@ def main():
     load_enrichment()
     load_fiction()
     load_name_stories()
+    load_name_editorial()
     load_saints_all()
     load_blog()
     for cc in COUNTRIES:
