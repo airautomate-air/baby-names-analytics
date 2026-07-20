@@ -61,7 +61,12 @@ def check_numbers(entries):
                 batch_numbers.add(str(v))
                 batch_numbers.add(str(abs(v)))
         batch_numbers |= {str(d) + 's' for d in f['decades_active']}
-        batch_numbers |= {str(fb.get('born')) for fb in f['famous'] if fb.get('born')}
+        # BCE born years are negative (e.g. -1790); allow "1790 BC" phrasing
+        for fb in f['famous']:
+            born = fb.get('born')
+            if born:
+                batch_numbers.add(str(born))
+                batch_numbers.add(str(abs(born)))
 
     year_fields = ('peak_year', 'latest_year', 'peak_rank_year', 'first_year_seen')
     for slug, e in entries.items():

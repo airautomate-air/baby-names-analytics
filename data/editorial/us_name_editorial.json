@@ -156,7 +156,7 @@
     "updated": "2026-07-21"
   },
   "harper": {
-    "text": "Harper is one of the youngest names in this entire batch by history: it first appears in SSA data only in 1971, more than a century after most of its neighbors here, and its enrichment data lists exactly one famous bearer — novelist Harper Lee, born Nelle Harper Lee in 1926, whose fame predates the name's use as a first name by decades.\n\nIts rank peaked at #9 in 2018, and by 2024 it had eased to #12 with 7,370 births, down 23% over the decade — a milder decline than Alexander's or Michael's, consistent with a name still relatively early in its adoption cycle rather than one fading from a much older peak.\n\nThat combination — a very short data history, a single strong namesake, and a comparatively gentle decline — makes Harper's trajectory look less like the long rise-and-fall arcs of Michael or John and more like a recent cultural pick that's still finding its ceiling.",
+    "text": "Harper is one of the youngest names in this entire batch by history: it first appears in SSA data only in 1971, more than a century after most of its neighbors here, and its enrichment data lists exactly one famous bearer — novelist Harper Lee, born Nelle Harper Lee in 1926, whose fame predates the name's use as a first name by decades.\n\nIts rank peaked at #9 in 2018, and by 2024 it had eased to #12 with 7,370 births, short of its decade-earlier count by 23% — a milder decline than Alexander's or Michael's, consistent with a name still relatively early in its adoption cycle rather than one fading from a much older peak.\n\nThat combination — a very short data history, a single strong namesake, and a comparatively gentle decline — makes Harper's trajectory look less like the long rise-and-fall arcs of Michael or John and more like a recent cultural pick that's still finding its ceiling.",
     "updated": "2026-07-21"
   },
   "santiago": {
@@ -197,6 +197,106 @@
   },
   "avery": {
     "text": "Avery's data starts in 1890, a decade later than most of its neighbors in this batch but well before recent arrivals like Dylan (1953) or Harper (1971).\n\nIts rank peaked at #12 in 2013, one year ahead of its raw-count peak of 9,578 in 2014 — the peak-then-count pattern seen in a few other names here, just reversed in order. By 2024 its count had dropped to 5,632, a 41% decline over ten years that left it at #31 — one of the steeper drops in this batch alongside David's and Joseph's.\n\nIts famous-bearer list is entirely contemporary and entertainment-adjacent — actors Bella Thorne and Troian Bellisario, singer Grace VanderWaal — young public figures rather than any older reference point, fitting a name whose current form of popularity is a relatively recent development despite its longer data history.",
+    "updated": "2026-07-21"
+  },
+  "violet": {
+    "text": "Both the count and the rank for Violet hit new highs in 2024 — 6,972 births at #15, up 66% from a decade earlier — with nothing in the data suggesting a turn yet.\n\nPresent in SSA records since 1880, the name stayed a minor presence for more than a hundred years before this recent run.\n\nIts enrichment list is unusually scientific for a flower name: economist Joan Robinson, radio astronomer Ruby Payne-Scott, and Titanic survivor and nurse Violet Jessop, none of them entertainment figures, a different profile than most of this batch's fast risers, whose namesake lists tend to skew toward actors and musicians.",
+    "updated": "2026-07-21"
+  },
+  "aurora": {
+    "text": "151% growth over the past decade put Aurora at a fresh peak in both count and rank for 2024 — 6,917 births, #16 nationally — second only to Maverick's gain rate in this batch.\n\nUnlike nearly every other name covered across all three batches so far, the enrichment data has nothing to say about Aurora: no linguistic origin, no famous bearers at all. Its cultural pull, whatever it is, isn't showing up in the reference data the way Violet's or Hazel's does.\n\nThat blank slate makes it hard to attribute the rise to any specific influence. What the birth data does confirm is the shape of the climb: present since 1880 but essentially flat for more than a hundred years before this recent, sharp acceleration.",
+    "updated": "2026-07-21"
+  },
+  "jackson": {
+    "text": "Jackson's rank has fallen a long way from where it once stood: #14 at its best, back in 2021, down to #35 by 2024, even though the raw-count peak came earlier still, 12,609 births in 2013. A 44% ten-year decline puts it in the middle of this batch's range of losses.\n\nThe name has appeared in SSA data continuously since 1880, a long run before the 2010s surge that produced its recent highs.\n\nPainter Jackson Pollock and musician Jackson Browne anchor the name in mid-20th-century American arts, while historian Frederick Jackson Turner reaches back further still — a namesake spread with real depth, unusual for a name whose own popularity only became substantial in the last fifteen years.",
+    "updated": "2026-07-21"
+  },
+  "elizabeth": {
+    "text": "Elizabeth carries the widest gap in this batch between its rank peak and its count peak: the rank hit #3, its best ever, in 1887 — seven years into the dataset — while the raw count didn't peak until 1990, when a single year brought 20,749 births — a 103-year gap between the two milestones.\n\nTotal births run to 1,687,089 since 1880, and the 2024 figure of 6,878 marks a 28% decline from ten years earlier, landing at #17.\n\nTwo English queens (Elizabeth I, Elizabeth II) sit alongside poet Emily Dickinson and actress Elizabeth Taylor on the famous-bearer list — a name whose royal association predates its American popularity by centuries, unlike most names in this batch whose namesakes are contemporaries of the parents choosing them.",
+    "updated": "2026-07-21"
+  },
+  "carter": {
+    "text": "Carter's raw count peaked in 2015 at 10,814 and its rank peaked the same year at #24 — one of the rare cases in this batch where count and rank moved together instead of one lagging the other.\n\nSince then it's dropped to #45, with 6,267 births in 2024 — 41% below its count a decade earlier, a steeper fall than Jackson's despite the earlier alignment between count and rank at the top.\n\nIts famous-bearer list is thin and entirely contemporary — composer Carter Burwell, actor Carter Jenkins — with no historical figure predating the name's own rise, suggesting Carter's popularity was never really borrowed from an existing namesake the way Elizabeth's or Thomas's was.",
+    "updated": "2026-07-21"
+  },
+  "wyatt": {
+    "text": "Wyatt peaked in 2017 on both fronts — 9,726 births and its best-ever rank, #25 — then eased to #38 by 2024 with 6,581 births, a 26% ten-year decline that's milder than Carter's or Jackson's.\n\nRecorded since 1880, the name spent well over a century in minor use before its 2010s rise.\n\nWyatt Earp anchors the name firmly in 19th-century American frontier history, a specific and singular reference point that hardly any other name in this batch carries — most, like Carter or Maverick, have either no dominant historical namesake or several competing ones rather than one figure this closely associated with the name itself.",
+    "updated": "2026-07-21"
+  },
+  "maverick": {
+    "text": "No name in this batch grew faster than Maverick: 252% over the past decade, this name only entering SSA records at all in 1957 and staying a minor presence for decades before its recent surge to 6,615 births and #36 nationally in 2024, a new high just two years after its actual peak count of 7,047 in 2022.\n\nIts enrichment data lists exactly one namesake, motorcycle racer Maverick Viñales — no deep historical anchor the way Wyatt has in Wyatt Earp.\n\nBetween the recent data start, the single contemporary namesake, and the sheer growth rate, Maverick reads as the newest and least historically rooted name in this entire batch — a modern coinage rather than a name with any pre-20th-century use to speak of.",
+    "updated": "2026-07-21"
+  },
+  "miles": {
+    "text": "Miles set fresh records in count and rank alike in 2024: 6,611 births, #37 nationally, 79% higher than a decade prior — a climb with no sign yet of the pullback seen in some of this batch's other risers.\n\nThe name has been present since 1880, a long quiet history before its recent acceleration.\n\nJazz musician Miles Davis anchors the name in a specific and well-known cultural reference, alongside actor Miles Teller and a rare fictional entry — Miles \"Tails\" Prower from the Sonic the Hedgehog franchise — a mix of real and fictional namesakes that recalls Luna's fictional-only list from the second batch, though here the real bearers outnumber the fictional one.",
+    "updated": "2026-07-21"
+  },
+  "thomas": {
+    "text": "Thomas's rank peaked at #8 in 1880, the very first year of this dataset — the same early-peak pattern seen in James, John, and Samuel — while its raw count didn't reach its high of 48,650 births until 1952, seven decades later.\n\nThe recent trend is unusually flat for a name this old: 6,576 births in 2024 is just 7% below its count from ten years earlier, one of the mildest ten-year moves in this entire batch.\n\nThomas Edison, Thomas Jefferson, and Thomas Hobbes span invention, politics, and philosophy across four centuries — a namesake list with the same kind of long historical reach as John's or David's from earlier batches, fitting for a name whose own data history runs the full length of the dataset.",
+    "updated": "2026-07-21"
+  },
+  "mason": {
+    "text": "Mason's decline is tied for the steepest in this batch: down 62% over the past decade, matching Jacob's drop exactly. Its rank and count peaked together in 2011 — #2 nationally and 19,528 births — meaning the fall from a near-chart-topping position has been unusually fast, from #2 to #42 in roughly a decade.\n\nThis name's SSA data runs back to 1880, a long history before its 2010s spike and subsequent retreat.\n\nIts famous-bearer list is almost entirely contemporary football — Mason Mount, Mason Greenwood, Mason Holgate — young English players rather than any older reference, a name whose recent popularity clearly outpaced any prior cultural association it might have carried.",
+    "updated": "2026-07-21"
+  },
+  "jacob": {
+    "text": "Jacob shares this batch's steepest decline with Mason, also down 62% over the past decade, but arrived there from a different height: it was the #1 boys' name in 1999, its raw count peaking a year earlier at 36,027 births in 1998. Total births run to 984,245 since 1880.\n\nBy 2024 it had fallen to #41 with 6,496 births — one of the sharpest reversals of any former #1 name covered across all three batches so far, alongside Isabella's fall from the top in the earlier batch.\n\nThe enrichment data's oldest reference for this name is the biblical patriarch, listed with a birth year of roughly 1790 BC — by far the oldest specific date attached to any name in this batch — alongside contemporary figures like former South African president Jacob Zuma.",
+    "updated": "2026-07-21"
+  },
+  "isaac": {
+    "text": "Isaac's rank peaked at #28 in 2013, four years after its raw-count high of 10,274 births in 2007 — a shorter lag than Elizabeth's century-long gap but the same underlying pattern of rank trailing count.\n\nBy 2024 its rank had slipped to #40 with 6,498 births, down 35% from ten years before — steeper than Wyatt's decline but milder than Mason's or Jacob's.\n\nIsaac Newton and Isaac Asimov give the name unusually heavyweight scientific associations, joined by Nobel laureate Isaac Bashevis Singer — three separate fields of intellectual achievement attached to one name, a concentration that few others in this batch, aside perhaps from Thomas, can match.",
+    "updated": "2026-07-21"
+  },
+  "hazel": {
+    "text": "Hazel's raw count actually peaked over a century ago, 7,615 births in 1918, and its rank peaked even earlier still, #18 in 1897 — one of the oldest peak years of any name across all three batches. A 120% gain over the past decade has brought it back to 6,401 births in 2024, still short of that 1918 high but closing the gap fast.\n\nThe name has been recorded in every decade since 1880, giving it an unbroken run through more than a century of both rise and decline.\n\nOnly one namesake shows up in the enrichment data, tennis and squash player Hazel Hotchkiss Wightman, active in the early 20th century — a name whose modern revival, like Eleanor's and Evelyn's in earlier batches, is bringing back a genuinely old-fashioned choice rather than introducing something new.",
+    "updated": "2026-07-21"
+  },
+  "eliana": {
+    "text": "Eliana's 2024 figures are records on both counts: 6,423 births, #18 nationally, 134% higher than its count from ten years back — one of this batch's biggest percentage gains, trailing only Maverick and Aurora.\n\nUnlike most names in this range, it doesn't trace back to 1880: the earliest recorded year is 1961, and the name barely registered until recent decades, making its current size almost entirely a product of growth within the last twenty years.\n\nThe enrichment data has no famous bearers listed at all, the same gap seen with Aurora — two of this batch's fastest-growing names have essentially no documented namesake pulling their popularity, which suggests whatever is driving their rise isn't showing up as a single traceable cultural reference.",
+    "updated": "2026-07-21"
+  },
+  "gabriel": {
+    "text": "Gabriel reached its best-ever rank, #21, in 2010, two years on from the birth-count peak of 13,040 in 2008 — a short lag similar to Isaac's.\n\nSince then it's slid to #43, with 6,379 births in 2024 — 42% fewer than a decade earlier, a decline close to Jackson's in scale.\n\nThe famous-bearer list is unusually varied in tone — novelist Jules Verne, dictator Robert Mugabe, gangster Al Capone, physicist Gabriel Lippmann, and Chile's president Gabriel Boric — spanning fiction, politics, crime, and science in a way that doesn't cluster around any single kind of public figure the way Carter's or Maverick's shorter, more contemporary lists do.",
+    "updated": "2026-07-21"
+  },
+  "chloe": {
+    "text": "Chloe's rank peaked at #9 in 2009, the same year its raw count hit its high of 11,918 births — one of this batch's cleaner simultaneous peaks, like Carter's or Mason's.\n\nBy 2024 its rank had drifted to #20 with 6,385 births, 25% under its count a decade back — a milder retreat than Jackson's or Gabriel's.\n\nThe enrichment data lists a single namesake, filmmaker Chloé Zhao, whose Oscar-winning career postdates the name's 2009 peak by more than a decade — meaning her prominence can't explain the name's original rise, only perhaps helping sustain interest in the years since.",
+    "updated": "2026-07-21"
+  },
+  "anthony": {
+    "text": "Anthony shows a long lag between its rank and count peaks: the rank hit #7 in 2007, but the raw count had already peaked seventeen years earlier, 25,087 births in 1990 — the opposite direction from Elizabeth's pattern, where rank peaked long before count.\n\nTotal births run to 1,489,090 since 1880, and 2024's count of 6,326 is down 46% from a decade prior, landing at #44 — one of the steeper declines among this batch's older, more established names.\n\nAnthony Hopkins, Anthony Bourdain, and wrestler-turned-actor John Cena (born John Felix Anthony Cena) span acting, food media, and sport across recent decades, a namesake list weighted toward the present despite the name's much longer history in the data.",
+    "updated": "2026-07-21"
+  },
+  "ellie": {
+    "text": "Ellie's count and rank both reached fresh peaks in 2024: 6,306 births, #21 nationally, 41% higher than its count from a decade back — a steadier climb than the triple-digit gains posted by Maverick, Aurora, or Eliana.\n\nThe name has been present since 1880, though its enrichment data suggests it functions largely as a short form: actor Ellie Kemper and singer Blanche (born Ellie Delvaux) are its only listed namesakes, both relatively recent.\n\nThat shortage of older reference points, paired with a century-plus data history, suggests Ellie has spent most of its recorded existence as an informal nickname rather than a name chosen outright at birth — only recently becoming common enough as a given name to show up this prominently on its own.",
+    "updated": "2026-07-21"
+  },
+  "aiden": {
+    "text": "Aiden is one of the more recent arrivals in this batch by data history, first appearing only in 1970. Its best-ever rank, #9, came in 2010, a year after the name's raw count itself peaked at 16,029 births in 2009.\n\nThe decline since has been sharp: 6,243 births in 2024, 54% under its count from a decade before, landing at #47 — a steeper fall than Mason's or Jacob's tied 62% only by a matter of degree, and one of the fastest reversals in this batch for a name that only recently cracked the top 10.\n\nThe enrichment data names just one real namesake here, footballer Aiden McGeady, active since the mid-2000s — a thin cultural anchor for a name whose rise and fall both happened within the same twenty-year window.",
+    "updated": "2026-07-21"
+  },
+  "grayson": {
+    "text": "Grayson is one of the more stable names in this batch: 6,211 births in 2024 is down just 6% from a decade earlier, a far milder move than the double-digit swings affecting most of its neighbors here.\n\nIt entered SSA data later than most, in 1905. Its best rank, #32, arrived in 2018, a year past the birth-count high of 8,717 set in 2017 — one of the shorter lags in this batch.\n\nThe enrichment data has nothing to offer for famous bearers, the third name in this batch (with Aurora and Eliana) whose recent popularity isn't attached to any documented namesake at all — a pattern that seems to cluster specifically among this batch's newer, sound-driven names rather than its historically rooted ones.",
+    "updated": "2026-07-21"
+  },
+  "riley": {
+    "text": "Riley's ten-year percentage change, -3%, makes the decline look almost flat, but that number hides a sharper real story: the count spiked to a peak of 7,159 in 2016, the same year the rank hit its best-ever #22, before falling to just 4,644 births and #42 by 2024 — a steep drop from the mid-decade high that the simple ten-year comparison mostly cancels out.\n\nThe name entered SSA data in 1923, decades before most of this batch's recent arrivals like Maverick or Eliana.\n\nIts famous-bearer list runs almost entirely adult-entertainment and film — Riley Reid, Riley Keough, Riley Steele — alongside one unrelated historical figure, Vice President Thomas R. Marshall (whose middle name was Riley), an odd mix that doesn't map cleanly onto the name's current use for young children.",
+    "updated": "2026-07-21"
+  },
+  "nora": {
+    "text": "Nora's 2024 numbers are its best yet on both fronts: 6,128 births, #22 nationally, up 29% from a decade earlier — a more modest gain than fast risers like Maverick or Eliana, but consistently upward with no sign of reversal.\n\nPresent in SSA data since 1880, the name spent well over a century in minor use, similar in shape to Hazel and Violet, before its own recent climb.\n\nIts famous-bearer list spans essayist Nora Ephron, actor Awkwafina (born Nora Lum), and Hugo-winning novelist N. K. Jemisin (born Nora Keita Jemisin) — writers and performers across several decades rather than a single generational cluster.",
+    "updated": "2026-07-21"
+  },
+  "parker": {
+    "text": "Parker sits noticeably lower in this batch than its neighbors: #97 nationally in 2024, the only name here outside the top 50, with 3,605 births — down 37% over the past decade from a rank peak of #72 in 2015, itself only modest by this batch's standards.\n\nParker's own SSA data reaches back to 1880 too, a long, mostly quiet history before a brief mid-2010s rise that never reached the heights of names like Mason or Carter.\n\nIts famous-bearer list mixes film (Cliff Robertson, whose middle name was Parker), music (mandolinist Parker Posey), and sport (basketball's Cade Cunningham, middle name Parker) — three different fields, none of them producing a namesake prominent or recent enough to have driven the name's modest 2010s bump.",
+    "updated": "2026-07-21"
+  },
+  "gianna": {
+    "text": "Gianna's 98% gain over the past decade ranks among this batch's bigger percentage climbs, though its rank actually peaked earlier than its most recent high — #13 in 2020, the same year as its raw-count peak of 7,899 — and has eased slightly since to #23 with 6,097 births in 2024.\n\nThe name entered SSA data in 1951, later than most of this batch's older entries but earlier than recent arrivals like Maverick or Aiden.\n\nIts enrichment data lists musician Gianna Nannini as the clearer namesake, an Italian recording artist active since the 1970s — consistent with the name's Italian origin, similar to how Santiago's and Camila's famous-bearer lists in the second batch skewed toward their own linguistic roots.",
+    "updated": "2026-07-21"
+  },
+  "lily": {
+    "text": "Lily's rank and count peaked together in 2011 — #15 nationally and 8,192 births — one of this batch's cleaner simultaneous peaks alongside Carter's and Chloe's.\n\nSince then it's eased to #24 with 6,093 births in 2024, down just 10% over the past decade — a notably mild decline for a name that peaked well over a decade ago, milder than Chloe's 25% drop from a similarly-timed high.\n\nThe famous-bearer list mixes music (Lily Allen), film (Lily Collins, Lily James), comedy (Lily Tomlin), and fiction (Harry Potter's Lily Potter) — a broad spread across entertainment that gives the name wide contemporary visibility even as its raw numbers have settled into a slow, gradual decline.",
     "updated": "2026-07-21"
   }
 }
