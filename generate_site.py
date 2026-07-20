@@ -68,6 +68,9 @@ OUTPUT_DIR = Path('docs')
 TOP_N_NAMES = 1000
 BASE_URL = "https://namecharted.com"
 PAGE_MIN_TOTAL = 500
+# Names below this total get noindex'd and are excluded from sitemaps and
+# browse/letter index links (page still generated, reachable via search/URL).
+NOINDEX_MIN_TOTAL = 1000
 
 OUTPUT_DIR.mkdir(exist_ok=True)
 
@@ -646,9 +649,12 @@ def build_country(cc: str) -> None:
             for _y, _c in _d[_sex].items():
                 decade_sex_counts[((_y // 10) * 10, _sex)][_n] += _c
 
+    # Only indexable names (>= NOINDEX_MIN_TOTAL) get letter-page listings;
+    # letters left with no qualifying names get no letter page at all.
     letter_names = {'F': defaultdict(list), 'M': defaultdict(list)}
     for n in pages_to_generate:
-        letter_names[_dom(n)][n[0].upper()].append(n)
+        if name_total[n] >= NOINDEX_MIN_TOTAL:
+            letter_names[_dom(n)][n[0].upper()].append(n)
     for sex in ('F', 'M'):
         for letter in letter_names[sex]:
             letter_names[sex][letter].sort(key=lambda n: (-name_sex_total[(n, sex)], n))
@@ -9567,13 +9573,16 @@ def generate_name_page(name):
 
     peak_dec = name_meta[name]['peak_dec']
     letter = name[0].upper()
+    letter_link = (
+        f' &nbsp;&middot;&nbsp; <a href="{p}/letter/{slug_label(dom)}-{name[0].lower()}.html">'
+        f'{S("rel_letter_link", label=label, label_cap=loc_label_cap(dom), letter=letter)}</a>'
+    ) if letter in letter_names[dom] else ''
     rel = (
         f'        <p style="margin:0.75rem 0 1.5rem;">'
         f'<a href="{p}/similar/{slugify(name)}.html"><strong>{S("rel_see_similar", name=name)}</strong></a>'
         f' &nbsp;&middot;&nbsp; <a href="{p}/compare.html?a={slugify(name)}">{S("compare_with_link", name=name)}</a>'
         f' &nbsp;&middot;&nbsp; <a href="{p}/decade/{peak_dec}s.html">{S("rel_pop_decade", d=peak_dec)}</a>'
-        f' &nbsp;&middot;&nbsp; <a href="{p}/letter/{slug_label(dom)}-{name[0].lower()}.html">'
-        f'{S("rel_letter_link", label=label, label_cap=loc_label_cap(dom), letter=letter)}</a></p>\n'
+        f'{letter_link}</p>\n'
     )
     rel += related_block(S("rel_more_popular", label=label),
                          related_more_popular(name, dom))
@@ -9614,7 +9623,7 @@ def generate_name_page(name):
     )
     famous_for_jsonld = filter_famous_for(
         (ENRICHMENT.get(slugify(name), {}) or {}).get('famous', []), name)
-    noindex_tag = '\n    <meta name="robots" content="noindex">' if total < 1000 else ""
+    noindex_tag = '\n    <meta name="robots" content="noindex">' if total < NOINDEX_MIN_TOTAL else ""
     extra_head = breadcrumb_jsonld([
         (S("crumb_home"), home_url()),
         (S("crumb_names"), f"{BASE_URL}{p}/names.html"),
@@ -9937,7 +9946,7 @@ def generate_browse_index():
         f'<a href="#letter-{l}">{l}</a>' for l in letters) + '</div>'
     sections = ""
     for l in letters:
-        names = by_initial[l]
+        names = [n for n in by_initial[l] if name_total.get(n, 0) >= NOINDEX_MIN_TOTAL]
         links = "".join(
             f'<a href="{p}/name/{slugify(n)}.html">{n}</a>' for n in names)
         sections += (
@@ -10305,7 +10314,7 @@ def generate_similar_page(name):
         <p>{similar_intro}</p>
         <ul class="trending-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:1rem; list-style:none; padding:0;">
 {cards}        </ul>"""
-    noindex_tag = '\n    <meta name="robots" content="noindex">' if name_total.get(name, 0) < 1000 else ""
+    noindex_tag = '\n    <meta name="robots" content="noindex">' if name_total.get(name, 0) < NOINDEX_MIN_TOTAL else ""
     extra_head = breadcrumb_jsonld([
         (S("crumb_home"), home_url()),
         (name, f"{BASE_URL}{p}/name/{slugify(name)}.html"),
@@ -10582,7 +10591,7 @@ def generate_rare_names_page():
         for n in by_letter[l]:
             dom = dominant_sex(n)
             canon = CANONICAL_OF.get(n)
-            if canon:
+            if canon and canon in HAS_PAGE:
                 variant_hint = (f' <a href="{p}/name/{slugify(canon)}.html" '
                                 f'style="color:#149E91; font-size:0.85em;">'
                                 f'{S("rare_variant_of", canonical=canon)}</a>')
@@ -11737,8 +11746,11 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
     if BLOG_POSTS_BY_CC.get(cc):
         urls.append(f"{BASE_URL}{p}/blog/")
         urls += [f"{BASE_URL}{p}/blog/{post['slug']}.html" for post in BLOG_POSTS_BY_CC[cc]]
-    urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
-    urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in pages_to_generate_by_country[cc]]
+    nt = name_total_by_country[cc]
+    indexed_names = [n for n in pages_to_generate_by_country[cc]
+                     if nt.get(n, 0) >= NOINDEX_MIN_TOTAL]
+    urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in indexed_names]
+    urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in indexed_names]
     urls += [f"{BASE_URL}{p}/year/{y}.html" for y in years_by_country[cc]]
     latest = years_by_country[cc][-1] if years_by_country[cc] else None
     prev_latest = latest - 1 if latest else None
