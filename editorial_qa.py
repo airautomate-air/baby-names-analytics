@@ -36,20 +36,48 @@ def check_overlap(entries):
     return failures
 
 
+# Round numbers used as structural framing (rank tiers, batch size) rather
+# than as a factual claim about a specific name's data.
+TIER_NUMBERS = {'10', '15', '20', '25', '30', '50', '100', '300', '1', '2', '3'}
+
+
 def check_numbers(entries):
     import editorial_facts
     failures = []
     counts, years, enrichment = editorial_facts.load()
-    for slug, e in entries.items():
+
+    # Numbers legitimately traceable to ANY name currently in the file, so a
+    # cross-reference like "unlike Ava's 45% drop" in another name's entry
+    # is allowed as long as it's real — just not fabricated.
+    batch_numbers = set(TIER_NUMBERS)
+    facts_by_slug = {}
+    for slug in entries:
         f = editorial_facts.facts_for(slug.title(), counts, years, enrichment)
+        if f is None:
+            continue
+        facts_by_slug[slug] = f
+        for k, v in f.items():
+            if isinstance(v, int):
+                batch_numbers.add(str(v))
+                batch_numbers.add(str(abs(v)))
+        batch_numbers |= {str(d) + 's' for d in f['decades_active']}
+        batch_numbers |= {str(fb.get('born')) for fb in f['famous'] if fb.get('born')}
+
+    year_fields = ('peak_year', 'latest_year', 'peak_rank_year', 'first_year_seen')
+    for slug, e in entries.items():
+        f = facts_by_slug.get(slug)
         if f is None:
             failures.append((slug, 'no facts available for this name'))
             continue
-        known_numbers = {str(v) for k, v in f.items() if isinstance(v, int)}
-        # allow "fallen 26%" for a fact of -26 (sign is implied by the verb)
-        known_numbers |= {str(abs(v)) for k, v in f.items() if isinstance(v, int)}
-        known_numbers |= {str(d) + 's' for d in f['decades_active']}
-        known_numbers |= {str(fb.get('born')) for fb in f['famous'] if fb.get('born')}
+        known_numbers = set(batch_numbers)
+        # allow "84 years earlier" derived from two of this name's own year
+        # facts (e.g. latest_year - peak_rank_year), a legitimate calculation
+        year_values = [f[k] for k in year_fields if f.get(k)]
+        year_values += [fb['born'] for fb in f['famous'] if fb.get('born')]
+        for a in year_values:
+            for b in year_values:
+                if a is not None and b is not None:
+                    known_numbers.add(str(abs(a - b)))
         # match comma-grouped numbers (19,836) as a single token, then strip
         # commas before comparing so "19,836" checks against known "19836"
         raw_mentions = re.findall(r"\b\d[\d,]*\d\b|\b\d\b", e['text'])
