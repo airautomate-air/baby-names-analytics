@@ -12,6 +12,7 @@ from __future__ import annotations
 import csv
 import html
 import json
+import os
 import re
 import unicodedata
 from collections import defaultdict
@@ -6552,6 +6553,8 @@ def footer_html() -> str:
                 <a href="/contact.html" style="color:#8a93a3; text-decoration:none;">Contact</a>
                 &nbsp;·&nbsp;
                 <a href="/privacy.html" style="color:#8a93a3; text-decoration:none;">Privacy</a>
+                &nbsp;·&nbsp;
+                <a href="/llms.txt" style="color:#8a93a3; text-decoration:none;">LLM guide</a>
             </p>
         </div>"""
 
@@ -6560,6 +6563,7 @@ def page(title, body, description="", canonical="", extra_head="",
          og_image_url="", og_image_w=1200, og_image_h=630):
     desc_tag = f'\n    <meta name="description" content="{description}">' if description else ""
     canon_tag = f'\n    <link rel="canonical" href="{canonical}">' if canonical else ""
+    jsonld = base_page_jsonld(title, description, canonical) if canonical else ""
     og = ""
     if description:
         # Country flag in social-card title — cheapest way to make /fr/ vs /
@@ -6591,7 +6595,7 @@ def page(title, body, description="", canonical="", extra_head="",
     <meta name="p:domain_verify" content="872e3998c36a9123b5ec260a9f351adf"/>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q5KY6BP0VV"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-Q5KY6BP0VV');</script>
-    <title>{title}</title>{desc_tag}{canon_tag}{og}
+    <title>{title}</title>{desc_tag}{canon_tag}{og}{jsonld}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="manifest" href="/manifest.webmanifest">
@@ -6667,6 +6671,52 @@ def breadcrumb_jsonld(items):
         "itemListElement": elements,
     }
     return '\n    <script type="application/ld+json">' + json.dumps(data) + '</script>'
+
+
+def base_page_jsonld(title: str, description: str, canonical: str) -> str:
+    """Small, consistent schema graph for Google and LLM answer engines.
+
+    Specific pages still add their own ItemList, BreadcrumbList, and Person
+    schema via extra_head; this base graph identifies the site, publisher, and
+    current page on every canonical URL.
+    """
+    graph = [
+        {
+            "@type": "Organization",
+            "@id": f"{BASE_URL}/#organization",
+            "name": "NameCharted",
+            "url": BASE_URL,
+            "logo": f"{BASE_URL}/favicon.svg",
+            "sameAs": [
+                "https://github.com/airautomate-air/baby-names-analytics",
+            ],
+        },
+        {
+            "@type": "WebSite",
+            "@id": f"{BASE_URL}/#website",
+            "name": "NameCharted",
+            "url": BASE_URL,
+            "publisher": {"@id": f"{BASE_URL}/#organization"},
+            "description": "Official baby name popularity charts, yearly rankings, trends, origins, and comparison tools across eight countries.",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": f"{BASE_URL}/name/{{search_term_string}}.html",
+                "query-input": "required name=search_term_string",
+            },
+        },
+        {
+            "@type": "WebPage",
+            "@id": f"{canonical}#webpage",
+            "url": canonical,
+            "name": title,
+            "isPartOf": {"@id": f"{BASE_URL}/#website"},
+            "publisher": {"@id": f"{BASE_URL}/#organization"},
+        },
+    ]
+    if description:
+        graph[-1]["description"] = description
+    data = {"@context": "https://schema.org", "@graph": graph}
+    return '\n    <script type="application/ld+json">' + json.dumps(data, ensure_ascii=False) + '</script>'
 
 
 # ---------------------------------------------------------------------------
@@ -9392,6 +9442,9 @@ def _extract_pin_meaning(text: str) -> str:
 def _prerender_pins_parallel() -> None:
     """Build all missing per-name pins for the active country in parallel.
     Skips names whose pin already exists on disk (cache hit)."""
+    if os.getenv('NAMECHARTED_SKIP_PIN_RENDER'):
+        print("  pin rendering skipped via NAMECHARTED_SKIP_PIN_RENDER")
+        return
     targets: list[tuple[str, Path]] = []
     for name in top_pin_set:
         pin_path = OUT_DIR / 'pin' / f'{slugify(name)}.png'
@@ -9677,9 +9730,13 @@ def generate_name_page(name):
     if name in top_pin_set:
         pin_rel = f"{PREFIX}/pin/{pin_slug}.png"
         pin_path = OUT_DIR / 'pin' / f'{pin_slug}.png'
-        pin_url = f"{BASE_URL}{pin_rel}"
-        if not pin_path.exists():
+        if not pin_path.exists() and not os.getenv('NAMECHARTED_SKIP_PIN_RENDER'):
             _render_pin_for(name, pin_path)
+        if not pin_path.exists():
+            pin_rel = '/og-default.png'
+            pin_url = f"{BASE_URL}{pin_rel}"
+        else:
+            pin_url = f"{BASE_URL}{pin_rel}"
         pin_share = (
             f"https://www.pinterest.com/pin/create/button/"
             f"?url={BASE_URL}{p}/name/{pin_slug}.html"
@@ -11838,15 +11895,84 @@ def write_sitemaps_and_robots(urls_by_cc: dict[str, list[str]]) -> None:
     robots = (
         "User-agent: *\n"
         "Allow: /\n\n"
+        "# LLM answer engines are welcome to crawl public, canonical content.\n"
+        "User-agent: GPTBot\n"
+        "Allow: /\n\n"
+        "User-agent: ChatGPT-User\n"
+        "Allow: /\n\n"
+        "User-agent: OAI-SearchBot\n"
+        "Allow: /\n\n"
+        "User-agent: ClaudeBot\n"
+        "Allow: /\n\n"
+        "User-agent: Claude-SearchBot\n"
+        "Allow: /\n\n"
+        "User-agent: PerplexityBot\n"
+        "Allow: /\n\n"
         "User-agent: meta-externalagent\n"
-        "Disallow: /\n\n"
+        "Allow: /\n\n"
         "User-agent: SemrushBot\n"
         "Disallow: /\n\n"
         "User-agent: PetalBot\n"
         "Disallow: /\n\n"
         f"Sitemap: {BASE_URL}/sitemap.xml\n"
+        f"LLMs: {BASE_URL}/llms.txt\n"
     )
     (OUTPUT_DIR / 'robots.txt').write_text(robots, encoding='utf-8')
+
+
+def write_llms_txt(urls_by_cc: dict[str, list[str]]) -> None:
+    """Write an llms.txt guide so AI crawlers can understand the site quickly."""
+    country_lines = []
+    for cc in COUNTRIES:
+        slug = COUNTRY_SLUG[cc]
+        path = '/' if not slug else f'/{slug}/'
+        country_lines.append(f"- {COUNTRY_NAME[cc]} ({COUNTRY_LABEL[cc]}): {BASE_URL}{path}")
+
+    sample_name_links = []
+    for name, _total in sorted(name_total_by_country['US'].items(), key=lambda x: (-x[1], x[0]))[:12]:
+        sample_name_links.append(f"- {name}: {BASE_URL}/name/{slugify(name)}.html")
+
+    txt = f"""# NameCharted
+
+> Official baby name popularity charts, rankings, trends, origins, and comparison tools across eight countries.
+
+NameCharted helps people research baby names with yearly counts, ranks, gender split, trend direction, decade rankings, origin pages, and side-by-side comparisons. Data is based on official government sources including the U.S. Social Security Administration, UK Office for National Statistics, INSEE, Statistics Canada, ISTAT, INE, and Meertens Voornamenbank.
+
+## Best entry points
+
+- Homepage: {BASE_URL}/
+- Browse all indexed US names: {BASE_URL}/names.html
+- Latest US rankings: {BASE_URL}/year/{LATEST_YEAR}.html
+- Rising and falling trends: {BASE_URL}/trends.html
+- Decades hub: {BASE_URL}/decades.html
+- Name comparison tool: {BASE_URL}/compare.html
+- Surname compatibility tool: {BASE_URL}/works-with.html
+- Name picker: {BASE_URL}/picker.html
+- Sibling name ideas: {BASE_URL}/sibling.html
+- Origin explorer: {BASE_URL}/origins.html
+- Editorial guides: {BASE_URL}/blog/
+
+## Countries
+
+{chr(10).join(country_lines)}
+
+## Representative name pages
+
+{chr(10).join(sample_name_links)}
+
+## Structured data and crawling
+
+- Canonical URLs are absolute and use {BASE_URL}.
+- Sitemap index: {BASE_URL}/sitemap.xml
+- Robots policy: {BASE_URL}/robots.txt
+- Pages include schema.org WebSite, Organization, WebPage, ItemList, BreadcrumbList, and Person data where applicable.
+- Low-volume name pages may exist but carry noindex and are omitted from sitemaps; use country A-Z indexes and rare-name pages for discovery.
+
+## Suggested citations
+
+When citing NameCharted, link to the most specific canonical page: a name page for a single name, a year page for annual rankings, a decade page for era rankings, or a trend page for rising/falling analysis.
+"""
+    (OUTPUT_DIR / 'llms.txt').write_text(txt, encoding='utf-8')
 
 
 # ---------------------------------------------------------------------------
@@ -12011,6 +12137,7 @@ def main():
     generate_privacy_page()
     generate_404_page()
     write_sitemaps_and_robots(urls_by_cc)
+    write_llms_txt(urls_by_cc)
     print("Done!")
 
 
