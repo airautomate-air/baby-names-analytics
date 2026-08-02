@@ -69,6 +69,19 @@ def check_numbers(entries):
                 batch_numbers.add(str(abs(born)))
 
     year_fields = ('peak_year', 'latest_year', 'peak_rank_year', 'first_year_seen')
+    DATASET_START_YEAR = 1880  # implicit anchor for "N years into the dataset"
+
+    # Cross-name derived gaps, e.g. citing "Samuel's 121-year gap" in another
+    # entry's text — legitimate as long as it's a real pairwise difference
+    # between two of THAT OTHER name's own year facts (not a fabricated one).
+    for slug, f in facts_by_slug.items():
+        yv = [f[k] for k in year_fields if f.get(k)] + [DATASET_START_YEAR]
+        yv += [fb['born'] for fb in f['famous'] if fb.get('born')]
+        for a in yv:
+            for b in yv:
+                if a is not None and b is not None:
+                    batch_numbers.add(str(abs(a - b)))
+
     for slug, e in entries.items():
         f = facts_by_slug.get(slug)
         if f is None:
@@ -76,8 +89,9 @@ def check_numbers(entries):
             continue
         known_numbers = set(batch_numbers)
         # allow "84 years earlier" derived from two of this name's own year
-        # facts (e.g. latest_year - peak_rank_year), a legitimate calculation
-        year_values = [f[k] for k in year_fields if f.get(k)]
+        # facts (e.g. latest_year - peak_rank_year), a legitimate calculation.
+        # DATASET_START_YEAR is included so "N years into the dataset" works.
+        year_values = [f[k] for k in year_fields if f.get(k)] + [DATASET_START_YEAR]
         year_values += [fb['born'] for fb in f['famous'] if fb.get('born')]
         for a in year_values:
             for b in year_values:
