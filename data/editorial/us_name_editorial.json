@@ -298,5 +298,105 @@
   "lily": {
     "text": "Lily's rank and count peaked together in 2011 — #15 nationally and 8,192 births — one of this batch's cleaner simultaneous peaks alongside Carter's and Chloe's.\n\nSince then it's eased to #24 with 6,093 births in 2024, down just 10% over the past decade — a notably mild decline for a name that peaked well over a decade ago, milder than Chloe's 25% drop from a similarly-timed high.\n\nThe famous-bearer list mixes music (Lily Allen), film (Lily Collins, Lily James), comedy (Lily Tomlin), and fiction (Harry Potter's Lily Potter) — a broad spread across entertainment that gives the name wide contemporary visibility even as its raw numbers have settled into a slow, gradual decline.",
     "updated": "2026-07-21"
+  },
+  "emily": {
+    "text": "892,769 total US births make Emily one of the largest names in this dataset, on par with Joseph or Matthew from earlier batches. It was the #1 girls' name for a long run through the late 1990s, its rank peaking in 1996 and its raw count peaking three years later at 26,542 births in 1999.\n\nThe fall since has been steep: 5,955 births in 2024, 53% under its count from ten years earlier, landing at #25 — a sharper drop than most names that once held the top spot.\n\nEmily Dickinson and Emily Brontë give the name serious 19th-century literary weight, while Emily Blunt keeps it current — a spread across two centuries that few names still in the top 30 can claim.",
+    "updated": "2026-07-21"
+  },
+  "aria": {
+    "text": "Aria is essentially flat: 0% change over the past ten years, one of the only names across all four batches to land exactly on zero. Its rank peaked at #19 in 2018, the same year the raw count hit its own high of 7,435 — a clean, simultaneous peak with no lag between the two measures.\n\nThe name only enters SSA data in 1900, twenty years after the dataset's start, and its enrichment data lists a single bearer, actor Aria Giovanni, whose career doesn't predate the name's own 2010s rise.\n\nThat combination — flat growth, a recent single peak, one contemporary namesake — makes Aria one of the more static entries in this batch, neither climbing nor falling in any meaningful way right now.",
+    "updated": "2026-07-21"
+  },
+  "scarlett": {
+    "text": "Scarlett shows an unusual split: its raw count peaked back in 2017 at 7,719 births, but its best-ever rank, #14, didn't arrive until five years later, in 2022 — the count fell while the rank kept improving, meaning competing names dropped faster than Scarlett did.\n\nFirst recorded in 1937, the name has a shorter data history than most names this popular, entering nearly six decades after the dataset begins.\n\nScarlett Johansson dominates the name's public association, joined by an unexpected second entry — Julia Louis-Dreyfus, whose middle name is Scarlett — a namesake list built almost entirely around one generation of actresses rather than spanning centuries the way Emily's does.",
+    "updated": "2026-07-21"
+  },
+  "cooper": {
+    "text": "Cooper's 2024 count, 5,699 births, is a fresh high on both fronts — its best-ever rank, #50, arrived the same year. An 18% climb over the past decade is modest compared to several other risers in this batch, but it's been a steady one rather than a sudden spike.\n\nThe name has technically been in the data since 1882, though its enrichment list carries only one entry: footballer Glen Johnson, whose middle name is Cooper — an indirect connection rather than someone actually named Cooper at birth.\n\nThat thin namesake record, despite a data history stretching back well over a century, suggests Cooper functioned mostly as a surname-turned-first-name until quite recently, without a strong individual figure driving its adoption.",
+    "updated": "2026-07-21"
+  },
+  "rowan": {
+    "text": "No name in this batch grew faster than Rowan except Thiago: 4,647 births at #71 in 2024, both fresh highs, 200% above where the name stood a decade earlier.\n\nSSA records for this name start in 1916, though it stayed a minor presence for nearly a century before this recent surge.\n\nThe famous-bearer list here is unusually varied for a name this size — 19th-century mathematician William Rowan Hamilton, actor Rowan Atkinson, and the Archbishop of Canterbury Rowan Williams all carry the name as either a first or middle name, spanning science, comedy, and the clergy in a way that doesn't cluster around one field the way Cooper's thin list does.",
+    "updated": "2026-07-21"
+  },
+  "caleb": {
+    "text": "Caleb's raw count peaked in 2002 at 11,665 births, but its rank kept climbing for another seven years, hitting #31 in 2009 — a longer lag than most names in this batch, similar in shape to Isaac's pattern from batch three.\n\nBy 2024 it had fallen to #49 with 5,766 births, down 38% from a decade before.\n\nThe enrichment data's oldest reference is the biblical spy Caleb, dated to roughly 1483 BC — one of the oldest specific dates attached to any name across all four batches so far — sitting alongside contemporary entries like actor Caleb McLaughlin and rapper Don Toliver, born Caleb Toliver.",
+    "updated": "2026-07-21"
+  },
+  "penelope": {
+    "text": "Penelope's rank reached its best-ever mark, #21, in 2022, three years after its raw count peaked at 6,733 births in 2019 — count falling while rank still climbed, the same pattern seen in Scarlett.\n\n5,741 births in 2024 is only 13% more than a decade before — a modest gain next to this batch's bigger risers like Rowan or Thiago.\n\nUnusually, no famous bearers are listed for Penelope at all, despite its flagged French origin and its long presence in Greek mythology through Odysseus's wife — a gap between cultural weight and documented namesakes that Aurora and Eliana also showed in the third batch.",
+    "updated": "2026-07-21"
+  },
+  "zoe": {
+    "text": "Zoe carries one of the longer gaps in this batch between its count peak and its rank peak: the raw count topped out in 2012 at 6,466 births, but the rank didn't reach its own best-ever mark, #29, until 2024 — twelve years later, second only to Joshua's thirteen-year lag elsewhere in this batch.\n\nThe pct change over the past decade is nearly flat, down just 3% to 5,719 births in 2024.\n\nNo origin and no famous bearers appear in the enrichment data at all, leaving Zoe's steady, quiet persistence — present since 1880, never spiking, never collapsing — without any obvious cultural explanation the data can offer.",
+    "updated": "2026-07-21"
+  },
+  "ella": {
+    "text": "346,302 total births puts Ella well ahead of most names in this batch by scale, though still a fraction of the oldest, largest names here like Charles's 2.4 million. Its count peaked in 2010 at 9,883, and the rank followed a year later at #12 in 2011.\n\nThe decline since has been substantial: 5,685 births in 2024, 34% fewer than ten years before, at #30 nationally.\n\nElla Fitzgerald anchors the name in mid-20th-century jazz, while Lorde (born Ella Yelich-O'Connor) and actor Ella Purnell keep it current — a spread from the 1930s through the 2020s that gives the name unusual reach for one that's fallen this far from its peak.",
+    "updated": "2026-07-21"
+  },
+  "charles": {
+    "text": "Charles's best-ever rank, #4, was already set in 1880, the very first year this dataset covers — the same year Samuel, John, William, and Thomas each hit their own best-ever rank, a cluster of names whose positional peak arrived right at the start of what this dataset can track. The raw count didn't reach its own high, 40,779 births, until 1947, sixty-seven years later.\n\n2,441,151 total births since 1880 makes Charles one of this batch's largest names by history. Its 2024 count, 5,593, sits 24% below where it was ten years back — a milder decline than Emily's or Abigail's despite the name's much longer run.\n\nCharles Darwin, Charles Dickens, and King Charles III cover science, literature, and monarchy across three centuries, the kind of namesake breadth that only names with an 1880-era rank peak tend to carry.",
+    "updated": "2026-07-21"
+  },
+  "angel": {
+    "text": "Angel's count and rank peaked in the exact same year, 2006 — 11,602 births and #31 nationally — a tidy simultaneous peak, matching the pattern seen in Cameron and Isaiah.\n\nSince then the fall has been sharp in rank terms: down to #63 by 2024, even though the raw-count decline, 21% over the decade, looks comparatively mild next to a name like Abigail's 55% drop.\n\nFirst recorded in 1888, just eight years into the dataset, Angel's famous-bearer list leans international and contemporary — footballer Angel Gomes, actor Angel Coulby — without any older reference point anchoring the name the way Charles's centuries-old namesakes do.",
+    "updated": "2026-07-21"
+  },
+  "roman": {
+    "text": "Roman's 2024 count, 5,474 births, is a new high alongside its best-ever rank, #52 — a 57% climb over the past decade, a solid but not extreme gain compared to this batch's steeper risers like Ivy or Ezekiel.\n\nThe name has technically been recorded since 1882, though it stayed minor for over thirteen decades before this recent run.\n\nFilm director Roman Polanski and businessman Roman Abramovich give the name a contemporary, mostly European set of namesakes, joined by novelist Romain Gary — a cluster that skews recent and international rather than reaching back through American history the way Charles's or Joshua's lists do.",
+    "updated": "2026-07-21"
+  },
+  "abigail": {
+    "text": "Abigail posted the steepest ten-year decline in this batch: down 55% to 5,499 births in 2024, landing at #32. Its rank peaked at #4 in 2005, two years after the raw count's own high of 15,932 births in 2003.\n\nThe enrichment data lists no famous bearers at all, despite the name's biblical origin and its earlier run near the top of the chart — a gap shared with Penelope and Zoe elsewhere in this batch.\n\nThat combination — a rapid, recent fall from a genuine top-five position, and no documented namesake pulling in the other direction — makes Abigail's decline look less like a slow fade and more like a sharp reversal with nothing currently working to offset it.",
+    "updated": "2026-07-21"
+  },
+  "mila": {
+    "text": "Mila hit its high-water mark on both fronts in 2018 at once: 8,167 births and #14 nationally. Six years on, 5,472 births in 2024 represents a 35% gain from where it stood a decade before — one of the stronger climbs among this batch's newer, internationally-rooted names.\n\nNo famous bearers show up in the enrichment data for Mila, leaving its rise — like Aurora's and Eliana's in the third batch — without a single traceable cultural reference, even as the name has climbed steadily for over a decade.",
+    "updated": "2026-07-21"
+  },
+  "josiah": {
+    "text": "Josiah's rank peaked at #45 in 2019, two years after its raw-count high of 7,073 births in 2017 — a short lag similar to Isla's pattern later in this same batch.\n\nThe decline since has been moderate: 5,457 births in 2024, only 16% under its count ten years prior — one of the milder ten-year drops in this batch, alongside Charles's 24%.\n\nIts famous-bearer list runs entirely through 18th- and 19th-century intellectual figures — physicist Josiah Willard Gibbs, ceramicist Josiah Wedgwood, philosopher Josiah Royce — with no contemporary entry at all, an old-fashioned namesake profile that matches the name's steady, unspectacular modern trajectory.",
+    "updated": "2026-07-21"
+  },
+  "cameron": {
+    "text": "Cameron's count and rank peaked in the same year, 2000 — 12,765 births and #31 nationally — echoing the simultaneous-peak shape seen in Angel, Mila, and Isaiah elsewhere in this batch.\n\nSince then it's fallen further than most: #66 by 2024, with 4,817 births, down 32% over the decade — a steeper decline than Josiah's or Charles's, closer to Ella's pace.\n\nCameron Diaz anchors the name in film, while voice actor Cam Clarke and rapper Wiz Khalifa (born Cameron Thomaz) round out a famous-bearer list that spans acting, animation, and music without concentrating in any single era.",
+    "updated": "2026-07-21"
+  },
+  "lucy": {
+    "text": "Lucy's 2024 count, 5,396 births, is its highest ever, matched by a fresh best-ever rank, #34 — a 26% climb over the past decade, a steadier pace than the triple-digit gains posted by names like Ivy or Ezekiel in this same batch.\n\nThis name's SSA data reaches back to 1880, though its enrichment data goes back further still: Saint Lucy, dated to roughly the year 283, is one of the oldest specific figures attached to any name covered across all four batches.\n\nLucy Liu and Lucy Lawless keep the name visible in contemporary film and television, while Lucy Maud Montgomery's authorship of Anne of Green Gables adds a literary anchor from over a century ago.",
+    "updated": "2026-07-21"
+  },
+  "ezekiel": {
+    "text": "Ezekiel's 5,390 births in 2024 is 126% above its count a decade prior, with both its count and rank peaking together two years earlier, in 2022, at #48 nationally.\n\nThe enrichment data's oldest reference dates to roughly 620 BC — the biblical prophet — making Ezekiel one of three names in this batch, alongside Caleb and Isaiah, whose famous-bearer list reaches back into antiquity via a biblical figure with a negative birth year on record.\n\nIts more recent namesakes are almost entirely athletic — steeplechase runner Ezekiel Kemboi, bodybuilder Ezekiel Jackson — a contrast between an ancient religious origin and a thoroughly modern set of contemporary bearers.",
+    "updated": "2026-07-21"
+  },
+  "isla": {
+    "text": "Isla's data history runs surprisingly deep for a name that reads as a recent trend: first recorded in 1886, just six years into the dataset, though it stayed minor for well over a century before climbing sharply in the 2020s.\n\n5,367 births in 2024 is 151% more than the name had a decade earlier. Its best-ever rank, #33, arrived in 2023 — two years after the raw count itself topped out at 5,540 in 2021.\n\nOnly one namesake appears in the enrichment data, actor Isla Fisher, active since the mid-2000s — a thin cultural anchor, similar to Aiden's or Cooper's, for a name whose modern popularity outpaces its documented associations.",
+    "updated": "2026-07-21"
+  },
+  "ivy": {
+    "text": "Ivy's 2024 count, 5,323 births, reached a fresh high the same year its rank did too, #36 — a 132% climb from ten years earlier, one of this batch's bigger percentage gains, though still behind bigger risers like Thiago, Rowan, and Isla.\n\nThis name's SSA data goes back to 1880, a footnote presence across most of that span before this recent surge.\n\nOnly one bearer shows up in the enrichment data, actor Melissa Rauch, whose middle name is Ivy — an indirect namesake rather than someone using it as a given name, leaving Ivy's rapid modern rise, like Aurora's or Mila's before it, without a clear documented cultural trigger.",
+    "updated": "2026-07-21"
+  },
+  "bennett": {
+    "text": "Bennett's growth rate over the past decade landed on an exact round number: 100%, a straight doubling, bringing both its count and rank to fresh highs in 2024 — 5,095 births at #60 nationally.\n\nBennett's own SSA data runs back to 1880 too, a long, mostly quiet history before this recent climb.\n\nIts famous-bearer list runs through jazz (Benny Carter, born Bennett Lester Carter), film (director Bennett Miller), and television (actor Ben Savage, born Benjamin Bennett Savage) — three different fields, none of them producing a household name prominent enough to obviously explain the sudden doubling in popularity.",
+    "updated": "2026-07-21"
+  },
+  "layla": {
+    "text": "Layla's data history starts later than most in this batch, in 1950 — two decades before Eric Clapton's 1970 song of the same name, meaning the name was already in quiet US use well before that cultural moment, contrary to what its popularity might suggest.\n\n2019 marked its high point on both fronts together: 6,518 births, #23 nationally. It's eased since to 5,305 births and #37 by 2024, an 18% pullback from a decade prior.\n\nThe enrichment data's only listed bearer is professional wrestler Layla El, active since the mid-2000s, decades after the name's actual first appearance in the birth data.",
+    "updated": "2026-07-21"
+  },
+  "thiago": {
+    "text": "Thiago posted the biggest percentage jump of any name across all four batches so far: 564%, taking it from a near-nonexistent presence to 5,289 births in 2024, with its rank hitting a fresh best, #55, the same year.\n\nMuch of that is a base-rate effect — the name's total births since it first entered the data, in 1986, run to just 29,375, the smallest total of any name covered in this batch, well below every other entry here, and its history spans only five decades rather than the thirteen or fourteen most other names in this range carry.\n\nThe famous-bearer list here is unusually uniform: five professional footballers, all Brazilian, all born within a decade of each other — Thiago Silva, Thiago Alcântara, Thiago Motta, Thiago Neves, Thiago Cionek — a namesake cluster with no equivalent elsewhere in this batch.",
+    "updated": "2026-07-21"
+  },
+  "isaiah": {
+    "text": "2006 was Isaiah's high point on both measures at once: 10,459 births, #39 nationally — the same simultaneous-peak shape as Angel, Cameron, and Mila.\n\nThe decline since has been steady: 5,250 births in 2024, 31% below its 2014 level, landing at #56.\n\nAlongside the biblical prophet Isaiah, dated to roughly 765 BC, the enrichment data lists philosopher Isaiah Berlin and NBA guard Isaiah Thomas — a name whose ancient religious root sits next to 20th-century intellectual and athletic namesakes, the same antiquity-to-present spread seen in Caleb's and Ezekiel's entries.",
+    "updated": "2026-07-21"
+  },
+  "joshua": {
+    "text": "Joshua carries one of the longest lags in this entire batch between its count peak and its rank peak: the raw count hit its high, 44,099 births, in 1989, but the rank didn't reach its own best, #3, until 2002 — thirteen years later, just ahead of Zoe's twelve-year gap.\n\n1,249,012 total births since 1880 makes Joshua roughly as historically large as Charles, though its recent trajectory looks nothing alike: 5,244 births in 2024 is 52% below its count ten years earlier, closer to Emily's steep pace than to Charles's milder retreat.\n\nJoshua Reynolds anchors the name in 18th-century British portraiture, while Josh Hutcherson and Josh Hartnett keep a shortened form current in contemporary film — two very different eras represented under variations of the same name.",
+    "updated": "2026-07-21"
   }
 }
