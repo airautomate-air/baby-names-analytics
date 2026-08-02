@@ -1,0 +1,57 @@
+# NameCharted
+
+> Official baby name popularity charts, rankings, trends, origins, and comparison tools across eight countries.
+
+NameCharted helps people research baby names with yearly counts, ranks, gender split, trend direction, decade rankings, origin pages, and side-by-side comparisons. Data is based on official government sources including the U.S. Social Security Administration, UK Office for National Statistics, INSEE, Statistics Canada, ISTAT, INE, and Meertens Voornamenbank.
+
+## Best entry points
+
+- Homepage: https://namecharted.com/
+- Browse all indexed US names: https://namecharted.com/names.html
+- Latest US rankings: https://namecharted.com/year/2024.html
+- Rising and falling trends: https://namecharted.com/trends.html
+- Decades hub: https://namecharted.com/decades.html
+- Name comparison tool: https://namecharted.com/compare.html
+- Surname compatibility tool: https://namecharted.com/works-with.html
+- Name picker: https://namecharted.com/picker.html
+- Sibling name ideas: https://namecharted.com/sibling.html
+- Origin explorer: https://namecharted.com/origins.html
+- Editorial guides: https://namecharted.com/blog/
+
+## Countries
+
+- United States (US): https://namecharted.com/
+- France (FR): https://namecharted.com/fr/
+- United Kingdom (UK): https://namecharted.com/uk/
+- Australia (AU): https://namecharted.com/au/
+- Canada (CA): https://namecharted.com/ca/
+- Spain (ES): https://namecharted.com/es/
+- Italy (IT): https://namecharted.com/it/
+- Netherlands (NL): https://namecharted.com/nl/
+
+## Representative name pages
+
+- James: https://namecharted.com/name/james.html
+- John: https://namecharted.com/name/john.html
+- Robert: https://namecharted.com/name/robert.html
+- Michael: https://namecharted.com/name/michael.html
+- William: https://namecharted.com/name/william.html
+- Mary: https://namecharted.com/name/mary.html
+- David: https://namecharted.com/name/david.html
+- Joseph: https://namecharted.com/name/joseph.html
+- Richard: https://namecharted.com/name/richard.html
+- Charles: https://namecharted.com/name/charles.html
+- Thomas: https://namecharted.com/name/thomas.html
+- Christopher: https://namecharted.com/name/christopher.html
+
+## Structured data and crawling
+
+- Canonical URLs are absolute and use https://namecharted.com.
+- Sitemap index: https://namecharted.com/sitemap.xml
+- Robots policy: https://namecharted.com/robots.txt
+- Pages include schema.org WebSite, Organization, WebPage, ItemList, BreadcrumbList, and Person data where applicable.
+- Low-volume name pages may exist but carry noindex and are omitted from sitemaps; use country A-Z indexes and rare-name pages for discovery.
+
+## Suggested citations
+
+When citing NameCharted, link to the most specific canonical page: a name page for a single name, a year page for annual rankings, a decade page for era rankings, or a trend page for rising/falling analysis.

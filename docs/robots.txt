@@ -1,8 +1,27 @@
 User-agent: *
 Allow: /
 
+# LLM answer engines are welcome to crawl public, canonical content.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
 User-agent: meta-externalagent
-Disallow: /
+Allow: /
 
 User-agent: SemrushBot
 Disallow: /
@@ -11,3 +30,4 @@ User-agent: PetalBot
 Disallow: /
 
 Sitemap: https://namecharted.com/sitemap.xml
+LLMs: https://namecharted.com/llms.txt
