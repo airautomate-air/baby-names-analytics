@@ -59,6 +59,6 @@ Three things make Latin names distinctive:
 
 ---
 
-*Explore more origin spotlights: [Greek names](/origins/greek.html), [Hebrew names](/origins/hebrew.html), [Italian names](/origins/italian.html), [Spanish names](/origins/spanish.html).*
+*Explore more origin spotlights: [Greek names](/origin/greek.html), [Hebrew names](/origin/hebrew.html), [Italian names](/origin/italian.html), [Spanish names](/origin/spanish.html).*
 
 *Data: SSA 2024 release. Origin classifications from Wikidata enrichment.*

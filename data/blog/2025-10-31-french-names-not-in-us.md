@@ -14,11 +14,11 @@ Here are twelve names hot in France today that could be the next wave.
 ## Boys
 
 1. **[Sacha](/name/sacha.html)** — France's #14 boy name in 2024 (2,420 babies). Russian short form of Alexander, fully naturalised in French. **Unranked in the US** — fewer than five US births in 2024. Easy to spell, easy to say, but Americans aren't picking it up yet.
-2. **[Marceau](/name/marceau.html)** — France #15 (2,290). Pronounced "mar-SO". A surname-name with napoleonic-era resonance. Unranked in the US.
-3. **[Gabin](/name/gabin.html)** — France #19 (2,025). Pronounced "ga-BAN". The actor Jean Gabin made this name a French staple. Unranked in the US.
-4. **[Malo](/name/malo.html)** — France #24 (1,830). A Breton saint's name. Two syllables, ends in 'o' — exactly the profile that usually travels well. Unranked in the US.
-5. **[Gaspard](/name/gaspard.html)** — France #39 (1,245). One of the three Magi. Unranked in the US.
-6. **[Côme](/name/come.html)** — France #42 (1,215). Pronounced "COHM". Saint Côme (Cosmas) of the Cosmas-and-Damian pair. The accent will likely fall off when this crosses west, leaving "Come" — which may be a barrier.
+2. **[Marceau](/fr/name/marceau.html)** — France #15 (2,290). Pronounced "mar-SO". A surname-name with napoleonic-era resonance. Unranked in the US.
+3. **[Gabin](/fr/name/gabin.html)** — France #19 (2,025). Pronounced "ga-BAN". The actor Jean Gabin made this name a French staple. Unranked in the US.
+4. **[Malo](/fr/name/malo.html)** — France #24 (1,830). A Breton saint's name. Two syllables, ends in 'o' — exactly the profile that usually travels well. Unranked in the US.
+5. **[Gaspard](/fr/name/gaspard.html)** — France #39 (1,245). One of the three Magi. Unranked in the US.
+6. **[Côme](/fr/name/come.html)** — France #42 (1,215). Pronounced "COHM". Saint Côme (Cosmas) of the Cosmas-and-Damian pair. The accent will likely fall off when this crosses west, leaving "Come" — which may be a barrier.
 
 Honourable mentions further down the French top 100: **Léandre**, **Andrea** (used for boys in France and Italy), **Maël** (US #1,057 but with a fast climb).
 
@@ -26,10 +26,10 @@ Honourable mentions further down the French top 100: **Léandre**, **Andrea** (u
 
 1. **[Ambre](/name/ambre.html)** — France's #3 girl name in 2024 (2,815 babies). The French spelling of Amber. The US chart still uses plain "Amber" (#412), but the accent-and-final-e treatment is what makes Ambre feel modern in French. Unranked in the US.
 2. **[Romy](/name/romy.html)** — France #7 (2,260). Romy Schneider's name, mid-century French film royalty. **US #926** — registering, but barely.
-3. **[Agathe](/name/agathe.html)** — France #19 (1,845). Pronounced "ah-GAT". The saint Agatha in French dress. Unranked in the US, though Agatha (the English form) sits at #654 and has been climbing.
-4. **[Victoire](/name/victoire.html)** — France #28 (1,535). Pronounced "vik-TWAR" — "Victory". Unranked in the US. The English equivalent Victoria is at #14, so it's not the meaning that's missing, just the French form.
+3. **[Agathe](/fr/name/agathe.html)** — France #19 (1,845). Pronounced "ah-GAT". The saint Agatha in French dress. Unranked in the US, though Agatha (the English form) sits at #654 and has been climbing.
+4. **[Victoire](/fr/name/victoire.html)** — France #28 (1,535). Pronounced "vik-TWAR" — "Victory". Unranked in the US. The English equivalent Victoria is at #14, so it's not the meaning that's missing, just the French form.
 5. **[Jeanne](/name/jeanne.html)** — France #25 (1,635). Joan of Arc's name. **US #4,311.** This one is almost a statistical anomaly given how iconically Jeanne d'Arc looms in French history.
-6. **[Romane](/name/romane.html)** — France #38 (1,185). The feminine of Romain. Two syllables, no accent issues. Unranked in the US.
+6. **[Romane](/fr/name/romane.html)** — France #38 (1,185). The feminine of Romain. Two syllables, no accent issues. Unranked in the US.
 
 ## Why these names haven't crossed
 

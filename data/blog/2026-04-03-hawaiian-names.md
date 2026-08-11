@@ -26,7 +26,7 @@ The Hawaiian naming wave is real, measurable, and still early.
 | [Malia](/name/malia.html) | Girls | #635 | #420 | **#546** | 639 |
 | [Keanu](/name/keanu.html) | Boys | #743 | #626 | #881 | 284 |
 | [Kalani](/name/kalani.html) | Girls | ~#1,300 | #798 | #647 | 481 |
-| [Nalu](/name/nalu.html) | Boys | — | — | ~#1,800 | ~65 |
+| Nalu | Boys | — | — | ~#1,800 | ~65 |
 
 ---
 

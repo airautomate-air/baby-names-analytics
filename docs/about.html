@@ -7,10 +7,10 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q5KY6BP0VV"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-Q5KY6BP0VV');</script>
     <title>About — NameCharted</title>
-    <meta name="description" content="NameCharted turns government birth records into interactive name trend charts. Learn about our data sources, methodology, and what the site can do.">
+    <meta name="description" content="NameCharted turns government birth records into interactive name trend charts. Learn who runs the site, where the data comes from, and how it is funded.">
     <link rel="canonical" href="https://namecharted.com/about.html">
     <meta property="og:title" content="🇺🇸 About — NameCharted">
-    <meta property="og:description" content="NameCharted turns government birth records into interactive name trend charts. Learn about our data sources, methodology, and what the site can do.">
+    <meta property="og:description" content="NameCharted turns government birth records into interactive name trend charts. Learn who runs the site, where the data comes from, and how it is funded.">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="NameCharted">
     <meta property="og:locale" content="en_US">
@@ -19,7 +19,7 @@
     <meta property="og:image:height" content="630">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="🇺🇸 About — NameCharted">
-    <meta name="twitter:description" content="NameCharted turns government birth records into interactive name trend charts. Learn about our data sources, methodology, and what the site can do.">
+    <meta name="twitter:description" content="NameCharted turns government birth records into interactive name trend charts. Learn who runs the site, where the data comes from, and how it is funded.">
     <meta name="twitter:image" content="https://namecharted.com/og-default.png">
     <meta property="og:url" content="https://namecharted.com/about.html">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -479,6 +479,10 @@
         .fiction-appears li { margin: 0.35rem 0; }
         .fiction-appears a { color: #149E91; text-decoration: none; font-weight: 500; }
         .fiction-appears a:hover { text-decoration: underline; }
+        .editorial-section { margin: 2rem 0; background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 1.25rem 1.5rem; }
+        .editorial-section h2 { font-size: 1.15rem; margin: 0 0 0.75rem; }
+        .editorial-section p { font-size: 0.95rem; line-height: 1.7; color: #1B2440; margin: 0 0 0.85rem; }
+        .editorial-section p.editorial-byline { font-size: 0.8rem; color: #8a93a3; margin: 0.5rem 0 0; }
         .stories-section { margin: 2rem 0; }
         .stories-section h2 { font-size: 1.15rem; margin: 0 0 1rem; }
         .story-card { background: #fff; border: 1px solid #d6dde2; border-radius: 8px; padding: 1rem 1.2rem 0.85rem; margin-bottom: 0.85rem; position: relative; }
@@ -650,12 +654,19 @@
         <p>Our primary dataset is the U.S. Social Security Administration's (SSA) annual name
         release, which covers every first name given to at least five babies born in the United
         States in a given year, going back to 1880. We also include official records from the
-        UK's Office for National Statistics (ONS), INSEE in France, the Australian Bureau of
-        Statistics (ABS), Statistics Canada, and national registries in Spain, Italy, and the
-        Netherlands.</p>
-        <p>All source data is public-domain or openly licensed by the issuing government agency.
-        We process it as-is — no smoothing, no interpolation — so the numbers you see match
-        exactly what the agencies publish.</p>
+        Office for National Statistics (England and Wales), INSEE in France, ISTAT in Italy,
+        Statistics Canada, the Instituto Nacional de Estadística in Spain, the New South Wales
+        and Victoria birth registries in Australia, and the Meertens Instituut's name bank in
+        the Netherlands.</p>
+        <p>All source data is public-domain or openly licensed by the issuing agency. We process
+        it as-is — no smoothing, no interpolation — so the numbers you see match exactly what the
+        agencies publish.</p>
+        <p><strong>Coverage is not equal across countries.</strong> Only the U.S. series is
+        near-complete. The England &amp; Wales, Australian, and Spanish sources publish ranked
+        top-100, top-100-ish, and top-50 lists respectively, so less common names are absent
+        entirely — and the Dutch series has not been updated since 2017. The
+        <a href="/methodology.html" style="color:#149E91;">methodology page</a> sets out the
+        exact years and depth for every country.</p>
 
         <h2 style="margin-top:2rem;">What you can do here</h2>
         <ul style="line-height:1.9;">
@@ -680,7 +691,33 @@
 
         <h2 style="margin-top:2rem;">Updates</h2>
         <p>We update the dataset each year when the SSA and partner agencies publish their
-        annual release, typically in May. The current data covers births through 2024.</p>
+        annual release, typically in May. U.S. data currently covers births through 2024.
+        Other countries run to different end years — Australia to 2025, the Netherlands only
+        to 2017 — as listed on the
+        <a href="/methodology.html" style="color:#149E91;">methodology page</a>.</p>
+
+        <h2 style="margin-top:2rem;">Who runs NameCharted</h2>
+        <p>NameCharted is built and maintained by JP, a solo developer. There is no company,
+        newsroom, or editorial staff behind it — one person writes the code that ingests the
+        government datasets, builds the charts, and publishes every page on this site.</p>
+        <p>The site started as a personal project: the existing baby-name sites were full of
+        invented rankings, unsourced "meanings", and lists that changed depending on who was
+        paying. The goal here is narrower and duller — take the official birth records, show
+        exactly what they say, and be clear about where every number comes from.</p>
+        <p>The written commentary on individual name pages — the "Editor's take" sections — is
+        researched and edited by JP, working from the figures in our own dataset rather than
+        from memory. Every numeric claim in those write-ups is checked against the source data
+        before it is published. Where a claim is an opinion about style or sound, it is
+        written as one.</p>
+        <p>NameCharted is free to use and funded personally. The site carries no sponsored
+        placements and no paid inclusion — no one can pay to have a name featured, ranked
+        higher, or described more favourably. If advertising is added in future, it will be
+        clearly labelled as advertising and kept separate from the data and the commentary.</p>
+        <p>Found an error, or disagree with something written here? Corrections are genuinely
+        welcome — email <a href="mailto:hello@namecharted.com" style="color:#149E91;">hello@namecharted.com</a>
+        and include the name, country, and year so it can be checked against the source.
+        For the full detail on how the data is processed, see the
+        <a href="/methodology.html" style="color:#149E91;">methodology page</a>.</p>
     </div>
 
         <div class="footer">
@@ -688,6 +725,8 @@
             <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.25rem;">Data: U.S. Social Security Administration (1880–2024)</p>
             <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.5rem;">
                 <a href="/about.html" style="color:#8a93a3; text-decoration:none;">About</a>
+                &nbsp;·&nbsp;
+                <a href="/methodology.html" style="color:#8a93a3; text-decoration:none;">Methodology</a>
                 &nbsp;·&nbsp;
                 <a href="/contact.html" style="color:#8a93a3; text-decoration:none;">Contact</a>
                 &nbsp;·&nbsp;

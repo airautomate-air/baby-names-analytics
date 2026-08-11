@@ -39,7 +39,7 @@ The olive branch appears in Greek mythology (Athena's gift to Athens), in the He
 
 **[Axel](/name/axel.html)** — #78 (4,245 babies). Old Norse and North German form of *Absalom*. And *Absalom* — from Hebrew *Avshalom*: *av* (father) + *shalom* (peace) — means "father of peace."
 
-Axel has been climbing steadily from #361 in 2000 to #78 in 2024 — one of the most consistent long-term rises in the boys' chart. The Swedish/Scandinavian association gives Axel a distinct, Nordic character that most parents associate with music (Axl Rose → Axel) rather than with the Hebrew peace-name lineage it actually carries. See [Scandinavian names](/blog/scandinavian-names.html).
+Axel has been climbing steadily from #361 in 2000 to #78 in 2024 — one of the most consistent long-term rises in the boys' chart. The Swedish/Scandinavian association gives Axel a distinct, Nordic character that most parents associate with music (Axl Rose → Axel) rather than with the Hebrew peace-name lineage it actually carries. See [Scandinavian names](/blog/scandinavian-origin-names.html).
 
 ---
 

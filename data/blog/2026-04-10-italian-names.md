@@ -19,7 +19,7 @@ The names dominating American baby naming right now include a striking cluster o
 
 ### Mateo — #7 (11,302 babies)
 
-**[Mateo](/name/mateo.html)** — Italian and Spanish form of Matthew (Hebrew *Mattityahu*: "gift of God"). Mateo was #428 in 2000 and is now #7 — the second-largest jump of any boys' name over this period. It's simultaneously the Italian *Matteo* and the Spanish *Mateo*; the two traditions have merged in American use. See [Spanish names](/blog/spanish-names.html).
+**[Mateo](/name/mateo.html)** — Italian and Spanish form of Matthew (Hebrew *Mattityahu*: "gift of God"). Mateo was #428 in 2000 and is now #7 — the second-largest jump of any boys' name over this period. It's simultaneously the Italian *Matteo* and the Spanish *Mateo*; the two traditions have merged in American use. See [Spanish names](/blog/spanish-origin-names.html).
 
 ### Luca — #23 (7,959 babies)
 
@@ -113,7 +113,7 @@ The current Italian-aesthetic wave is driven by specific phonetic preferences th
 
 Many of the "Italian" names in current American data are shared with Spanish — Mateo, Sofia, Lucia, Lorenzo, Emiliano, Valentina are all standard in both Italian and Spanish naming. The two traditions have partially merged in American use, where parents of various backgrounds choose these names for their Mediterranean sound and elegance.
 
-See [Spanish names](/blog/spanish-names.html) for the specific Spanish contributions.
+See [Spanish names](/blog/spanish-origin-names.html) for the specific Spanish contributions.
 
 ---
 

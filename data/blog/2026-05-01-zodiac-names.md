@@ -24,7 +24,7 @@ Some zodiac sign names were already established baby names with independent appe
 | Gemini | [Gemini](/name/gemini.html) | ~#1,800 | ~62 | unranked | New appearance |
 | Aries | [Aries](/name/aries.html) | ~#1,200 | ~160 | ~#1,800 | Rising rapidly |
 | Leo/Leona | — | — | — | — | — |
-| Libra | [Libra](/name/libra.html) | ~#1,600 | ~85 | unranked | New appearance |
+| Libra | Libra | ~#1,600 | ~85 | unranked | New appearance |
 | Scorpio | — | unranked | — | — | Not usable as a name |
 | Taurus | [Taurus](/name/taurus.html) | ~#1,900 | ~50 | unranked | Rare |
 | Aquarius | — | unranked | — | — | Not usable |
@@ -107,7 +107,7 @@ Gemini (May 21 - June 20) is the twins sign — appropriate for parents expectin
 
 ## Libra and Taurus: the new experiments
 
-**[Libra](/name/libra.html)** — ~#1,600, ~85 babies in 2024.
+**Libra** — ~#1,600, ~85 babies in 2024.
 
 Libra (September 23 - October 22) is the balance sign. As a name, it works — two syllables, the -a ending that reads as feminine and elegant. It's primarily being used for girls.
 

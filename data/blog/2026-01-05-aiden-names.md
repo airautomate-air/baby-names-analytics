@@ -117,7 +117,7 @@ The shift is from invented American sounds to retrieved historical names. The ae
 
 One important note: **Aidan** (the Irish spelling) is holding up slightly better than Aiden (the Americanized spelling). Aidan is at #312; Aiden is at #47 — but Aiden's faster decline means the gap between them is narrowing. The original Irish form with its authentic Celtic heritage may survive the craze's decline better than the invented variants, the same way Matthew survived when Matt-ew-rhyming names faded.
 
-Aidan's etymology — *Aodhán*, little fire, from the Celtic fire god — gives it an independent identity that none of the invented -ayden names can claim. See [Irish names](/blog/irish-names.html).
+Aidan's etymology — *Aodhán*, little fire, from the Celtic fire god — gives it an independent identity that none of the invented -ayden names can claim. See [Irish names](/blog/irish-origin-names.html).
 
 ---
 

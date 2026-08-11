@@ -6549,6 +6549,8 @@ def footer_html() -> str:
             <p style="font-size:0.75rem; color:#8a93a3; margin-top:0.5rem;">
                 <a href="/about.html" style="color:#8a93a3; text-decoration:none;">About</a>
                 &nbsp;·&nbsp;
+                <a href="/methodology.html" style="color:#8a93a3; text-decoration:none;">Methodology</a>
+                &nbsp;·&nbsp;
                 <a href="/contact.html" style="color:#8a93a3; text-decoration:none;">Contact</a>
                 &nbsp;·&nbsp;
                 <a href="/privacy.html" style="color:#8a93a3; text-decoration:none;">Privacy</a>
@@ -11594,12 +11596,19 @@ def generate_about_page() -> None:
         <p>Our primary dataset is the U.S. Social Security Administration's (SSA) annual name
         release, which covers every first name given to at least five babies born in the United
         States in a given year, going back to 1880. We also include official records from the
-        UK's Office for National Statistics (ONS), INSEE in France, the Australian Bureau of
-        Statistics (ABS), Statistics Canada, and national registries in Spain, Italy, and the
-        Netherlands.</p>
-        <p>All source data is public-domain or openly licensed by the issuing government agency.
-        We process it as-is — no smoothing, no interpolation — so the numbers you see match
-        exactly what the agencies publish.</p>
+        Office for National Statistics (England and Wales), INSEE in France, ISTAT in Italy,
+        Statistics Canada, the Instituto Nacional de Estadística in Spain, the New South Wales
+        and Victoria birth registries in Australia, and the Meertens Instituut's name bank in
+        the Netherlands.</p>
+        <p>All source data is public-domain or openly licensed by the issuing agency. We process
+        it as-is — no smoothing, no interpolation — so the numbers you see match exactly what the
+        agencies publish.</p>
+        <p><strong>Coverage is not equal across countries.</strong> Only the U.S. series is
+        near-complete. The England &amp; Wales, Australian, and Spanish sources publish ranked
+        top-100, top-100-ish, and top-50 lists respectively, so less common names are absent
+        entirely — and the Dutch series has not been updated since 2017. The
+        <a href="/methodology.html" style="color:#149E91;">methodology page</a> sets out the
+        exact years and depth for every country.</p>
 
         <h2 style="margin-top:2rem;">What you can do here</h2>
         <ul style="line-height:1.9;">
@@ -11624,12 +11633,182 @@ def generate_about_page() -> None:
 
         <h2 style="margin-top:2rem;">Updates</h2>
         <p>We update the dataset each year when the SSA and partner agencies publish their
-        annual release, typically in May. The current data covers births through 2024.</p>
+        annual release, typically in May. U.S. data currently covers births through 2024.
+        Other countries run to different end years — Australia to 2025, the Netherlands only
+        to 2017 — as listed on the
+        <a href="/methodology.html" style="color:#149E91;">methodology page</a>.</p>
+
+        <h2 style="margin-top:2rem;">Who runs NameCharted</h2>
+        <p>NameCharted is built and maintained by JP, a solo developer. There is no company,
+        newsroom, or editorial staff behind it — one person writes the code that ingests the
+        government datasets, builds the charts, and publishes every page on this site.</p>
+        <p>The site started as a personal project: the existing baby-name sites were full of
+        invented rankings, unsourced "meanings", and lists that changed depending on who was
+        paying. The goal here is narrower and duller — take the official birth records, show
+        exactly what they say, and be clear about where every number comes from.</p>
+        <p>The written commentary on individual name pages — the "Editor's take" sections — is
+        researched and edited by JP, working from the figures in our own dataset rather than
+        from memory. Every numeric claim in those write-ups is checked against the source data
+        before it is published. Where a claim is an opinion about style or sound, it is
+        written as one.</p>
+        <p>NameCharted is free to use and funded personally. The site carries no sponsored
+        placements and no paid inclusion — no one can pay to have a name featured, ranked
+        higher, or described more favourably. If advertising is added in future, it will be
+        clearly labelled as advertising and kept separate from the data and the commentary.</p>
+        <p>Found an error, or disagree with something written here? Corrections are genuinely
+        welcome — email <a href="mailto:hello@namecharted.com" style="color:#149E91;">hello@namecharted.com</a>
+        and include the name, country, and year so it can be checked against the source.
+        For the full detail on how the data is processed, see the
+        <a href="/methodology.html" style="color:#149E91;">methodology page</a>.</p>
     </div>"""
     (OUTPUT_DIR / 'about.html').write_text(
         page("About — NameCharted", body,
-             description="NameCharted turns government birth records into interactive name trend charts. Learn about our data sources, methodology, and what the site can do.",
+             description="NameCharted turns government birth records into interactive name trend charts. Learn who runs the site, where the data comes from, and how it is funded.",
              canonical=f"{BASE_URL}/about.html"),
+        encoding='utf-8')
+
+
+def generate_methodology_page() -> None:
+    """Full data-provenance page. Deliberately spells out where each country's
+    coverage is partial — several sources publish only a top-N list, and the NL
+    series has not been updated since 2017. Stating that plainly is the point."""
+    body = """
+    <div style="max-width:720px; margin:2rem auto 0;">
+        <h1>Methodology</h1>
+        <p style="color:#5B6678; font-size:0.9rem;">Last updated: August 2026</p>
+
+        <p>This page describes exactly where NameCharted's numbers come from, what is done to
+        them before they reach a chart, and — importantly — where the data is incomplete.
+        Coverage is not equal across countries, and some of the charts on this site rest on
+        much thinner source data than others. That is documented below rather than hidden.</p>
+
+        <h2 style="margin-top:2rem;">Where the data comes from</h2>
+        <p>Every figure on the site originates from a national statistics agency, a state
+        birth registry, or a public research institute. Nothing is estimated, modelled, or
+        purchased from a third-party aggregator.</p>
+        <div style="overflow-x:auto; margin:1.25rem 0;">
+        <table style="border-collapse:collapse; width:100%; font-size:0.88rem;">
+            <thead><tr style="background:#F7F8FA; text-align:left;">
+                <th style="padding:0.6rem; border:1px solid #e2e8ed;">Country</th>
+                <th style="padding:0.6rem; border:1px solid #e2e8ed;">Source</th>
+                <th style="padding:0.6rem; border:1px solid #e2e8ed;">Years</th>
+                <th style="padding:0.6rem; border:1px solid #e2e8ed;">Names per year, per sex</th>
+            </tr></thead>
+            <tbody>
+            <tr><td style="padding:0.6rem; border:1px solid #e2e8ed;">United States</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">Social Security Administration</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">1880&ndash;2024</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">All names with 5+ births (~17,700 F / ~14,200 M in 2024)</td></tr>
+            <tr><td style="padding:0.6rem; border:1px solid #e2e8ed;">France</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">INSEE</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">1900&ndash;2024</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">~6,800 F / ~6,200 M in 2024</td></tr>
+            <tr><td style="padding:0.6rem; border:1px solid #e2e8ed;">Italy</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">ISTAT (Contanomi)</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">1999&ndash;2024</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">Top 10,000 per sex</td></tr>
+            <tr><td style="padding:0.6rem; border:1px solid #e2e8ed;">Canada</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">Statistics Canada (table 17-10-0147-01)</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">1991&ndash;2024</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">~4,100 F / ~3,800 M in 2024</td></tr>
+            <tr><td style="padding:0.6rem; border:1px solid #e2e8ed;">England &amp; Wales</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">Office for National Statistics</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">1996&ndash;2024</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">Top 100 per sex</td></tr>
+            <tr><td style="padding:0.6rem; border:1px solid #e2e8ed;">Australia</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">NSW and Victoria birth registries (plus QLD/SA where published)</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">1952&ndash;2025</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">Roughly the top 100&ndash;130 per sex</td></tr>
+            <tr><td style="padding:0.6rem; border:1px solid #e2e8ed;">Spain</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">Instituto Nacional de Estad&iacute;stica (INE)</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">1924&ndash;2024</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">Top 50 per sex</td></tr>
+            <tr><td style="padding:0.6rem; border:1px solid #e2e8ed;">Netherlands</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">Meertens Instituut (KNAW) Nederlandse Voornamenbank</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">1935&ndash;2017</td>
+                <td style="padding:0.6rem; border:1px solid #e2e8ed;">~190 F / ~135 M in 2017</td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h2 style="margin-top:2rem;">Known gaps you should read before trusting a chart</h2>
+        <ul style="line-height:1.9;">
+            <li><strong>Only the U.S. series is close to complete.</strong> The SSA publishes every
+            name given to five or more babies, back to 1880. No other source on this site is that deep.</li>
+            <li><strong>England &amp; Wales, Australia, and Spain are top-N lists.</strong> ONS and
+            INE publish a ranked top 100 and top 50 respectively; the Australian state registries
+            publish a similar popular-names list. A name that never reaches that cut-off will show
+            no data at all, even though real babies were given it. Absence from these charts is not
+            evidence that a name is unused.</li>
+            <li><strong>"UK" means England and Wales.</strong> The ONS dataset does not cover
+            Scotland or Northern Ireland, which publish separately through National Records of
+            Scotland and NISRA. The country switcher's UK option is labelled for brevity.</li>
+            <li><strong>Australia is not national.</strong> It is an aggregate of individual state
+            registries — principally New South Wales and Victoria. It approximates the national
+            picture but is not an Australian Bureau of Statistics release.</li>
+            <li><strong>The Netherlands series stops at 2017.</strong> It has not been refreshed
+            since, so Dutch charts should be read as historical rather than current.</li>
+            <li><strong>Rare names are suppressed at source.</strong> Agencies withhold
+            low-frequency names to prevent individual children being identifiable. Those births
+            happened; they are simply not in any public file.</li>
+        </ul>
+
+        <h2 style="margin-top:2rem;">How the numbers are processed</h2>
+        <p>Each source is downloaded in its published format — CSV, XLS, or ZIP — and normalised
+        into a single table of country, year, sex, name, and count. Processing is limited to
+        format conversion: decoding the original character encoding, standardising capitalisation,
+        and mapping each source's sex labels onto a common F/M field.</p>
+        <p>No smoothing, interpolation, or gap-filling is applied. If an agency published a
+        count, that exact count is what the chart plots. Where a year is missing from a source,
+        the chart shows a gap rather than a guessed value.</p>
+
+        <h2 style="margin-top:2rem;">How ranks are calculated</h2>
+        <p>Ranks are computed by NameCharted, not taken from the source files. Within each
+        country, year, and sex, names are sorted by birth count in descending order and numbered
+        from 1. Boys and girls are ranked separately, so a #1 girls' name and a #1 boys' name in
+        the same year are two different names.</p>
+        <p>Spelling variants are counted as distinct names, because the source agencies record
+        them that way. "Aidan" and "Aiden" have separate counts, separate ranks, and separate
+        trend lines; they are never merged. This means a sound that is popular across several
+        spellings will look less common than it actually is.</p>
+        <p>For top-N countries, a rank is only meaningful within the published list. A name
+        ranked #50 in Spain is the least common name in a 50-name file, not the 50th most
+        popular name in the country.</p>
+
+        <h2 style="margin-top:2rem;">Meanings, origins, and famous bearers</h2>
+        <p>Name meanings and origin classifications are drawn from publicly available
+        encyclopedic references. Etymology is frequently contested — many names have several
+        defensible derivations, and reference works disagree — so these should be treated as the
+        commonly cited interpretation rather than a settled fact.</p>
+        <p>Famous-bearer lists are generated from Wikidata, ordered by how many language editions
+        of Wikipedia carry an article about that person. It is an automated prominence measure,
+        not an editorial judgement about who matters.</p>
+        <p>Numerology readings are included as entertainment. They have no evidential basis and
+        are not presented as analysis.</p>
+
+        <h2 style="margin-top:2rem;">Editorial commentary</h2>
+        <p>The "Editor's take" sections on individual name pages are written by a human, working
+        from a generated fact sheet for that name — peak year, current rank, largest rise and
+        fall, and trajectory — extracted directly from the dataset described above. Every numeric
+        claim is checked against the source data before publication. Statements about style,
+        sound, or cultural association are opinion and are written as such.</p>
+
+        <h2 style="margin-top:2rem;">Update cadence</h2>
+        <p>The U.S. dataset is refreshed each year when the SSA publishes its annual release,
+        typically in May. Other countries are updated as their agencies publish, which varies
+        from annually to irregularly. The Netherlands has not published in a form we ingest
+        since 2017.</p>
+
+        <h2 style="margin-top:2rem;">Corrections</h2>
+        <p>If a figure here contradicts the official source, the official source is right and
+        this site has a bug. Report it to
+        <a href="mailto:hello@namecharted.com" style="color:#149E91;">hello@namecharted.com</a>
+        with the name, country, and year, and it will be checked and corrected.</p>
+    </div>"""
+    (OUTPUT_DIR / 'methodology.html').write_text(
+        page("Methodology — NameCharted", body,
+             description="Where NameCharted's baby-name data comes from, how ranks are calculated, and exactly where each country's coverage is incomplete.",
+             canonical=f"{BASE_URL}/methodology.html"),
         encoding='utf-8')
 
 
@@ -11796,7 +11975,8 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
              for sex in ('F', 'M') for letter in sorted(letter_names_by_country[cc][sex].keys())]
     if cc == 'US':
         urls += [f"{BASE_URL}/compare/{f}" for f in compare_files]
-        urls += [f"{BASE_URL}/about.html", f"{BASE_URL}/contact.html", f"{BASE_URL}/privacy.html"]
+        urls += [f"{BASE_URL}/about.html", f"{BASE_URL}/methodology.html",
+                 f"{BASE_URL}/contact.html", f"{BASE_URL}/privacy.html"]
     return urls
 
 
@@ -12007,6 +12187,7 @@ def main():
     # Root-only pages — emit once under US nav.
     set_active("US")
     generate_about_page()
+    generate_methodology_page()
     generate_contact_page()
     generate_privacy_page()
     generate_404_page()

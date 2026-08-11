@@ -114,7 +114,7 @@ Ember has the warm, glowing sound quality that's driving names like Amber (in it
 
 **[Sienna](/name/sienna.html)** — Girls #139 (2,113 babies). The color sienna comes from *terra di Siena* (earth of Siena) — a natural ochre pigment from the clay-rich soil near Siena, Italy. Raw sienna is a warm brownish-yellow; burnt sienna (heated) is the deep reddish-brown that most people recognize from the Crayola crayon.
 
-Sienna was #621 in 2000 and is #139 in 2024 — a substantial climb. Sienna Miller (the British actress, born 1981, rose to fame ~2004) drove early awareness. The Italian place-name quality gives Sienna an additional backing beyond just the color. See [Italian names](/blog/italian-names.html).
+Sienna was #621 in 2000 and is #139 in 2024 — a substantial climb. Sienna Miller (the British actress, born 1981, rose to fame ~2004) drove early awareness. The Italian place-name quality gives Sienna an additional backing beyond just the color. See [Italian names](/blog/italian-origin-names.html).
 
 ---
 

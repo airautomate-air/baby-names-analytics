@@ -47,7 +47,7 @@ The girls' side is broader and ranks higher. **Naomi** at #44 leads — technica
 | **[Sakura](/name/sakura.html)** | #3,001 | "cherry blossom" |
 | **[Yumi](/name/yumi.html)** | #3,071 | "reason" or "beautiful" |
 | **[Mai](/name/mai.html)** | #3,245 | "dance" |
-| **[Hinata](/name/hinata.html)** | #4,495 | "sunny place" |
+| **Hinata** | #4,495 | "sunny place" |
 
 ## How Japanese naming works — and how it differs in English
 

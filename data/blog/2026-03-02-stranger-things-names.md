@@ -27,7 +27,7 @@ Here's why.
 | Dustin Henderson | [Dustin](/name/dustin.html) | #627 | #694 | -67 spots |
 | Max Mayfield | [Max](/name/max.html) (girls) | #386 | #317 | +69 spots |
 | Joyce Byers | [Joyce](/name/joyce.html) | ~#1,100 | ~#1,200 | declining |
-| Jim Hopper | [Hopper](/name/hopper.html) | — | ~#1,800 | minimal |
+| Jim Hopper | Hopper | — | ~#1,800 | minimal |
 | Robin Buckley | [Robin](/name/robin.html) | #447 | #391 | +56 spots |
 
 None of these movements are large enough to attribute primarily to *Stranger Things*. Lucas was already rising for unrelated reasons. Max for girls was already trending. Dustin is declining despite the show.

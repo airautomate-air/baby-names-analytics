@@ -47,11 +47,11 @@ Here's the full picture.
 
 ### Other musicians
 
-**[Cobain](/name/cobain.html)** — Kurt Cobain (1967–1994). Only 6 boys per year in 2024. It's technically in the SSA data but extremely rare.
+**Cobain** — Kurt Cobain (1967–1994). Only 6 boys per year in 2024. It's technically in the SSA data but extremely rare.
 
 **[Morrison](/name/morrison.html) — #3,606** (31 boys). Jim Morrison (1943–1971) or Toni Morrison (1931–2019). Morrison as a first name is still very rare.
 
-**[Bono](/name/bono.html)** — Not in SSA data with meaningful numbers. The U2 singer's name hasn't crossed over.
+**Bono** — Not in SSA data with meaningful numbers. The U2 singer's name hasn't crossed over.
 
 ---
 

@@ -69,7 +69,7 @@ Kai is also one of the few one-syllable names that works well for both boys and 
 
 ### Finn — #198 (1,791 babies)
 
-**[Finn](/name/finn.html)** — Irish *Fionn* (fair, white). Finn McCool (*Fionn mac Cumhaill*) is the great hero of Irish mythology. Finn has been climbing steadily from #836 (2000) to #198 (2024). See [Irish names](/blog/irish-names.html).
+**[Finn](/name/finn.html)** — Irish *Fionn* (fair, white). Finn McCool (*Fionn mac Cumhaill*) is the great hero of Irish mythology. Finn has been climbing steadily from #836 (2000) to #198 (2024). See [Irish names](/blog/irish-origin-names.html).
 
 ---
 
