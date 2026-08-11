@@ -10351,7 +10351,13 @@ def generate_similar_page(name):
         <p>{similar_intro}</p>
         <ul class="trending-list" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:1rem; list-style:none; padding:0;">
 {cards}        </ul>"""
-    noindex_tag = '\n    <meta name="robots" content="noindex">' if name_total.get(name, 0) < NOINDEX_MIN_TOTAL else ""
+    # /similar/ pages are ALWAYS noindex, regardless of the name's birth total.
+    # They mirror every name page 1:1 but carry only ~50-80 words of unique content
+    # (a heading, one sentence, a list of 24 links). At ~22K pages they were half of
+    # the indexed surface and read as scaled content — the cause of the AdSense
+    # "Low value content" rejection (2026-08-12). They stay live and linked for
+    # users and internal linking; they simply don't belong in the index.
+    noindex_tag = '\n    <meta name="robots" content="noindex">'
     extra_head = breadcrumb_jsonld([
         (S("crumb_home"), home_url()),
         (name, f"{BASE_URL}{p}/name/{slugify(name)}.html"),
@@ -11964,7 +11970,9 @@ def collect_country_urls(cc: str, compare_files: list[str]) -> list[str]:
     indexed_names = [n for n in pages_to_generate_by_country[cc]
                      if nt.get(n, 0) >= NOINDEX_MIN_TOTAL]
     urls += [f"{BASE_URL}{p}/name/{slugify(n)}.html" for n in indexed_names]
-    urls += [f"{BASE_URL}{p}/similar/{slugify(n)}.html" for n in indexed_names]
+    # /similar/ pages are intentionally NOT listed: they are unconditionally
+    # noindex (see generate_similar_page), and a noindex URL in a sitemap is a
+    # contradictory signal. This halves the indexed surface.
     urls += [f"{BASE_URL}{p}/year/{y}.html" for y in years_by_country[cc]]
     latest = years_by_country[cc][-1] if years_by_country[cc] else None
     prev_latest = latest - 1 if latest else None
