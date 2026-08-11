@@ -70,7 +70,7 @@ BASE_URL = "https://namecharted.com"
 PAGE_MIN_TOTAL = 500
 # Names below this total get noindex'd and are excluded from sitemaps and
 # browse/letter index links (page still generated, reachable via search/URL).
-NOINDEX_MIN_TOTAL = 1000
+NOINDEX_MIN_TOTAL = 2000
 
 OUTPUT_DIR.mkdir(exist_ok=True)
 
