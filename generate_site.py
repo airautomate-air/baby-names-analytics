@@ -9893,7 +9893,7 @@ def generate_name_page(name):
             f'<div class="editorial-section">'
             f'<h2>Editor’s take on {html.escape(name)}</h2>'
             f'{paras}'
-            f'<p class="editorial-byline">— NameCharted editorial{byline_suffix}</p>'
+            f'<p class="editorial-byline">— NameCharted{byline_suffix}</p>'
             f'</div>'
         )
 
@@ -11652,11 +11652,6 @@ def generate_about_page() -> None:
         invented rankings, unsourced "meanings", and lists that changed depending on who was
         paying. The goal here is narrower and duller — take the official birth records, show
         exactly what they say, and be clear about where every number comes from.</p>
-        <p>The written commentary on individual name pages — the "Editor's take" sections — is
-        researched and edited by JP, working from the figures in our own dataset rather than
-        from memory. Every numeric claim in those write-ups is checked against the source data
-        before it is published. Where a claim is an opinion about style or sound, it is
-        written as one.</p>
         <p>NameCharted is free to use and funded personally. The site carries no sponsored
         placements and no paid inclusion — no one can pay to have a name featured, ranked
         higher, or described more favourably. If advertising is added in future, it will be
@@ -11793,11 +11788,14 @@ def generate_methodology_page() -> None:
         are not presented as analysis.</p>
 
         <h2 style="margin-top:2rem;">Editorial commentary</h2>
-        <p>The "Editor's take" sections on individual name pages are written by a human, working
-        from a generated fact sheet for that name — peak year, current rank, largest rise and
-        fall, and trajectory — extracted directly from the dataset described above. Every numeric
-        claim is checked against the source data before publication. Statements about style,
-        sound, or cultural association are opinion and are written as such.</p>
+        <p>The "Editor's take" sections on individual name pages are built from a fact sheet
+        compiled for that name — peak year, current rank, largest rise and fall, and overall
+        trajectory — extracted directly from the dataset described above, so the commentary
+        follows the figures rather than general impressions about a name.</p>
+        <p>Before publication, every entry passes an automated check that traces each number back
+        to the source data and rejects the entry if a figure does not match. Statements about
+        style, sound, or cultural association are opinion, and are written as opinion rather than
+        as findings from the data.</p>
 
         <h2 style="margin-top:2rem;">Update cadence</h2>
         <p>The U.S. dataset is refreshed each year when the SSA publishes its annual release,
