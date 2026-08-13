@@ -11,20 +11,29 @@ Decisions (JP, Jul 21):
 
 ## Phase A — Trust & honesty fixes (1 session)
 
-- [ ] A1. Remove fabricated stories: empty `data/name_stories.json` to `{}`,
-      keep the submission form + moderation pipeline untouched. Regenerate,
-      verify story sections show only the "share your story" form.
-- [ ] A2. About page: add "Who runs NameCharted" section — JP, what he does,
-      why the site exists, how it's funded/maintained. Honest, no fake persona.
-      Draft goes to JP for approval before shipping.
-- [ ] A3. New `/methodology.html` (EN, US tree first): how each country's data
-      is ingested (SSA, ONS, INSEE, ABS, StatCan, ES/IT/NL registries), how
-      ranks are computed, the <5-births suppression rule, where origins/
-      meanings/famous-bearer data comes from (Wikipedia/Wikidata), update
-      cadence, and a corrections contact. Link from footer + About; add to
-      sitemap.
-- [ ] A4. Fix 14 dead `/name/` links in 6 hand-written blog posts (also exists
-      as a spawned background task — do whichever lands first, skip the other).
+- [x] A1. Removed fabricated stories 2026-08-11 (commit e4222ee92ef) —
+      `data/name_stories.json` emptied to `{}`, deleting 217 invented stories
+      across 106 names. Submission form + moderation pipeline untouched; the
+      render is guarded by `if stories:` so the section disappears until real
+      submissions arrive. Backup of the removed content kept out of the repo.
+- [x] A2. About "Who runs NameCharted" shipped 2026-08-11, then revised
+      2026-08-12 (commit c4d1f4b3843). First draft claimed the per-name
+      analyses were "researched and edited by JP" — untrue, they're drafted
+      from a generated fact sheet and gated by `editorial_qa.py`. JP's call:
+      drop the authorship claim entirely rather than disclose or overstate.
+      The page now says nothing about who writes the commentary.
+- [x] A3. `/methodology.html` shipped 2026-08-11. Per-country provenance
+      table, rank calculation, enrichment sourcing, update cadence,
+      corrections contact. Footer link sitewide + About + sitemap-us.xml.
+      Writing it surfaced real errors in the old About copy: AU credited to
+      the ABS (actually NSW + VIC state registries), NL called a national
+      registry (actually the Meertens Instituut name bank), and "data through
+      2024" (NL stops at 2017, AU runs to 2025). Also now states plainly that
+      only the US series is near-complete — GB/AU/ES are top-100/top-50 lists
+      where an absent name is NOT evidence the name is unused.
+- [x] A4. Fixed 2026-08-11 — 8 dead links in 6 posts (`/origins/*` →
+      `/origin/*`; four `*-names.html` blog slugs → `*-origin-names.html`).
+      Full crawl of all built pages reports zero dead internal links.
 
 ## Phase B — Unique editorial copy, top 300 US name pages (batched)
 
@@ -82,24 +91,70 @@ Design:
       (batches 1-3) pass QA. Scheduled task `namecharted-editorial-batch-3`
       disabled (redundant) — none of the 3 scheduled batches ended up
       firing unattended; all were run manually instead.
-- [ ] B6–B14. Batches 4–12 (ranks #76-300) — not yet scheduled. Lesson
-      for future batches: open with more structurally varied sentences
-      from the start (vary "X peaked at #N in Y" / "X's count hit Z in Y"
-      / "Y was X's best year" etc.) to cut down on the QA-rework loop —
-      each batch so far has needed a second pass to break up self-similar
-      openings within its own 25 entries, on top of avoiding prior batches.
-- [ ] B15. Full QA pass over all 300; regenerate; commit/push
+- [x] B6–B14. Batches 4–12 (ranks #76-300) — complete. Lesson learned across
+      the run: open with more structurally varied sentences from the start
+      (vary "X peaked at #N in Y" / "X's count hit Z in Y" / "Y was X's best
+      year" etc.) to cut down the QA-rework loop — every batch needed a second
+      pass to break self-similar openings within its own 25 entries, on top of
+      avoiding all prior batches.
+- [x] B15. Full QA over all 300 passes (no repeated n-grams, all numbers
+      traced, lengths OK). 300/300 editorial blocks render, 34,793 words, none
+      noindexed. Shipped and pushed 2026-08-12.
 
 ## Phase C — Ship & request review
 
-- [ ] C1. Final regenerate + link/sitemap verification sweep (reuse Jul 20 checks)
-- [ ] C2. Push; confirm live
+- [x] C1. Regenerate + link/sitemap sweep done 2026-08-11/12. Full crawl of
+      all built pages: zero dead internal links.
+- [x] C2. Pushed 2026-08-12 (c4d1f4b3843). Confirmed live: /methodology.html
+      serving, editorial blocks live on name pages.
+      NOTE: sitemap total dropped 44,758 → 16,853 URLs. This is intended, from
+      commits b15a2cd51c0 (all /similar/ pages noindex + out of sitemaps) and
+      fb1d900d6e7 (NOINDEX_MIN_TOTAL raised 1,000 → 2,000) — not a regression.
+      Fewer, thicker indexable pages is the point.
 - [ ] C3. Wait until ~Aug 20 (≥4 weeks after Jul 17 rejection AND ≥2 weeks
-      after Phase B ships), then check "I have fixed the issues" → Request
-      review in AdSense
+      after Phase B ships → Phase B landed Aug 12, so ~Aug 26 is the safer
+      date), then check "I have fixed the issues" → Request review in AdSense.
+      Before requesting: resolve the GA anomaly below — a reviewer landing on
+      a site with 2s average engagement is being shown a bad signal.
+- [ ] C5. Investigate GA traffic quality (raised 2026-08-12). The Jul 15–Aug 11
+      GA report shows 20.6K active users at **2s average engagement** and
+      20.8K new vs 20.6K active — i.e. almost no returning users and near-zero
+      dwell. That pattern reads as bot/crawler traffic being counted, not
+      readers. Users are also **down 48%** period-over-period, so the premise
+      that traffic is growing does not hold. Check GA4 for referral spam and
+      unfiltered bot traffic before drawing any monetisation conclusions.
 - [ ] C4. If rejected a 3rd time: stop iterating on AdSense; shift to
       affiliate monetization + traffic building until organic traffic exists
 
 ## Review
+
+**2026-08-11/12 — Phases A and B shipped.**
+
+The headline problem was not that content was missing, it was that finished
+content was never published. All 200 written analyses (batches 1–8) existed
+only in `data/editorial/us_name_editorial.json`; `main` was 5 commits ahead of
+`origin/main` and the built `docs/` regen was entirely uncommitted. Google had
+never seen any of it. Batches 9–12 landed alongside, so 300 names now carry
+34,793 words of unique, fact-checked commentary.
+
+Two judgement calls worth remembering:
+
+1. **The fabricated stories had to go before anything else shipped.** 217
+   invented "reader stories" were rendering as genuine UGC. Publishing more
+   content on top of that would have made a manual review worse, not better.
+
+2. **The first About draft overstated authorship** ("researched and edited by
+   JP") and the methodology page said the analyses were "written by a human".
+   Both were false. Shipping that on the same pages that promise honest
+   sourcing — immediately after deleting fabricated content for being
+   misleading — would have been the same mistake in a different costume. JP
+   chose to drop the claim rather than disclose AI assistance. Worth noting for
+   next time: Google does not penalise AI-assisted content, it penalises
+   low-value content, and the automated fact-tracing gate is the part that
+   actually carries credibility.
+
+Writing the methodology page also caught four inaccurate data claims that had
+been live on the About page for months (see A3). Being forced to document
+provenance precisely is what exposed them.
 
 (fill in after completion)
